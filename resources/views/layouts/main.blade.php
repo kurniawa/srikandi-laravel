@@ -1,21 +1,39 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  @vite('resources/css/app.css')
-  <script src="{{ asset('js/jquery-3.5.1.js') }}"></script>
-  <link rel="shortcut icon" href="{{ asset('images/logo-mc-bg_removed.png') }}" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @vite(['resources/css/app.css','resources/js/app.js'])
+    <script src="{{ asset('js/jquery-3.5.1.js') }}"></script>
+    {{-- <link rel="shortcut icon" href="{{ asset('images/logo-mc-bg_removed.png') }}" type="image/x-icon"> --}}
     <link rel="stylesheet" href="{{ asset('js/jquery-ui-1.12.1/jquery-ui.css') }}">
     <script src="{{ asset('js/jquery-ui-1.12.1/jquery-ui.js') }}"></script>
-    <script src="{{ asset('js/jquery.table2excel.js') }}"></script>
+    {{-- <script src="{{ asset('js/jquery.table2excel.js') }}"></script> --}}
     <script src="{{ asset('js/functions.js') }}"></script>
-    <title>Srikandi App</title>
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            font-family:Figtree, sans-serif;
+            font-feature-settings:normal;
+        }
+    </style>
+    <title>Srikandi</title>
+    {{-- @laravelPWA --}}
 </head>
 <body class="relative">
     <div id="menu-close-layer" class="absolute w-screen h-screen hidden z-30" onclick="hideMenuCloseLayer('profile-menu','menu-close-layer')"></div>
+    <div id="loading-animation-layer" class="hidden fixed w-screen h-screen z-30 bg-slate-300 opacity-35">
+        <div role="status" class="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+            <svg aria-hidden="true" class="inline w-16 h-16 text-gray-200 animate-spin dark:text-gray-600 fill-purple-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+            </svg>
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
     <div class="min-h-full">
-        <nav class="bg-gray-100 no_print">
+        <nav class="bg-emerald-100 no_print">
           <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="flex h-16 items-center justify-between">
               <div class="flex items-center">
@@ -24,7 +42,7 @@
                         <img class="h-8 w-8" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company">
                     </a>
                 </div>
-                <div class="hidden md:block">
+                <div class="">
                   <div class="ml-10 flex items-baseline space-x-4">
                     <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
                     @foreach ($menus as $menu)
@@ -49,9 +67,9 @@
                   </div>
                 </div>
               </div>
-              <div class="hidden md:block">
+              <div class="">
                 <div class="ml-4 flex items-center md:ml-6">
-                  <button type="button" class="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                  <button type="button" class="rounded-full bg-rose-200 p-1 text-gray-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                     <span class="sr-only">View notifications</span>
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
@@ -61,16 +79,26 @@
                   <!-- Profile dropdown -->
                   <div class="relative ml-3">
                     <div>
-                      <button type="button" class="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" id="user-menu-button" aria-expanded="false" aria-haspopup="true" onclick="toggleMenu('profile-menu', 'menu-close-layer')">
-                        <span class="sr-only">Open user menu</span>
                         @if (Auth::user())
                         @if (Auth::user()->profile_picture)
-                        <img class="h-8 w-8 rounded-full" src="{{ asset("storage/" . Auth::user()->profile_picture) }}" alt="Profile Picture">
+                        <button type="button" class="flex max-w-xs items-center rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" id="user-menu-button" aria-expanded="false" aria-haspopup="true" onclick="toggleMenu('profile-menu', 'menu-close-layer')">
+                            <span class="sr-only">Open user menu</span>
+                            <img class="h-8 w-8 rounded-full" src="{{ asset("storage/" . Auth::user()->profile_picture) }}" alt="Profile Picture">
+                        </button>
                         @else
-                        <img class="h-8 w-8 rounded-full" src="{{ asset('images/srikandi-mascot.jpg') }}" alt="Profile Picture">
+                        <button class="text-white bg-indigo-300 rounded-full w-8 h-8 flex justify-center items-center" id="user-menu-button" aria-expanded="false" aria-haspopup="true" onclick="toggleMenu('profile-menu', 'menu-close-layer')">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                            </svg>
+                        </button>
                         @endif
+                        @else
+                        <button class="text-white bg-indigo-300 rounded-full w-8 h-8 flex justify-center items-center" id="user-menu-button" aria-expanded="false" aria-haspopup="true" onclick="toggleMenu('profile-menu', 'menu-close-layer')">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                            </svg>
+                        </button>
                         @endif
-                      </button>
                     </div>
 
                     <!--
@@ -97,7 +125,11 @@
                             </button>
                         </form>
                         @else
+                        @if (isset($profile_menu['params']))
+                        <a href="{{ route($profile_menu['route'], $profile_menu['params']) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">{{ $profile_menu['name'] }}</a>
+                        @else
                         <a href="{{ route($profile_menu['route']) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">{{ $profile_menu['name'] }}</a>
+                        @endif
                       @endif
                       @endforeach
                       {{-- <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a>
@@ -106,9 +138,11 @@
                   </div>
                 </div>
               </div>
-              <div class="-mr-2 flex md:hidden">
+              {{-- MOBILE MENU HAMBURGER --}}
+              <div class="hidden -mr-2" onclick="$('#mobile-menu').toggle(150)">
+                {{-- flex --}}
                 <!-- Mobile menu button -->
-                <button type="button" class="inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" aria-controls="mobile-menu" aria-expanded="false">
+                <button type="button" class="inline-flex items-center justify-center rounded-md bg-rose-200 p-2 text-gray-500 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" aria-controls="mobile-menu" aria-expanded="false">
                   <span class="sr-only">Open main menu</span>
                   <!-- Menu open: "hidden", Menu closed: "block" -->
                   <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
@@ -120,15 +154,23 @@
                   </svg>
                 </button>
               </div>
+              {{-- END - MOBILE MENU HAMBURGER --}}
             </div>
           </div>
 
           <!-- Mobile menu, show/hide based on menu state. -->
+          {{-- MOBILE MENU --}}
           <div class="hidden" id="mobile-menu">
             <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
+              <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
               @foreach ($menus as $menu)
                 <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">{{ $menu['name'] }}</a>
                 @endforeach
+              {{-- <a href="#" class="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium" aria-current="page">Dashboard</a>
+              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Team</a>
+              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Projects</a>
+              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Calendar</a>
+              <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Reports</a> --}}
             </div>
             <div class="border-t border-gray-700 pb-3 pt-4">
               <div class="flex items-center px-5">
@@ -136,8 +178,13 @@
                   <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
                 </div>
                 <div class="ml-3">
-                  <div class="text-base font-medium leading-none text-white">Tom Cook</div>
-                  <div class="text-sm font-medium leading-none text-gray-400">tom@example.com</div>
+                    @if (Auth::user())
+                    <div class="text-base font-medium leading-none text-white">{{ Auth::user()->nama }}</div>
+                    <div class="text-sm font-medium leading-none text-gray-400">{{ Auth::user()->username }}</div>
+                    @else
+                    <div class="text-base font-medium leading-none text-white">Tom Cook</div>
+                    <div class="text-sm font-medium leading-none text-gray-400">tom@example.com</div>
+                    @endif
                 </div>
                 <button type="button" class="ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                   <span class="sr-only">View notifications</span>
@@ -147,16 +194,51 @@
                 </button>
               </div>
               <div class="mt-3 space-y-1 px-2">
+                @if (Auth::user())
+
+                <div>
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="rounded-md w-full text-start py-2 px-3 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Sign out</button>
+                    </form>
+                </div>
+                @else
                 <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Your Profile</a>
                 <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Settings</a>
-                <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Sign out</a>
+                <a href="{{ route('login') }}" class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Log in</a>
+                @endif
               </div>
             </div>
           </div>
+          {{-- END - MOBILE MENU --}}
         </nav>
         @yield('content')
 
-
+        <div class="mt-12 mx-2 mb-12 p-2 rounded border-2 border-emerald-300 text-gray-400">
+            @if (Auth::user())
+            <div class="text-center">
+                <span>Welcome, {{ Auth::user()->username }}!</span>
+            </div>
+            <form action="{{ route('logout') }}" method="POST" onsubmit="showLoadingSpinner()">
+                @csrf
+                <div class="flex justify-center">
+                    <button type="submit" class="rounded-md border-2 border-yellow-400 bg-yellow-200 py-1 px-2 font-medium hover:bg-gray-700 hover:text-white flex gap-1 items-center">
+                        <span>Log out</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                        </svg>
+                    </button>
+                </div>
+            </form>
+            @else
+            <div class="text-center">
+                <p>
+                    User not logged in.
+                    <a href="{{ route('login') }}" class="font-bold text-blue-400 hover:bg-gray-700 hover:text-white" onclick="showLoadingSpinner()">Log in</a>
+                </p>
+            </div>
+            @endif
+        </div>
 </body>
 
 <script>
@@ -186,6 +268,17 @@
                 </svg>`;
             }
         }, 450);
+    }
+
+    function showLoadingSpinner() {
+        $('#loading-animation-layer').show();
+        setTimeout(() => {
+            $('#loading-animation-layer').hide();
+        }, 3000);
+    }
+
+    function hideLoadingSpinner(params) {
+        $('#loading-animation-layer').hide();
     }
 </script>
 </html>
