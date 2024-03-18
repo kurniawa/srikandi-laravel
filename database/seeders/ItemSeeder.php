@@ -12,6 +12,8 @@ class ItemSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        $items = [
+            ["tipe_barang" => "perhiasan"],
+        ];
     }
 }

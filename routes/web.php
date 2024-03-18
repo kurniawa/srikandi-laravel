@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ArtisanController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\UserController;
@@ -53,6 +54,12 @@ Route::controller(ItemController::class)->group(function(){
 
 Route::controller(UserController::class)->group(function(){
     Route::get('/users/{user}/list_of_items','list_of_items')->name('users.list_of_items')->middleware('auth');
+});
+
+Route::controller(CartController::class)->group(function(){
+    Route::get('/carts/{user}/index','index')->name('carts.index')->middleware('auth');
+    Route::get('/carts/{from}/pilih_tipe_barang','pilih_tipe_barang')->name('carts.pilih_tipe_barang')->middleware('auth');
+    Route::get('/carts/{from}/{tipe_barang}/create_item','create_item')->name('carts.create_item')->middleware('auth');
 });
 
 Route::controller(ArtisanController::class)->group(function(){
