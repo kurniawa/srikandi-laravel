@@ -3,7 +3,7 @@
 <main class="p-2">
     <x-errors-any></x-errors-any>
     <x-validation-feedback></x-validation-feedback>
-    <div class="relative w-screen h-screen">
+    <div class="relative w-full h-screen">
         <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2">
             <div class="text-center">
                 <h3 class="text-3xl font-bold text-indigo-500">Login</h3>

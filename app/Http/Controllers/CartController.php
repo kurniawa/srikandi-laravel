@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\JenisPerhiasan;
 use App\Models\Menu;
+use App\Models\TipePerhiasan;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -56,6 +58,10 @@ class CartController extends Controller
     function create_item($from, $tipe_barang) {
         // dump($from);
         // dd($tipe_barang);
+        $tipe_perhiasans = TipePerhiasan::all();
+        $jenis_perhiasans = JenisPerhiasan::select('id', 'nama as label', 'nama as value', 'tipe_perhiasan_id')->get();
+        // dd($tipe_perhiasans);
+        // dd($jenis_perhiasans);
 
         $data = [
             // 'goback' => 'home',
@@ -68,6 +74,8 @@ class CartController extends Controller
             // 'user' => Auth::user(),
             'from' => $from,
             'tipe_barang' => $tipe_barang,
+            'tipe_perhiasans' => $tipe_perhiasans,
+            'jenis_perhiasans' => $jenis_perhiasans,
         ];
 
         return view('carts.create_item', $data);
