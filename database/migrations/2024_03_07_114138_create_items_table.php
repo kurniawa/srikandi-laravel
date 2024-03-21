@@ -25,8 +25,10 @@ return new class extends Migration
             $table->string('merk',50)->nullable();
             $table->string('edisi',50)->nullable();
             $table->smallInteger('kadar')->nullable();
-            $table->enum('gol_kadar',['MUDA','BAGUS','TUA'])->nullable();
+            // $table->enum('gol_kadar',['MUDA','BAGUS','TUA'])->nullable();
             $table->smallInteger('berat')->nullable(); // int/integer | 4 bytes  -2147483648 to 2147483647                    0 to 4294967295
+            $table->bigInteger('harga_gr')->nullable();
+            $table->bigInteger('harga_t');
             $table->smallInteger('kondisi')->nullable(); // 99 => mulus, 80 => cacat dikit hampir tidak terlihat, 75 => cacat lumayan keliatan, 50 => rusak
             $table->string('nama_long');
             $table->string('nama_short');

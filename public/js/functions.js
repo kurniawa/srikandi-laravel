@@ -309,12 +309,12 @@ function formatNumber(ipt, hidden_id) {
     // console.log(num);
     // console.log(ipt.value.length);
     // console.log(num[ipt.value.length - 2]);
-    if (num[ipt.value.length - 2] === '.' || num[ipt.value.length - 3] === '.') {
-        num = num.split('.');
-    } else {
-        num = ipt.value.split(".").join("");
-        num = num.split(",");
-    }
+    num = ipt.value.split(".").join("");
+    num = num.split(",");
+    // if (num[ipt.value.length - 2] === '.' || num[ipt.value.length - 3] === '.') {
+    //     num = num.split('.');
+    // } else {
+    // }
     // console.log(num);
 
     // console.log(num);
@@ -323,6 +323,10 @@ function formatNumber(ipt, hidden_id) {
         if (num[1] !== '') {
             hidden_num = `${num[0]}.${num[1]}`;
         }
+        // hidden_num = '';
+        // num.forEach(n => {
+        //     hidden_num += n;
+        // });
     } else {
         hidden_num = num[0];
     }
@@ -343,6 +347,34 @@ function formatNumber(ipt, hidden_id) {
             ipt.value = real_number_formatted;
         }
         // console.log(ipt.value);
+    }
+}
+
+function formatNumber2(formatted_id, hidden_id) {
+    var formatted = document.getElementById(formatted_id);
+    var num = formatted.value;
+    num = formatted.value.split(".").join("");
+    num = num.split(",");
+    let hidden_num;
+    if (num.length === 2) {
+        if (num[1] !== '') {
+            hidden_num = `${num[0]}.${num[1]}`;
+        }
+    } else {
+        hidden_num = num[0];
+    }
+
+    hidden_num = parseFloat(hidden_num);
+    document.getElementById(hidden_id).value = hidden_num;
+    if (!isNaN(hidden_num)) {
+        let real_number_formatted = parseFloat(num[0]).toLocaleString("id-ID", {
+            style: "decimal",
+        });
+        if (num.length === 2) {
+            formatted.value = `${real_number_formatted},${num[1]}`;
+        } else {
+            formatted.value = real_number_formatted;
+        }
     }
 }
 
