@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('tipe_perhiasan_id')->constrained()->onDelete('cascade')->onUpdate('cascade'); // tidak bisa nullable. Kalau tipe_perhiasan ada, masa tidak ada id nya?
             $table->string('tipe_perhiasan');
             $table->string('nama');
-            $table->string('codename')->nullable()->unique();
+            $table->string('codename', 50)->nullable()->unique();
             $table->smallInteger('barcode')->nullable();
             $table->timestamps();
         });

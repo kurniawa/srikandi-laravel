@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cap;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\JenisPerhiasan;
@@ -60,6 +61,7 @@ class CartController extends Controller
         // dd($tipe_barang);
         $tipe_perhiasans = TipePerhiasan::all();
         $jenis_perhiasans = JenisPerhiasan::select('id', 'nama as label', 'nama as value', 'tipe_perhiasan_id')->get();
+        $caps = Cap::select('id', 'nama as label', 'nama as value', 'codename')->get();
         // dd($tipe_perhiasans);
         // dd($jenis_perhiasans);
 
@@ -76,7 +78,10 @@ class CartController extends Controller
             'tipe_barang' => $tipe_barang,
             'tipe_perhiasans' => $tipe_perhiasans,
             'jenis_perhiasans' => $jenis_perhiasans,
+            'caps' => $caps,
         ];
+
+        // dd($caps);
 
         return view('carts.create_item', $data);
     }

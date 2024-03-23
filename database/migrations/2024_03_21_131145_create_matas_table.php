@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('warna', 20);
             $table->string('level_warna', 20); // netral, tua, muda
             $table->string('opacity', 20); // transparent, half-transparent, non-transparent
+            $table->string('codename', 50)->nullable();
             $table->timestamps();
         });
     }

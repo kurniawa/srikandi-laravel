@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('mainans', function (Blueprint $table) {
             $table->id();
+            $table->string('nama', 50);
+            $table->string('codename', 50)->nullable();
             $table->timestamps();
         });
     }

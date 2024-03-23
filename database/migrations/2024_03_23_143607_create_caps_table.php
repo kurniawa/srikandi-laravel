@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tipe_perhiasans', function (Blueprint $table) {
+        Schema::create('caps', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
-            $table->string('codename', 50)->nullable()->unique();
-            $table->smallInteger('barcode')->nullable();
+            $table->string('nama', 50);
+            $table->string('codename', 50)->nullable();
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tipe_perhiasans');
+        Schema::dropIfExists('caps');
     }
 };

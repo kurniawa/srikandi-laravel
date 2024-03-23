@@ -65,7 +65,8 @@
                 <label id="label_nama_short" for="nama_short" class="block text-sm font-medium text-gray-900 dark:text-white">nama_short</label>
                 <input type="text" id="nama_short" name="nama_short" class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
                 <label id="label_nama_long" for="nama_long" class="mt-1 block text-sm font-medium text-gray-900 dark:text-white">nama_long</label>
-                <input type="text" id="nama_long" name="nama_long" class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                <textarea id="nama_long" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-300 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
+                {{-- <input type="text" id="nama_long" name="nama_long" class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"> --}}
             </div>
             <div class="mb-5">
                 <label for="keterangan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">keterangan (opt.)</label>
@@ -222,6 +223,7 @@
 
 <script>
     let jenis_perhiasans = {!! json_encode($jenis_perhiasans, JSON_HEX_TAG) !!}
+    let caps = {!! json_encode($caps, JSON_HEX_TAG) !!}
     // console.log(jenis_perhiasans);
     // $('#tipe_perhiasan').autocomplete({
     //     source: jenis_perhiasans,
@@ -229,6 +231,13 @@
     //         document.getElementById('tipe_perhiasan').value = ui.item.value;
     //     }
     // });
+    $('#cap').autocomplete({
+        source: caps,
+        select: function (event, ui) {
+            document.getElementById('cap').value = ui.item.value;
+            generateNama();
+        }
+    })
 
     function pilihanJenisPerhiasan(data_tipe_perhiasan) {
         // console.log(data_tipe_perhiasan);
@@ -243,6 +252,7 @@
                 source: pilihan_jenis_perhiasans,
                 select: function (event, ui) {
                     document.getElementById('jenis_perhiasan').value = ui.item.value;
+                    generateNama();
                 }
             })
             document.getElementById('label_jenis_perhiasan').textContent = `jenis ${tipe_perhiasan.nama}`
@@ -387,6 +397,11 @@
         let tipe_perhiasan = json_tipe_perhiasan.nama;
         let jenis_perhiasan = document.getElementById('jenis_perhiasan').value;
         let warna_emas = document.getElementById('warna_emas').value;
+        if (warna_emas === 'kuning') {
+            warna_emas = ''
+        } else {
+            warna_emas = `<${warna_emas}>`;
+        }
         let kadar = document.getElementById('kadar').value;
         let berat = document.getElementById('berat').value;
         let kondisi = document.getElementById('kondisi').value;
@@ -396,8 +411,10 @@
         let merk = document.getElementById('merk').value;
         let plat = document.getElementById('plat').value;
 
-        let nama_long = `${tipe_perhiasan} ${jenis_perhiasan} we:${warna_emas} ${kadar}% ${berat}gr. kd:${kondisi} cap:${cap} ru:${range_usia} merk:${merk} plat:${plat}`;
-        nama_long = nama_long.split("  ").join(" ");
+        let nama_short = `${tipe_perhiasan} ${jenis_perhiasan} ${warna_emas} ${kadar}% ${berat}gr.`;
+        let nama_long = `${tipe_perhiasan} ${jenis_perhiasan} ${warna_emas} ${kadar}% ${berat}gr. zu:${kondisi} cap:${cap} ru:${range_usia} merk:${merk} plat:${plat}`;
+        // nama_long = nama_long.split("  ").join(" ");
+        document.getElementById('nama_short').value = nama_short;
         document.getElementById('nama_long').value = nama_long;
     }
 </script>

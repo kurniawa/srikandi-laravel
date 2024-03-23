@@ -22,6 +22,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             ItemSeeder::class,
             TipePerhiasanSeeder::class,
+            MainanSeeder::class,
+            CapSeeder::class,
         ]);
     }
 }
