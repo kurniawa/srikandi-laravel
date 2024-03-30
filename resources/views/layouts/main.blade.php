@@ -77,7 +77,7 @@
                   </button>
 
                   @if (Auth::user())
-                  <a href="{{ route('carts.index', Auth::user()->id) }}" class="text-indigo-500" onclick="showLoadingSpinner()">
+                  <a class="loading-spinner text-indigo-500" href="{{ route('carts.index', Auth::user()->id) }}">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
                       </svg>
@@ -136,7 +136,7 @@
                         @if (isset($profile_menu['params']))
                         <a href="{{ route($profile_menu['route'], $profile_menu['params']) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">{{ $profile_menu['name'] }}</a>
                         @else
-                        <a href="{{ route($profile_menu['route']) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">{{ $profile_menu['name'] }}</a>
+                        <a href="{{ route($profile_menu['route']) }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">{{ $profile_menu['name'] }}</a>
                         @endif
                       @endif
                       @endforeach
@@ -213,7 +213,7 @@
                 @else
                 <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Your Profile</a>
                 <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Settings</a>
-                <a href="{{ route('login') }}" class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Log in</a>
+                <a href="{{ route('login') }}" class="loading-spinner block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Log in</a>
                 @endif
               </div>
             </div>
@@ -222,15 +222,15 @@
         </nav>
         @yield('content')
 
-        <div class="mt-12 mx-2 mb-12 p-2 rounded border-2 border-emerald-300 text-gray-400">
+        <div class="mt-16 mx-2 mb-16 p-2 rounded border-2 border-emerald-300 text-gray-400">
             @if (Auth::user())
             <div class="text-center">
                 <span>Welcome, {{ Auth::user()->username }}!</span>
             </div>
-            <form action="{{ route('logout') }}" method="POST" onsubmit="showLoadingSpinner()">
+            <form action="{{ route('logout') }}" method="POST">
                 @csrf
                 <div class="flex justify-center">
-                    <button type="submit" class="rounded-md border-2 border-yellow-400 bg-yellow-200 py-1 px-2 font-medium hover:bg-gray-700 hover:text-white flex gap-1 items-center">
+                    <button type="submit" class="loading-spinner rounded-md border-2 border-yellow-400 bg-yellow-200 py-1 px-2 font-medium hover:bg-gray-700 hover:text-white flex gap-1 items-center">
                         <span>Log out</span>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
@@ -242,7 +242,7 @@
             <div class="text-center">
                 <p>
                     User not logged in.
-                    <a href="{{ route('login') }}" class="font-bold text-blue-400 hover:bg-gray-700 hover:text-white" onclick="showLoadingSpinner()">Log in</a>
+                    <a href="{{ route('login') }}" class="loading-spinner font-bold text-blue-400 hover:bg-gray-700 hover:text-white">Log in</a>
                 </p>
             </div>
             @endif
@@ -288,6 +288,14 @@
     function hideLoadingSpinner(params) {
         $('#loading-animation-layer').hide();
     }
+
+    let elem_with_loading_spinner = document.querySelectorAll('.loading-spinner');
+    elem_with_loading_spinner.forEach(element => {
+        element.addEventListener('click', () => {
+            // console.log('clicked');
+            showLoadingSpinner();
+        })
+    });
 </script>
 </html>
 

@@ -9,7 +9,7 @@
                 <h3 class="text-3xl font-bold text-indigo-500">Login</h3>
             </div>
             <div class="w-screen flex justify-center">
-                <form action="{{ route('login') }}" method="POST" onsubmit="showLoadingSpinner()" class="border rounded p-2 mt-2 w-3/4">
+                <form action="{{ route('login') }}" method="POST" class="border rounded p-2 mt-2 w-3/4">
                     @csrf
                     <div class="mt-5    ">
                         <label for="username" class="block font-medium leading-6 text-gray-900">Username</label>
@@ -24,7 +24,7 @@
                         </div>
                     </div>
                     <div class="mt-3 flex justify-center mb-5">
-                        <button type="submit" class="rounded px-3 py-2 font-semibold bg-indigo-400 border-2 border-indigo-500 text-white hover:bg-indigo-600 active:bg-indigo-700 focus:ring focus:ring-indigo-300" type="submit">Log in</button>
+                        <button type="submit" class="loading-spinner rounded px-3 py-2 font-semibold bg-indigo-400 border-2 border-indigo-500 text-white hover:bg-indigo-600 active:bg-indigo-700 focus:ring focus:ring-indigo-300" type="submit">Log in</button>
                     </div>
                 </form>
             </div>

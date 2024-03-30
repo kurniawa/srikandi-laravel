@@ -16,6 +16,9 @@ class HomeController extends Controller
             'route_now' => 'home',
             'profile_menus' => Menu::get_profile_menus(Auth::user()),
             'parent_route' => 'home',
+            'back' => false,
+            'backRoute' => null,
+            'backRouteParams' => null,
             'spk_menus' => Menu::get_spk_menus(),
             // 'user' => Auth::user(),
         ];

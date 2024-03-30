@@ -6,6 +6,7 @@ use App\Models\Cap;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\JenisPerhiasan;
+use App\Models\Mata;
 use App\Models\Menu;
 use App\Models\TipePerhiasan;
 use App\Models\User;
@@ -33,8 +34,11 @@ class CartController extends Controller
             // 'user' => Auth::user(),
             'cart' => $cart,
             'cart_items' => $cart_items,
+            'back' => true,
+            'backRoute' => 'home',
+            'backRouteParams' => null,
         ];
-
+        // dd($data);
         return view('carts.index', $data);
     }
 
@@ -51,6 +55,9 @@ class CartController extends Controller
             'spk_menus' => Menu::get_spk_menus(),
             // 'user' => Auth::user(),
             'from' => $from,
+            'back' => true,
+            'backRoute' => 'carts.index',
+            'backRouteParams' => [Auth::user()->id],
         ];
 
         return view('carts.pilih_tipe_barang', $data);
@@ -62,6 +69,7 @@ class CartController extends Controller
         $tipe_perhiasans = TipePerhiasan::all();
         $jenis_perhiasans = JenisPerhiasan::select('id', 'nama as label', 'nama as value', 'tipe_perhiasan_id')->get();
         $caps = Cap::select('id', 'nama as label', 'nama as value', 'codename')->get();
+        $warna_matas = Mata::select('id', 'warna as label', 'warna as value')->get();
         // dd($tipe_perhiasans);
         // dd($jenis_perhiasans);
 
@@ -72,6 +80,9 @@ class CartController extends Controller
             'route_now' => 'home',
             'profile_menus' => Menu::get_profile_menus(Auth::user()),
             'parent_route' => 'home',
+            'back' => true,
+            'backRoute' => 'carts.pilih_tipe_barang',
+            'backRouteParams' => [$from],
             'spk_menus' => Menu::get_spk_menus(),
             // 'user' => Auth::user(),
             'from' => $from,
@@ -79,6 +90,7 @@ class CartController extends Controller
             'tipe_perhiasans' => $tipe_perhiasans,
             'jenis_perhiasans' => $jenis_perhiasans,
             'caps' => $caps,
+            'warna_matas' => $warna_matas,
         ];
 
         // dd($caps);

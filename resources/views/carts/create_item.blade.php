@@ -65,7 +65,7 @@
                 <label id="label_nama_short" for="nama_short" class="block text-sm font-medium text-gray-900 dark:text-white">nama_short</label>
                 <input type="text" id="nama_short" name="nama_short" class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
                 <label id="label_nama_long" for="nama_long" class="mt-1 block text-sm font-medium text-gray-900 dark:text-white">nama_long</label>
-                <textarea id="nama_long" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-300 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
+                <textarea id="nama_long" name="nama_long" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-300 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
                 {{-- <input type="text" id="nama_long" name="nama_long" class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"> --}}
             </div>
             <div class="mb-5">
@@ -107,6 +107,7 @@
                     <div id="div_merk" class="mb-3 hidden">
                         <label id="label_merk" for="merk" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">merk</label>
                         <select id="merk" name="merk" onchange="generateNama()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option value="">--</option>
                             <option value="Antam">Antam</option>
                             <option value="UBS">UBS</option>
                         </select>
@@ -195,8 +196,8 @@
         </div>
 
         {{-- TOMBOL ATRIBUT --}}
-        <div class="fixed bottom-0 bg-violet-200 rounded w-full px-2">
-            <div class="flex gap-2">
+        <div class="fixed z-30 bottom-0 bg-violet-200 rounded w-4/5 px-2">
+            <div class="grid grid-cols-3 gap-2">
                 <div class="flex gap-1 items-center">
                     <input type="checkbox" name="toggle_mata" id="toggle_mata" onclick="toggleCheckbox(this, 'div_mata')"><label for="toggle_mata">mata</label>
                 </div>
@@ -219,11 +220,14 @@
             <button type="submit" class="bg-emerald-300 text-white px-3 py-2 rounded font-bold">+ Tambah Item Baru</button>
         </div>
     </form>
+
+    <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button>
 </main>
 
 <script>
     let jenis_perhiasans = {!! json_encode($jenis_perhiasans, JSON_HEX_TAG) !!}
     let caps = {!! json_encode($caps, JSON_HEX_TAG) !!}
+    let warna_matas = {!! json_encode($warna_matas, JSON_HEX_TAG) !!}
     // console.log(jenis_perhiasans);
     // $('#tipe_perhiasan').autocomplete({
     //     source: jenis_perhiasans,
@@ -295,6 +299,11 @@
         </div>`
         );
         index_mata++;
+
+    }
+
+    function setAutocompleteWarnaMata(element_id, source) {
+
     }
 
     let index_mainan = 0;
@@ -412,7 +421,7 @@
         let plat = document.getElementById('plat').value;
 
         let nama_short = `${tipe_perhiasan} ${jenis_perhiasan} ${warna_emas} ${kadar}% ${berat}gr.`;
-        let nama_long = `${tipe_perhiasan} ${jenis_perhiasan} ${warna_emas} ${kadar}% ${berat}gr. zu:${kondisi} cap:${cap} ru:${range_usia} merk:${merk} plat:${plat}`;
+        let nama_long = `${tipe_perhiasan} ${jenis_perhiasan} ${warna_emas} ${kadar}% ${berat}gr. zu:${kondisi} c:${cap} ru:${range_usia} merk:${merk} plat:${plat}`;
         // nama_long = nama_long.split("  ").join(" ");
         document.getElementById('nama_short').value = nama_short;
         document.getElementById('nama_long').value = nama_long;

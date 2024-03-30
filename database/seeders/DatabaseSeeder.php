@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             TipePerhiasanSeeder::class,
             MainanSeeder::class,
             CapSeeder::class,
+            MataSeeder::class,
         ]);
     }
 }
