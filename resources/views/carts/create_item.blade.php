@@ -14,63 +14,96 @@
                 </div>
                 <div class="mb-5">
                     <label for="tipe_perhiasan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">tipe perhiasan</label>
-                    <select id="tipe_perhiasan" onchange="pilihanJenisPerhiasan(this.value);generateNama()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <select id="tipe_perhiasan" name="tipe_perhiasan" onchange="pilihanJenisPerhiasan(this.value);generateNama()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         <option value="">--</option>
                         @foreach ($tipe_perhiasans as $tipe_perhiasan)
+                        @if (old('tipe_perhiasan'))
+                        @if (old('tipe_perhiasan') == $tipe_perhiasan->id)
+                        <option value='{ "id":{{ $tipe_perhiasan->id }}, "nama": "{{ $tipe_perhiasan->nama }}" }' selected>{{ $tipe_perhiasan->nama }}</option>
+                        @endif
+                        @else
                         <option value='{ "id":{{ $tipe_perhiasan->id }}, "nama": "{{ $tipe_perhiasan->nama }}" }'>{{ $tipe_perhiasan->nama }}</option>
+                        @endif
                         @endforeach
                     </select>
                 </div>
                 <div class="mb-5">
                     <label id="label_jenis_perhiasan" for="jenis_perhiasan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">jenis ...</label>
-                    <input type="text" name="jenis_perhiasan" id="jenis_perhiasan" onchange="generateNama()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input type="text" name="jenis_perhiasan" id="jenis_perhiasan" value="{{ old('jenis_perhiasan') ? old('jenis_perhiasan') : '' }}" onchange="generateNama()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
                 <div class="mb-5">
                     <label for="deskripsi" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">deskripsi (opt.)</label>
-                    <input type="text" id="deskripsi" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input type="text" id="deskripsi" name="deskripsi" value="{{ old('deskripsi') ? old('deskripsi') : '' }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
                 <div class="mb-5">
                     <label for="warna_emas" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">warna emas</label>
                     <select id="warna_emas" name="warna_emas" onchange="generateNama()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        @if (old('warna_emas'))
+                        @if (old('warna_emas') == 'kuning')
+                        <option value="kuning" selected>kuning</option>
+                        @else
+                        <option value="kuning">kuning</option>
+                        @endif
+                        @if (old('warna_emas') == 'rose gold')
+                        <option value="rose gold" selected>rose gold</option>
+                        @else
+                        <option value="rose gold">rose gold</option>
+                        @endif
+                        @if (old('warna_emas') == 'putih')
+                        <option value="putih" selected>putih</option>
+                        @else
+                        <option value="putih">putih</option>
+                        @endif
+                        @if (old('warna_emas') == 'chrome')
+                        <option value="chrome" selected>chrome</option>
+                        @else
+                        <option value="chrome">chrome</option>
+                        @endif
+                        @else
                         <option value="kuning">kuning</option>
                         <option value="rose gold">rose gold</option>
                         <option value="putih">putih</option>
                         <option value="chrome">chrome</option>
+                        @endif
                     </select>
                 </div>
             </div>
             <div class="grid grid-cols-2 gap-2">
                 <div class="mb-5">
                     <label id="label_kadar_formatted" for="kadar_formatted" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">kadar(%)</label>
-                    <input type="text" id="kadar_formatted" onchange="formatNumber(this, 'kadar');generateNama()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <input type="hidden" id="kadar" name="kadar">
+                    <input type="text" id="kadar_formatted" value="{{ old('kadar_formatted') ? old('kadar_formatted') : '' }}" onchange="formatNumber(this, 'kadar');generateNama()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input type="hidden" id="kadar" name="kadar" value="{{ old('kadar') ? old('kadar') : '' }}">
                 </div>
                 <div class="mb-5">
                     <label id="label_berat_formatted" for="berat_formatted" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">berat</label>
-                    <input type="text" id="berat_formatted" onchange="formatNumber(this, 'berat');hitungHargaGrOrT();generateNama();" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <input type="hidden" id="berat" name="berat">
+                    <input type="text" id="berat_formatted" value="{{ old('berat_formatted') ? old('berat_formatted') : '' }}" onchange="formatNumber(this, 'berat');hitungHargaGrOrT();generateNama();" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input type="hidden" id="berat" name="berat" value="{{ old('berat') ? old('berat') : '' }}">
                 </div>
                 <div class="mb-5">
                     <label id="label_harga_gr_formatted" for="harga_gr_formatted" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">harga_gr</label>
-                    <input type="text" id="harga_gr_formatted" onchange="formatNumber(this, 'harga_gr');hitungHargaT();" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <input type="hidden" id="harga_gr" name="harga_gr">
+                    <input type="text" id="harga_gr_formatted" value="{{ old('harga_gr_formatted') ? old('harga_gr_formatted') : '' }}" onchange="formatNumber(this, 'harga_gr');hitungHargaT();" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input type="hidden" id="harga_gr" name="harga_gr" value="{{ old('harga_gr') ? old('harga_gr') : '' }}">
                 </div>
                 <div class="mb-5">
                     <label id="label_harga_t_formatted" for="harga_t_formatted" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">harga_t</label>
-                    <input type="text" id="harga_t_formatted" onchange="formatNumber(this, 'harga_t');hitungHargaGr();" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <input type="hidden" id="harga_t" name="harga_t">
+                    <input type="text" id="harga_t_formatted" value="{{ old('harga_t_formatted') ? old('harga_t_formatted') : '' }}" onchange="formatNumber(this, 'harga_t');hitungHargaGr();" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input type="hidden" id="harga_t" name="harga_t" value="{{ old('harga_t') ? old('harga_t') : '' }}">
                 </div>
             </div>
             <div class="mb-5 border border-emerald-300 rounded p-1">
                 <label id="label_nama_short" for="nama_short" class="block text-sm font-medium text-gray-900 dark:text-white">nama_short</label>
-                <input type="text" id="nama_short" name="nama_short" class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                <input type="text" id="nama_short" name="nama_short" value="{{ old('nama_short') ? old('nama_short') : '' }}" class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
                 <label id="label_nama_long" for="nama_long" class="mt-1 block text-sm font-medium text-gray-900 dark:text-white">nama_long</label>
-                <textarea id="nama_long" name="nama_long" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-300 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
+                <textarea id="nama_long" name="nama_long" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-300 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    {{ old('nama_long') ? old('nama_long') : '' }}
+                </textarea>
                 {{-- <input type="text" id="nama_long" name="nama_long" class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"> --}}
             </div>
             <div class="mb-5">
                 <label for="keterangan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">keterangan (opt.)</label>
-                <textarea id="keterangan" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
+                <textarea id="keterangan" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    {{ old('keterangan') ? old('keterangan') : '' }}
+                </textarea>
             </div>
             {{-- ATRIBUT LAIN --}}
             <div class="border border-indigo-300 p-2 rounded">
@@ -81,40 +114,99 @@
                     <div class="mb-3">
                         <label for="kondisi" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">kondisi</label>
                         <select id="kondisi" name="kondisi" onchange="generateNama()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            @if (old('kondisi'))
+                            @if (old('kondisi') == "99")
+                            <option value="99" selected>99 - mulus</option>
+                            @else
+                            <option value="99">99 - mulus</option>
+                            @endif
+                            @if (old('kondisi') == "80")
+                            <option value="80" selected>80 - sedikit cacat/hampir tidak terlihat</option>
+                            @else
+                            <option value="80">80 - sedikit cacat/hampir tidak terlihat</option>
+                            @endif
+                            @if (old('kondisi') == "70")
+                            <option value="70" selected>70 - cacat jelas terlihat</option>
+                            @else
+                            <option value="70">70 - cacat jelas terlihat</option>
+                            @endif
+                            @if (old('kondisi') == "60")
+                            <option value="60" selected>60 - cacat banget</option>
+                            @else
+                            <option value="60">60 - cacat banget</option>
+                            @endif
+                            @if (old('kondisi') == "50")
+                            <option value="50" selected>50 - ancur / rusak</option>
+                            @else
+                            <option value="50">50 - ancur / rusak</option>
+                            @endif
+                            @else
                             <option value="99">99 - mulus</option>
                             <option value="80">80 - sedikit cacat/hampir tidak terlihat</option>
                             <option value="70">70 - cacat jelas terlihat</option>
                             <option value="60">60 - cacat banget</option>
                             <option value="50">50 - ancur / rusak</option>
+                            @endif
                         </select>
                     </div>
                     <div class="mb-3">
                         <label id="label_cap" for="cap" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">cap</label>
-                        <input type="text" id="cap" name="cap" onchange="generateNama()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <input type="text" id="cap" name="cap" value="{{ old('cap') ? old('cap') : '' }}" onchange="generateNama()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     </div>
                     <div class="mb-3">
                         <label for="range_usia" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">range_usia</label>
                         <select id="range_usia" name="range_usia" onchange="generateNama()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            @if (old('range_usia'))
+                            @if (old('range_usia') == 'dewasa')
+                            <option value="dewasa" selected>dewasa</option>
+                            @else
+                            <option value="dewasa">dewasa</option>
+                            @endif
+                            @if (old('range_usia') == 'anak')
+                            <option value="anak" selected>anak</option>
+                            @else
+                            <option value="anak">anak</option>
+                            @endif
+                            @if (old('range_usia') == 'bayi')
+                            <option value="bayi" selected>bayi</option>
+                            @else
+                            <option value="bayi">bayi</option>
+                            @endif
+                            @else
                             <option value="dewasa">dewasa</option>
                             <option value="anak">anak</option>
                             <option value="bayi">bayi</option>
+                            @endif
                         </select>
                     </div>
                     <div id="div_ukuran" class="mb-3 hidden">
                         <label id="label_ukuran" for="ukuran" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ukuran(mm.)</label>
-                        <input type="text" id="ukuran" name="ukuran" onchange="generateNama()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <input type="text" id="ukuran" name="ukuran" value="{{ old('ukuran') ? old('ukuran') : '' }}" onchange="generateNama()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     </div>
                     <div id="div_merk" class="mb-3 hidden">
                         <label id="label_merk" for="merk" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">merk</label>
                         <select id="merk" name="merk" onchange="generateNama()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            @if (old('merk'))
+                            @if (old('merk') == 'Antam')
+                            <option value="Antam" selected>Antam</option>
+                            @else
+                            <option value="Antam">Antam</option>
+                            @endif
+                            @if (old('merk') == 'UBS')
+                            <option value="UBS" selected>UBS</option>
+                            @else
+                            <option value="UBS">UBS</option>
+                            @endif
+                            @else
                             <option value="">--</option>
                             <option value="Antam">Antam</option>
                             <option value="UBS">UBS</option>
+                            @endif
                         </select>
                     </div>
                     <div id="div_plat" class="mb-3 hidden">
                         <label id="label_plat" for="plat" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">plat</label>
-                        <input type="number" step="1" max="9" min="0" id="plat" name="plat" onchange="generateNama()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <input type="number" step="1" max="9" min="0" id="plat" name="plat" value="{{ old('plat') ? old('plat') : '' }}" onchange="generateNama()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     </div>
                 </div>
 
@@ -131,24 +223,60 @@
                         <div id="data-mata-0" class="data-mata">
                             <div class="grid grid-cols-2 gap-2 mt-2 border-t border-b border-violet-300 p-1">
                                 <div class="mb-1">
-                                    <input type="text" id="warna_mata" name="warna_mata[]" placeholder="warna_mata" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <input type="text" id="warna_mata-0" name="warna_mata[]" value="{{ old('warna_mata.0') ? old('warna_mata.0') : '' }}" placeholder="warna_mata" class="warna-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 </div>
                                 <div class="mb-1">
-                                    <select id="level_warna" name="level_warna[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <select id="level_warna" name="level_warna[]" class="level-warna bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        @if (old('level_warna.0'))
+                                        @if (old('level_warna.0') == 'netral')
+                                        <option value="netral" selected>netral</option>
+                                        @else
+                                        <option value="netral">netral</option>
+                                        @endif
+                                        @if (old('level_warna.0') == 'tua')
+                                        <option value="tua" selected>tua</option>
+                                        @else
+                                        <option value="tua">tua</option>
+                                        @endif
+                                        @if (old('level_warna.0') == 'muda')
+                                        <option value="muda" selected>muda</option>
+                                        @else
+                                        <option value="muda">muda</option>
+                                        @endif
+                                        @else
                                         <option value="netral">netral</option>
                                         <option value="tua">tua</option>
                                         <option value="muda">muda</option>
+                                        @endif
                                     </select>
                                 </div>
                                 <div class="mb-1">
-                                    <select id="opacity" name="opacity[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <select id="opacity" name="opacity[]" class="opacity-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        @if (old('opacity'))
+                                        @if (old('opacity') == 'transparent')
+                                        <option value="transparent" selected>transparent</option>
+                                        @else
+                                        <option value="transparent">transparent</option>
+                                        @endif
+                                        @if (old('opacity') == 'non-transparent')
+                                        <option value="non-transparent" selected>non-transparent</option>
+                                        @else
+                                        <option value="non-transparent">non-transparent</option>
+                                        @endif
+                                        @if (old('opacity') == 'half-transparent')
+                                        <option value="half-transparent" selected>half-transparent</option>
+                                        @else
+                                        <option value="half-transparent">half-transparent</option>
+                                        @endif
+                                        @else
                                         <option value="transparent">transparent</option>
                                         <option value="non-transparent">non-transparent</option>
                                         <option value="half-transparent">half-transparent</option>
+                                        @endif
                                     </select>
                                 </div>
                                 <div class="mb-1">
-                                    <input type="text" id="jumlah_mata" name="jumlah_mata[]" placeholder="jumlah_mata" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <input type="text" id="jumlah_mata" name="jumlah_mata[]" value="{{ old('jumlah_mata.0') ? old('jumlah_mata.0') : '' }}" placeholder="jumlah_mata" class="jumlah-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 </div>
                             </div>
                             <div class="flex justify-end mt-1">
@@ -175,10 +303,10 @@
                         <div id="data-mainan-0" class="data-mainan">
                             <div class="grid grid-cols-2 gap-2 mt-2 border-t border-b border-violet-300 p-1">
                                 <div class="mb-1">
-                                    <input type="text" id="tipe_mainan" name="tipe_mainan[]" placeholder="tipe_mainan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <input type="text" id="tipe_mainan-0" name="tipe_mainan[]" value="{{ old('tipe_mainan.0') ? old('tipe_mainan.0') : '' }}" placeholder="tipe_mainan" class="tipe-mainan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 </div>
                                 <div class="mb-1">
-                                    <input type="text" id="jumlah_mainan" name="jumlah_mainan[]" placeholder="jumlah_mainan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <input type="text" id="jumlah_mainan-0" name="jumlah_mainan[]" value="{{ old('jumlah_mainan.0') ? old('jumlah_mainan.0') : '' }}" placeholder="jumlah_mainan" class="jumlah-mainan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 </div>
                             </div>
                             <div class="flex justify-end mt-1">
@@ -228,6 +356,8 @@
     let jenis_perhiasans = {!! json_encode($jenis_perhiasans, JSON_HEX_TAG) !!}
     let caps = {!! json_encode($caps, JSON_HEX_TAG) !!}
     let warna_matas = {!! json_encode($warna_matas, JSON_HEX_TAG) !!}
+    let mainans = {!! json_encode($mainans, JSON_HEX_TAG) !!}
+    // console.log(mainans);
     // console.log(jenis_perhiasans);
     // $('#tipe_perhiasan').autocomplete({
     //     source: jenis_perhiasans,
@@ -269,24 +399,24 @@
         `<div id="data-mata-${index_mata}">
             <div class="grid grid-cols-2 gap-2 mt-2 border-t border-b border-violet-300 p-1">
                 <div class="mb-1">
-                    <input type="text" id="warna_mata" name="warna_mata" placeholder="warna_mata" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input type="text" id="warna_mata-${index_mata}" name="warna_mata" placeholder="warna_mata" class="warna-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
                 <div class="mb-1">
-                    <select id="level_warna" name="level_warna" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <select id="level_warna" name="level_warna" class="level-warna bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         <option value="netral">netral</option>
                         <option value="tua">tua</option>
                         <option value="muda">muda</option>
                     </select>
                 </div>
                 <div class="mb-1">
-                    <select id="opacity" name="opacity" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <select id="opacity" name="opacity" class="opacity-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         <option value="transparent">transparent</option>
                         <option value="non-transparent">non-transparent</option>
                         <option value="half-transparent">half-transparent</option>
                     </select>
                 </div>
                 <div class="mb-1">
-                    <input type="text" id="jumlah_mata" name="jumlah_mata" placeholder="jumlah_mata" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input type="text" id="jumlah_mata" name="jumlah_mata" placeholder="jumlah_mata" class="jumlah-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
             </div>
             <div class="flex justify-end mt-1">
@@ -298,24 +428,31 @@
             </div>
         </div>`
         );
+
+        setAutocompleteWarnaMata(`warna_mata-${index_mata}`, warna_matas);
         index_mata++;
 
     }
 
     function setAutocompleteWarnaMata(element_id, source) {
-
+        // console.log('run autocomplete mata');
+        $(`#${element_id}`).autocomplete({
+            source: source,
+        });
     }
 
-    let index_mainan = 0;
+    setAutocompleteWarnaMata(`warna_mata-0`, warna_matas);
+
+    let index_mainan = 1;
     function addMainan() {
         document.getElementById('data_mainan').insertAdjacentHTML('beforeend',
         `<div id="data-mainan-${index_mainan}" class="data-mainan">
             <div class="grid grid-cols-2 gap-2 mt-2 border-t border-b border-violet-300 p-1">
                 <div class="mb-1">
-                    <input type="text" id="tipe_mainan" name="tipe_mainan[]" placeholder="tipe_mainan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input type="text" id="tipe_mainan-${index_mainan}" name="tipe_mainan[]" placeholder="tipe_mainan" class="tipe-mainan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
                 <div class="mb-1">
-                    <input type="text" id="jumlah_mainan" name="jumlah_mainan[]" placeholder="jumlah_mainan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input type="text" id="jumlah_mainan-${index_mainan}" name="jumlah_mainan[]" placeholder="jumlah_mainan" class="jumlah-mainan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
             </div>
             <div class="flex justify-end mt-1">
@@ -327,8 +464,18 @@
             </div>
         </div>`
         );
+
+        setAutocompleteMainan(`tipe_mainan-${index_mainan}`);
         index_mainan++;
     }
+
+    function setAutocompleteMainan(element_id) {
+        $(`#${element_id}`).autocomplete({
+            source: mainans,
+        });
+    }
+
+    setAutocompleteMainan('tipe_mainan-0')
 
     function removeElement(id) {
         document.getElementById(id).remove();
@@ -415,13 +562,28 @@
         let berat = document.getElementById('berat').value;
         let kondisi = document.getElementById('kondisi').value;
         let cap = document.getElementById('cap').value;
+        if (cap) {
+            cap = ` c:${cap}`;
+        }
         let range_usia = document.getElementById('range_usia').value;
+        if (range_usia) {
+            range_usia = ` ru:${range_usia}`;
+        }
         let ukuran = document.getElementById('ukuran').value;
+        if (ukuran) {
+            ukuran = ` uk:${ukuran}`
+        }
         let merk = document.getElementById('merk').value;
+        if (merk) {
+            merk = `merk:${merk}`
+        }
         let plat = document.getElementById('plat').value;
+        if (plat) {
+            plat = ` plat:${plat}`;
+        }
 
-        let nama_short = `${tipe_perhiasan} ${jenis_perhiasan} ${warna_emas} ${kadar}% ${berat}gr.`;
-        let nama_long = `${tipe_perhiasan} ${jenis_perhiasan} ${warna_emas} ${kadar}% ${berat}gr. zu:${kondisi} c:${cap} ru:${range_usia} merk:${merk} plat:${plat}`;
+        let nama_short = `${tipe_perhiasan} ${jenis_perhiasan} ${warna_emas} ${kadar}% ${berat}gr`;
+        let nama_long = `${tipe_perhiasan} ${jenis_perhiasan} ${warna_emas} ${kadar}% ${berat}gr zu:${kondisi}${cap}${ukuran}${range_usia}${merk}${plat}`;
         // nama_long = nama_long.split("  ").join(" ");
         document.getElementById('nama_short').value = nama_short;
         document.getElementById('nama_long').value = nama_long;

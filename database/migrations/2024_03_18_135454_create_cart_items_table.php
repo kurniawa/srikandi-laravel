@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('cart_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('cart_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('item_id')->nullable()->constrained()->onDelete('set null')->onUpdate('cascade');
-            $table->bigInteger('harga');
+            $table->foreignId('item_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->bigInteger('harga_t');
         });
     }
 

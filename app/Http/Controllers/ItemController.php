@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
+use App\Models\CartItem;
 use App\Models\Item;
 use App\Models\ItemMainan;
 use App\Models\ItemMata;
 use App\Models\Mainan;
 use App\Models\Mata;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ItemController extends Controller
 {
     function store($from, Request $request) {
         $post = $request->post();
-        dump($from);
-        dd($post);
+        // dump($from);
+        // dd($post);
 
         $request->validate([
             'tipe_barang'=> 'required',
@@ -30,12 +33,6 @@ class ItemController extends Controller
         $kadar = null;
         $berat = null;
         $harga_gr = null;
-        $kondisi = null;
-        $cap = null;
-        $range_usia = null;
-        $ukuran = null;
-        $merk = null;
-        $plat = null;
         // $edisi = null;
         // $nampan = null;
         if ($post['tipe_barang'] === 'perhiasan') {
@@ -73,7 +70,7 @@ class ItemController extends Controller
         // cek apakah ada item yang sama
         $item_exist = Item::where('nama_long', $post['nama_long'])->get();
 
-        if (count($item_exist) !== 0) {
+        if (count($item_exist) !== 0) { // pindah ke halaman untuk memilih item yang mirip-mirip
             dump('item exist');
             dd($item_exist);
         }
@@ -82,18 +79,27 @@ class ItemController extends Controller
             'tipe_barang' => $post['tipe_barang'],
             'tipe_perhiasan' => $tipe_perhiasan,
             'jenis_perhiasan' => $jenis_perhiasan,
-            'range_usia' => $post['range_usia'],
             'warna_emas' => $warna_emas,
             'kadar' => $kadar,
             'berat' => $berat,
             'harga_gr' => $harga_gr,
             'harga_t' => $harga_t,
+            'nama_short' => $post['nama_short'],
+            'nama_long' => $post['nama_long'],
             'kondisi' => $post['kondisi'],
             'cap' => $post['cap'],
             'range_usia' => $post['range_usia'],
             'ukuran' => $post['ukuran'],
             'merk' => $post['merk'],
             'plat' => $post['plat'],
+            // 'edisi',
+            // 'nampan',
+            'stock' => 1,
+            // 'kode_item',
+            // 'barcode',
+            // 'deskripsi',
+            // 'keterangan',
+            // 'status',
         ]);
 
         // MATA
@@ -137,5 +143,29 @@ class ItemController extends Controller
                 ]);
             }
         }
+
+        $success_ = '-item baru telah diinput-';
+
+        // MULAI INPUT KE CART
+        $user = Auth::user();
+        $cart = Cart::where('user_id', $user->id)->first();
+        if (!$cart) {
+            $cart = Cart::create([
+                'user_id' => $user->id,
+            ]);
+        }
+        CartItem::create([
+            'cart_id' => $cart->id,
+            'item_id' => $item_new->id,
+            'harga_t' => $harga_t,
+        ]);
+        $success_ .= '-item telah diinput ke cart-';
+        // END - INPUT KE CART
+
+        $feedback = [
+            'success_' => $success_,
+        ];
+
+        return redirect()->route('carts.index', $user->id)->with($feedback);
     }
 }

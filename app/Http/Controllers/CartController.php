@@ -6,6 +6,7 @@ use App\Models\Cap;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\JenisPerhiasan;
+use App\Models\Mainan;
 use App\Models\Mata;
 use App\Models\Menu;
 use App\Models\TipePerhiasan;
@@ -69,7 +70,8 @@ class CartController extends Controller
         $tipe_perhiasans = TipePerhiasan::all();
         $jenis_perhiasans = JenisPerhiasan::select('id', 'nama as label', 'nama as value', 'tipe_perhiasan_id')->get();
         $caps = Cap::select('id', 'nama as label', 'nama as value', 'codename')->get();
-        $warna_matas = Mata::select('id', 'warna as label', 'warna as value')->get();
+        $warna_matas = Mata::select('warna as label', 'warna as value')->groupBy('warna')->get();
+        $mainans = Mainan::select('id', 'nama as label', 'nama as value')->get();
         // dd($tipe_perhiasans);
         // dd($jenis_perhiasans);
 
@@ -91,6 +93,7 @@ class CartController extends Controller
             'jenis_perhiasans' => $jenis_perhiasans,
             'caps' => $caps,
             'warna_matas' => $warna_matas,
+            'mainans' => $mainans,
         ];
 
         // dd($caps);
