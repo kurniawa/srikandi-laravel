@@ -100,4 +100,10 @@ class CartController extends Controller
 
         return view('carts.create_item', $data);
     }
+
+    function checkout(Cart $cart, Request $request) {
+        $post = $request->post();
+        dump($cart);
+        dd($post);
+    }
 }

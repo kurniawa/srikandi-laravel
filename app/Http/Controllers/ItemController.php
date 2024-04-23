@@ -157,8 +157,16 @@ class ItemController extends Controller
         CartItem::create([
             'cart_id' => $cart->id,
             'item_id' => $item_new->id,
-            'harga_t' => $harga_t,
+            'harga_t' => (string)$harga_t,
         ]);
+
+        if ($cart->harga_total) {
+            $cart->harga_total = (string)((float)$cart->harga_total + $harga_t);
+        } else {
+            $cart->harga_total = (string)($harga_t);
+        }
+        $cart->save();
+
         $success_ .= '-item telah diinput ke cart-';
         // END - INPUT KE CART
 
