@@ -18,10 +18,6 @@ class CartController extends Controller
 {
     function index(User $user) {
         $cart = Cart::where('user_id', $user->id)->first();
-        $cart_items = null;
-        if ($cart) {
-            $cart_items = $cart->cart_items;
-        }
 
 
         $data = [
@@ -34,7 +30,6 @@ class CartController extends Controller
             'spk_menus' => Menu::get_spk_menus(),
             // 'user' => Auth::user(),
             'cart' => $cart,
-            'cart_items' => $cart_items,
             'back' => true,
             'backRoute' => 'home',
             'backRouteParams' => null,
@@ -45,6 +40,7 @@ class CartController extends Controller
 
     function pilih_tipe_barang($from) {
         // dd($from);
+        $cart = Cart::where('user_id', Auth::user()->id)->first();
 
         $data = [
             // 'goback' => 'home',
@@ -59,6 +55,7 @@ class CartController extends Controller
             'back' => true,
             'backRoute' => 'carts.index',
             'backRouteParams' => [Auth::user()->id],
+            'cart' => $cart,
         ];
 
         return view('carts.pilih_tipe_barang', $data);
@@ -74,6 +71,8 @@ class CartController extends Controller
         $mainans = Mainan::select('id', 'nama as label', 'nama as value')->get();
         // dd($tipe_perhiasans);
         // dd($jenis_perhiasans);
+
+        $cart = Cart::where('user_id', Auth::user()->id)->first();
 
         $data = [
             // 'goback' => 'home',
@@ -94,6 +93,7 @@ class CartController extends Controller
             'caps' => $caps,
             'warna_matas' => $warna_matas,
             'mainans' => $mainans,
+            'cart' => $cart,
         ];
 
         // dd($caps);
@@ -102,8 +102,42 @@ class CartController extends Controller
     }
 
     function checkout(Cart $cart, Request $request) {
-        $post = $request->post();
-        dump($cart);
-        dd($post);
+        $get = $request->query();
+        // dump($cart);
+        // dd($get);
+
+        $cart_items = collect();
+        $harga_total = 0;
+        foreach ($get['cart_item_id'] as $cart_item_id) {
+            $cart_item = CartItem::find($cart_item_id);
+            $cart_items->push($cart_item);
+            $harga_total += (float)$cart_item->harga_t;
+        }
+        // dd($cart_items);
+
+        $users = User::all();
+
+        $data = [
+            // 'goback' => 'home',
+            // 'user_role' => $user_role,
+            'menus' => Menu::get(),
+            'route_now' => 'home',
+            'profile_menus' => Menu::get_profile_menus(Auth::user()),
+            'parent_route' => 'home',
+            'back' => true,
+            'backRoute' => 'carts.index',
+            'backRouteParams' => [$cart->id],
+            'spk_menus' => Menu::get_spk_menus(),
+            // 'user' => Auth::user(),
+            // 'from' => $from,
+            'cart' => $cart,
+            'cart_items' => $cart_items,
+            'harga_total' => $harga_total,
+            'users' => $users,
+        ];
+
+        // dd($caps);
+
+        return view('carts.checkout', $data);
     }
 }

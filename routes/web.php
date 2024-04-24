@@ -60,7 +60,8 @@ Route::controller(CartController::class)->group(function(){
     Route::get('/carts/{user}/index','index')->name('carts.index')->middleware('auth');
     Route::get('/carts/{from}/pilih_tipe_barang','pilih_tipe_barang')->name('carts.pilih_tipe_barang')->middleware('auth');
     Route::get('/carts/{from}/{tipe_barang}/create_item','create_item')->name('carts.create_item')->middleware('auth');
-    Route::post('/carts/{cart}/checkout','checkout')->name('carts.checkout')->middleware('auth');
+    Route::get('/carts/{cart}/checkout','checkout')->name('carts.checkout')->middleware('auth');
+    Route::post('/carts/{cart}/proses_checkout','proses_checkout')->name('carts.proses_checkout')->middleware('auth');
 });
 
 Route::controller(ArtisanController::class)->group(function(){

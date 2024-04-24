@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
+use App\Models\CartItem;
 use App\Models\Menu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -9,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 class HomeController extends Controller
 {
     public function home() {
+        $cart = Cart::where('user_id', Auth::user()->id)->first();
+
         $data = [
             // 'goback' => 'home',
             // 'user_role' => $user_role,
@@ -21,6 +25,7 @@ class HomeController extends Controller
             'backRouteParams' => null,
             'spk_menus' => Menu::get_spk_menus(),
             // 'user' => Auth::user(),
+            'cart' => $cart,
         ];
         return view('app', $data);
     }

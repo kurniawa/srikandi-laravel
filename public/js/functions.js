@@ -350,6 +350,37 @@ function formatNumber(ipt, hidden_id) {
     }
 }
 
+function formatNumberX(string_value) {
+    let num = string_value.split(".").join("");
+    num = num.split(",");
+    let float_number;
+    if (num.length === 2) {
+        if (num[1] !== '') {
+            float_number = `${num[0]}.${num[1]}`;
+        }
+    } else {
+        float_number = num[0];
+    }
+
+    let formatted_number = float_number;
+    if (!isNaN(float_number)) {
+        let real_number_formatted = parseFloat(num[0]).toLocaleString("id-ID", {
+            style: "decimal",
+        });
+        // console.log(real_number_formatted);
+        formatted_number = `${real_number_formatted} ,-`;
+        if (num.length === 2) {
+            formatted_number = `${real_number_formatted} ,${num[1]}`;
+        }
+    }
+
+    return formatted_number;
+}
+
+function preformatDotToComa(float_value) {
+    return float_value.toString().split(".").join(",");
+}
+
 function formatNumber2(formatted_id, hidden_id) {
     var formatted = document.getElementById(formatted_id);
     var num = formatted.value;
