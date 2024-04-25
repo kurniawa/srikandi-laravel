@@ -140,4 +140,10 @@ class CartController extends Controller
 
         return view('carts.checkout', $data);
     }
+
+    function proses_checkout(Cart $cart, Request $request) {
+        $post = $request->post();
+        dump($cart);
+        dd($post);
+    }
 }

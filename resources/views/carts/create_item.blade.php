@@ -1,4 +1,4 @@
-@extends('layouts.main', $cart)
+@extends('layouts.main')
 @section('content')
 <main>
     <x-errors-any></x-errors-any>
@@ -399,24 +399,24 @@
         `<div id="data-mata-${index_mata}">
             <div class="grid grid-cols-2 gap-2 mt-2 border-t border-b border-violet-300 p-1">
                 <div class="mb-1">
-                    <input type="text" id="warna_mata-${index_mata}" name="warna_mata" placeholder="warna_mata" class="warna-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input type="text" id="warna_mata-${index_mata}" name="warna_mata[]" placeholder="warna_mata" class="warna-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
                 <div class="mb-1">
-                    <select id="level_warna" name="level_warna" class="level-warna bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <select id="level_warna" name="level_warna[]" class="level-warna bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         <option value="netral">netral</option>
                         <option value="tua">tua</option>
                         <option value="muda">muda</option>
                     </select>
                 </div>
                 <div class="mb-1">
-                    <select id="opacity" name="opacity" class="opacity-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <select id="opacity" name="opacity[]" class="opacity-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         <option value="transparent">transparent</option>
                         <option value="non-transparent">non-transparent</option>
                         <option value="half-transparent">half-transparent</option>
                     </select>
                 </div>
                 <div class="mb-1">
-                    <input type="text" id="jumlah_mata" name="jumlah_mata" placeholder="jumlah_mata" class="jumlah-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input type="text" id="jumlah_mata" name="jumlah_mata[]" placeholder="jumlah_mata" class="jumlah-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
             </div>
             <div class="flex justify-end mt-1">
@@ -556,7 +556,7 @@
         if (warna_emas === 'kuning') {
             warna_emas = ''
         } else {
-            warna_emas = `<${warna_emas}>`;
+            warna_emas = ` <${warna_emas}>`;
         }
         let kadar = document.getElementById('kadar').value;
         let berat = document.getElementById('berat').value;
@@ -582,8 +582,8 @@
             plat = ` plat:${plat}`;
         }
 
-        let nama_short = `${tipe_perhiasan} ${jenis_perhiasan} ${warna_emas} ${kadar}% ${berat}gr`;
-        let nama_long = `${tipe_perhiasan} ${jenis_perhiasan} ${warna_emas} ${kadar}% ${berat}gr zu:${kondisi}${cap}${ukuran}${range_usia}${merk}${plat}`;
+        let nama_short = `${tipe_perhiasan} ${jenis_perhiasan}${warna_emas} ${kadar}% ${berat}gr`;
+        let nama_long = `${tipe_perhiasan} ${jenis_perhiasan}${warna_emas} ${kadar}% ${berat}gr zu:${kondisi}${cap}${ukuran}${range_usia}${merk}${plat}`;
         // nama_long = nama_long.split("  ").join(" ");
         document.getElementById('nama_short').value = nama_short;
         document.getElementById('nama_long').value = nama_long;

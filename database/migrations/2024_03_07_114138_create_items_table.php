@@ -20,6 +20,7 @@ return new class extends Migration
             $table->smallInteger('kadar')->nullable();
             // $table->enum('gol_kadar',['MUDA','BAGUS','TUA'])->nullable();
             $table->smallInteger('berat')->nullable(); // int/integer | 4 bytes  -2147483648 to 2147483647                    0 to 4294967295
+            $table->integer('ongkos_gr')->nullable(); // nullable untuk barang yang bukan bb_able atau bukan perhiasan
             $table->bigInteger('harga_gr')->nullable();
             $table->bigInteger('harga_t');
             $table->string('nama_short');

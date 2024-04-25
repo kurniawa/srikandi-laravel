@@ -1,4 +1,4 @@
-@extends('layouts.main', $cart)
+@extends('layouts.main')
 @section('content')
 <main class="p-2">
     <x-errors-any></x-errors-any>
@@ -10,6 +10,7 @@
 
     <h3 class="text-xl font-bold text-slate-500">Keranjang</h3>
 
+    @if ($cart)
     <form action="{{ route('carts.checkout', $cart->id) }}" method="GET" class="mt-5">
         <div class="flex gap-2 items-center my-2">
             <input type="checkbox" name="pilih_semua" id="pilih_semua" class="w-4 h-4" onclick="pilihSemuaCartItems(this)" checked>
@@ -58,6 +59,9 @@
             <button type="submit" class="rounded-lg px-3 py-2 bg-emerald-400 text-white border-2 border-emerald-500 font-bold">Checkout</button>
         </div>
     </form>
+    @else
+    <div class="text-slate-500 italic">- masih kosong -</div>
+    @endif
 
     <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button>
     {{-- @if ($back === true)

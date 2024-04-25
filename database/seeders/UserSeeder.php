@@ -15,9 +15,11 @@ class UserSeeder extends Seeder
     {
         //
         $user = [
-            ['nama' => 'Adi Kurniawan', 'username' => 'cibinongguy', 'password' => 'ffloveakunsomuch','role'=>'Developer'],
-            ['nama' => 'Adi Kurniawan', 'username' => 'kuruniawa', 'password' => 'ddloveakunsomuch','role'=>'SuperAdmin'],
-            ['nama' => 'Aldebaran', 'username' => 'aldebaran', 'password' => 'aldebaranloveandin','role'=>'User'],
+            ['nama' => 'Adi Kurniawan', 'username' => 'cibinongguy', 'password' => 'ffloveakunsomuch','role'=>'Developer', 'clearance_level'=>1],
+            ['nama' => 'Adi Kurniawan', 'username' => 'kuruniawa', 'password' => 'ddloveakunsomuch','role'=>'SuperAdmin', 'clearance_level'=>2],
+            ['nama' => 'Aldebaran', 'username' => 'aldebaran', 'password' => 'aldebaran','role'=>'Admin', 'clearance_level'=>3],
+            ['nama' => 'Andin', 'username' => 'andin', 'password' => 'andin','role'=>'User', 'clearance_level'=>5],
+            ['nama' => 'Udin', 'username' => 'udin', 'password' => 'udin','role'=>'Client', 'clearance_level'=>5],
         ];
 
         for ($i = 0; $i < count($user); $i++) {
@@ -30,6 +32,7 @@ class UserSeeder extends Seeder
                 'username' => $user[$i]['username'],
                 'password' => $password,
                 'role' => $user[$i]['role'],
+                'clearance_level' => $user[$i]['clearance_level'],
             ]);
         }
 

@@ -14,4 +14,8 @@ class Cart extends Model
     function cart_items(): HasMany {
         return $this->hasMany(CartItem::class);
     }
+
+    function user() {
+        return $this->hasOne(User::class, 'id', 'customer_id');
+    }
 }

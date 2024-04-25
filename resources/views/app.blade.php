@@ -1,4 +1,4 @@
-@extends('layouts.main', $cart)
+@extends('layouts.main')
 @section('content')
     <main>
         <x-errors-any></x-errors-any>

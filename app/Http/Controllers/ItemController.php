@@ -67,6 +67,24 @@ class ItemController extends Controller
             $harga_t = (float)$post['berat'] * (float)$post['harga_gr'] * 100;
         }
 
+        // VALIDASI MATA
+        foreach ($post['warna_mata'] as $key_warna_mata => $warna_mata) {
+            if ($warna_mata) {
+                if ($post['jumlah_mata'][$key_warna_mata] == 0 || $post['jumlah_mata'][$key_warna_mata] === null) {
+                    $request->validate(['error'=>'required'], ['error.required'=>'-jumlah_mata tidak sesuai-']);
+                }
+            }
+        }
+
+        // VALIDASI MAINAN
+        foreach ($post['tipe_mainan'] as $key_tipe_mainan => $tipe_mainan) {
+            if ($tipe_mainan) {
+                if ($post['jumlah_mainan'][$key_tipe_mainan] === null || $post['jumlah_mainan'][$key_tipe_mainan] == 0 ) {
+                    $request->validate(['error'=>'required'],['error.required'=>'-jumlah_mainan tidak sesuai-']);
+                }
+            }
+        }
+
         // cek apakah ada item yang sama
         $item_exist = Item::where('nama_long', $post['nama_long'])->get();
 
@@ -105,9 +123,6 @@ class ItemController extends Controller
         // MATA
         foreach ($post['warna_mata'] as $key_warna_mata => $warna_mata) {
             if ($warna_mata) {
-                if ($post['jumlah_mata'][$key_warna_mata] == 0 || $post['jumlah_mata'][$key_warna_mata] === null) {
-                    $request->validate(['error'=>'required'], ['error.required'=>'-jumlah_mata tidak sesuai-']);
-                }
                 $mata = Mata::where('warna', $warna_mata)->where('level_warna', $post['level_warna'][$key_warna_mata])->where('opacity', $post['opacity'][$key_warna_mata])->first();
                 if (!$mata) {
                     $mata = Mata::create([
@@ -127,9 +142,6 @@ class ItemController extends Controller
         // MAINAN
         foreach ($post['tipe_mainan'] as $key_tipe_mainan => $tipe_mainan) {
             if ($tipe_mainan) {
-                if ($post['jumlah_mainan'][$key_tipe_mainan] === null || $post['jumlah_mainan'][$key_tipe_mainan] == 0 ) {
-                    $request->validate(['error'=>'required'],['error.required'=>'-jumlah_mainan tidak sesuai-']);
-                }
                 $mainan = Mainan::where('nama', $tipe_mainan)->first();
                 if (!$mainan) {
                     $mainan = Mainan::create([
