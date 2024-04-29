@@ -375,10 +375,32 @@ function formatNumberX(string_value) {
     }
 
     return formatted_number;
-}
+} // fungsi untuk return decimal number dalam bentuk string
 
 function preformatDotToComa(float_value) {
     return float_value.toString().split(".").join(",");
+}
+
+function pangkasDesimal(str_value) {
+    let float_value = parseFloat(str_value);
+    let get_decimal = float_value % 1;
+    // console.log(get_decimal);
+    // console.log(get_decimal.toString());
+    if (get_decimal.toString().length > 4) {
+        get_decimal = get_decimal.toFixed(2);
+    }
+    let get_real_number = Math.trunc(float_value) * 100 / 100;
+    // console.log(get_real_number);
+    // console.log(get_real_number + get_decimal);
+    if (get_decimal === 0) {
+        return get_real_number;
+    } else {
+        let real_number = parseFloat(get_real_number) + parseFloat(get_decimal);
+        // console.log(get_real_number);
+        // console.log(get_decimal);
+        // console.log(real_number);
+        return real_number;
+    }
 }
 
 function formatNumber2(formatted_id, hidden_id) {

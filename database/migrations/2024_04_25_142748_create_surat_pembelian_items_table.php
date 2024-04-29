@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('surat_pembelian_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pembelian_id')->constrained()->onDelete('cascade');
+            $table->foreignId('surat_pembelian_id')->constrained()->onDelete('cascade');
             $table->foreignId('item_id')->nullable()->constrained()->onDelete('set null'); // nullable, karena nanti kalo ada item yang ga sengaja ke hapus, data ini tidak ikut terhapus
             $table->string('tipe_barang', 20);// ,['perhiasan','LM','lain-lain','bb-able','non-bb-able'] // campur -> tipe_barang bb_able dan non_bb_able
             $table->string('tipe_perhiasan',50)->nullable();
@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('warna_emas',20)->nullable(); // kuning, rose-gold, putih, chrome
             $table->smallInteger('kadar')->nullable(); // nullable untuk barang yang bukan bb_able atau bukan perhiasan
             $table->smallInteger('berat')->nullable(); // nullable untuk barang yang bukan bb_able atau bukan perhiasan
-            $table->integer('ongkos_gr')->nullable(); // nullable untuk barang yang bukan bb_able atau bukan perhiasan
-            $table->integer('harga_gr')->nullable(); // nullable untuk barang yang bukan bb_able atau bukan perhiasan
+            $table->integer('ongkos_g')->nullable(); // nullable untuk barang yang bukan bb_able atau bukan perhiasan
+            $table->integer('harga_g')->nullable(); // nullable untuk barang yang bukan bb_able atau bukan perhiasan
             $table->integer('harga_t');
             $table->string('nama_short');
             $table->string('nama_long');
@@ -34,18 +34,17 @@ return new class extends Migration
             $table->smallInteger('plat')->nullable(); // jumlah plat ya biasa 1 atau 2 atau 3
             $table->string('edisi',50)->nullable();
             $table->string('nampan',50)->nullable();
-            $table->smallInteger('stock')->default('1'); // smallint    | 2 bytes  -32768 to 32767                              0 to 65535
             $table->string('kode_item',100)->nullable(); // nullable dulu, soalnya belum tau mesti gimana formatnya
             $table->integer('barcode')->nullable()->unique();
             $table->string('deskripsi')->nullable();
             $table->string('keterangan')->nullable();
-            $table->string('status', 20)->nullable(); // ready, terjual, cuci, dll
+            // $table->string('status', 20)->nullable(); // ready, terjual, cuci, dll
             $table->string('item_photo')->nullable();
-            $table->smallInteger('jumlah')->default(1);
+            $table->smallInteger('jumlah')->default(1); // smallint    | 2 bytes  -32768 to 32767                              0 to 65535
 
             // Berikutnya adalah kolom yang berkaitan dengan penjualan
             // perlu diperhatikan disini banyak nullable, karena item belum tentu perhiasan yang bisa BB
-            $table->string('proses_bb', 20)->nullable(); // ['ready','finished'] // nullable untuk barang yang bukan bb_able atau bukan perhiasan
+            // $table->string('proses_bb', 20)->nullable(); // ['ready','finished'] // nullable untuk barang yang bukan bb_able atau bukan perhiasan
             // selama status_bb = ada, maka proses_bb akan tetap null, tidak berubah menjadi ready
             $table->string('status_bb', 20)->nullable(); // ['ada','bb', 'tukar', 'tukar-tambah', 'tukar-kurang'] // nullable untuk barang yang bukan bb_able atau bukan perhiasan
             $table->string('kondisi_bb', 20)->nullable(); // ['sama', 'mulus','tidak-mulus', 'rusak-ringan', 'rusak-berat'] // nullable karena bisa jadi barang nya bukan perhiasan

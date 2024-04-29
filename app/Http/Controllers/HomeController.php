@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\Item;
 use App\Models\Menu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,8 @@ class HomeController extends Controller
         if ($user) {
             $cart = Cart::where('user_id', $user->id)->first();
         }
-        
+        $items = Item::limit(100)->get();
+
         $data = [
             // 'goback' => 'home',
             // 'user_role' => $user_role,
@@ -30,6 +32,7 @@ class HomeController extends Controller
             'spk_menus' => Menu::get_spk_menus(),
             // 'user' => Auth::user(),
             'cart' => $cart,
+            'items' => $items,
         ];
         return view('app', $data);
     }

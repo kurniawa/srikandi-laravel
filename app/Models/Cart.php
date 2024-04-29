@@ -12,10 +12,10 @@ class Cart extends Model
     protected $guarded = ['id'];
 
     function cart_items(): HasMany {
-        return $this->hasMany(CartItem::class);
+        return $this->hasMany(CartItem::class)->orderByDesc('id');
     }
 
     function user() {
-        return $this->hasOne(User::class, 'id', 'customer_id');
+        return $this->hasOne(User::class, 'id', 'pelanggan_id');
     }
 }

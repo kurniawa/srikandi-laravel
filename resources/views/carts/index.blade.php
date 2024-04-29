@@ -25,7 +25,7 @@
             </div>
             <div class="col-span-9">
                 <div class="font-bold text-slate-500">{{ $cart_item->item->nama_short }}</div>
-                <div class="font-bold text-slate-600 text-xs">Rp {{ number_format((string)((float)$cart_item->item->harga_gr / 100), 2, ',', '.') }} / g</div>
+                <div class="font-bold text-slate-600 text-xs">Rp {{ number_format((string)((float)$cart_item->item->harga_g / 100), 2, ',', '.') }} / g</div>
                 <div class="font-bold text-slate-500">Rp {{ number_format((string)((float)$cart_item->item->harga_t / 100), 2, ',', '.') }}</div>
                 <input type="hidden" name="harga_t[]" value="{{ (string)((float)$cart_item->item->harga_t / 100) }}" class="binder_harga_t">
                 <div class="flex justify-end">

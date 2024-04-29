@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\SuratPembelianController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -62,6 +63,10 @@ Route::controller(CartController::class)->group(function(){
     Route::get('/carts/{from}/{tipe_barang}/create_item','create_item')->name('carts.create_item')->middleware('auth');
     Route::get('/carts/{cart}/checkout','checkout')->name('carts.checkout')->middleware('auth');
     Route::post('/carts/{cart}/proses_checkout','proses_checkout')->name('carts.proses_checkout')->middleware('auth');
+});
+
+Route::controller(SuratPembelianController::class)->group(function(){
+    Route::get('/surat_pembelian/index','index')->name('surat_pembelian.index')->middleware('auth');
 });
 
 Route::controller(ArtisanController::class)->group(function(){

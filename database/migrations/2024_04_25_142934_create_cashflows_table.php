@@ -20,7 +20,7 @@ return new class extends Migration
             // string karena bisa jadi array, ada beberapa item_id dari pembelian_id terkait, bisa jadi semua item dalam satu pembelian atau hanya beberapa saja.
             // $table->foreignId('penjualan_id')->nullable()->constrained()->onDelete('cascade');
             // Masalah ketika pakai array, nanti pas mencari di database jadi lebih sulit.
-            $table->string('nama_transaksi',50)->nullable(); //, ['mix'= campur, 'bba' = bb-able, 'non' => non-bb-able] pembelian-perhiasan, penjualan-perhiasan, mutasi-ke-tunai, mutasi-dari-bca, penyesuaian
+            // $table->string('nama_transaksi',50)->nullable(); //, ['mix'= campur, 'bba' = bb-able, 'non' => non-bb-able] pembelian-perhiasan, penjualan-perhiasan, mutasi-ke-tunai, mutasi-dari-bca, penyesuaian
             $table->enum('tipe',['pemasukan', 'pengeluaran'])->nullable();
             $table->string('tipe_wallet',50)->nullable(); // tunai, bank, e-wallet
             $table->string('nama_wallet',50)->nullable(); // tunai, bca, bri, bni, mandiri, ovo, gopay, dana, dll.

@@ -7,8 +7,10 @@ use App\Models\CartItem;
 use App\Models\Item;
 use App\Models\ItemMainan;
 use App\Models\ItemMata;
+use App\Models\ItemPhoto;
 use App\Models\Mainan;
 use App\Models\Mata;
+use App\Models\Menu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -32,7 +34,7 @@ class ItemController extends Controller
         $warna_emas = null;
         $kadar = null;
         $berat = null;
-        $harga_gr = null;
+        $harga_g = null;
         // $edisi = null;
         // $nampan = null;
         if ($post['tipe_barang'] === 'perhiasan') {
@@ -43,7 +45,7 @@ class ItemController extends Controller
                 'plat' => 'nullable|numeric',
                 'kadar' => 'required|numeric',
                 'berat' => 'required|numeric',
-                'harga_gr' => 'required|numeric',
+                'harga_g' => 'required|numeric',
                 'nama_short' => 'required',
                 'nama_long' => 'required',
                 'kondisi' => 'nullable',
@@ -63,8 +65,8 @@ class ItemController extends Controller
             $warna_emas = $post['warna_emas'];
             $kadar = (float)$post['kadar'] * 100;
             $berat = (float)$post['berat'] * 100;
-            $harga_gr = (float)$post['harga_gr'] * 100;
-            $harga_t = (float)$post['berat'] * (float)$post['harga_gr'] * 100;
+            $harga_g = (float)$post['harga_g'] * 100;
+            $harga_t = (float)$post['berat'] * (float)$post['harga_g'] * 100;
         }
 
         // VALIDASI MATA
@@ -100,7 +102,7 @@ class ItemController extends Controller
             'warna_emas' => $warna_emas,
             'kadar' => $kadar,
             'berat' => $berat,
-            'harga_gr' => $harga_gr,
+            'harga_g' => $harga_g,
             'harga_t' => $harga_t,
             'nama_short' => $post['nama_short'],
             'nama_long' => $post['nama_long'],
@@ -187,5 +189,38 @@ class ItemController extends Controller
         ];
 
         return redirect()->route('carts.index', $user->id)->with($feedback);
+    }
+
+    function show(Item $item) {
+        // dd($item);
+        $item_photos = ItemPhoto::where('item_id', $item->id)->orderBy('photo_index')->get();
+        $user = Auth::user();
+
+        $cart = Cart::where('user_id', $user->id)->first();
+        // dd($item->user->id);
+        // $related_user = null;
+
+        // if (Auth::user()) {
+        //     if (Auth::user()->id == $item->user->id) {
+        //         $related_user = Auth::user();
+        //     }
+        // }
+
+        // $peminat_items = PeminatItem::where('item_id', $item->id)->orderBy('created_at')->get();
+
+        $data = [
+            'menus' => Menu::get(),
+            'route_now' => 'home',
+            'profile_menus' => Menu::get_profile_menus(Auth::user()),
+            'parent_route' => 'home',
+            'spk_menus' => Menu::get_spk_menus(),
+            'item' => $item,
+            'item_photos' => $item_photos,
+            'cart' => $cart,
+            // 'related_user' => $related_user,
+            // 'peminat_items' => $peminat_items,
+        ];
+        // dd($data);
+        return view('items.show', $data);
     }
 }

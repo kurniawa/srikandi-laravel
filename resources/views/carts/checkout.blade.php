@@ -7,7 +7,7 @@
 
     <h3 class="text-xl font-bold text-slate-500">Data Pelanggan</h3>
     <div class="flex justify-between mt-3 items-center">
-        @if ($cart->customer_id)
+        @if ($cart->pelanggan_id)
         <table>
             <tr>
                 <td><label for="nama_pelanggan">Nama</label></td><td><span class="mx-2">:</span></td>
@@ -61,6 +61,57 @@
 
     <form action="{{ route('carts.proses_checkout', $cart->id) }}" method="POST">
         @csrf
+        <div class="flex gap-1 mt-5 items-center">
+            <h3 class="text-lg font-bold text-slate-500">Tanggal Surat</h3>
+            <span class="text-slate-500 text-xs italic">(dd-mm-yyyy)</span>
+        </div>
+        <div class="flex gap-1 items-center mt-2 bg-slate-300 p-1">
+            <select name="hari" id="hari" class="border py-1 rounded" disabled>
+                @if (old('hari'))
+                @for ($i = 1; $i < 32; $i++)
+                <option value="{{ $i }}" {{ old('hari') == $i ? 'selected' : '' }}>{{ $i }}</option>
+                @endfor
+                @else
+                @for ($i = 1; $i < 32; $i++)
+                @if ($i == date('d'))
+                <option value="{{ $i }}" selected>{{ $i }}</option>
+                @else
+                <option value="{{ $i }}">{{ $i }}</option>
+                @endif
+                @endfor
+                @endif
+            </select>
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+                </svg>
+            </div>
+            <select name="bulan" id="bulan" class="border py-1 rounded" disabled>
+                @if (old('bulan'))
+                @for ($i = 1; $i < 13; $i++)
+                <option value="{{ $i }}" {{ old('bulan') == $i ? 'selected' : '' }}>{{ $i }}</option>
+                @endfor
+                @else
+                @for ($i = 1; $i < 13; $i++)
+                @if ($i == date('m'))
+                <option value="{{ $i }}" selected>{{ $i }}</option>
+                @else
+                <option value="{{ $i }}">{{ $i }}</option>
+                @endif
+                @endfor
+                @endif
+            </select>
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+                </svg>
+            </div>
+            <input type="text" name="tahun" class="border rounded p-1 w-1/3" value="{{ old('tahun') ? old('tahun') : date('Y') }}" readonly>
+            {{-- kalau nanti ada fungsi pengubahan tanggal surat, maka ini boleh dihapus --}}
+            <input type="hidden" name="hari" value="{{ date('d') }}" readonly>
+            <input type="hidden" name="bulan" value="{{ date('m') }}" readonly>
+        </div>
+
         <h3 class="text-xl font-bold text-slate-500 mt-5">Checkout</h3>
         <div class="mt-5">
             @foreach ($cart_items as $key => $cart_item)
@@ -71,9 +122,10 @@
                 <div class="col-span-9 flex justify-between">
                     <div>
                         <div class="font-bold text-slate-500">{{ $cart_item->item->nama_short }}</div>
-                        <div class="font-bold text-slate-600 text-xs">Rp {{ number_format((string)((float)$cart_item->item->harga_gr / 100), 2, ',', '.') }} / g</div>
+                        <div class="font-bold text-slate-600 text-xs">Rp {{ number_format((string)((float)$cart_item->item->harga_g / 100), 2, ',', '.') }} / g</div>
                         <div class="font-bold text-slate-500">Rp {{ number_format((string)((float)$cart_item->item->harga_t / 100), 2, ',', '.') }}</div>
                         <input type="hidden" name="harga_t[]" value="{{ (string)((float)$cart_item->harga_t / 100) }}" class="binder_harga_t">
+                        <input type="hidden" name="cart_item_ids[]" value="{{ $cart_item->id }}">
                     </div>
                     <div class="w-6 h-6 flex justify-center border font-bold text-slate-500">1</div>
                     {{-- <div class="flex justify-end">
@@ -104,10 +156,11 @@
             <div class="text-xl font-bold text-red-600">Rp <span id="harga_total_formatted">{{ number_format((string)((float)$harga_total / 100), 2, ',', '.') }}</span></div>
             <input type="hidden" name="harga_total" id="harga_total" value="{{ (string)((float)$harga_total / 100) }}">
         </div>
-        <input type="hidden" name="nama_pelanggan" id="nama_pelanggan_di_dalam_form" value="{{ $cart->customer_id ? $cart->user->nama : 'guest' }}">
-        <input type="hidden" name="username_pelanggan" id="username_pelanggan_di_dalam_form" value="{{ $cart->customer_id ? $cart->user->username : 'guest' }}">
+        <input type="hidden" name="nama_pelanggan" id="nama_pelanggan_di_dalam_form" value="{{ $cart->pelanggan_id ? $cart->user->nama : 'guest' }}">
+        <input type="hidden" name="username_pelanggan" id="username_pelanggan_di_dalam_form" value="{{ $cart->pelanggan_id ? $cart->user->username : 'guest' }}">
 
         {{-- PEMBAYARAN --}}
+        <h5 class="font-bold text-lg text-slate-500 my-3">Metode Pembayaran</h5>
         <div class="flex items-center">
             <input type="checkbox" id="checkbox-tunai" name="tunai" value="yes" onclick="toggleTunai(this)">
             <label for="checkbox-tunai" class="ml-2">Tunai</label>
@@ -160,7 +213,7 @@
         <input type="hidden" id="ipt-sisa-bayar" name="sisa_bayar" value="{{ (string)((float)$harga_total / 100) }}" readonly>
 
         {{-- END PEMBAYARAN --}}
-        <div class="flex justify-center mt-9">
+        <div class="relative flex justify-center mt-9 z-10">
             <button type="submit" class="rounded-lg px-3 py-2 bg-emerald-400 text-white border-2 border-emerald-500 font-bold">PROSES PEMBAYARAN</button>
         </div>
     </form>
@@ -230,16 +283,25 @@
         arr_jumlah_bayar.forEach(jumlah_bayar => {
             // console.log(jumlah_bayar.value);
             if (jumlah_bayar.value !== '') {
-                total_bayar = total_bayar + parseInt(jumlah_bayar.value);
+                total_bayar = total_bayar + parseFloat(jumlah_bayar.value);
             }
         });
         // console.log(total_bayar);
-        let sisa_bayar = (parseFloat(total_tagihan) / 100) - total_bayar;
+        let sisa_bayar = (parseFloat(total_tagihan/ 100)) - total_bayar;
 
-        document.getElementById('total-bayar').textContent = formatNumberHargaRemoveDecimal(total_bayar.toString());
-        document.getElementById('sisa-bayar').textContent = formatNumberHargaRemoveDecimal(sisa_bayar.toString());
-        document.getElementById('ipt-total-bayar').value = total_bayar;
-        document.getElementById('ipt-sisa-bayar').value = sisa_bayar;
+        // console.log(total_tagihan);
+        // console.log(total_tagihan / 100);
+        // console.log(parseFloat(total_tagihan / 100));
+        // console.log(total_bayar);
+        // console.log(sisa_bayar);
+
+        console.log('pangkasDesimal')
+        console.log(pangkasDesimal(sisa_bayar));
+
+        document.getElementById('total-bayar').textContent = formatNumberX(preformatDotToComa(pangkasDesimal(total_bayar)));
+        document.getElementById('sisa-bayar').textContent = formatNumberX(preformatDotToComa(pangkasDesimal(sisa_bayar)));
+        document.getElementById('ipt-total-bayar').value = pangkasDesimal(total_bayar).toString();
+        document.getElementById('ipt-sisa-bayar').value = pangkasDesimal(sisa_bayar).toString();
     }
 </script>
 @endsection

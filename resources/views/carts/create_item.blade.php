@@ -80,9 +80,9 @@
                     <input type="hidden" id="berat" name="berat" value="{{ old('berat') ? old('berat') : '' }}">
                 </div>
                 <div class="mb-5">
-                    <label id="label_harga_gr_formatted" for="harga_gr_formatted" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">harga_gr</label>
-                    <input type="text" id="harga_gr_formatted" value="{{ old('harga_gr_formatted') ? old('harga_gr_formatted') : '' }}" onchange="formatNumber(this, 'harga_gr');hitungHargaT();" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <input type="hidden" id="harga_gr" name="harga_gr" value="{{ old('harga_gr') ? old('harga_gr') : '' }}">
+                    <label id="label_harga_g_formatted" for="harga_g_formatted" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">harga_g</label>
+                    <input type="text" id="harga_g_formatted" value="{{ old('harga_g_formatted') ? old('harga_g_formatted') : '' }}" onchange="formatNumber(this, 'harga_g');hitungHargaT();" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input type="hidden" id="harga_g" name="harga_g" value="{{ old('harga_g') ? old('harga_g') : '' }}">
                 </div>
                 <div class="mb-5">
                     <label id="label_harga_t_formatted" for="harga_t_formatted" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">harga_t</label>
@@ -493,11 +493,11 @@
 
     function hitungHargaT() {
         let berat = parseFloat(document.getElementById('berat').value);
-        let harga_gr = parseFloat(document.getElementById('harga_gr').value);
+        let harga_g = parseFloat(document.getElementById('harga_g').value);
         // console.log(berat);
-        // console.log(harga_gr);
-        if (!isNaN(berat) && !isNaN(harga_gr)) {
-            let harga_t = formatDecimal(berat * harga_gr);
+        // console.log(harga_g);
+        if (!isNaN(berat) && !isNaN(harga_g)) {
+            let harga_t = formatDecimal(berat * harga_g);
             let harga_t_formatted = document.getElementById('harga_t_formatted');
             harga_t_formatted.value = harga_t.toString().split('.').join(',');
             formatNumber2('harga_t_formatted', 'harga_t');
@@ -510,28 +510,28 @@
         // console.log(berat);
         // console.log(harga_t);
         if (!isNaN(berat) && !isNaN(harga_t)) {
-            let harga_gr = formatDecimal(harga_t / berat);
-            let harga_gr_formatted = document.getElementById('harga_gr_formatted');
-            harga_gr_formatted.value = harga_gr.toString().split('.').join(',');
-            // console.log(harga_gr)
-            formatNumber2('harga_gr_formatted', 'harga_gr');
+            let harga_g = formatDecimal(harga_t / berat);
+            let harga_g_formatted = document.getElementById('harga_g_formatted');
+            harga_g_formatted.value = harga_g.toString().split('.').join(',');
+            // console.log(harga_g)
+            formatNumber2('harga_g_formatted', 'harga_g');
         }
     }
 
     function hitungHargaGrOrT() {
         let berat = parseFloat(document.getElementById('berat').value);
-        let harga_gr = parseFloat(document.getElementById('harga_gr').value);
+        let harga_g = parseFloat(document.getElementById('harga_g').value);
         let harga_t = parseFloat(document.getElementById('harga_t').value);
-        if (!isNaN(berat) && !isNaN(harga_gr)) {
-            let harga_t = formatDecimal(berat * harga_gr);
+        if (!isNaN(berat) && !isNaN(harga_g)) {
+            let harga_t = formatDecimal(berat * harga_g);
             let harga_t_formatted = document.getElementById('harga_t_formatted');
             harga_t_formatted.value = harga_t.toString().split('.').join(',');
             formatNumber2('harga_t_formatted', 'harga_t');
         } else if (!isNaN(berat) && !isNaN(harga_t)) {
-            let harga_gr = formatDecimal(harga_t / berat);
-            let harga_gr_formatted = document.getElementById('harga_gr_formatted');
-            harga_gr_formatted.value = harga_gr.toString().split('.').join(',')
-            formatNumber2('harga_gr_formatted', 'harga_gr');
+            let harga_g = formatDecimal(harga_t / berat);
+            let harga_g_formatted = document.getElementById('harga_g_formatted');
+            harga_g_formatted.value = harga_g.toString().split('.').join(',')
+            formatNumber2('harga_g_formatted', 'harga_g');
         }
     }
 
