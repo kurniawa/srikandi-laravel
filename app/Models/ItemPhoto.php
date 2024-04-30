@@ -10,4 +10,8 @@ class ItemPhoto extends Model
     use HasFactory;
     protected $guarded = ['id'];
     public $timestamps = false;
+
+    function photo() {
+        return $this->hasOne(Photo::class, 'id', 'photo_id');
+    }
 }

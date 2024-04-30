@@ -10,4 +10,8 @@ class ItemMata extends Model
     use HasFactory;
     protected $guarded = ['id'];
     public $timestamps = false;
+
+    function mata() {
+        return $this->hasOne(Mata::class, 'id', 'mata_id');
+    }
 }

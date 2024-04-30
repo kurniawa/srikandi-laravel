@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cap;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Item;
 use App\Models\ItemMainan;
 use App\Models\ItemMata;
 use App\Models\ItemPhoto;
+use App\Models\JenisPerhiasan;
 use App\Models\Mainan;
 use App\Models\Mata;
 use App\Models\Menu;
+use App\Models\TipePerhiasan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -195,7 +198,8 @@ class ItemController extends Controller
         // dd($item);
         $item_photos = ItemPhoto::where('item_id', $item->id)->orderBy('photo_index')->get();
         $user = Auth::user();
-
+        // dump($item->item_matas);
+        // dd($item->item_matas[0]->mata);
         $cart = Cart::where('user_id', $user->id)->first();
         // dd($item->user->id);
         // $related_user = null;
@@ -208,6 +212,7 @@ class ItemController extends Controller
 
         // $peminat_items = PeminatItem::where('item_id', $item->id)->orderBy('created_at')->get();
 
+
         $data = [
             'menus' => Menu::get(),
             'route_now' => 'home',
@@ -217,10 +222,68 @@ class ItemController extends Controller
             'item' => $item,
             'item_photos' => $item_photos,
             'cart' => $cart,
+            'user' => $user,
             // 'related_user' => $related_user,
             // 'peminat_items' => $peminat_items,
         ];
         // dd($data);
         return view('items.show', $data);
+    }
+
+    function edit(Item $item) {
+        $user = Auth::user();
+        $cart = Cart::where('user_id', $user->id)->first();
+        $item_photos = collect();
+
+        for ($i=0 ; $i < 5 ; $i++) {
+            $item_photo = ItemPhoto::where('item_id', $item->id)->where('photo_index', $i)->first();
+
+            $item_photos->push($item_photo);
+        }
+
+        $arr_warna_emas = ['kuning', 'rose gold', 'putih', 'chrome'];
+        $obj_kondisi = [
+            ['value' => '99', 'label' => '99 - mulus'],
+            ['value' => '80', 'label' => '80 - sedikit cacat/hampir tidak terlihat'],
+            ['value' => '70', 'label' => '70 - cacat jelas terlihat'],
+            ['value' => '60', 'label' => '60 - cacat banget'],
+            ['value' => '50', 'label' => '50 - ancur / rusak'],
+        ];
+        $arr_range_usia = ['dewasa', 'anak', 'bayi'];
+        $arr_merks = ['', 'Antam', 'UBS'];
+
+        $tipe_perhiasans = TipePerhiasan::all();
+        $jenis_perhiasans = JenisPerhiasan::select('id', 'nama as label', 'nama as value', 'tipe_perhiasan_id', 'tipe_perhiasan')->get();
+        $caps = Cap::select('id', 'nama as label', 'nama as value', 'codename')->get();
+        $warna_matas = Mata::select('warna as label', 'warna as value')->groupBy('warna')->get();
+        $mainans = Mainan::select('id', 'nama as label', 'nama as value')->get();
+
+        $data = [
+            'menus' => Menu::get(),
+            'route_now' => 'home',
+            'profile_menus' => Menu::get_profile_menus(Auth::user()),
+            'parent_route' => 'home',
+            'back' => true,
+            'backRoute' => 'items.show',
+            'backRouteParams' => [$item->id],
+            'spk_menus' => Menu::get_spk_menus(),
+            'item' => $item,
+            'cart' => $cart,
+            'user' => $user,
+            'item_photos' => $item_photos,
+            'arr_warna_emas' => $arr_warna_emas,
+            'obj_kondisi' => $obj_kondisi,
+            'arr_range_usia' => $arr_range_usia,
+            'arr_merks' => $arr_merks,
+            'tipe_perhiasans' => $tipe_perhiasans,
+            'jenis_perhiasans' => $jenis_perhiasans,
+            'caps' => $caps,
+            'warna_matas' => $warna_matas,
+            'mainans' => $mainans,
+            // 'related_user' => $related_user,
+            // 'peminat_items' => $peminat_items,
+        ];
+        // dd($data);
+        return view('items.edit', $data);
     }
 }

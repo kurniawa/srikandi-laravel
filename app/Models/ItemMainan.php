@@ -10,4 +10,8 @@ class ItemMainan extends Model
     use HasFactory;
     protected $guarded = ['id'];
     public $timestamps = false;
+
+    function mainan() {
+        return $this->hasOne(Mainan::class, 'id', 'mainan_id');
+    }
 }

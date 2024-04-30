@@ -50,31 +50,86 @@
     </div>
     @endif
     <div class="p-2">
-        <div class="font-bold text-xl">{{ $item->nama }}</div>
+        <div>
+            <span class="font-bold text-lg text-slate-500">{{ $item->nama_short }}</span>
+            @if ($item->deskripsi)
+            <span class="italic">-{{ $item->deskripsi }}-</span>
+            @endif
+        </div>
+        <div class="text-slate-500 flex justify-between">
+            <span>@ {{ number_format((int)$item->harga_g / 100,2,',','.') }}</span>
+            <span>stok: {{ $item->stock }}</span>
+        </div>
         <div class="flex justify-between items-center">
-            <div class="font-bold text-2xl">
-                <span>Rp. </span>{{ number_format((int)$item->harga * 100,2,',','.') }}
+            <div class="font-bold text-xl text-slate-600">
+                <span>Rp. </span>{{ number_format((int)$item->harga_t / 100,2,',','.') }}
             </div>
-            {{-- @if ($related_user !== null)
             <div class="bg-slate-100 rounded-full w-8 h-8 flex justify-center items-center">
-                <a href="{{ route('items.edit', $item->id) }}" onclick="showLoadingSpinner()" class="text-slate-400">
+                <a href="{{ route('items.edit', $item->id) }}" class="loading-spinner text-slate-400">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                     </svg>
                 </a>
             </div>
-            @endif --}}
         </div>
-        @if ($item->deskripsi)
-        <div class="mt-2">
-            <h3 class="font-bold">Deskripsi:</h3>
-            <div class="border rounded p-2">
-                <p>{{ $item->deskripsi }}</p>
+        <h5 class="mt-3 font-bold">Data:</h5>
+        <div class="mt-2 p-1 border border-emerald-400 rounded">
+            <div class="flex gap-2">
+                <div>
+                    <table class="border-r">
+                        <tr><td>we</td><td>:</td><td>{{ $item->warna_emas }}</td></tr>
+                        <tr><td>k</td><td>:</td><td>{{ $item->kadar / 100 }}%</td></tr>
+                        <tr><td>b</td><td>:</td><td>{{ $item->berat / 100 }}g</td></tr>
+                        <tr><td>zu</td><td>:</td><td>{{ $item->kondisi }}</td></tr>
+                        <tr><td>ru</td><td>:</td><td>{{ $item->range_usia }}</td></tr>
+                        <tr><td>uk</td><td>:</td><td>{{ $item->ukuran }}</td></tr>
+                        <tr><td>cap</td><td>:</td><td>{{ $item->cap }}</td></tr>
+                    </table>
+                </div>
+                <div>
+                    <table>
+                        <tr><td>ongkos/g</td><td>:</td><td>{{ number_format((int)$item->ongkos_g / 100,2,',','.') }}</td></tr>
+                        <tr><td>harga/g</td><td>:</td><td>{{ number_format((int)$item->harga_g / 100,2,',','.') }}</td></tr>
+                        <tr><td>harga t</td><td>:</td><td>{{ number_format((int)$item->harga_t / 100,2,',','.') }}</td></tr>
+                        <tr><td>merk</td><td>:</td><td>{{ $item->merk }}</td></tr>
+                        <tr><td>plat</td><td>:</td><td>{{ $item->plat }}</td></tr>
+                        <tr><td>edisi</td><td>:</td><td>{{ $item->edisi }}</td></tr>
+                        <tr><td>nampan</td><td>:</td><td>{{ $item->nampan }}</td></tr>
+                    </table>
+                </div>
+            </div>
+            <div class="p-1 border rounded border-indigo-400 mt-3">
+                <h3 class="font-bold">Mata</h3>
+                <div>
+                    @if (count($item->item_matas) > 0)
+                    <div class="flex gap-2">
+                        @foreach ($item->item_matas as $item_mata)
+                        <span>{{ $item_mata->mata->warna }} :</span>
+                        <span>{{ $item_mata->jumlah_mata }}</span>
+                        <span class="italic text-slate-400">({{ $item_mata->mata->level_warna }}-{{ $item_mata->mata->opacity }})</span>
+                        @endforeach
+                    </div>
+                    @else
+                    <div>-</div>
+                    @endif
+                </div>
+            </div>
+            <div class="p-1 border rounded border-orange-400 mt-2">
+                <h3 class="font-bold">Mainan</h3>
+                <div>
+                    @if (count($item->item_mainans) > 0)
+                    <div class="flex gap-2">
+                        @foreach ($item->item_mainans as $item_mainan)
+                        <span>{{ $item_mainan->mainan->nama }} :</span>
+                        <span>{{ $item_mainan->jumlah_mainan }}</span>
+                        @endforeach
+                    </div>
+                    @else
+                    <div>-</div>
+                    @endif
+                </div>
             </div>
         </div>
-        @else
-        <div class="mt-2"><h3 class="font-bold">Deskripsi: - tidak ada -</h3></div>
-        @endif
         <div class="mt-2 text-slate-400">
             @if ($item->keterangan)
             <h3 class="font-bold">Keterangan lain:</h3>
@@ -106,7 +161,8 @@
             <h3 class="font-bold">Daftar Peminat: - belum ada -</h3>
             @endif
         </div> --}}
-        @if ($item->sold)
+
+        {{-- @if ($item->sold)
         <div class="mt-2 bg-yellow-100 p-2">
             <h3 class="font-bold">Buyer / sold to:</h3>
             <div class="border rounded p-2">
@@ -115,38 +171,23 @@
         </div>
         @else
         <h3 class="font-bold">Buyer / sold to: - belum ada -</h3>
-        @endif
-        <div class="mt-12">
-            @if (Auth::user())
-            <form action="{{ route('items.mau', $item->id) }}" method="POST" onsubmit="showLoadingSpinner()">
-                @csrf
-                <button type="submit" class="py-2 bg-emerald-400 rounded-3xl w-full text-white flex items-center justify-center gap-1">
-                    <span>Saya mau ini</span>
-                </button>
-            </form>
-            @else
-            <button id="toggle-button" type="button" class="py-2 border-2 border-emerald-400 rounded-3xl w-full text-emerald-500 font-bold flex items-center justify-center gap-1" onclick="toggle_light(this.id, 'form-konfirmasi', [], ['bg-emerald-200'], 'block')">
-                <span>Saya mau ini</span>
-            </button>
-            <div id="form-konfirmasi" class="border-2 bg-emerald-50 rounded p-2 mt-2 hidden">
-                <h5 class="font-bold">--> Isi data, karena Anda belum log in -</h5>
-                <form action="{{ route('items.mau', $item->id) }}" method="POST" class="mt-2" onsubmit="showLoadingSpinner()">
-                    @csrf
-                    <div>
-                        <label for="nama" class="block text-sm font-medium leading-6 text-gray-900">Nama peminat</label>
-                        <div class="mt-2">
-                            <input type="text" name="nama" id="nama" autocomplete="given-name" class="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                        </div>
-                    </div>
-                    <button type="submit" class="mt-2 py-2 bg-emerald-400 rounded w-full text-white flex items-center justify-center gap-1">
-                        <span>Konfirmasi</span>
-                    </button>
-                </form>
+        @endif --}}
 
-            </div>
-            @endif
+        <div class="mt-12">
+            <form action="{{ route('items.insert_to_cart', [$item->id, $user->id]) }}" method="POST" class="mt-2" onsubmit="showLoadingSpinner()">
+                @csrf
+                @if ((int)$item->stock >= 1)
+                <button type="submit" class="mt-2 py-2 bg-emerald-400 rounded w-full text-white flex items-center justify-center gap-1 font-bold">
+                    <span>+ Keranjang</span>
+                </button>
+                @else
+                <button type="button" class="mt-2 py-2 bg-slate-300 rounded w-full text-white flex items-center justify-center gap-1 font-bold" disabled>
+                    <span>Stok habis</span>
+                </button>
+                @endif
+            </form>
+
         </div>
-        {{-- @if ($related_user !== null)
         <div class="flex justify-center mt-2">
             <form action="{{ route('items.delete', $item->id) }}" method="GET" onsubmit="if(confirm('Anda yakin ingin menghapus barang ini?')){showLoadingSpinner();return true;} else {hideLoadingSpinner();return false;}">
                 @csrf
@@ -157,7 +198,6 @@
                 </button>
             </form>
         </div>
-        @endif --}}
     </div>
 </main>
 

@@ -41,16 +41,17 @@ Route::controller(AuthController::class)->group(function(){
 });
 
 Route::controller(ItemController::class)->group(function(){
-    Route::get('/items/add','create')->name('items.create')->middleware('auth');
-    Route::post('/items/{from}/store','store')->name('items.store');
-    Route::get('/items/{item}/show','show')->name('items.show');
-    Route::get('/items/{item}/edit','edit')->name('items.edit');
-    Route::post('/items/{item}/update','update')->name('items.update');
-    Route::post('/items/{item}/delete','delete')->name('items.delete');
-    Route::post('/items/{item}/{item_photo}/delete_photo','delete_photo')->name('items.delete_photo');
-    Route::post('/items/{item}/add_photo','add_photo')->name('items.add_photo');
-    Route::post('/items/{item}/mau','mau')->name('items.mau');
-    Route::post('/items/{item}/{peminat_item}/hapus_peminat','hapus_peminat')->name('items.hapus_peminat');
+    Route::get('/items/add','create')->name('items.create')->middleware('level3');
+    Route::post('/items/{from}/store','store')->name('items.store')->middleware('level3');
+    Route::get('/items/{item}/show','show')->name('items.show')->middleware('auth');
+    Route::post('/items/{item}/{user}/insert_to_cart','insert_to_cart')->name('items.insert_to_cart')->middleware('level3');
+    Route::get('/items/{item}/edit','edit')->name('items.edit')->middleware('level3');
+    Route::post('/items/{item}/update','update')->name('items.update')->middleware('level3');
+    Route::post('/items/{item}/delete','delete')->name('items.delete')->middleware('level3');
+    Route::post('/items/{item}/{item_photo}/delete_photo','delete_photo')->name('items.delete_photo')->middleware('level3');
+    Route::post('/items/{item}/add_photo','add_photo')->name('items.add_photo')->middleware('level3');
+    // Route::post('/items/{item}/mau','mau')->name('items.mau');
+    // Route::post('/items/{item}/{peminat_item}/hapus_peminat','hapus_peminat')->name('items.hapus_peminat');
 });
 
 Route::controller(UserController::class)->group(function(){
@@ -58,15 +59,15 @@ Route::controller(UserController::class)->group(function(){
 });
 
 Route::controller(CartController::class)->group(function(){
-    Route::get('/carts/{user}/index','index')->name('carts.index')->middleware('auth');
-    Route::get('/carts/{from}/pilih_tipe_barang','pilih_tipe_barang')->name('carts.pilih_tipe_barang')->middleware('auth');
-    Route::get('/carts/{from}/{tipe_barang}/create_item','create_item')->name('carts.create_item')->middleware('auth');
-    Route::get('/carts/{cart}/checkout','checkout')->name('carts.checkout')->middleware('auth');
-    Route::post('/carts/{cart}/proses_checkout','proses_checkout')->name('carts.proses_checkout')->middleware('auth');
+    Route::get('/carts/{user}/index','index')->name('carts.index')->middleware('level3');;
+    Route::get('/carts/{from}/pilih_tipe_barang','pilih_tipe_barang')->name('carts.pilih_tipe_barang')->middleware('level3');;
+    Route::get('/carts/{from}/{tipe_barang}/create_item','create_item')->name('carts.create_item')->middleware('level3');;
+    Route::get('/carts/{cart}/checkout','checkout')->name('carts.checkout')->middleware('level3');;
+    Route::post('/carts/{cart}/proses_checkout','proses_checkout')->name('carts.proses_checkout')->middleware('level3');;
 });
 
 Route::controller(SuratPembelianController::class)->group(function(){
-    Route::get('/surat_pembelian/index','index')->name('surat_pembelian.index')->middleware('auth');
+    Route::get('/surat_pembelian/index','index')->name('surat_pembelian.index')->middleware('level3');;
 });
 
 Route::controller(ArtisanController::class)->group(function(){

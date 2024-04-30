@@ -69,7 +69,7 @@ class CartController extends Controller
         // dump($from);
         // dd($tipe_barang);
         $tipe_perhiasans = TipePerhiasan::all();
-        $jenis_perhiasans = JenisPerhiasan::select('id', 'nama as label', 'nama as value', 'tipe_perhiasan_id')->get();
+        $jenis_perhiasans = JenisPerhiasan::select('id', 'nama as label', 'nama as value', 'tipe_perhiasan_id', 'tipe_perhiasan')->get();
         $caps = Cap::select('id', 'nama as label', 'nama as value', 'codename')->get();
         $warna_matas = Mata::select('warna as label', 'warna as value')->groupBy('warna')->get();
         $mainans = Mainan::select('id', 'nama as label', 'nama as value')->get();
@@ -346,7 +346,7 @@ class CartController extends Controller
             $cart->delete();
             $success_ .= '-Cart dihapus!-';
         }
-        
+
         $feedback = [
             'success_' => $success_,
             'errors_' => $errors_,
