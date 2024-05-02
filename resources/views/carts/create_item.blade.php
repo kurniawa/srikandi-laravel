@@ -543,6 +543,6 @@
     }
 
 </script>
-<script src="{{ asset('js/create_item.js') }}"></script>
+<script src="{{ asset('js/item.js') }}"></script>
 @endsection
 

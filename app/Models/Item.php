@@ -18,6 +18,10 @@ class Item extends Model
         return $this->hasMany(ItemMata::class, 'mata_id', 'id');
     }
 
+    function mainans() {
+        return $this->belongsToMany(Mainan::class, 'item_mainans', 'item_id', 'mainan_id');
+    }
+
     function item_mainans() {
         return $this->hasMany(ItemMainan::class, 'mainan_id', 'id');
     }

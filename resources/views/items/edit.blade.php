@@ -126,8 +126,8 @@
                     <input type="text" id="kadar_formatted" value="{{ old('kadar_formatted') }}" onchange="formatNumber(this, 'kadar');generateNama()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <input type="hidden" id="kadar" name="kadar" value="{{ old('kadar') }}">
                     @else
-                    <input type="text" id="kadar_formatted" value="{{ $item->kadar }}" onchange="formatNumber(this, 'kadar');generateNama()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <input type="hidden" id="kadar" name="kadar" value="{{ $item->kadar }}">
+                    <input type="text" id="kadar_formatted" value="{{ number_format((float)$item->kadar / 100, 2, ',', '.') }}" onchange="formatNumber(this, 'kadar');generateNama()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input type="hidden" id="kadar" name="kadar" value="{{ (float)$item->kadar / 100 }}">
                     @endif
                 </div>
                 <div class="mb-5">
@@ -136,8 +136,8 @@
                     <input type="text" id="berat_formatted" value="{{ old('berat_formatted') }}" onchange="formatNumber(this, 'berat');hitungHargaGrOrT();generateNama();" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <input type="hidden" id="berat" name="berat" value="{{ old('berat') }}">
                     @else
-                    <input type="text" id="berat_formatted" value="{{ $item->berat }}" onchange="formatNumber(this, 'berat');hitungHargaGrOrT();generateNama();" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <input type="hidden" id="berat" name="berat" value="{{ $item->berat }}">
+                    <input type="text" id="berat_formatted" value="{{ number_format((float)$item->berat / 100, 2, ',', '.') }}" onchange="formatNumber(this, 'berat');hitungHargaGrOrT();generateNama();" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input type="hidden" id="berat" name="berat" value="{{ (float)$item->berat / 100 }}">
                     @endif
                 </div>
                 <div class="mb-5">
@@ -146,8 +146,8 @@
                     <input type="text" id="harga_g_formatted" value="{{ old('harga_g_formatted') }}" onchange="formatNumber(this, 'harga_g');hitungHargaT();" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <input type="hidden" id="harga_g" name="harga_g" value="{{ old('harga_g') }}">
                     @else
-                    <input type="text" id="harga_g_formatted" value="{{ $item->harga_g }}" onchange="formatNumber(this, 'harga_g');hitungHargaT();" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <input type="hidden" id="harga_g" name="harga_g" value="{{ $item->harga_g }}">
+                    <input type="text" id="harga_g_formatted" value="{{ number_format((float)$item->harga_g / 100, 2, ',', '.') }}" onchange="formatNumber(this, 'harga_g');hitungHargaT();" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input type="hidden" id="harga_g" name="harga_g" value="{{ (float)$item->harga_g / 100 }}">
                     @endif
                 </div>
                 <div class="mb-5">
@@ -156,8 +156,8 @@
                     <input type="text" id="harga_t_formatted" value="{{ old('harga_t_formatted') }}" onchange="formatNumber(this, 'harga_t');hitungHargaGr();" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <input type="hidden" id="harga_t" name="harga_t" value="{{ old('harga_t') }}">
                     @else
-                    <input type="text" id="harga_t_formatted" value="{{ $item->harga_t }}" onchange="formatNumber(this, 'harga_t');hitungHargaGr();" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <input type="hidden" id="harga_t" name="harga_t" value="{{ $item->harga_t }}">
+                    <input type="text" id="harga_t_formatted" value="{{ number_format((float)$item->harga_t / 100, 2, ',', '.') }}" onchange="formatNumber(this, 'harga_t');hitungHargaGr();" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input type="hidden" id="harga_t" name="harga_t" value="{{ (float)$item->harga_t / 100 }}">
                     @endif
                 </div>
             </div>
@@ -286,7 +286,7 @@
                     </div>
                 </div>
 
-                <div id="div_mata" class="hidden">
+                <div id="div_mata" class="{{ count($item->item_matas) ? '' : 'hidden' }}">
                     <div class="flex gap-2 items-center">
                         <span>mata :</span>
                         <button type="button" class="bg-emerald-300 rounded-2xl text-white px-2 py-1" onclick="addMata()">
@@ -296,6 +296,80 @@
                         </button>
                     </div>
                     <div id="data_mata">
+                        @if (count($item->item_matas))
+                        @foreach ($item->item_matas as $key => $item_mata)
+                        <div id="data-mata-0" class="data-mata">
+                            <div class="grid grid-cols-2 gap-2 mt-2 border-t border-b border-violet-300 p-1">
+                                <div class="mb-1">
+                                    <input type="text" id="warna_mata-0" name="warna_mata[]" value="{{ old("warna_mata.$key") ? old("warna_mata.$key") : $item->matas[$key]->warna }}" placeholder="warna_mata" class="warna-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                </div>
+                                <div class="mb-1">
+                                    <select id="level_warna" name="level_warna[]" class="level-warna bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        @if (old("level_warna.$key"))
+
+                                        @foreach ($arr_level_warnas as $level_warna)
+                                        @if (old("level_warna.$key") == $level_warna)
+                                        <option value="{{ $level_warna }}" selected>{{ $level_warna }}</option>
+                                        @else
+                                        <option value="{{ $level_warna }}">{{ $level_warna }}</option>
+                                        @endif
+                                        @endforeach
+
+                                        @else
+
+                                        @foreach ($arr_level_warnas as $level_warna)
+                                        @if ($item->matas[$key]->level_warna == $level_warna)
+                                        <option value="{{ $level_warna }}" selected>{{ $level_warna }}</option>
+                                        @else
+                                        <option value="{{ $level_warna }}">{{ $level_warna }}</option>
+                                        @endif
+                                        @endforeach
+
+                                        @endif
+                                    </select>
+                                </div>
+                                <div class="mb-1">
+                                    <select id="opacity" name="opacity[]" class="opacity-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        @if (old('opacity'))
+
+                                        @foreach ($arr_opacities as $opacity)
+                                        @if (old('opacity') == $opacity)
+                                        <option value="{{ $opacity }}" selected>{{ $opacity }}</option>
+                                        @else
+                                        <option value="{{ $opacity }}">{{ $opacity }}</option>
+                                        @endif
+                                        @endforeach
+
+                                        @else
+
+                                        @foreach ($arr_opacities as $opacity)
+                                        @if ($item->matas[$key]->opacity == $opacity)
+                                        <option value="{{ $opacity }}" selected>{{ $opacity }}</option>
+                                        @else
+                                        <option value="{{ $opacity }}">{{ $opacity }}</option>
+                                        @endif
+                                        @endforeach
+
+                                        @endif
+
+                                    </select>
+                                </div>
+                                <div class="mb-1">
+                                    <input type="text" id="jumlah_mata" name="jumlah_mata[]" value="{{ old("jumlah_mata.$key") ? old("jumlah_mata.$key") : $item_mata->jumlah_mata }}" placeholder="jumlah_mata" class="jumlah-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                </div>
+                            </div>
+                            <div class="flex justify-end mt-1">
+                                <button class="bg-pink-300 text-white px-2 py-1 rounded-2xl" onclick="removeElement('data-mata-{{ $key }}')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        @endforeach
+
+                        @else
+
                         <div id="data-mata-0" class="data-mata">
                             <div class="grid grid-cols-2 gap-2 mt-2 border-t border-b border-violet-300 p-1">
                                 <div class="mb-1">
@@ -303,51 +377,43 @@
                                 </div>
                                 <div class="mb-1">
                                     <select id="level_warna" name="level_warna[]" class="level-warna bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                        @if (old('level_warna.0'))
-                                        @if (old('level_warna.0') == 'netral')
-                                        <option value="netral" selected>netral</option>
+                                        @if (old("level_warna.$key"))
+
+                                        @foreach ($arr_level_warnas as $level_warna)
+                                        @if (old("level_warna.$key") == $level_warna)
+                                        <option value="{{ $level_warna }}" selected>{{ $level_warna }}</option>
                                         @else
-                                        <option value="netral">netral</option>
+                                        <option value="{{ $level_warna }}">{{ $level_warna }}</option>
                                         @endif
-                                        @if (old('level_warna.0') == 'tua')
-                                        <option value="tua" selected>tua</option>
+                                        @endforeach
+
                                         @else
-                                        <option value="tua">tua</option>
-                                        @endif
-                                        @if (old('level_warna.0') == 'muda')
-                                        <option value="muda" selected>muda</option>
-                                        @else
-                                        <option value="muda">muda</option>
-                                        @endif
-                                        @else
-                                        <option value="netral">netral</option>
-                                        <option value="tua">tua</option>
-                                        <option value="muda">muda</option>
+
+                                        @foreach ($arr_level_warnas as $level_warna)
+                                        <option value="{{ $level_warna }}">{{ $level_warna }}</option>
+                                        @endforeach
+
                                         @endif
                                     </select>
                                 </div>
                                 <div class="mb-1">
                                     <select id="opacity" name="opacity[]" class="opacity-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                         @if (old('opacity'))
-                                        @if (old('opacity') == 'transparent')
-                                        <option value="transparent" selected>transparent</option>
+
+                                        @foreach ($arr_opacities as $opacity)
+                                        @if (old('opacity') == $opacity)
+                                        <option value="{{ $opacity }}" selected>{{ $opacity }}</option>
                                         @else
-                                        <option value="transparent">transparent</option>
+                                        <option value="{{ $opacity }}">{{ $opacity }}</option>
                                         @endif
-                                        @if (old('opacity') == 'non-transparent')
-                                        <option value="non-transparent" selected>non-transparent</option>
+                                        @endforeach
+
                                         @else
-                                        <option value="non-transparent">non-transparent</option>
-                                        @endif
-                                        @if (old('opacity') == 'half-transparent')
-                                        <option value="half-transparent" selected>half-transparent</option>
-                                        @else
-                                        <option value="half-transparent">half-transparent</option>
-                                        @endif
-                                        @else
-                                        <option value="transparent">transparent</option>
-                                        <option value="non-transparent">non-transparent</option>
-                                        <option value="half-transparent">half-transparent</option>
+
+                                        @foreach ($arr_opacities as $opacity)
+                                        <option value="{{ $opacity }}">{{ $opacity }}</option>
+                                        @endforeach
+
                                         @endif
                                     </select>
                                 </div>
@@ -363,10 +429,12 @@
                                 </button>
                             </div>
                         </div>
+                        @endif
                     </div>
                 </div>
 
-                <div id="div_mainan" class="mt-2 hidden">
+
+                <div id="div_mainan" class="mt-2 {{ count($item->mainans) ? '' : 'hidden' }}">
                     <div class="flex gap-2 items-center">
                         <span>mainan :</span>
                         <button type="button" class="bg-emerald-300 rounded-2xl text-white px-2 py-1" onclick="addMainan()">
@@ -376,6 +444,28 @@
                         </button>
                     </div>
                     <div id="data_mainan">
+
+                        @if (count($item->mainans))
+                        @foreach ($item->mainans as $key => $mainan)
+                        <div id="data-mainan-{{ $key }}" class="data-mainan">
+                            <div class="grid grid-cols-2 gap-2 mt-2 border-t border-b border-violet-300 p-1">
+                                <div class="mb-1">
+                                    <input type="text" id="tipe_mainan-{{ $key }}" name="tipe_mainan[]" value="{{ old("tipe_mainan.$key") ? old("tipe_mainan.$key") : $mainan->nama }}" placeholder="tipe_mainan" class="tipe-mainan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                </div>
+                                <div class="mb-1">
+                                    <input type="text" id="jumlah_mainan-{{ $key }}" name="jumlah_mainan[]" value="{{ old("jumlah_mainan.$key") ? old("jumlah_mainan.$key") : $item->item_mainans[$key]->jumlah_mainan }}" placeholder="jumlah_mainan" class="jumlah-mainan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                </div>
+                            </div>
+                            <div class="flex justify-end mt-1">
+                                <button type="button" class="bg-pink-300 text-white px-2 py-1 rounded-2xl" onclick="removeElement('data-mainan-{{ $key }}')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        @endforeach
+                        @else
                         <div id="data-mainan-0" class="data-mainan">
                             <div class="grid grid-cols-2 gap-2 mt-2 border-t border-b border-violet-300 p-1">
                                 <div class="mb-1">
@@ -393,7 +483,10 @@
                                 </button>
                             </div>
                         </div>
+                        @endif
+
                     </div>
+
                 </div>
             </div>
 
@@ -403,37 +496,42 @@
         <div class="fixed z-30 bottom-0 bg-violet-200 rounded w-4/5 px-2">
             <div class="grid grid-cols-3 gap-2">
                 <div class="flex gap-1 items-center">
-                    <input type="checkbox" name="toggle_mata" id="toggle_mata" onclick="toggleCheckbox(this, 'div_mata')"><label for="toggle_mata">mata</label>
+                    <input type="checkbox" name="toggle_mata" id="toggle_mata" onclick="toggleCheckbox(this, 'div_mata')" {{ (count($item->matas)) ? 'checked' : '' }}><label for="toggle_mata">mata</label>
                 </div>
                 <div class="flex gap-1 items-center">
-                    <input type="checkbox" name="toggle_mainan" id="toggle_mainan" onclick="toggleCheckbox(this, 'div_mainan')"><label for="toggle_mainan"><label for="toggle_mainan">mainan</label>
+                    <input type="checkbox" name="toggle_mainan" id="toggle_mainan" onclick="toggleCheckbox(this, 'div_mainan')" {{ (count($item->mainans)) ? 'checked' : '' }}><label for="toggle_mainan"><label for="toggle_mainan">mainan</label>
                 </div>
                 <div class="flex gap-1 items-center">
-                    <input type="checkbox" name="toggle_ukuran" id="toggle_ukuran" onclick="toggleCheckbox(this, 'div_ukuran')"><label for="toggle_ukuran">ukuran</label>
+                    <input type="checkbox" name="toggle_ukuran" id="toggle_ukuran" onclick="toggleCheckbox(this, 'div_ukuran')" {{ ($item->ukuran) ? 'checked' : '' }}><label for="toggle_ukuran">ukuran</label>
                 </div>
                 <div class="flex gap-1 items-center">
-                    <input type="checkbox" name="toggle_merk" id="toggle_merk" onclick="toggleCheckbox(this, 'div_merk')"><label for="toggle_merk">merk</label>
+                    <input type="checkbox" name="toggle_merk" id="toggle_merk" onclick="toggleCheckbox(this, 'div_merk')"  {{ ($item->merk) ? 'checked' : '' }}><label for="toggle_merk">merk</label>
                 </div>
                 <div class="flex gap-1 items-center">
-                    <input type="checkbox" name="toggle_plat" id="toggle_plat" onclick="toggleCheckbox(this, 'div_plat')"><label for="toggle_plat">plat</label>
+                    <input type="checkbox" name="toggle_plat" id="toggle_plat" onclick="toggleCheckbox(this, 'div_plat')" {{ ($item->plat) ? 'checked' : '' }}><label for="toggle_plat">plat</label>
                 </div>
             </div>
         </div>
 
         <div class="text-center mt-10">
-            <button type="submit" class="bg-emerald-300 text-white px-3 py-2 rounded font-bold">+ Tambah Item Baru</button>
+            <button type="submit" class="bg-emerald-300 text-white px-3 py-2 rounded font-bold">Konfirmasi Edit</button>
         </div>
     </form>
 
     <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button>
 </main>
 
+<script src="{{ asset('js/item.js') }}"></script>
+
 <script>
     let jenis_perhiasans = {!! json_encode($jenis_perhiasans, JSON_HEX_TAG) !!}
     let caps = {!! json_encode($caps, JSON_HEX_TAG) !!}
     let warna_matas = {!! json_encode($warna_matas, JSON_HEX_TAG) !!}
     let mainans = {!! json_encode($mainans, JSON_HEX_TAG) !!}
-    // console.log(mainans);
+    let item_matas = {!! json_encode($item->matas, JSON_HEX_TAG) !!}
+    let item_mainans = {!! json_encode($item->mainans, JSON_HEX_TAG) !!}
+    // console.log(item_matas);
+    // console.log(item_mainans);
     // console.log(jenis_perhiasans);
     // $('#tipe_perhiasan').autocomplete({
     //     source: jenis_perhiasans,
@@ -450,166 +548,28 @@
     })
 
     function pilihanJenisPerhiasan(tipe_perhiasan) {
-        // console.log(data_tipe_perhiasan);
-        // console.log(JSON.parse(data_tipe_perhiasan));
-        // var tipe_perhiasan = JSON.parse(data_tipe_perhiasan);
-
-        var pilihan_jenis_perhiasans = jenis_perhiasans.filter((o) => o.tipe_perhiasan == tipe_perhiasan);
-        console.log(pilihan_jenis_perhiasans);
-        $('#jenis_perhiasan').autocomplete({
-            source: pilihan_jenis_perhiasans,
-            select: function (event, ui) {
-                document.getElementById('jenis_perhiasan').value = ui.item.value;
-                generateNama();
-            }
-        })
-        document.getElementById('label_jenis_perhiasan').textContent = `jenis ${tipe_perhiasan}`;
+        pilihanJenisPerhiasan__(tipe_perhiasan, jenis_perhiasans);
     }
 
-    let index_mata = 1;
+    let index_mata = item_matas.length + 1;
     function addMata() {
-        document.getElementById('data_mata').insertAdjacentHTML('beforeend',
-        `<div id="data-mata-${index_mata}">
-            <div class="grid grid-cols-2 gap-2 mt-2 border-t border-b border-violet-300 p-1">
-                <div class="mb-1">
-                    <input type="text" id="warna_mata-${index_mata}" name="warna_mata[]" placeholder="warna_mata" class="warna-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                </div>
-                <div class="mb-1">
-                    <select id="level_warna" name="level_warna[]" class="level-warna bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option value="netral">netral</option>
-                        <option value="tua">tua</option>
-                        <option value="muda">muda</option>
-                    </select>
-                </div>
-                <div class="mb-1">
-                    <select id="opacity" name="opacity[]" class="opacity-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option value="transparent">transparent</option>
-                        <option value="non-transparent">non-transparent</option>
-                        <option value="half-transparent">half-transparent</option>
-                    </select>
-                </div>
-                <div class="mb-1">
-                    <input type="text" id="jumlah_mata" name="jumlah_mata[]" placeholder="jumlah_mata" class="jumlah-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                </div>
-            </div>
-            <div class="flex justify-end mt-1">
-                <button type="button" class="bg-pink-300 text-white px-2 py-1 rounded-2xl" onclick="removeElement('data-mata-${index_mata}')">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
-                    </svg>
-                </button>
-            </div>
-        </div>`
-        );
-
-        setAutocompleteWarnaMata(`warna_mata-${index_mata}`, warna_matas);
+        addMata__(index_mata, warna_matas);
         index_mata++;
 
     }
-
-    function setAutocompleteWarnaMata(element_id, source) {
-        // console.log('run autocomplete mata');
-        $(`#${element_id}`).autocomplete({
-            source: source,
-        });
-    }
-
     setAutocompleteWarnaMata(`warna_mata-0`, warna_matas);
 
-    let index_mainan = 1;
+    let index_mainan = item_mainans.length + 1;
+    // console.log(index_mata);
+    // console.log(index_mainan);
     function addMainan() {
-        document.getElementById('data_mainan').insertAdjacentHTML('beforeend',
-        `<div id="data-mainan-${index_mainan}" class="data-mainan">
-            <div class="grid grid-cols-2 gap-2 mt-2 border-t border-b border-violet-300 p-1">
-                <div class="mb-1">
-                    <input type="text" id="tipe_mainan-${index_mainan}" name="tipe_mainan[]" placeholder="tipe_mainan" class="tipe-mainan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                </div>
-                <div class="mb-1">
-                    <input type="text" id="jumlah_mainan-${index_mainan}" name="jumlah_mainan[]" placeholder="jumlah_mainan" class="jumlah-mainan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                </div>
-            </div>
-            <div class="flex justify-end mt-1">
-                <button type="button" class="bg-pink-300 text-white px-2 py-1 rounded-2xl" onclick="removeElement('data-mainan-${index_mainan}')">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
-                    </svg>
-                </button>
-            </div>
-        </div>`
-        );
-
-        setAutocompleteMainan(`tipe_mainan-${index_mainan}`);
+        addMainan__(index_mainan, mainans)
         index_mainan++;
     }
 
-    function setAutocompleteMainan(element_id) {
-        $(`#${element_id}`).autocomplete({
-            source: mainans,
-        });
-    }
-
-    setAutocompleteMainan('tipe_mainan-0')
-
-    function removeElement(id) {
-        document.getElementById(id).remove();
-    }
-
-    function toggleCheckbox(checkbox, element_id) {
-        // console.log(checkbox.checked)
-        if (checkbox.checked) {
-            $(`#${element_id}`).show(300)
-        } else {
-            $(`#${element_id}`).hide(300)
-
-        }
-    }
-
-    function hitungHargaT() {
-        let berat = parseFloat(document.getElementById('berat').value);
-        let harga_g = parseFloat(document.getElementById('harga_g').value);
-        // console.log(berat);
-        // console.log(harga_g);
-        if (!isNaN(berat) && !isNaN(harga_g)) {
-            let harga_t = formatDecimal(berat * harga_g);
-            let harga_t_formatted = document.getElementById('harga_t_formatted');
-            harga_t_formatted.value = harga_t.toString().split('.').join(',');
-            formatNumber2('harga_t_formatted', 'harga_t');
-        }
-    }
-
-    function hitungHargaGr() {
-        let berat = parseFloat(document.getElementById('berat').value);
-        let harga_t = parseFloat(document.getElementById('harga_t').value);
-        // console.log(berat);
-        // console.log(harga_t);
-        if (!isNaN(berat) && !isNaN(harga_t)) {
-            let harga_g = formatDecimal(harga_t / berat);
-            let harga_g_formatted = document.getElementById('harga_g_formatted');
-            harga_g_formatted.value = harga_g.toString().split('.').join(',');
-            // console.log(harga_g)
-            formatNumber2('harga_g_formatted', 'harga_g');
-        }
-    }
-
-    function hitungHargaGrOrT() {
-        let berat = parseFloat(document.getElementById('berat').value);
-        let harga_g = parseFloat(document.getElementById('harga_g').value);
-        let harga_t = parseFloat(document.getElementById('harga_t').value);
-        if (!isNaN(berat) && !isNaN(harga_g)) {
-            let harga_t = formatDecimal(berat * harga_g);
-            let harga_t_formatted = document.getElementById('harga_t_formatted');
-            harga_t_formatted.value = harga_t.toString().split('.').join(',');
-            formatNumber2('harga_t_formatted', 'harga_t');
-        } else if (!isNaN(berat) && !isNaN(harga_t)) {
-            let harga_g = formatDecimal(harga_t / berat);
-            let harga_g_formatted = document.getElementById('harga_g_formatted');
-            harga_g_formatted.value = harga_g.toString().split('.').join(',')
-            formatNumber2('harga_g_formatted', 'harga_g');
-        }
-    }
+    setAutocompleteMainan('tipe_mainan-0', mainans);
 
 </script>
 
-<script src="{{ asset('js/create_item.js') }}"></script>
 @endsection
 
