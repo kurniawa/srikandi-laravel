@@ -48,7 +48,7 @@ Route::controller(ItemController::class)->group(function(){
     Route::get('/items/{item}/edit','edit')->name('items.edit')->middleware('level3');
     Route::post('/items/{item}/update','update')->name('items.update')->middleware('level3');
     Route::post('/items/{item}/delete','delete')->name('items.delete')->middleware('level3');
-    Route::post('/items/{item}/{item_photo}/delete_photo','delete_photo')->name('items.delete_photo')->middleware('level3');
+    Route::post('/items/{item}/{item_photo}/{photo}/delete_photo','delete_photo')->name('items.delete_photo')->middleware('level3');
     Route::post('/items/{item}/add_photo','add_photo')->name('items.add_photo')->middleware('level3');
     // Route::post('/items/{item}/mau','mau')->name('items.mau');
     // Route::post('/items/{item}/{peminat_item}/hapus_peminat','hapus_peminat')->name('items.hapus_peminat');

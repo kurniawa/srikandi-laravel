@@ -8,9 +8,9 @@
     @if ($item_photos[$i])
     <div class="flex gap-2">
         <div class="w-28 max-h-28 mb-2">
-            <img src="{{ asset("storage/" . $item_photos[$i]->photo->path) }}" alt="item_photo" class="w-full">
+            <img src="{{ asset("storage/" . $photos[$i]->path) }}" alt="item_photo" class="w-full">
         </div>
-        <form action="{{ route('items.delete_photo', [$item->id, $item_photos[$i]->id]) }}" method="POST" onsubmit="return confirm('Anda yakin ingin hapus photo_item ini?')" class="flex items-center">
+        <form action="{{ route('items.delete_photo', [$item->id, $item_photos[$i]->id, $photos[$i]->id]) }}" method="POST" onsubmit="return confirm('Anda yakin ingin hapus photo_item ini?')" class="flex items-center">
             @csrf
             <button type="submit" class="bg-pink-300 text-pink-500 rounded p-1">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
@@ -42,7 +42,7 @@
             </div>
             <img id="preview-photo-{{ $i }}"></img>
             <div class="flex justify-center mt-1">
-                <button type="submit" class="bg-emerald-300 text-emerald-500 font-bold rounded px-3 py-1 text-sm">Tambah</button>
+                <button type="submit" class="bg-emerald-300 text-white border-2 border-emerald-400 font-bold rounded px-3 py-1 text-sm">+ Tambah Photo</button>
             </div>
         </div>
     </form>

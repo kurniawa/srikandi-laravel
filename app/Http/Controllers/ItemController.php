@@ -13,9 +13,11 @@ use App\Models\JenisPerhiasan;
 use App\Models\Mainan;
 use App\Models\Mata;
 use App\Models\Menu;
+use App\Models\Photo;
 use App\Models\TipePerhiasan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ItemController extends Controller
 {
@@ -66,7 +68,7 @@ class ItemController extends Controller
             $tipe_perhiasan = $post['tipe_perhiasan'];
             $jenis_perhiasan = $post['jenis_perhiasan'];
             // CEK relasi tipe_perhiasan dengan jenis_perhiasan
-            $exist_jenis_perhiasan = JenisPerhiasan::where('tipe_perhiasan', $tipe_perhiasan)->where('jenis_perhiasan', $jenis_perhiasan)->first();
+            $exist_jenis_perhiasan = JenisPerhiasan::where('tipe_perhiasan', $tipe_perhiasan)->where('nama', $jenis_perhiasan)->first();
             if (!$exist_jenis_perhiasan) {
                 $get_tipe_perhiasan = TipePerhiasan::where('nama', $tipe_perhiasan)->first();
                 JenisPerhiasan::create([
@@ -213,7 +215,7 @@ class ItemController extends Controller
 
     function show(Item $item) {
         // dd($item);
-        $item_photos = ItemPhoto::where('item_id', $item->id)->orderBy('photo_index')->get();
+        // $item_photos = ItemPhoto::where('item_id', $item->id)->orderBy('photo_index')->get();
         $user = Auth::user();
         // dump($item->item_matas);
         // dd($item->item_matas[0]->mata);
@@ -237,7 +239,7 @@ class ItemController extends Controller
             'parent_route' => 'home',
             'spk_menus' => Menu::get_spk_menus(),
             'item' => $item,
-            'item_photos' => $item_photos,
+            // 'item_photos' => $item_photos,
             'cart' => $cart,
             'user' => $user,
             // 'related_user' => $related_user,
@@ -250,12 +252,26 @@ class ItemController extends Controller
     function edit(Item $item) {
         $user = Auth::user();
         $cart = Cart::where('user_id', $user->id)->first();
+        // if (count($item->item_photos)) {
+        //     foreach ($item->item_photos as $item_photo) {
+        //         $photo = Photo::find($item_photo->photo_id);
+        //         $photos->push($photo);
+        //     }
+        // }
+
         $item_photos = collect();
+        $photos = collect();
 
         for ($i=0 ; $i < 5 ; $i++) {
             $item_photo = ItemPhoto::where('item_id', $item->id)->where('photo_index', $i)->first();
 
             $item_photos->push($item_photo);
+
+            $photo = null;
+            if ($item_photo) {
+                $photo = Photo::find($item_photo->photo_id);
+            }
+            $photos->push($photo);
         }
 
         $arr_warna_emas = ['kuning', 'rose gold', 'putih', 'chrome'];
@@ -290,6 +306,7 @@ class ItemController extends Controller
             'cart' => $cart,
             'user' => $user,
             'item_photos' => $item_photos,
+            'photos' => $photos,
             'arr_warna_emas' => $arr_warna_emas,
             'obj_kondisi' => $obj_kondisi,
             'arr_range_usia' => $arr_range_usia,
@@ -304,6 +321,13 @@ class ItemController extends Controller
             // 'related_user' => $related_user,
             // 'peminat_items' => $peminat_items,
         ];
+        // if (count($item->matas)) {
+        //     $test = ItemMata::where('item_id', $item->id)->get();
+        //     dump($test);
+        //     dump(count($item->matas));
+        //     dump('item->matas true');
+        //     dump($item->item_matas);
+        // }
         // dd(count($item->item_matas));
         return view('items.edit', $data);
     }
@@ -311,7 +335,7 @@ class ItemController extends Controller
     function update(Item $item, Request $request) {
         $post = $request->post();
         // dump($from);
-        dd($post);
+        // dd($post);
 
         $request->validate([
             'tipe_barang'=> 'required',
@@ -355,7 +379,7 @@ class ItemController extends Controller
             $tipe_perhiasan = $post['tipe_perhiasan'];
             $jenis_perhiasan = $post['jenis_perhiasan'];
             // CEK relasi tipe_perhiasan dengan jenis_perhiasan
-            $exist_jenis_perhiasan = JenisPerhiasan::where('tipe_perhiasan', $tipe_perhiasan)->where('jenis_perhiasan', $jenis_perhiasan)->first();
+            $exist_jenis_perhiasan = JenisPerhiasan::where('tipe_perhiasan', $tipe_perhiasan)->where('nama', $jenis_perhiasan)->first();
             if (!$exist_jenis_perhiasan) {
                 $get_tipe_perhiasan = TipePerhiasan::where('nama', $tipe_perhiasan)->first();
                 JenisPerhiasan::create([
@@ -473,4 +497,61 @@ class ItemController extends Controller
 
         return redirect()->route('items.show', $item->id)->with($feedback);
     }
+
+    function delete_photo(Item $item, ItemPhoto $item_photo, Photo $photo) {
+        // dump(Storage::exists($item_photo->photo_path));
+        // dd($item_photo);
+        $warnings_ = "";
+        if (Storage::exists($photo->path)) {
+            Storage::delete($photo->path);
+        }
+        $warnings_ .= "-File storage dihapus-";
+
+        $item_photo->delete();
+        $warnings_ .= "-ItemPhoto dihapus-";
+
+        $feedback = [
+            "warnings_" => $warnings_,
+        ];
+
+        return back()->with($feedback);
+    }
+
+    function add_photo(Item $item, Request $request) {
+        $post = $request->post();
+        $file_photo = $request->file('photo');
+        // dump($post);
+        // dump($photo);
+        // dd($item);
+
+        $request->validate([
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'photo_index' => 'required|numeric'
+        ]);
+
+        $success_ = "";
+
+        $file_name = time() . "." . $file_photo->extension();
+        $file_photo->storeAs('items/photos', $file_name);
+
+        $photo = Photo::create([
+            "path" => "items/photos/$file_name",
+        ]);
+
+        $item_photo = ItemPhoto::create([
+            "item_id" => $item->id,
+            "photo_id" => $photo->id,
+            "photo_index" => $post['photo_index'],
+        ]);
+
+        $success_ .= "-ItemPhoto $item_photo->photo_path created-";
+
+        $feedback = [
+            "success_" => $success_
+        ];
+
+        return back()->with($feedback);
+
+    }
+
 }

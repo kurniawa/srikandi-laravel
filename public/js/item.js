@@ -137,7 +137,7 @@ function generateNama() {
     }
 
     let nama_short = `${tipe_perhiasan} ${jenis_perhiasan}${warna_emas} ${kadar}% ${berat}gr`;
-    let nama_long = `${tipe_perhiasan} ${jenis_perhiasan}${warna_emas} ${kadar}% ${berat}gr ${cap}${ukuran}${range_usia}${merk}${plat}`;
+    let nama_long = `${tipe_perhiasan} ${jenis_perhiasan}${warna_emas} ${kadar}% ${berat}gr${cap}${ukuran}${range_usia}${merk}${plat}`;
     // nama_long = nama_long.split("  ").join(" ");
     document.getElementById('nama_short').value = nama_short;
     document.getElementById('nama_long').value = nama_long;
@@ -199,4 +199,23 @@ function hitungHargaGrOrT() {
         harga_g_formatted.value = harga_g.toString().split('.').join(',')
         formatNumber2('harga_g_formatted', 'harga_g');
     }
+
+}
+
+function previewImage(image_file, div_preview_photo, preview_photo) {
+    if (image_file) {
+        // console.log(image_file)
+        document.getElementById(preview_photo).src = URL.createObjectURL(image_file);
+        $(`#${div_preview_photo}`).show();
+    }
+}
+
+function removeImage(input_image, div_preview_photo, preview_photo) {
+    document.getElementById(preview_photo).src = "";
+    $(`#${div_preview_photo}`).hide(300);
+    const input_image_element = document.getElementById(input_image);
+    // console.log(input_image_element);
+    // console.log(input_image_element.value);
+    input_image_element.value = null;
+    // console.log(input_image_element.value);
 }

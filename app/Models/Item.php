@@ -15,7 +15,7 @@ class Item extends Model
     }
 
     function item_matas() {
-        return $this->hasMany(ItemMata::class, 'mata_id', 'id');
+        return $this->hasMany(ItemMata::class, 'item_id', 'id');
     }
 
     function mainans() {
@@ -23,7 +23,11 @@ class Item extends Model
     }
 
     function item_mainans() {
-        return $this->hasMany(ItemMainan::class, 'mainan_id', 'id');
+        return $this->hasMany(ItemMainan::class, 'item_id', 'id');
+    }
+
+    function photos() {
+        return $this->belongsToMany(Photo::class, 'item_photos', 'item_id', 'photo_id');
     }
 
     function item_photos() {
