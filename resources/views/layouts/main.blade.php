@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
     @vite(['resources/css/app.css','resources/js/app.js'])
     <script src="{{ asset('js/jquery-3.5.1.js') }}"></script>
     {{-- <link rel="shortcut icon" href="{{ asset('images/logo-mc-bg_removed.png') }}" type="image/x-icon"> --}}
@@ -20,6 +21,7 @@
     </style>
     <title>Srikandi</title>
     {{-- @laravelPWA --}}
+
 </head>
 <body class="relative">
     <div id="menu-close-layer" class="absolute w-screen h-screen hidden z-30" onclick="hideMenuCloseLayer('profile-menu','menu-close-layer')"></div>
@@ -252,6 +254,7 @@
             </div>
             @endif
         </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
 </body>
 
 <script>

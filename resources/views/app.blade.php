@@ -7,8 +7,8 @@
             @foreach ($items as $key => $item)
                 <a href="{{ route('items.show', $item->id) }}" class="loading-spinner p-2 bg-white rounded shadow drop-shadow relative">
                     <div>
-                        @if (isset($item_photos[$key]->photo_path))
-                        <img src="{{ asset("storage/" . $item_photos[$key]->photo_path) }}" alt="item_photo" class="w-full">
+                        @if (count($item->item_photos))
+                        <img src="{{ asset("storage/" . $item->item_photos[0]->photo->path) }}" alt="item_photo" class="w-full">
                         @else
                         <div class="bg-indigo-100 text-indigo-400">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full">

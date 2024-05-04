@@ -20,7 +20,7 @@
             @if ($key === 0)
             <button type="button" class="w-3 h-3 rounded-full" aria-current="true" aria-label="Slide {{ $key }}" data-carousel-slide-to="{{ $key }}"></button>
             @else
-            <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide {{ $key }}" data-carousel-slide-to="{{ $key }}"></button>
+            <button type="button" class="w-3 h-3 rounded-full bg-white/50 dark:bg-gray-800/50" aria-current="false" aria-label="Slide {{ $key }}" data-carousel-slide-to="{{ $key }}"></button>
             @endif
             @endforeach
         </div>

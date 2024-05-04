@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\SuratPembelianController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -40,6 +41,10 @@ Route::controller(AuthController::class)->group(function(){
     Route::post('/register','register_new')->name('register_new');
 });
 
+Route::controller(UserController::class)->group(function(){
+    Route::get('/users/{user}/list_of_items','list_of_items')->name('users.list_of_items')->middleware('auth');
+});
+
 Route::controller(ItemController::class)->group(function(){
     Route::get('/items/add','create')->name('items.create')->middleware('level3');
     Route::post('/items/{from}/store','store')->name('items.store')->middleware('level3');
@@ -54,8 +59,9 @@ Route::controller(ItemController::class)->group(function(){
     // Route::post('/items/{item}/{peminat_item}/hapus_peminat','hapus_peminat')->name('items.hapus_peminat');
 });
 
-Route::controller(UserController::class)->group(function(){
-    Route::get('/users/{user}/list_of_items','list_of_items')->name('users.list_of_items')->middleware('auth');
+Route::controller(PhotoController::class)->group(function(){
+    Route::post('/items/{item}/add_photo','add_photo')->name('items.add_photo')->middleware('level3');
+    Route::post('/items/{item}/{item_photo}/{photo}/delete_photo','delete_photo')->name('items.delete_photo')->middleware('level3');
 });
 
 Route::controller(CartController::class)->group(function(){

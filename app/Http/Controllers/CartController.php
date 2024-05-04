@@ -148,7 +148,7 @@ class CartController extends Controller
     function proses_checkout(Cart $cart, Request $request) {
         $post = $request->post();
         $user = Auth::user();
-        dump($cart);
+        // dump($cart);
         // dd($post);
 
 
@@ -171,7 +171,7 @@ class CartController extends Controller
         $harga_total = (string)($post['harga_total'] * 100) + 0;
         $total_bayar = (string)($post['total_bayar'] * 100) + 0;
         $sisa_bayar = (string)($post['sisa_bayar'] * 100) + 0;
-        dump(time());
+        // dump(time());
         // dd($sisa_bayar);
 
         // dd($post);
@@ -217,7 +217,7 @@ class CartController extends Controller
         // if ($cart->pelanggan_id == Auth::user()->id) {
         //     $request->validate(['error'=>'required'],['error.required'=>'User tidak boleh membeli untuk diri sendiri!']);
         // }
-        $nama_pelanggan = 'guest';
+        $pelanggan_nama = 'guest';
         $pelanggan = null;
         $pelanggan_id = null;
         if ($post['nama_pelanggan'] !== 'guest') {
@@ -228,7 +228,7 @@ class CartController extends Controller
             if ($user->id == $pelanggan->id) {
                 $request->validate(['error'=>'required'],['error.required'=>'-admin dan pelanggan tidak boleh sama-']);
             }
-            $nama_pelanggan = $pelanggan->nama;
+            $pelanggan_nama = $pelanggan->nama;
             $pelanggan_id = $pelanggan->id;
         }
         // dd($cart);
@@ -238,13 +238,13 @@ class CartController extends Controller
 
         $time_key = time();
         $pembelian_new = SuratPembelian::create([
-            'tanggal_surat' => date('Y-m-d', strtotime("$post[hari]-$post[bulan]-$post[tahun]")) . 'T' . date('H:i:s', time()),
+            'tanggal_surat' => date('Y-m-d', strtotime("$post[hari]-$post[bulan]-$post[tahun]")) . 'T' . date('H:i:s', $time_key),
             'no_surat' => uniqid(),
             'time_key' => $time_key,
             'user_id' => Auth::user()->id,
             'username' => Auth::user()->username,
             'pelanggan_id' => $cart->pelanggan_id,
-            'nama_pelanggan' => $nama_pelanggan,
+            'pelanggan_nama' => $pelanggan_nama,
             'keterangan' => $cart->keterangan,
             'harga_total' => (string)$harga_total,
             'total_bayar' => (string)$total_bayar,

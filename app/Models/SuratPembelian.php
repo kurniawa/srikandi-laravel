@@ -58,4 +58,8 @@ class SuratPembelian extends Model
         // dump($last_four_digit);
         // dd($time_key);
     }
+
+    function items() {
+        return $this->hasMany(SuratPembelianItem::class);
+    }
 }
