@@ -130,7 +130,7 @@
                       <!-- Active: "bg-gray-100", Not Active: "" -->
                       @foreach ($profile_menus as $profile_menu)
                       @if ($profile_menu['route'] === 'logout')
-                        <form action="{{ route($profile_menu['route']) }}" method="post" class="block">
+                        <form action="{{ route($profile_menu['route']) }}" method="post" class="loading-spinner block">
                             @csrf
                             <button type="submit" class="py-2 text-sm text-left pl-4 text-gray-600 hover:bg-gray-200 w-full flex">
                                 <span>{{ $profile_menu['name'] }}</span>
@@ -141,7 +141,7 @@
                         </form>
                         @else
                         @if (isset($profile_menu['params']))
-                        <a href="{{ route($profile_menu['route'], $profile_menu['params']) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">{{ $profile_menu['name'] }}</a>
+                        <a href="{{ route($profile_menu['route'], $profile_menu['params']) }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">{{ $profile_menu['name'] }}</a>
                         @else
                         <a href="{{ route($profile_menu['route']) }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">{{ $profile_menu['name'] }}</a>
                         @endif

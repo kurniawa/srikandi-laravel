@@ -3,6 +3,7 @@
 use App\Http\Controllers\ArtisanController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CashflowController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\PhotoController;
@@ -74,6 +75,10 @@ Route::controller(CartController::class)->group(function(){
 
 Route::controller(SuratPembelianController::class)->group(function(){
     Route::get('/surat_pembelian/index','index')->name('surat_pembelian.index')->middleware('level3');;
+});
+
+Route::controller(CashflowController::class)->group(function(){
+    Route::get('/cashflow/index','index')->name('cashflow.index')->middleware('level3');;
 });
 
 Route::controller(ArtisanController::class)->group(function(){

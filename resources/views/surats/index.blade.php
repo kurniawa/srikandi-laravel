@@ -20,15 +20,15 @@
                         </div>
                     </div>
                 </td>
-                <td class="py-1"><div class="text-center">{{ $surat_pembelian->username }}</div></td>
-                <td class="py-1"><div class="text-center">{{ $surat_pembelian->pelanggan_nama }}</div></td>
-                <td class="py-1"><div class="text-center">{{ my_decimal_format($surat_pembelian->harga_total) }}</div></td>
+                <td class="py-1"><div class="text-center text-slate-500">{{ $surat_pembelian->username }}</div></td>
+                <td class="py-1"><div class="text-center text-slate-500">{{ $surat_pembelian->pelanggan_nama }}</div></td>
+                <td class="py-1"><div class="text-center text-slate-500">{{ my_decimal_format($surat_pembelian->harga_total) }}</div></td>
             </tr>
             <tr class="border-b">
                 <td colspan="4" class="pb-1">
-                    <div id="surat_pembelian_items-{{ $key }}" class="border border-indigo-400 rounded p-2">
+                    <div id="surat_pembelian_items-{{ $key }}" class="border border-indigo-400 rounded p-2 hidden">
                         <h3 class="font-bold text-slate-500">Data Barang:</h3>
-                        <div class="flex gap-1 justify-between items-center border-y">
+                        <div class="flex gap-1 justify-between items-center border-y text-slate-400">
                             @foreach ($surat_pembelian->items as $item)
                             <span>{{ $item->nama_short }}</span>
                             <div class="text-xs">

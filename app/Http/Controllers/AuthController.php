@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\Menu;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -10,12 +11,23 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
     public function login() {
+        $user = Auth::user();
+        $cart = null;
+        if ($user) {
+            $cart = Cart::where('user_id', $user->id)->first();
+        }
+
+        if ($user) {
+            return redirect()->route('home');
+        }
         $data = [
             'menus' => Menu::get(),
             'route_now' => 'home',
             'profile_menus' => Menu::get_profile_menus(Auth::user()),
             'parent_route' => 'home',
             'spk_menus' => Menu::get_spk_menus(),
+            'user' => $user,
+            'cart' => $cart,
         ];
 
         return view('auth.login', $data);

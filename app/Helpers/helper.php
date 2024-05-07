@@ -27,4 +27,13 @@ function my_decimal_format($number) {
 
     return $formatted_number;
 }
+
+function pangkas_string_25($str_value) {
+    $str_formatted = $str_value;
+    if (strlen($str_value) > 25) {
+        $str_formatted = substr($str_value, 0, 25) . "...";
+    }
+
+    return $str_formatted;
+}
 ?>

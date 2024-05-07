@@ -44,7 +44,7 @@ class Menu extends Model
         $menus = collect();
         if (isset($user)) {
             if ($user !== null) {
-                if ($user->role === 'Developer') {
+                if ($user->clearance_level == 6) {
                     $menus->push(
                         // ['name'=>'Your Profile','route'=>'user.profile'],
                         // ['name'=>'Settings','route'=>'settings'],
@@ -56,7 +56,8 @@ class Menu extends Model
                     $menus->push(
                         // ['name'=>'Your Profile','route'=>'user.profile'],
                         // ['name'=>'Settings','route'=>'settings'],
-                        ['name'=>'Daftar item Anda','route'=>'users.list_of_items', 'params'=>$user->id],
+                        ['name'=>'Surat / Transaksi','route'=>'surat_pembelian.index', 'params'=>$user->id],
+                        ['name'=>'Accounting','route'=>'cashflow.index', 'params'=>$user->id],
                         ['name'=>'Log Out','route'=>'logout'],
                     );
                 }

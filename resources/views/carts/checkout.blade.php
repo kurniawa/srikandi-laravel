@@ -182,26 +182,28 @@
                         </svg>
                     </div>
                 </div>
-                <div id="dd-daftar-ewallet" class="border absolute top-12 bg-white w-full z-10 hidden">
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('bank','bca')" id="bca"><img src="{{ asset('img/logo-bank-bca.png') }}" class="h-full"></div>
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('bank','bri')" id="bri"><img src="{{ asset('img/logo-bank-bri.png') }}" class="h-full"><span class="font-bold text-blue-800 text-base ml-2">BRI</span></div>
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('bank','mandiri')" id="mandiri"><img src="{{ asset('img/logo-bank-mandiri.png') }}" class="h-full"></div>
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('bank','bni')" id="bni"><img src="{{ asset('img/logo-bank-bni.png') }}" class="h-full"></div>
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('bank','cimb')" id="cimb"><img src="{{ asset('img/logo-bank-cimb.png') }}" class="h-full"></div>
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('bank','ocbc')" id="ocbc"><img src="{{ asset('img/logo-bank-ocbc.jpg') }}" class="h-full"></div>
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('bank','bjb')" id="bjb"><img src="{{ asset('img/logo-bank-bjb.png') }}" class="h-full"></div>
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('bank','maybank')" id="maybank"><img src="{{ asset('img/logo-bank-maybank.svg') }}" class="h-full"></div>
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('ewallet','gopay')" id="gopay"><img src="{{ asset('img/logo-ewallet-gopay.png') }}" class="h-full"></div>
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('ewallet','shopee')" id="shopee"><img src="{{ asset('img/logo-ewallet-shopee.png') }}" class="h-full"></div>
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('ewallet','dana')" id="dana"><img src="{{ asset('img/logo-ewallet-dana.png') }}" class="h-full"></div>
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('ewallet','ovo')" id="ovo"><img src="{{ asset('img/logo-ewallet-ovo.png') }}" class="h-full"><span class="font-bold text-violet-800 text-base ml-2">OVO</span></div>
+                <div id="dd-daftar-ewallet" class="border absolute top-12 bg-white w-full z-20 hidden">
+                    @foreach ($wallets_non_tunai as $wallet)
+                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('{{ $wallet->tipe }}', '{{ $wallet->nama }}')" id="{{ $wallet->nama }}"><img src="{{ asset("img/logo-$wallet->tipe-$wallet->nama.png") }}" class="h-full"></div>
+                    @endforeach
+                    {{-- <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('bank','BRI')" id="BRI"><img src="{{ asset('img/logo-bank-bri.png') }}" class="h-full"><span class="font-bold text-blue-800 text-base ml-2">BRI</span></div>
+                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('bank','Mandiri')" id="Mandiri"><img src="{{ asset('img/logo-bank-mandiri.png') }}" class="h-full"></div>
+                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('bank','BNI')" id="BNI"><img src="{{ asset('img/logo-bank-bni.png') }}" class="h-full"></div>
+                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('bank','CIMB')" id="CIMB"><img src="{{ asset('img/logo-bank-cimb.png') }}" class="h-full"></div>
+                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('bank','OCBC')" id="OCBC"><img src="{{ asset('img/logo-bank-ocbc.jpg') }}" class="h-full"></div>
+                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('bank','BJB')" id="BJB"><img src="{{ asset('img/logo-bank-bjb.png') }}" class="h-full"></div>
+                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('bank','Maybank')" id="Maybank"><img src="{{ asset('img/logo-bank-maybank.svg') }}" class="h-full"></div>
+                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('ewallet','GoPay')" id="GoPay"><img src="{{ asset('img/logo-ewallet-gopay.png') }}" class="h-full"></div>
+                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('ewallet','ShopeePay')" id="ShopeePay"><img src="{{ asset('img/logo-ewallet-shopee.png') }}" class="h-full"></div>
+                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('ewallet','Dana')" id="Dana"><img src="{{ asset('img/logo-ewallet-dana.png') }}" class="h-full"></div>
+                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('ewallet','OVO')" id="OVO"><img src="{{ asset('img/logo-ewallet-ovo.png') }}" class="h-full"><span class="font-bold text-violet-800 text-base ml-2">OVO</span></div> --}}
                     <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('lain-lain','lain-lain')"><span class="font-bold text-base ml-2">Lain - lain</span></div>
                 </div>
             </div>
         </div>
         <div class="flex justify-end">
             <div class="">
-                <span class="font-bold text-orange-500">Sisa Bayar</span>
+                <span id="label-sisa-bayar" class="font-bold text-orange-500">Sisa Bayar</span>
                 <div class="font-bold text-lg"><span>Rp </span><span id="sisa-bayar">{{ number_format((string)((float)$harga_total / 100), 2, ',', '.') }}</span></div>
             </div>
             <div class="ml-2">
@@ -287,7 +289,15 @@
             }
         });
         // console.log(total_bayar);
-        let sisa_bayar = (parseFloat(total_tagihan/ 100)) - total_bayar;
+        let sisa_bayar_real_value = (parseFloat(total_tagihan/ 100)) - total_bayar;
+        let sisa_bayar = sisa_bayar_real_value;
+        if (sisa_bayar_real_value < 0) {
+            document.getElementById('label-sisa-bayar').textContent = "KEMBALI";
+            sisa_bayar = -sisa_bayar_real_value;
+        } else {
+            document.getElementById('label-sisa-bayar').textContent = "Sisa Bayar";
+
+        }
 
         // console.log(total_tagihan);
         // console.log(total_tagihan / 100);
@@ -301,7 +311,7 @@
         document.getElementById('total-bayar').textContent = formatNumberX(preformatDotToComa(pangkasDesimal(total_bayar)));
         document.getElementById('sisa-bayar').textContent = formatNumberX(preformatDotToComa(pangkasDesimal(sisa_bayar)));
         document.getElementById('ipt-total-bayar').value = pangkasDesimal(total_bayar).toString();
-        document.getElementById('ipt-sisa-bayar').value = pangkasDesimal(sisa_bayar).toString();
+        document.getElementById('ipt-sisa-bayar').value = pangkasDesimal(sisa_bayar_real_value).toString();
     }
 </script>
 @endsection

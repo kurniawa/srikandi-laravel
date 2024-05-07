@@ -12,7 +12,11 @@ class SuratPembelianController extends Controller
 {
     function index() {
         $user = Auth::user();
-        $cart = Cart::where('user_id', $user->id)->first();
+        $cart = null;
+        if ($user) {
+            $cart = Cart::where('user_id', $user->id)->first();
+        }
+
         $surat_pembelians = SuratPembelian::orderByDesc('created_at')->limit(200)->get();
         // my_decimal_format(100000);
         // my_decimal_format(100002);

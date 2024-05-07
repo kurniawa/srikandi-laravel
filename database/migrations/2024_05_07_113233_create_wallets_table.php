@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('saldos', function (Blueprint $table) {
+        Schema::create('wallets', function (Blueprint $table) {
             $table->id();
-            $table->string('kategori_wallet',20)->nullable(); // tunai, non-tunai
-            $table->string('tipe_wallet',20)->nullable(); // laci, bank, e-wallet
-            $table->string('nama_wallet',20); // tunai, bca, bri, bni, mandiri, ovo, gopay, dana, dll.
-            $table->integer('saldo');
+            $table->string('kategori', 20); // tunai atau non-tunai
+            $table->string('tipe', 20); // laci, bank atau ewallet
+            $table->string('nama', 20); // tunai, BCA atau GoPay
             $table->timestamps();
         });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('saldos');
+        Schema::dropIfExists('wallets');
     }
 };

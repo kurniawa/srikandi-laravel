@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             MainanSeeder::class,
             CapSeeder::class,
             MataSeeder::class,
+            WalletSeeder::class,
         ]);
     }
 }

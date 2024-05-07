@@ -100,49 +100,63 @@ class SuratPembelianItem extends Model
         ]);
 
         // CASHFLOW
-        $tipe_wallet = "";
-        $nama_wallet = "";
         $jumlah = 0;
         if (isset($post['jumlah_tunai'])) {
             if ($post['jumlah_tunai'] !== null) {
-                $tipe_wallet = "tunai";
-                $nama_wallet = "tunai";
-                $jumlah = (int)$post['jumlah_tunai'];
-                Cashflow::create([
+                if ((int)$post['sisa_bayar'] < 0) {
+                    $jumlah = ((float)$post['jumlah_tunai'] * 100) + ((float)$post['sisa_bayar'] * 100);
+                } else {
+                    $jumlah = (float)$post['jumlah_tunai'] * 100;
+                }
+                $wallet = Wallet::where('tipe', 'laci')->where('nama', 'cash')->first();
+                $cashflow = Cashflow::create([
                     'user_id' => Auth::user()->id,
                     'time_key' => $time_key,
                     'surat_pembelian_id' => $surat_pembelian->id,
                     'surat_pembelian_item_id' => $surat_pembelian_item->id,
                     // 'nama_transaksi' => $nama_transaksi,
                     'tipe' => 'pemasukan',
-                    'tipe_wallet' => $tipe_wallet,
-                    'nama_wallet' => $nama_wallet,
+                    'kategori_wallet' => $wallet->kategori,
+                    'tipe_wallet' => $wallet->tipe,
+                    'nama_wallet' => $wallet->nama,
                     'jumlah' => $jumlah,
                 ]);
                 // self::create_update_neraca($tipe_wallet, $nama_wallet, $jumlah);
+
+                // CEK Saldo terkait
+
+                Saldo::cek_saldo_wallet_sebelumnya_dan_create_apabila_belum_ada($time_key, $wallet, $jumlah);
             }
         }
+
         if (isset($post['jumlah'])) { // kodingan pada blade sempat di edit, js dipake bareng2, awalnya ini namanya jumlah_non_tunai
             foreach ($post['jumlah'] as $key => $jumlah_non_tunai) {
                 if ($jumlah_non_tunai !== null) {
-                    $tipe_wallet = $post['tipe_instansi'][$key];
-                    $nama_wallet = $post['nama_instansi'][$key];
-                    $jumlah = $jumlah_non_tunai;
-                    Cashflow::create([
+                    $wallet = Wallet::where('tipe', $post['tipe_instansi'][$key])->where('nama', $post['nama_instansi'][$key])->first();
+                    // $tipe_wallet = $post['tipe_instansi'][$key];
+                    // $nama_wallet = $post['nama_instansi'][$key];
+                    $jumlah = $jumlah_non_tunai * 100;
+                    $cashflow = Cashflow::create([
                         'user_id' => Auth::user()->id,
                         'time_key' => $time_key,
                         'surat_pembelian_id' => $surat_pembelian->id,
                         // 'nama_transaksi' => $nama_transaksi,
                         'tipe' => 'pemasukan',
-                        'tipe_wallet' => $tipe_wallet,
-                        'nama_wallet' => $nama_wallet,
+                        'kategori_wallet' => $wallet->kategori,
+                        'tipe_wallet' => $wallet->tipe,
+                        'nama_wallet' => $wallet->nama,
                         'jumlah' => $jumlah,
                     ]);
                     // self::create_update_neraca($tipe_wallet, $nama_wallet, $jumlah);
+                    Saldo::cek_saldo_wallet_sebelumnya_dan_create_apabila_belum_ada($time_key, $wallet, $jumlah);
                 }
             }
         }
 
         $cart_item->delete();
+    }
+
+    function item() {
+        return $this->hasOne(Item::class, "id", "item_id");
     }
 }

@@ -22,9 +22,10 @@ return new class extends Migration
             // Masalah ketika pakai array, nanti pas mencari di database jadi lebih sulit.
             // $table->string('nama_transaksi',50)->nullable(); //, ['mix'= campur, 'bba' = bb-able, 'non' => non-bb-able] pembelian-perhiasan, penjualan-perhiasan, mutasi-ke-tunai, mutasi-dari-bca, penyesuaian
             $table->enum('tipe',['pemasukan', 'pengeluaran'])->nullable();
-            $table->string('tipe_wallet',50)->nullable(); // tunai, bank, e-wallet
-            $table->string('nama_wallet',50)->nullable(); // tunai, bca, bri, bni, mandiri, ovo, gopay, dana, dll.
-            $table->integer('jumlah')->nullable(); // nullable karena masih belum bisa jelas apabila semua barang dalam satu surat pembelian dijual semua, lalu penjualan tersebut kombinasi antara tunai dan non-tunai
+            $table->string('kategori_wallet',20)->nullable(); // tunai, bank, e-wallet
+            $table->string('tipe_wallet',20)->nullable(); // tunai, bank, e-wallet
+            $table->string('nama_wallet',20)->nullable(); // tunai, bca, bri, bni, mandiri, ovo, gopay, dana, dll.
+            $table->bigInteger('jumlah')->nullable(); // nullable karena masih belum bisa jelas apabila semua barang dalam satu surat pembelian dijual semua, lalu penjualan tersebut kombinasi antara tunai dan non-tunai
             $table->string('keterangan')->nullable();
             $table->timestamps();
         });

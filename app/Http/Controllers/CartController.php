@@ -15,6 +15,7 @@ use App\Models\SuratPembelian;
 use App\Models\SuratPembelianItem;
 use App\Models\TipePerhiasan;
 use App\Models\User;
+use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -68,6 +69,10 @@ class CartController extends Controller
     function create_item($from, $tipe_barang) {
         // dump($from);
         // dd($tipe_barang);
+        $time = time();
+        // dump($time);
+        // dump(date("Y-m-d", $time));
+        // dd(date("Y-m-d", $time - 86400));
         $tipe_perhiasans = TipePerhiasan::all();
         $jenis_perhiasans = JenisPerhiasan::select('id', 'nama as label', 'nama as value', 'tipe_perhiasan_id', 'tipe_perhiasan')->get();
         $caps = Cap::select('id', 'nama as label', 'nama as value', 'codename')->get();
@@ -107,6 +112,7 @@ class CartController extends Controller
 
     function checkout(Cart $cart, Request $request) {
         $get = $request->query();
+
         // dump($cart);
         // dd($get);
 
@@ -120,6 +126,8 @@ class CartController extends Controller
         // dd($cart_items);
 
         $users = User::all();
+
+        $wallets_non_tunai = Wallet::where('kategori', 'non-tunai')->get();
 
         $data = [
             // 'goback' => 'home',
@@ -138,6 +146,7 @@ class CartController extends Controller
             'cart_items' => $cart_items,
             'harga_total' => $harga_total,
             'users' => $users,
+            'wallets_non_tunai' => $wallets_non_tunai,
         ];
 
         // dd($caps);
