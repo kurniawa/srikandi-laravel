@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string('kategori_wallet',20)->nullable(); // tunai, non-tunai
             $table->string('tipe_wallet',20)->nullable(); // laci, bank, e-wallet
             $table->string('nama_wallet',20); // tunai, bca, bri, bni, mandiri, ovo, gopay, dana, dll.
-            $table->integer('saldo');
+            $table->integer('saldo_awal');
+            $table->integer('saldo_akhir');
             $table->timestamps();
         });
     }

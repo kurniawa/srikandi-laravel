@@ -4,18 +4,15 @@ function my_decimal_format($number) {
         $number = (float)$number;
     }
 
-    // dump($number);
-    $formatted_number = ($number / 100) + 0;
-    // dump($formatted_number);
-    // dump(is_float($formatted_number));
+    // dump($number + 0);
+    $number_divided_by_100 = ($number / 100) + 0;
+    $str_devided = (string)$number_divided_by_100;
+    $formatted_number = number_format($str_devided, 2, ',', '.');
+    $exploded_number = explode(",", $formatted_number);
 
-    if (!is_float($formatted_number)) {
-        $formatted_number = number_format($formatted_number, 0, ',', '.') . ",-";
+    if ( (int)$exploded_number[1] === 0 ) {
+        $formatted_number = number_format($str_devided, 0, ',', '.') . ",-";
     } else {
-        // dump('is float');
-        $formatted_number = number_format($formatted_number, 2, ',', '.');
-        // dump($formatted_number);
-        $exploded_number = explode(",", $formatted_number);
         if (strlen($exploded_number[1]) === 1) {
             $formatted_number = "$exploded_number[0],$exploded_number[1]0";
         } else {

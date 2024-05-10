@@ -229,7 +229,7 @@ class CartController extends Controller
         $pelanggan_nama = 'guest';
         $pelanggan = null;
         $pelanggan_id = null;
-        if ($post['nama_pelanggan'] !== 'guest') {
+        if ($post['pelanggan_nama'] !== 'guest') {
             $pelanggan = User::where('username', $post['username_pelanggan'])->first();
             if (!$pelanggan) {
                 $request->validate(['error'=>'required'],['error.required'=>'-pelanggan tidak ditemukan-']);

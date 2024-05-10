@@ -26,7 +26,7 @@ class CashflowController extends Controller
         $col_saldos = collect();
 
         for ($i=$get_day; $i >= 1 ; $i--) {
-            $starting_time = "$get_year-$get_month-$i 00:00:00";
+            $starting_time = "$get_year-$get_month-$i";
             $ending_time = "$get_year-$get_month-$i 23:59:59";
 
             $cashflows = Cashflow::whereBetween('created_at', [$starting_time, $ending_time])->orderByDesc("created_at")->get();
@@ -48,7 +48,7 @@ class CashflowController extends Controller
             ]);
 
             // SALDO
-            $saldos = Saldo::where('created_at', "$get_year-$get_month-$i")->get();
+            $saldos = Saldo::whereBetween("created_at", [$starting_time, $ending_time])->get();
             $saldo_awal = 0;
             $saldo_akhir = 0;
             if (count($saldos)) {
@@ -57,23 +57,11 @@ class CashflowController extends Controller
                     $saldo_akhir += $saldo->saldo_akhir;
                 }
             }
-            foreach ($cashflows as $cashflow) {
-                if ($cashflow->tipe == 'pemasukan') {
-                    $saldo_akhir += $cashflow->jumlah;
-                } elseif ($cashflow->tipe == 'pengeluaran') {
-                    $saldo_akhir -= $cashflow->jumlah;
-                }
-            }
             $col_saldos->push([
                 'saldo_awal' => $saldo_awal,
                 'saldo_akhir' => $saldo_akhir,
             ]);
         }
-        // dd($col_saldos);
-
-        // dump($starting_time);
-        // dump($ending_time);
-        // dd($col_cashflows);
 
         $data = [
             // 'goback' => 'home',

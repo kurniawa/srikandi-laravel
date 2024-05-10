@@ -62,4 +62,8 @@ class SuratPembelian extends Model
     function items() {
         return $this->hasMany(SuratPembelianItem::class);
     }
+
+    function cashflows() {
+        return $this->hasMany(Cashflow::class);
+    }
 }

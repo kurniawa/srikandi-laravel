@@ -66,19 +66,21 @@ Route::controller(PhotoController::class)->group(function(){
 });
 
 Route::controller(CartController::class)->group(function(){
-    Route::get('/carts/{user}/index','index')->name('carts.index')->middleware('level3');;
-    Route::get('/carts/{from}/pilih_tipe_barang','pilih_tipe_barang')->name('carts.pilih_tipe_barang')->middleware('level3');;
-    Route::get('/carts/{from}/{tipe_barang}/create_item','create_item')->name('carts.create_item')->middleware('level3');;
-    Route::get('/carts/{cart}/checkout','checkout')->name('carts.checkout')->middleware('level3');;
-    Route::post('/carts/{cart}/proses_checkout','proses_checkout')->name('carts.proses_checkout')->middleware('level3');;
+    Route::get('/carts/{user}/index','index')->name('carts.index')->middleware('level3');
+    Route::get('/carts/{from}/pilih_tipe_barang','pilih_tipe_barang')->name('carts.pilih_tipe_barang')->middleware('level3');
+    Route::get('/carts/{from}/{tipe_barang}/create_item','create_item')->name('carts.create_item')->middleware('level3');
+    Route::get('/carts/{cart}/checkout','checkout')->name('carts.checkout')->middleware('level3');
+    Route::post('/carts/{cart}/proses_checkout','proses_checkout')->name('carts.proses_checkout')->middleware('level3');
 });
 
 Route::controller(SuratPembelianController::class)->group(function(){
-    Route::get('/surat_pembelian/index','index')->name('surat_pembelian.index')->middleware('level3');;
+    Route::get('/surat_pembelian/index','index')->name('surat_pembelian.index')->middleware('level3');
+    Route::get('/surat_pembelian/{surat_pembelian}/show','show')->name('surat_pembelian.show')->middleware('level3');
+    Route::post('/surat_pembelian/{surat_pembelian}/update_data_pelanggan','update_data_pelanggan')->name('surat_pembelian.update_data_pelanggan')->middleware('level3');
 });
 
 Route::controller(CashflowController::class)->group(function(){
-    Route::get('/cashflow/index','index')->name('cashflow.index')->middleware('level3');;
+    Route::get('/cashflow/index','index')->name('cashflow.index')->middleware('level3');
 });
 
 Route::controller(ArtisanController::class)->group(function(){

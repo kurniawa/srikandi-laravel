@@ -11,24 +11,27 @@ class Saldo extends Model
     protected $guarded = ['id'];
 
     static function cek_saldo_wallet_sebelumnya_dan_create_apabila_belum_ada($time_key, $wallet, $jumlah) {
-        $jumlah_saldo = 0;
-        $saldo = Saldo::where('created_at', date("Y-m-d", $time_key))->where('kategori_wallet', $wallet->kategori)->where('tipe_wallet', $wallet->tipe)->where('nama_wallet', $wallet->nama)->first();
-        if (!$saldo) {
-            $saldo_yesterday = Saldo::where('created_at', date("Y-m-d", $time_key - 86400))->where('kategori_wallet', $wallet->kategori)->where('tipe_wallet', $wallet->tipe)->where('nama_wallet', $wallet->nama)->first();
+        $saldo_akhir = $jumlah;
+        $saldo_awal = 0;
+        $today = date("Y-m-d", $time_key);
+        $saldo_today = Saldo::whereBetween('created_at', [$today, date("Y-m-d H:i:s", $time_key)])->where('kategori_wallet', $wallet->kategori)->where('tipe_wallet', $wallet->tipe)->where('nama_wallet', $wallet->nama)->first();
+        if (!$saldo_today) {
+            $yesterday = date("Y-m-d", $time_key - 86400);
+            $saldo_yesterday = Saldo::whereBetween('created_at', [$yesterday, date("Y-m-d H:i:s", $time_key)])->where('kategori_wallet', $wallet->kategori)->where('tipe_wallet', $wallet->tipe)->where('nama_wallet', $wallet->nama)->first();
             if ($saldo_yesterday) {
-                $jumlah_saldo = (int)$saldo_yesterday->jumlah + $jumlah;
-            } else {
-                $jumlah_saldo = $jumlah;
+                $saldo_akhir = (int)$saldo_yesterday->saldo_akhir + $jumlah;
+                $saldo_awal = $saldo_yesterday->saldo_akhir;
             }
 
         } else {
-            $jumlah_saldo = (int)$saldo->jumlah + $jumlah;
+            $saldo_akhir = (int)$saldo_today->saldo_akhir + $jumlah;
         }
         $saldo = Saldo::create([
             "kategori_wallet" => $wallet->kategori,
             "tipe_wallet" => $wallet->tipe,
             "nama_wallet" => $wallet->nama,
-            "saldo" => (string)$jumlah_saldo,
+            "saldo_awal" => (string)$saldo_awal,
+            "saldo_akhir" => (string)$saldo_akhir,
         ]);
     }
 }

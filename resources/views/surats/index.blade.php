@@ -39,7 +39,7 @@
                             @endforeach
                         </div>
                         <div class="flex justify-end mt-1">
-                            <button class="bg-yellow-200 text-slate-400 px-2 py-1 rounded-xl border border-yellow-400">Detail</button>
+                            <a href="{{ route('surat_pembelian.show', $surat_pembelian->id) }}" class="bg-yellow-200 text-slate-400 px-2 py-1 rounded-xl border border-yellow-400">Detail</a>
                         </div>
                     </div>
                 </td>
