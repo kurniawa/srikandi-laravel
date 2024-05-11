@@ -6,58 +6,8 @@
 
 
     <h3 class="text-xl font-bold text-slate-500">Data Pelanggan</h3>
-    <div class="flex justify-between mt-3 items-center">
-        @if ($cart->pelanggan_id)
-        <table>
-            <tr>
-                <td><label for="pelanggan_nama">Nama</label></td><td><span class="mx-2">:</span></td>
-                <td><input type="text" name="pelanggan_nama" id="pelanggan_nama" value="guest" class="border rounded p-1" value="{{ $cart->user->nama }}"></td>
-            </tr>
-            <tr>
-                <td><label for="username_pelanggan">Username</label></td><td><span class="mx-2">:</span></td>
-                <td><input type="text" name="username_pelanggan" id="username_pelanggan" value="{{ $cart->user->username }}" class="border rounded p-1"></td>
-            </tr>
-        </table>
-        @else
-        <div id="tampilan_pelanggan_guest" class="mt-3 text-slate-500">- Pelanggan guest -</div>
-        <table id="tampilan_data_pelanggan" class="hidden bg-slate-200">
-            <tr>
-                <td><label for="pelanggan_nama">Nama</label></td><td><span class="mx-2">:</span></td>
-                <td><input type="text" name="pelanggan_nama" id="pelanggan_nama" value="guest" class="border rounded p-1 bg-slate-100" readonly></td>
-            </tr>
-            <tr>
-                <td><label for="username_pelanggan">Username</label></td><td><span class="mx-2">:</span></td>
-                <td><input type="text" name="username_pelanggan" id="username_pelanggan" class="border rounded p-1 bg-slate-100" readonly></td>
-            </tr>
-        </table>
-        @endif
-        <div>
-            <button type="button" id="btn-ganti" class="border-2 rounded px-2 py-1 text-slate-500 font-bold" onclick="toggle_light(this.id, 'form-cari-data-pelanggan', ['text-slate-500'], ['text-white', 'bg-slate-400'], 'block'); ">ganti</button>
-        </div>
-    </div>
 
-    <div action="" id="form-cari-data-pelanggan" class="mt-3 hidden">
-        <table>
-            <tr>
-                <td><label for="cari_pelanggan_nama">Nama</label></td><td><span class="mx-2">:</span></td>
-                <td><input type="text" name="cari_pelanggan_nama" id="cari_pelanggan_nama" class="border rounded p-1"></td>
-            </tr>
-            <tr>
-                <td><label for="cari_username_pelanggan">Username</label></td><td><span class="mx-2">:</span></td>
-                <td><input type="text" name="cari_username_pelanggan" id="cari_username_pelanggan" class="border rounded p-1"></td>
-            </tr>
-            <tr>
-                <td colspan="3"><div id="feedback_cari_pelanggan" class="text-xs text-red-500"></div></td>
-            </tr>
-            <tr>
-                <td colspan="3">
-                    <div class="flex justify-center mt-2">
-                        <button type="submit" class="p-1 rounded-xl border-2 border-emerald-300 text-emerald-500 font-bold text-sm" onclick="cariDataPelanggan()">Tetapkan</button>
-                    </div>
-                </td>
-            </tr>
-        </table>
-    </div>
+    <x-form-cari-data-pelanggan :pelangganid="$pelangganid" :pelanggannama="$pelanggannama" :pelangganusername="$pelangganusername" :pelanggannik="$pelanggannik" :route="null" :params="null"></x-form-cari-data-pelanggan>
 
     <form action="{{ route('carts.proses_checkout', $cart->id) }}" method="POST">
         @csrf
@@ -156,8 +106,9 @@
             <div class="text-xl font-bold text-red-600">Rp <span id="harga_total_formatted">{{ number_format((string)((float)$harga_total / 100), 2, ',', '.') }}</span></div>
             <input type="hidden" name="harga_total" id="harga_total" value="{{ (string)((float)$harga_total / 100) }}">
         </div>
-        <input type="hidden" name="pelanggan_nama" id="pelanggan_nama_di_dalam_form" value="{{ $cart->pelanggan_id ? $cart->user->nama : 'guest' }}">
-        <input type="hidden" name="username_pelanggan" id="username_pelanggan_di_dalam_form" value="{{ $cart->pelanggan_id ? $cart->user->username : 'guest' }}">
+        <input type="hidden" name="pelanggan_nama" id="pelanggan_nama_di_dalam_form" value="{{ $cart->pelanggan_id ? $cart->pelanggan->nama : '' }}">
+        <input type="hidden" name="pelanggan_username" id="pelanggan_username_di_dalam_form" value="{{ $cart->pelanggan_id ? $cart->pelanggan->username : '' }}">
+        <input type="hidden" name="pelanggan_nik" id="pelanggan_nik_di_dalam_form" value="{{ $cart->pelanggan_id ? $cart->pelanggan->nik : '' }}">
 
         {{-- PEMBAYARAN --}}
         <h5 class="font-bold text-lg text-slate-500 my-3">Metode Pembayaran</h5>
@@ -238,45 +189,15 @@
     <div class="w-1/4"></div>
 </main>
 
+<script src="{{ asset('js/checkout.js') }}"></script>
+
 <script>
     const users = {!! json_encode($users, JSON_HEX_TAG) !!};
     let total_tagihan = {!! json_encode($harga_total, JSON_HEX_TAG) !!}
     // console.log(users);
 
     function cariDataPelanggan() {
-        let pelanggan_nama = document.getElementById('cari_pelanggan_nama');
-        if (pelanggan_nama) {
-            pelanggan_nama = pelanggan_nama.value.trim();
-        }
-        let username_pelanggan = document.getElementById('cari_username_pelanggan');
-        if (username_pelanggan) {
-            username_pelanggan = username_pelanggan.value.trim();
-        }
-
-        let found_pelanggan = null;
-
-        // console.log(pelanggan_nama);
-        if (pelanggan_nama && username_pelanggan) {
-            // var pilihan_jenis_perhiasans = jenis_perhiasans.filter((o) => o.tipe_perhiasan_id == tipe_perhiasan.id);
-            found_pelanggan = users.filter((o) => o.username == username_pelanggan);
-        } else if (pelanggan_nama && !username_pelanggan) {
-            found_pelanggan = users.filter((o) => o.nama == pelanggan_nama);
-        } else if (!pelanggan_nama && username_pelanggan) {
-            found_pelanggan = users.filter((o) => o.username == username_pelanggan);
-        }
-
-        console.log(found_pelanggan);
-        if (found_pelanggan.length === 1) {
-            document.getElementById('pelanggan_nama').value = found_pelanggan[0].nama;
-            document.getElementById('pelanggan_nama_di_dalam_form').value = found_pelanggan[0].nama;
-            document.getElementById('username_pelanggan').value = found_pelanggan[0].username;
-            document.getElementById('username_pelanggan_di_dalam_form').value = found_pelanggan[0].username;
-            $('#tampilan_data_pelanggan').show(300);
-            $('#tampilan_pelanggan_guest').hide(300);
-            toggle_light('btn-ganti', 'form-cari-data-pelanggan', ['text-slate-500'], ['text-white', 'bg-slate-400'], 'block');
-        } else {
-            document.getElementById('feedback_cari_pelanggan').textContent = '- ditemukan lebih dari satu pelanggan dengan nama yang sama atau ada kesalahan -'
-        }
+        cariDataPelangganF(users);
     }
 
     function hitungTotalBayar() {

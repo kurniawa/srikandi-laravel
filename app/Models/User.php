@@ -44,4 +44,38 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    static function cari_data_pelanggan($nama, $username, $nik) {
+        $feedback = "";
+        $pelanggan = null;
+        $error_cari_data_pelanggan = false;
+
+        if (!$nama && !$username && !$nik) {
+            return array($pelanggan, $error_cari_data_pelanggan, $feedback);
+        }
+
+        if ($username) {
+            $pelanggan = User::where('username', $username)->first();
+            if (!$pelanggan) {
+                $error_cari_data_pelanggan = true;
+                $feedback = "-username tidak ditemukan-";
+            }
+        } elseif ($nik) {
+            $pelanggan = User::where('nik', $nik)->first();
+            if (!$pelanggan) {
+                $error_cari_data_pelanggan = true;
+                $feedback = "-nik tidak ditemukan-";
+            }
+        } elseif ($nama) {
+            $pelanggan = User::where('nama', $nama)->first();
+            if (count($pelanggan) > 1) {
+                $error_cari_data_pelanggan = true;
+                $feedback = "-lebih dari satu pelanggan ditemukan-";
+            } else {
+                $pelanggan = $pelanggan[0];
+            }
+        }
+
+        return array($pelanggan, $error_cari_data_pelanggan, $feedback);
+    }
 }

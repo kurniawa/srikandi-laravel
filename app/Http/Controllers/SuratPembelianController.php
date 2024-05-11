@@ -55,16 +55,24 @@ class SuratPembelianController extends Controller
 
         $pelanggan_nama = "guest";
         $pelanggan_username = "guest";
+        $pelangganid = null;
+        $pelanggannama = null;
+        $pelangganusername = null;
+        $pelanggannik = null;
         if ($surat_pembelian->pelanggan_id !== null) {
-            $pelanggan = User::find($surat_pembelian->pelanggan_id);
-            $pelanggan_nama = $pelanggan->nama;
-            $pelanggan_username = $pelanggan->username;
+            $pelanggan_nama = $surat_pembelian->pelanggan_nama;
+            $pelanggan_username = $surat_pembelian->pelanggan_username;
+            $pelangganid = $surat_pembelian->pelanggan_id;
+            $pelanggannama = $surat_pembelian->pelanggan_nama;
+            $pelangganusername = $surat_pembelian->pelanggan_username;
+            $pelanggannik = $surat_pembelian->pelanggan_nik;
         }
 
         $wallets_non_tunai = Wallet::where('kategori', 'non-tunai')->get();
 
         $users = User::all();
         // dd($surat_pembelian->cashflows);
+
         $data = [
             // 'goback' => 'home',
             // 'user_role' => $user_role,
@@ -83,6 +91,11 @@ class SuratPembelianController extends Controller
             'pelanggan_username' => $pelanggan_username,
             'wallets_non_tunai' => $wallets_non_tunai,
             'users' => $users,
+            'route_cari_data_pelanggan' => "surat_pembelian.update_data_pelanggan",
+            'pelangganid' => $pelangganid,
+            'pelanggannama' => $pelanggannama,
+            'pelangganusername' => $pelangganusername,
+            'pelanggannik' => $pelanggannik,
         ];
         // dd($data);
         return view('surats.show', $data);
@@ -96,25 +109,20 @@ class SuratPembelianController extends Controller
         $success_ = "";
 
         $pelanggan = null;
-        if ($post['pelanggan_nama'] && $post['pelanggan_username']) {
-            $pelanggan = User::where('nama', $post['pelanggan_nama'])->where('username', $post['pelanggan_username'])->first();
-        } elseif ($post['pelanggan_nama']) {
-            $pelanggan = User::where('nama', $post['pelanggan_nama'])->get();
-            if (count($pelanggan) > 1) {
-                $request->validate(['error'=>'required'],['error.required'=>'-lebih dari satu pelanggan ditemukan-']);
-            } else {
-                $pelanggan = $pelanggan[0];
-            }
-        } elseif ($post['pelanggan_username']) {
-            $pelanggan = User::where('username', $post['pelanggan_username'])->first();
-            if (!$pelanggan) {
-                $request->validate(['error'=>'required'],['error.required'=>'-username tidak ditemukan-']);
-            }
+        $error_cari_data_pelanggan = false;
+        $feedback_cek_pelanggan = "";
+
+        list($pelanggan, $error_cari_data_pelanggan, $feedback_cek_pelanggan) = User::cari_data_pelanggan($post['pelanggan_nama'], $post['pelanggan_username'], $post['pelanggan_nik']);
+
+        if ($error_cari_data_pelanggan) {
+            $request->validate(['error'=>'required'],['error.required'=>$feedback_cek_pelanggan]);
         }
 
         if ($pelanggan) {
             $surat_pembelian->pelanggan_id = $pelanggan->id;
             $surat_pembelian->pelanggan_nama = $pelanggan->nama;
+            $surat_pembelian->pelanggan_username = $pelanggan->username;
+            $surat_pembelian->pelanggan_nik = $pelanggan->nik;
             $surat_pembelian->save();
             $success_ .= "-Data pelanggan telah diupdate-";
         }

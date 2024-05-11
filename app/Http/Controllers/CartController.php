@@ -129,6 +129,17 @@ class CartController extends Controller
 
         $wallets_non_tunai = Wallet::where('kategori', 'non-tunai')->get();
 
+        $pelangganid = null;
+        $pelanggannama = null;
+        $pelangganusername = null;
+        $pelanggannik = null;
+        if ($cart->pelanggan_id) {
+            $pelangganid = $cart->pelanggan_id;
+            $pelanggannama = $cart->pelanggan->nama;
+            $pelangganusername = $cart->pelanggan->username;
+            $pelanggannik = $cart->pelanggan->nik;
+        }
+
         $data = [
             // 'goback' => 'home',
             // 'user_role' => $user_role,
@@ -147,9 +158,13 @@ class CartController extends Controller
             'harga_total' => $harga_total,
             'users' => $users,
             'wallets_non_tunai' => $wallets_non_tunai,
+            'pelangganid' => $pelangganid,
+            'pelanggannama' => $pelanggannama,
+            'pelangganusername' => $pelangganusername,
+            'pelanggannik' => $pelanggannik,
         ];
 
-        // dd($caps);
+        // dd($pelangganid);
 
         return view('carts.checkout', $data);
     }
@@ -226,19 +241,26 @@ class CartController extends Controller
         // if ($cart->pelanggan_id == Auth::user()->id) {
         //     $request->validate(['error'=>'required'],['error.required'=>'User tidak boleh membeli untuk diri sendiri!']);
         // }
-        $pelanggan_nama = 'guest';
         $pelanggan = null;
+        $error_cari_data_pelanggan = false;
+        $feedback_cek_pelanggan = "";
+
+        // dd($post);
+        list($pelanggan, $error_cari_data_pelanggan, $feedback_cek_pelanggan) = User::cari_data_pelanggan($post['pelanggan_nama'], $post['pelanggan_username'], $post['pelanggan_nik']);
+
+        if ($error_cari_data_pelanggan) {
+            $request->validate(['error'=>'required'],['error.required'=>$feedback_cek_pelanggan]);
+        }
+
         $pelanggan_id = null;
-        if ($post['pelanggan_nama'] !== 'guest') {
-            $pelanggan = User::where('username', $post['username_pelanggan'])->first();
-            if (!$pelanggan) {
-                $request->validate(['error'=>'required'],['error.required'=>'-pelanggan tidak ditemukan-']);
-            }
-            if ($user->id == $pelanggan->id) {
-                $request->validate(['error'=>'required'],['error.required'=>'-admin dan pelanggan tidak boleh sama-']);
-            }
-            $pelanggan_nama = $pelanggan->nama;
+        $pelanggan_nama = null;
+        $pelanggan_username = null;
+        $pelanggan_nik = null;
+        if ($pelanggan) {
             $pelanggan_id = $pelanggan->id;
+            $pelanggan_nama = $pelanggan->nama;
+            $pelanggan_username = $pelanggan->username;
+            $pelanggan_nik = $pelanggan->nik;
         }
         // dd($cart);
         // dump((int)$post['sisa_bayar']);
@@ -254,6 +276,8 @@ class CartController extends Controller
             'username' => Auth::user()->username,
             'pelanggan_id' => $cart->pelanggan_id,
             'pelanggan_nama' => $pelanggan_nama,
+            'pelanggan_username' => $pelanggan_username,
+            'pelanggan_nik' => $pelanggan_nik,
             'keterangan' => $cart->keterangan,
             'harga_total' => (string)$harga_total,
             'total_bayar' => (string)$total_bayar,
@@ -266,9 +290,6 @@ class CartController extends Controller
         $pembelian_new->no_surat = $no_surat;
         $pembelian_new->save();
         $success_ .= '-no_surat, status_bb Pembelian diupdate!-';
-
-        $jumlah_item_perhiasan = 0;
-        $pembelian_items = collect();
 
         // CREATE SURAT_PEMBELIAN_ITEM DAN CASHFLOW
         foreach ($post['cart_item_ids'] as $cart_item_id) {

@@ -15,7 +15,11 @@ class Cart extends Model
         return $this->hasMany(CartItem::class)->orderByDesc('id');
     }
 
-    function user() {
+    function pelanggan() {
         return $this->hasOne(User::class, 'id', 'pelanggan_id');
+    }
+
+    function user() {
+        return $this->hasOne(User::class);
     }
 }
