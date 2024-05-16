@@ -99,6 +99,13 @@ class SuratPembelianItem extends Model
             'keterangan_lain' => $keterangan_lain,
         ]);
 
+        if ($cart_item->photo_path) {
+            SuratPembelianItemPhoto::create([
+                'surat_pembelian_item_id' => $surat_pembelian_item->id,
+                'path' => $cart_item->photo_path,
+            ]);
+        }
+
         // CASHFLOW
         $jumlah = 0;
         if (isset($post['jumlah_tunai'])) {
@@ -158,5 +165,9 @@ class SuratPembelianItem extends Model
 
     function item() {
         return $this->hasOne(Item::class, "id", "item_id");
+    }
+
+    function photos() {
+        return $this->hasMany(SuratPembelianItemPhoto::class);
     }
 }

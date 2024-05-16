@@ -133,4 +133,8 @@ class SuratPembelianController extends Controller
 
         return back()->with($feedback);
     }
+
+    function print_out(SuratPembelian $surat_pembelian) {
+        dd($surat_pembelian);
+    }
 }

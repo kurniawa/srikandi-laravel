@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('item_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->bigInteger('harga_t');
             $table->smallInteger('jumlah')->default(1);
+            $table->string('photo_path')->nullable();
         });
     }
 

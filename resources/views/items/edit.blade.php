@@ -4,7 +4,7 @@
     <x-errors-any></x-errors-any>
     <x-validation-feedback></x-validation-feedback>
 
-    @for ($i = 0; $i < 5; $i++)
+    {{-- @for ($i = 0; $i < 5; $i++)
     @if ($item_photos[$i])
     <div class="flex gap-2">
         <div class="w-28 max-h-28 mb-2">
@@ -47,7 +47,10 @@
         </div>
     </form>
     @endif
-    @endfor
+    @endfor --}}
+    <div class="text-center">
+        <h1 class="font-bold text-slate-400 text-xl">Edit Data Barang</h1>
+    </div>
 
     <form action="{{ route('items.update', $item->id) }}" method="POST">
         @csrf

@@ -3,6 +3,7 @@
 use App\Http\Controllers\ArtisanController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CashflowController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemController;
@@ -55,7 +56,7 @@ Route::controller(ItemController::class)->group(function(){
     Route::post('/items/{item}/update','update')->name('items.update')->middleware('level3');
     Route::post('/items/{item}/delete','delete')->name('items.delete')->middleware('level3');
     Route::post('/items/{item}/{item_photo}/{photo}/delete_photo','delete_photo')->name('items.delete_photo')->middleware('level3');
-    Route::post('/items/{item}/add_photo','add_photo')->name('items.add_photo')->middleware('level3');
+    Route::get('/items/{item}/add_photo','add_photo')->name('items.add_photo')->middleware('level3');
     // Route::post('/items/{item}/mau','mau')->name('items.mau');
     // Route::post('/items/{item}/{peminat_item}/hapus_peminat','hapus_peminat')->name('items.hapus_peminat');
 });
@@ -63,6 +64,10 @@ Route::controller(ItemController::class)->group(function(){
 Route::controller(PhotoController::class)->group(function(){
     Route::post('/items/{item}/add_photo','add_photo')->name('items.add_photo')->middleware('level3');
     Route::post('/items/{item}/{item_photo}/{photo}/delete_photo','delete_photo')->name('items.delete_photo')->middleware('level3');
+    Route::post('/photos/{cart_item}/add_cart_item_photo','add_cart_item_photo')->name('photos.add_cart_item_photo')->middleware('level3');
+    Route::post('/photos/{cart_item}/delete_cart_item_photo','delete_cart_item_photo')->name('photos.delete_cart_item_photo')->middleware('level3');
+    Route::post('/photos/{cart}/add_cart_photo','add_cart_photo')->name('photos.add_cart_photo')->middleware('level3');
+    Route::post('/photos/{cart}/delete_cart_photo','delete_cart_photo')->name('photos.delete_cart_photo')->middleware('level3');
 });
 
 Route::controller(CartController::class)->group(function(){
@@ -73,10 +78,16 @@ Route::controller(CartController::class)->group(function(){
     Route::post('/carts/{cart}/proses_checkout','proses_checkout')->name('carts.proses_checkout')->middleware('level3');
 });
 
+Route::controller(CartItemController::class)->group(function(){
+    // Route::get('/cart_items/{cart}/{cart_item}/add_photo','add_photo')->name('cart_items.add_photo')->middleware('level3');
+    // Route::post('/cart_items/{cart_item}/add_photo_db','add_photo_db')->name('cart_items.add_photo_db')->middleware('level3');
+});
+
 Route::controller(SuratPembelianController::class)->group(function(){
     Route::get('/surat_pembelian/index','index')->name('surat_pembelian.index')->middleware('level3');
     Route::get('/surat_pembelian/{surat_pembelian}/show','show')->name('surat_pembelian.show')->middleware('level3');
     Route::post('/surat_pembelian/{surat_pembelian}/update_data_pelanggan','update_data_pelanggan')->name('surat_pembelian.update_data_pelanggan')->middleware('level3');
+    Route::get('/surat_pembelian/{surat_pembelian}/print_out','print_out')->name('surat_pembelian.print_out')->middleware('level3');
 });
 
 Route::controller(CashflowController::class)->group(function(){

@@ -13,6 +13,7 @@ use App\Models\Mata;
 use App\Models\Menu;
 use App\Models\SuratPembelian;
 use App\Models\SuratPembelianItem;
+use App\Models\SuratPembelianPhoto;
 use App\Models\TipePerhiasan;
 use App\Models\User;
 use App\Models\Wallet;
@@ -112,6 +113,7 @@ class CartController extends Controller
 
     function checkout(Cart $cart, Request $request) {
         $get = $request->query();
+        $user = Auth::user();
 
         // dump($cart);
         // dd($get);
@@ -149,7 +151,7 @@ class CartController extends Controller
             'parent_route' => 'home',
             'back' => true,
             'backRoute' => 'carts.index',
-            'backRouteParams' => [$cart->id],
+            'backRouteParams' => [$user->id],
             'spk_menus' => Menu::get_spk_menus(),
             // 'user' => Auth::user(),
             // 'from' => $from,
@@ -284,6 +286,13 @@ class CartController extends Controller
             'sisa_bayar' => (string)$sisa_bayar,
             'status_bayar' => $status_bayar,
         ]);
+
+        if ($cart->photo_path) {
+            SuratPembelianPhoto::create([
+                'surat_pembelian_id' => $pembelian_new->id,
+                'path' => $cart->photo_path
+            ]);
+        }
         $success_ .= 'Pembelian baru dibuat!';
 
         $no_surat = SuratPembelian::generate_no_surat($pembelian_new->id, $pelanggan_id, count($post['cart_item_ids']), $time_key);

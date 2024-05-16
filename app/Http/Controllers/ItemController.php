@@ -295,7 +295,7 @@ class ItemController extends Controller
 
         $data = [
             'menus' => Menu::get(),
-            'route_now' => 'home',
+            'route_now' => 'items.edit',
             'profile_menus' => Menu::get_profile_menus(Auth::user()),
             'parent_route' => 'home',
             'back' => true,
@@ -496,6 +496,47 @@ class ItemController extends Controller
         ];
 
         return redirect()->route('items.show', $item->id)->with($feedback);
+    }
+
+    function add_photo(Item $item, Request $request) {
+        // dd($item);
+        $user = Auth::user();
+        $cart = Cart::where('user_id', $user->id)->first();
+
+        $item_photos = collect();
+        $photos = collect();
+
+        for ($i=0 ; $i < 5 ; $i++) {
+            $item_photo = ItemPhoto::where('item_id', $item->id)->where('photo_index', $i)->first();
+
+            $item_photos->push($item_photo);
+
+            $photo = null;
+            if ($item_photo) {
+                $photo = Photo::find($item_photo->photo_id);
+            }
+            $photos->push($photo);
+        }
+
+        $data = [
+            'menus' => Menu::get(),
+            'route_now' => 'items.add_photo',
+            'profile_menus' => Menu::get_profile_menus(Auth::user()),
+            'parent_route' => 'home',
+            'spk_menus' => Menu::get_spk_menus(),
+            'back' => true,
+            'backRoute' => 'items.show',
+            'backRouteParams' => [$item->id],
+            'item' => $item,
+            'item_photos' => $item_photos,
+            'photos' => $photos,
+            'cart' => $cart,
+            'user' => $user,
+            // 'related_user' => $related_user,
+            // 'peminat_items' => $peminat_items,
+        ];
+
+        return view('items.add_photos', $data);
     }
 
 }

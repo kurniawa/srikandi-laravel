@@ -1,17 +1,17 @@
-<div class="flex justify-between mt-3 items-center">
+<div class="flex justify-between mt-1 items-center">
     @if ($pelangganid)
-    <table>
+    <table class="text-sm border">
         <tr>
             <td><label for="pelanggan_nama">Nama</label></td><td><span class="mx-2">:</span></td>
-            <td><input type="text" name="pelanggan_nama" id="pelanggan_nama" class="border rounded p-1" value="{{ $pelanggannama }}"></td>
+            <td><input type="text" name="pelanggan_nama" id="pelanggan_nama" value="{{ $pelanggannama }}" class="border-0 p-0" readonly></td>
         </tr>
         <tr>
             <td><label for="pelanggan_username">Username</label></td><td><span class="mx-2">:</span></td>
-            <td><input type="text" name="pelanggan_username" id="pelanggan_username" value="{{ $pelangganusername }}" class="border rounded p-1"></td>
+            <td><input type="text" name="pelanggan_username" id="pelanggan_username" value="{{ $pelangganusername }}" class="border-0 p-0" readonly></td>
         </tr>
         <tr>
             <td><label for="pelanggan_nik">NIK</label></td><td><span class="mx-2">:</span></td>
-            <td><input type="text" name="pelanggan_nik" id="pelanggan_nik" value="{{ $pelanggannik }}" class="border rounded p-1"></td>
+            <td><input type="text" name="pelanggan_nik" id="pelanggan_nik" value="{{ $pelanggannik }}" class="border-0 p-0" readonly></td>
         </tr>
     </table>
     @else

@@ -202,17 +202,19 @@ function hitungHargaGrOrT() {
 
 }
 
-function previewImage(image_file, div_preview_photo, preview_photo) {
+function previewImage(image_file, div_preview_photo, preview_photo, label_input_photo) {
     if (image_file) {
         // console.log(image_file)
         document.getElementById(preview_photo).src = URL.createObjectURL(image_file);
         $(`#${div_preview_photo}`).show();
+        $(`#${label_input_photo}`).hide();
     }
 }
 
-function removeImage(input_image, div_preview_photo, preview_photo) {
+function removeImage(input_image, div_preview_photo, preview_photo, label_input_photo) {
     document.getElementById(preview_photo).src = "";
     $(`#${div_preview_photo}`).hide(300);
+    $(`#${label_input_photo}`).show(300);
     const input_image_element = document.getElementById(input_image);
     // console.log(input_image_element);
     // console.log(input_image_element.value);
