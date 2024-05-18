@@ -135,6 +135,66 @@ class SuratPembelianController extends Controller
     }
 
     function print_out(SuratPembelian $surat_pembelian) {
-        dd($surat_pembelian);
+        $user = Auth::user();
+        $cart = null;
+        if ($user) {
+            $cart = Cart::where('user_id', $user->id)->first();
+        }
+        // $time = time();
+        // dump($time);
+        // $day = (int)date("d");
+        // $month = (int)date("m");
+        // $year = (int)date("Y");
+        // $faktor_bagi = $day + $month + $year;
+        // $nomor_surat = $time / $faktor_bagi;
+        // dump($nomor_surat);
+        // dump((int)$nomor_surat);
+        // $hasil_kali = (int)$nomor_surat * $faktor_bagi;
+        // $tanggal_kembali = date("d-m-Y H:i:s", $hasil_kali);
+        // dd($tanggal_kembali);
+
+        $pelanggan_nama = "guest";
+        $pelanggan_username = "guest";
+        $pelangganid = null;
+        $pelanggannama = null;
+        $pelangganusername = null;
+        $pelanggannik = null;
+        if ($surat_pembelian->pelanggan_id !== null) {
+            $pelanggan_nama = $surat_pembelian->pelanggan_nama;
+            $pelanggan_username = $surat_pembelian->pelanggan_username;
+            $pelangganid = $surat_pembelian->pelanggan_id;
+            $pelanggannama = $surat_pembelian->pelanggan_nama;
+            $pelangganusername = $surat_pembelian->pelanggan_username;
+            $pelanggannik = $surat_pembelian->pelanggan_nik;
+        }
+
+        $wallets_non_tunai = Wallet::where('kategori', 'non-tunai')->get();
+
+        $data = [
+            // 'goback' => 'home',
+            // 'user_role' => $user_role,
+            'menus' => Menu::get(),
+            'route_now' => 'home',
+            'profile_menus' => Menu::get_profile_menus(Auth::user()),
+            'parent_route' => 'home',
+            'spk_menus' => Menu::get_spk_menus(),
+            // 'user' => Auth::user(),
+            'cart' => $cart,
+            'back' => true,
+            'backRoute' => 'home',
+            'backRouteParams' => null,
+            'surat_pembelian' => $surat_pembelian,
+            'pelanggan_nama' => $pelanggan_nama,
+            'pelanggan_username' => $pelanggan_username,
+            'wallets_non_tunai' => $wallets_non_tunai,
+            // 'users' => $users,
+            'route_cari_data_pelanggan' => "surat_pembelian.update_data_pelanggan",
+            'pelangganid' => $pelangganid,
+            'pelanggannama' => $pelanggannama,
+            'pelangganusername' => $pelangganusername,
+            'pelanggannik' => $pelanggannik,
+        ];
+        // dd($data);
+        return view('surats.print-out', $data);
     }
 }

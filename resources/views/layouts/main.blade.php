@@ -35,7 +35,7 @@
         </div>
     </div>
     <div class="min-h-full">
-        <nav class="bg-emerald-100 no_print">
+        <nav class="bg-emerald-100 no-print">
           <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="flex h-16 items-center justify-between">
               <div class="flex items-center">
@@ -229,7 +229,7 @@
         </nav>
         @yield('content')
 
-        <div class="mt-16 mx-2 mb-16 p-2 rounded border-2 border-emerald-300 text-gray-400">
+        <div class="mt-16 mx-2 mb-16 p-2 rounded border-2 border-emerald-300 text-gray-400 no-print">
             @if (Auth::user())
             <div class="text-center">
                 <span>Welcome, {{ Auth::user()->username }}!</span>
@@ -254,6 +254,32 @@
             </div>
             @endif
         </div>
+
+        {{-- ATTRIBUTION --}}
+        <div class="no-print">
+            <div class="mt-5 ml-4">
+                <h3 class="text-slate-400 font-bold">Attribution</h3>
+            </div>
+            <div class="grid grid-cols-2 items-center p-2 m-2 border-4 rounded-lg mt-1 border-sky-200">
+                <div class="w-1/2">
+                    <img src="{{ asset('img/icons-simbol-toko/diamond.png') }}" alt="" class="w-full">
+                </div>
+                <a class="text-xs text-sky-400 font-bold bg-sky-100 rounded-lg p-1" href="https://www.flaticon.com/free-icons/diamond" title="diamond icons">Diamond icons created by Iconic Panda - Flaticon</a>
+                <div class="w-1/2">
+                    <img src="{{ asset('img/icons-simbol-toko/medal.png') }}" alt="" class="w-full">
+                </div>
+                <a class="text-xs text-sky-400 font-bold bg-sky-100 rounded-lg p-1" href="https://www.flaticon.com/free-icons/medal" title="medal icons">Medal icons created by Handicon - Flaticon</a>
+                <div class="w-1/2">
+                    <img src="{{ asset('img/icons-simbol-toko/wreath.png') }}" alt="" class="w-full">
+                </div>
+                <a class="text-xs text-sky-400 font-bold bg-sky-100 rounded-lg p-1" href="https://www.flaticon.com/free-icons/trophy" title="trophy icons">Trophy icons created by Freepik - Flaticon</a>
+                <div class="w-1/2">
+                    <img src="{{ asset('img/icons-simbol-toko/coin.png') }}" alt="" class="w-full">
+                </div>
+                <a class="text-xs text-sky-400 font-bold bg-sky-100 rounded-lg p-1" href="https://www.flaticon.com/free-icons/coin" title="coin icons">Coin icons created by amonrat rungreangfangsai - Flaticon</a>
+            </div>
+        </div>
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
 </body>
 

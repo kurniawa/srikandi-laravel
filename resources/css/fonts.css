@@ -1,0 +1,48 @@
+@font-face {
+    font-display: swap;
+    font-family: 'Playfair Display';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/playfair-display-v37-latin-regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-display: swap;
+    font-family: 'Fredericka the Great';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/fredericka-the-great-v21-latin-regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-display: swap;
+    font-family: 'Almendra Display';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/almendra-display-v31-latin-regular.woff2') format('woff2');
+}
+
+.font-almendra {
+    font-display: swap;
+    font-family: 'Almendra Display';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/almendra-display-v31-latin-regular.woff2') format('woff2');
+}
+
+.font-fredericka {
+    font-display: swap;
+    font-family: 'Fredericka the Great';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/fredericka-the-great-v21-latin-regular.woff2') format('woff2');
+}
+
+.font-playfair-display {
+    font-display: swap;
+    font-family: 'Playfair Display';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/playfair-display-v37-latin-regular.woff2') format('woff2');
+}
+

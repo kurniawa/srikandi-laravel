@@ -50,7 +50,13 @@ class SuratPembelian extends Model
         if (strlen((string)$jumlah_item) === 1) {
             $jumlah_item_formatted = "0$jumlah_item";
         }
-        $no_surat = "$pembelian_id_formatted.$user_id.$kode_pelanggan.$jumlah_item_formatted-$time_key";
+        $day = (int)date("d", $time_key);
+        $month = (int)date("m", $time_key);
+        $year = (int)date("Y", $time_key);
+        $faktor_bagi = $day + $month + $year;
+        $nomor_surat = (int)($time_key / $faktor_bagi);
+
+        $no_surat = "$pembelian_id_formatted.$user_id.$kode_pelanggan.$jumlah_item_formatted-$nomor_surat";
         // terdiri dari tiga bagian 11.22.33 -> nomor surat juga harusnya akan selalu unik
 
         // return array($no_surat, $time_key);
@@ -69,5 +75,9 @@ class SuratPembelian extends Model
 
     function photos() {
         return $this->hasMany(SuratPembelianPhoto::class);
+    }
+
+    function user() {
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 }
