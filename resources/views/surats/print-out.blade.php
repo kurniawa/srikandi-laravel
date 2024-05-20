@@ -31,6 +31,7 @@
             <span class="text-slate-400 italic font-bold text-xs">- guest -</span>
             @endif
             <div>
+                <div class="text-xs font-bold text-slate-400">e-invoice</div>
                 <table class="text-sm text-slate-400 border border-collapse">
                     <tr class="border border-collapse"><td>Tanggal</td><td>:</td><td>{{ date("d-m-Y", strtotime($surat_pembelian->tanggal_surat)) }}</td></tr>
                     <tr class="border border-collapse"><td>Invoice-ID</td><td>:</td><td class=" font-bold">{{ $surat_pembelian->no_surat }}</td></tr>
@@ -63,7 +64,7 @@
         <div class="grid grid-cols-12 text-sm font-bold text-slate-400 font-playfair-display">
             <div class="col-span-1">No.</div>
             <div class="col-span-9 text-center">Data Barang</div>
-            <div class="col-span-2">Jumlah & Harga</div>
+            <div class="col-span-2">Jml./Ongkos/Hrg.</div>
         </div>
         @foreach ($surat_pembelian->items as $key => $item)
         <div class="grid grid-cols-12 border-y py-3">
@@ -150,7 +151,22 @@
         </div>
     </div>
 
+    {{-- SYARAT & KETENTUAN --}}
+    <div class="border p-1 border-red-300">
+        <div class="text-xs font-bold text-red-400">PERHATIAN</div>
+        <div class="pl-3">
+            <ol class="list-decimal list-outside text-xs text-red-400">
+                <li>E-invoice ini akan tercatat dalam sistem. Selama pelanggan terdaftar dalam sistem, maka penjualan kembali tanpa surat, masih bisa dilakukan. Terutama apabila penjualan tidak diwakilkan oleh orang lain.</li>
+                <li>Perhiasan telah ditimbang ulang dan disaksikan oleh pembeli. Keakuratan hingga 2 angka di belakang koma.</li>
+                <li>Pada saat penjualan kembali, berat perhiasan bisa saja berkurang/menyusut. Penyebab penyusutan diantaranya: gesekan, barang rusak sehingga ada bagian yang hilang, dll.</li>
+            </ol>
 
+        </div>
+    </div>
+
+    <div class="mt-5 text-center no-print">
+        <button class="bg-emerald-300 text-white rounded-lg border-2 border-emerald-400 px-3 py-1" onclick="window.print(); return false;">Cetak</button>
+    </div>
 </main>
 
 <script src="{{ asset('js/checkout.js') }}"></script>

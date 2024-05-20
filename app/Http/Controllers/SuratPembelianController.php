@@ -197,4 +197,8 @@ class SuratPembelianController extends Controller
         // dd($data);
         return view('surats.print-out', $data);
     }
+
+    function delete(SuratPembelian $surat_pembelian) {
+        dd($surat_pembelian);
+    }
 }
