@@ -5,7 +5,7 @@
     <x-validation-feedback></x-validation-feedback>
 
     <div class="flex justify-end">
-        <a href="{{ route('carts.pilih_tipe_barang', 'cart') }}" class="loading-spinner bg-emerald-400 text-white rounded-lg px-2 py-1">+ New Item</a>
+        <a href="{{ route('add_new_item.pilih_tipe_barang', 'cart') }}" class="loading-spinner bg-emerald-400 text-white rounded-lg px-2 py-1">+ New Item</a>
     </div>
 
     <h3 class="text-xl font-bold text-slate-500">Keranjang</h3>

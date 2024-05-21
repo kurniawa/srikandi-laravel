@@ -48,10 +48,10 @@ Route::controller(UserController::class)->group(function(){
 });
 
 Route::controller(ItemController::class)->group(function(){
-    Route::get('/items/add','create')->name('items.create')->middleware('level3');
+    Route::get('/items/{from}/pilih_tipe_barang','pilih_tipe_barang')->name('add_new_item.pilih_tipe_barang')->middleware('level3');
+    Route::get('/items/{from}/{tipe_barang}/create_item','create_item')->name('add_new_item.create')->middleware('level3');
     Route::post('/items/{from}/store','store')->name('items.store')->middleware('level3');
     Route::get('/items/{item}/show','show')->name('items.show')->middleware('auth');
-    Route::post('/items/{item}/{user}/insert_to_cart','insert_to_cart')->name('items.insert_to_cart')->middleware('level3');
     Route::get('/items/{item}/edit','edit')->name('items.edit')->middleware('level3');
     Route::post('/items/{item}/update','update')->name('items.update')->middleware('level3');
     Route::post('/items/{item}/delete','delete')->name('items.delete')->middleware('level3');
@@ -72,15 +72,13 @@ Route::controller(PhotoController::class)->group(function(){
 
 Route::controller(CartController::class)->group(function(){
     Route::get('/carts/{user}/index','index')->name('carts.index')->middleware('level3');
-    Route::get('/carts/{from}/pilih_tipe_barang','pilih_tipe_barang')->name('carts.pilih_tipe_barang')->middleware('level3');
-    Route::get('/carts/{from}/{tipe_barang}/create_item','create_item')->name('carts.create_item')->middleware('level3');
     Route::get('/carts/{cart}/checkout','checkout')->name('carts.checkout')->middleware('level3');
     Route::post('/carts/{cart}/proses_checkout','proses_checkout')->name('carts.proses_checkout')->middleware('level3');
+    Route::post('/carts/{item}/{user}/insert_to_cart','insert_to_cart')->name('carts.insert_to_cart')->middleware('level3');
 });
 
 Route::controller(CartItemController::class)->group(function(){
-    // Route::get('/cart_items/{cart}/{cart_item}/add_photo','add_photo')->name('cart_items.add_photo')->middleware('level3');
-    // Route::post('/cart_items/{cart_item}/add_photo_db','add_photo_db')->name('cart_items.add_photo_db')->middleware('level3');
+    Route::get('/cart_items/{cart}/{cart_item}/add_photo','add_photo')->name('cart_items.add_photo')->middleware('level3');
 });
 
 Route::controller(SuratPembelianController::class)->group(function(){

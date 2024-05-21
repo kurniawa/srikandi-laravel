@@ -21,6 +21,73 @@ use Illuminate\Support\Facades\Storage;
 
 class ItemController extends Controller
 {
+    function pilih_tipe_barang($from) {
+        // dd($from);
+        $cart = Cart::where('user_id', Auth::user()->id)->first();
+
+        $data = [
+            // 'goback' => 'home',
+            // 'user_role' => $user_role,
+            'menus' => Menu::get(),
+            'route_now' => 'home',
+            'profile_menus' => Menu::get_profile_menus(Auth::user()),
+            'parent_route' => 'home',
+            'spk_menus' => Menu::get_spk_menus(),
+            // 'user' => Auth::user(),
+            'from' => $from,
+            'back' => true,
+            'backRoute' => 'carts.index',
+            'backRouteParams' => [Auth::user()->id],
+            'cart' => $cart,
+        ];
+
+        return view('carts.pilih_tipe_barang', $data);
+    }
+
+    function create_item($from, $tipe_barang) {
+        // dump($from);
+        // dd($tipe_barang);
+        $time = time();
+        // dump($time);
+        // dump(date("Y-m-d", $time));
+        // dd(date("Y-m-d", $time - 86400));
+        $tipe_perhiasans = TipePerhiasan::all();
+        $jenis_perhiasans = JenisPerhiasan::select('id', 'nama as label', 'nama as value', 'tipe_perhiasan_id', 'tipe_perhiasan')->get();
+        $caps = Cap::select('id', 'nama as label', 'nama as value', 'codename')->get();
+        $warna_matas = Mata::select('warna as label', 'warna as value')->groupBy('warna')->get();
+        $mainans = Mainan::select('id', 'nama as label', 'nama as value')->get();
+        // dd($tipe_perhiasans);
+        // dd($jenis_perhiasans);
+
+        $cart = Cart::where('user_id', Auth::user()->id)->first();
+
+        $data = [
+            // 'goback' => 'home',
+            // 'user_role' => $user_role,
+            'menus' => Menu::get(),
+            'route_now' => 'home',
+            'profile_menus' => Menu::get_profile_menus(Auth::user()),
+            'parent_route' => 'home',
+            'back' => true,
+            'backRoute' => 'add_new_item.pilih_tipe_barang',
+            'backRouteParams' => [$from],
+            'spk_menus' => Menu::get_spk_menus(),
+            // 'user' => Auth::user(),
+            'from' => $from,
+            'tipe_barang' => $tipe_barang,
+            'tipe_perhiasans' => $tipe_perhiasans,
+            'jenis_perhiasans' => $jenis_perhiasans,
+            'caps' => $caps,
+            'warna_matas' => $warna_matas,
+            'mainans' => $mainans,
+            'cart' => $cart,
+        ];
+
+        // dd($caps);
+
+        return view('carts.create_item', $data);
+    }
+
     function store($from, Request $request) {
         $post = $request->post();
         // dump($from);
@@ -40,6 +107,7 @@ class ItemController extends Controller
         $kadar = null;
         $berat = null;
         $harga_g = null;
+        $ongkos_g = null;
         // $edisi = null;
         // $nampan = null;
         if ($post['tipe_barang'] === 'perhiasan') {
@@ -51,6 +119,7 @@ class ItemController extends Controller
                 'kadar' => 'required|numeric',
                 'berat' => 'required|numeric',
                 'harga_g' => 'required|numeric',
+                'ongkos_g' => 'required|numeric',
                 'nama_short' => 'required',
                 'nama_long' => 'required',
                 'kondisi' => 'nullable',
@@ -81,6 +150,7 @@ class ItemController extends Controller
             $warna_emas = $post['warna_emas'];
             $kadar = (float)$post['kadar'] * 100;
             $berat = (float)$post['berat'] * 100;
+            $ongkos_g = (float)$post['ongkos_g'] * 100;
             $harga_g = (float)$post['harga_g'] * 100;
             $harga_t = (float)$post['berat'] * (float)$post['harga_g'] * 100;
         }
@@ -119,6 +189,7 @@ class ItemController extends Controller
             'kadar' => $kadar,
             'berat' => $berat,
             'harga_g' => $harga_g,
+            'ongkos_g' => $ongkos_g,
             'harga_t' => $harga_t,
             'nama_short' => $post['nama_short'],
             'nama_long' => $post['nama_long'],
@@ -176,28 +247,10 @@ class ItemController extends Controller
 
         $success_ = '-item baru telah diinput-';
 
+        $user = Auth::user();
         if ($from === 'cart') {
             // MULAI INPUT KE CART
-            $user = Auth::user();
-            $cart = Cart::where('user_id', $user->id)->first();
-            if (!$cart) {
-                $cart = Cart::create([
-                    'user_id' => $user->id,
-                ]);
-            }
-            CartItem::create([
-                'cart_id' => $cart->id,
-                'item_id' => $item_new->id,
-                'harga_t' => (string)$harga_t,
-            ]);
-
-            if ($cart->harga_total) {
-                $cart->harga_total = (string)((float)$cart->harga_total + $harga_t);
-            } else {
-                $cart->harga_total = (string)($harga_t);
-            }
-            $cart->save();
-
+            Cart::insert_to_cart_helper($item_new, $user);
             $success_ .= '-item telah diinput ke cart-';
             // END - INPUT KE CART
         }
@@ -537,6 +590,34 @@ class ItemController extends Controller
         ];
 
         return view('items.add_photos', $data);
+    }
+
+    function delete(Item $item) {
+        $dangers_ = '';
+        // CEK apakah item ini ada fotonya
+        if (count($item->photos)) {
+            foreach ($item->photos as $photo) {
+                // CEK apakah foto ini juga dipakai oleh item lain?
+                $item_photo_others = ItemPhoto::where('photo_id', $photo->id)->where('item_id', '!=', $item->id)->get();
+                if (count($item_photo_others)) {
+                    # code...
+                    $dangers_ .= "-item lain memakai foto yang sama, storage tidak dihapus-";
+                } else {
+                    // HAPUS storage
+                    if (Storage::exists($photo->path)) {
+                        Storage::delete($photo->path);
+                    }
+                    $dangers_ .= "-$photo->path dihapus-";
+                }
+            }
+        }
+        $item->delete();
+        $dangers_ .= "-item dihapus-";
+        $feedback = [
+            'dangers_' => $dangers_
+        ];
+
+        return redirect()->route('home')->with($feedback);
     }
 
 }

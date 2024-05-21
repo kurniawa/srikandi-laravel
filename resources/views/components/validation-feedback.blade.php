@@ -28,10 +28,10 @@
         </div>
     </div>
     @endif
-    @if (session()->has('danger_') && session('danger_')!=="")
+    @if (session()->has('dangers_') && session('dangers_')!=="")
     <div class="font-semibold px-3 py-2 rounded bg-red-200 text-red-600 opacity-70 w-11/12 flex justify-between items-center">
         <div>
-            {{ session('danger_') }}
+            {{ session('dangers_') }}
         </div>
         <div>
             <button type="button" onclick="hideFeedbackMessages()">

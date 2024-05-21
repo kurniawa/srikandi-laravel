@@ -129,7 +129,7 @@
                     <input type="text" id="kadar_formatted" value="{{ old('kadar_formatted') }}" onchange="formatNumber(this, 'kadar');generateNama()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <input type="hidden" id="kadar" name="kadar" value="{{ old('kadar') }}">
                     @else
-                    <input type="text" id="kadar_formatted" value="{{ number_format((float)$item->kadar / 100, 2, ',', '.') }}" onchange="formatNumber(this, 'kadar');generateNama()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input type="text" id="kadar_formatted" value="{{ casual_decimal_format($item->kadar) }}" onchange="formatNumber(this, 'kadar');generateNama()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <input type="hidden" id="kadar" name="kadar" value="{{ (float)$item->kadar / 100 }}">
                     @endif
                 </div>
@@ -139,7 +139,7 @@
                     <input type="text" id="berat_formatted" value="{{ old('berat_formatted') }}" onchange="formatNumber(this, 'berat');hitungHargaGrOrT();generateNama();" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <input type="hidden" id="berat" name="berat" value="{{ old('berat') }}">
                     @else
-                    <input type="text" id="berat_formatted" value="{{ number_format((float)$item->berat / 100, 2, ',', '.') }}" onchange="formatNumber(this, 'berat');hitungHargaGrOrT();generateNama();" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input type="text" id="berat_formatted" value="{{ casual_decimal_format($item->berat) }}" onchange="formatNumber(this, 'berat');hitungHargaGrOrT();generateNama();" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <input type="hidden" id="berat" name="berat" value="{{ (float)$item->berat / 100 }}">
                     @endif
                 </div>
@@ -149,8 +149,18 @@
                     <input type="text" id="harga_g_formatted" value="{{ old('harga_g_formatted') }}" onchange="formatNumber(this, 'harga_g');hitungHargaT();" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <input type="hidden" id="harga_g" name="harga_g" value="{{ old('harga_g') }}">
                     @else
-                    <input type="text" id="harga_g_formatted" value="{{ number_format((float)$item->harga_g / 100, 2, ',', '.') }}" onchange="formatNumber(this, 'harga_g');hitungHargaT();" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input type="text" id="harga_g_formatted" value="{{ casual_decimal_format($item->harga_g) }}" onchange="formatNumber(this, 'harga_g');hitungHargaT();" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <input type="hidden" id="harga_g" name="harga_g" value="{{ (float)$item->harga_g / 100 }}">
+                    @endif
+                </div>
+                <div class="mb-5">
+                    <label id="label_ongkos_g_formatted" for="ongkos_g_formatted" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ongkos/g</label>
+                    @if (old('ongkos_g'))
+                    <input type="text" id="ongkos_g_formatted" value="{{ old('ongkos_g_formatted') }}" onchange="formatNumber(this, 'ongkos_g');hitungHargaT();" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input type="hidden" id="ongkos_g" name="ongkos_g" value="{{ old('ongkos_g') }}">
+                    @else
+                    <input type="text" id="ongkos_g_formatted" value="{{ casual_decimal_format($item->ongkos_g) }}" onchange="formatNumber(this, 'ongkos_g');hitungHargaT();" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input type="hidden" id="ongkos_g" name="ongkos_g" value="{{ (float)$item->ongkos_g / 100 }}">
                     @endif
                 </div>
                 <div class="mb-5">
@@ -159,7 +169,7 @@
                     <input type="text" id="harga_t_formatted" value="{{ old('harga_t_formatted') }}" onchange="formatNumber(this, 'harga_t');hitungHargaGr();" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <input type="hidden" id="harga_t" name="harga_t" value="{{ old('harga_t') }}">
                     @else
-                    <input type="text" id="harga_t_formatted" value="{{ number_format((float)$item->harga_t / 100, 2, ',', '.') }}" onchange="formatNumber(this, 'harga_t');hitungHargaGr();" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input type="text" id="harga_t_formatted" value="{{ casual_decimal_format($item->harga_t) }}" onchange="formatNumber(this, 'harga_t');hitungHargaGr();" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <input type="hidden" id="harga_t" name="harga_t" value="{{ (float)$item->harga_t / 100 }}">
                     @endif
                 </div>
@@ -520,6 +530,9 @@
             <button type="submit" class="bg-emerald-300 text-white px-3 py-2 rounded font-bold">Konfirmasi Edit</button>
         </div>
     </form>
+    <div class="text-center mt-3">
+        <button class="bg-rose-300 text-white px-3 py-2 rounded font-bold" onclick="history.back()">Cancel</button>
+    </div>
 
     <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button>
 </main>

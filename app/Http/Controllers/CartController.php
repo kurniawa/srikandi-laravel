@@ -44,72 +44,7 @@ class CartController extends Controller
         return view('carts.index', $data);
     }
 
-    function pilih_tipe_barang($from) {
-        // dd($from);
-        $cart = Cart::where('user_id', Auth::user()->id)->first();
 
-        $data = [
-            // 'goback' => 'home',
-            // 'user_role' => $user_role,
-            'menus' => Menu::get(),
-            'route_now' => 'home',
-            'profile_menus' => Menu::get_profile_menus(Auth::user()),
-            'parent_route' => 'home',
-            'spk_menus' => Menu::get_spk_menus(),
-            // 'user' => Auth::user(),
-            'from' => $from,
-            'back' => true,
-            'backRoute' => 'carts.index',
-            'backRouteParams' => [Auth::user()->id],
-            'cart' => $cart,
-        ];
-
-        return view('carts.pilih_tipe_barang', $data);
-    }
-
-    function create_item($from, $tipe_barang) {
-        // dump($from);
-        // dd($tipe_barang);
-        $time = time();
-        // dump($time);
-        // dump(date("Y-m-d", $time));
-        // dd(date("Y-m-d", $time - 86400));
-        $tipe_perhiasans = TipePerhiasan::all();
-        $jenis_perhiasans = JenisPerhiasan::select('id', 'nama as label', 'nama as value', 'tipe_perhiasan_id', 'tipe_perhiasan')->get();
-        $caps = Cap::select('id', 'nama as label', 'nama as value', 'codename')->get();
-        $warna_matas = Mata::select('warna as label', 'warna as value')->groupBy('warna')->get();
-        $mainans = Mainan::select('id', 'nama as label', 'nama as value')->get();
-        // dd($tipe_perhiasans);
-        // dd($jenis_perhiasans);
-
-        $cart = Cart::where('user_id', Auth::user()->id)->first();
-
-        $data = [
-            // 'goback' => 'home',
-            // 'user_role' => $user_role,
-            'menus' => Menu::get(),
-            'route_now' => 'home',
-            'profile_menus' => Menu::get_profile_menus(Auth::user()),
-            'parent_route' => 'home',
-            'back' => true,
-            'backRoute' => 'carts.pilih_tipe_barang',
-            'backRouteParams' => [$from],
-            'spk_menus' => Menu::get_spk_menus(),
-            // 'user' => Auth::user(),
-            'from' => $from,
-            'tipe_barang' => $tipe_barang,
-            'tipe_perhiasans' => $tipe_perhiasans,
-            'jenis_perhiasans' => $jenis_perhiasans,
-            'caps' => $caps,
-            'warna_matas' => $warna_matas,
-            'mainans' => $mainans,
-            'cart' => $cart,
-        ];
-
-        // dd($caps);
-
-        return view('carts.create_item', $data);
-    }
 
     function checkout(Cart $cart, Request $request) {
         $get = $request->query();
@@ -393,5 +328,15 @@ class CartController extends Controller
         ];
 
         return redirect(route('surat_pembelian.index'))->with($feedback);
+    }
+
+    function insert_to_cart(Item $item, User $user) {
+        $success_ = '';
+        Cart::insert_to_cart_helper($item, $user);
+        $success_ .= "-Item telah diinput ke keranjang-";
+        $feedback = [
+            'success_' => $success_
+        ];
+        return redirect()->route('carts.index', $user->id)->with($feedback);
     }
 }
