@@ -211,6 +211,8 @@
     </div>
 </main>
 
+<x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button>
+
 <script>
     function toggleWarna(toggle_button, id_to_toggle, class_warna) {
         console.log(toggle_button);

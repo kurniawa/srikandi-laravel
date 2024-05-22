@@ -16,7 +16,7 @@ class ArtisanController extends Controller
             'route_now' => 'home',
             'profile_menus' => Menu::get_profile_menus(Auth::user()),
             'parent_route' => 'home',
-            'spk_menus' => Menu::get_spk_menus(),
+            // 'spk_menus' => Menu::get_spk_menus(),
         ];
 
         return view('artisans.index', $data);

@@ -44,14 +44,17 @@ Route::controller(AuthController::class)->group(function(){
 });
 
 Route::controller(UserController::class)->group(function(){
-    Route::get('/users/{user}/list_of_items','list_of_items')->name('users.list_of_items')->middleware('auth');
+    Route::get('/pelanggans/index','index')->name('pelanggans.index')->middleware('level3');
+    Route::get('/pelanggans/{pelanggan}/show','show')->name('pelanggans.show')->middleware('level3');
+    Route::get('/users/{user}/list_of_items','list_of_items')->name('users.list_of_items')->middleware('level3');
+
 });
 
 Route::controller(ItemController::class)->group(function(){
     Route::get('/items/{from}/pilih_tipe_barang','pilih_tipe_barang')->name('add_new_item.pilih_tipe_barang')->middleware('level3');
     Route::get('/items/{from}/{tipe_barang}/create_item','create_item')->name('add_new_item.create')->middleware('level3');
     Route::post('/items/{from}/store','store')->name('items.store')->middleware('level3');
-    Route::get('/items/{item}/show','show')->name('items.show')->middleware('auth');
+    Route::get('/items/{item}/{from}/show','show')->name('items.show')->middleware('auth');
     Route::get('/items/{item}/edit','edit')->name('items.edit')->middleware('level3');
     Route::post('/items/{item}/update','update')->name('items.update')->middleware('level3');
     Route::post('/items/{item}/delete','delete')->name('items.delete')->middleware('level3');
@@ -79,6 +82,7 @@ Route::controller(CartController::class)->group(function(){
 
 Route::controller(CartItemController::class)->group(function(){
     Route::get('/cart_items/{cart}/{cart_item}/add_photo','add_photo')->name('cart_items.add_photo')->middleware('level3');
+    Route::post('/cart_items/{cart}/{cart_item}/delete','delete')->name('cart_items.delete')->middleware('level3');
 });
 
 Route::controller(SuratPembelianController::class)->group(function(){

@@ -32,7 +32,7 @@ class ItemController extends Controller
             'route_now' => 'home',
             'profile_menus' => Menu::get_profile_menus(Auth::user()),
             'parent_route' => 'home',
-            'spk_menus' => Menu::get_spk_menus(),
+            // 'spk_menus' => Menu::get_spk_menus(),
             // 'user' => Auth::user(),
             'from' => $from,
             'back' => true,
@@ -71,7 +71,7 @@ class ItemController extends Controller
             'back' => true,
             'backRoute' => 'add_new_item.pilih_tipe_barang',
             'backRouteParams' => [$from],
-            'spk_menus' => Menu::get_spk_menus(),
+            // 'spk_menus' => Menu::get_spk_menus(),
             // 'user' => Auth::user(),
             'from' => $from,
             'tipe_barang' => $tipe_barang,
@@ -262,11 +262,11 @@ class ItemController extends Controller
         if ($from === 'cart') {
             return redirect()->route('carts.index', $user->id)->with($feedback);
         } else {
-            return redirect()->route('items.show', $item_new->id)->with($feedback);
+            return redirect()->route('items.show', [$item_new->id, 'home'])->with($feedback);
         }
     }
 
-    function show(Item $item) {
+    function show(Item $item, $from) {
         // dd($item);
         // $item_photos = ItemPhoto::where('item_id', $item->id)->orderBy('photo_index')->get();
         $user = Auth::user();
@@ -290,7 +290,10 @@ class ItemController extends Controller
             'route_now' => 'home',
             'profile_menus' => Menu::get_profile_menus(Auth::user()),
             'parent_route' => 'home',
-            'spk_menus' => Menu::get_spk_menus(),
+            'back' => true,
+            'backRoute' => $from,
+            'backRouteParams' => [$user->id],
+            // 'spk_menus' => Menu::get_spk_menus(),
             'item' => $item,
             // 'item_photos' => $item_photos,
             'cart' => $cart,
@@ -354,7 +357,7 @@ class ItemController extends Controller
             'back' => true,
             'backRoute' => 'items.show',
             'backRouteParams' => [$item->id],
-            'spk_menus' => Menu::get_spk_menus(),
+            // 'spk_menus' => Menu::get_spk_menus(),
             'item' => $item,
             'cart' => $cart,
             'user' => $user,
@@ -548,7 +551,7 @@ class ItemController extends Controller
             'success_' => $success_,
         ];
 
-        return redirect()->route('items.show', $item->id)->with($feedback);
+        return redirect()->route('items.show', [$item->id, 'home'])->with($feedback);
     }
 
     function add_photo(Item $item, Request $request) {
@@ -576,7 +579,7 @@ class ItemController extends Controller
             'route_now' => 'items.add_photo',
             'profile_menus' => Menu::get_profile_menus(Auth::user()),
             'parent_route' => 'home',
-            'spk_menus' => Menu::get_spk_menus(),
+            // 'spk_menus' => Menu::get_spk_menus(),
             'back' => true,
             'backRoute' => 'items.show',
             'backRouteParams' => [$item->id],

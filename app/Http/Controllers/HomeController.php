@@ -71,7 +71,7 @@ class HomeController extends Controller
             'back' => false,
             'backRoute' => null,
             'backRouteParams' => null,
-            'spk_menus' => Menu::get_spk_menus(),
+            // 'spk_menus' => Menu::get_spk_menus(),
             // 'user' => Auth::user(),
             'cart' => $cart,
             'items' => $items,

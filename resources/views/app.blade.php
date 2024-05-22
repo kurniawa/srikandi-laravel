@@ -5,7 +5,7 @@
         <x-validation-feedback></x-validation-feedback>
         <div class="grid grid-cols-2 gap-2 mt-1">
             @foreach ($items as $key => $item)
-                <a href="{{ route('items.show', $item->id) }}" class="loading-spinner p-2 bg-white rounded shadow drop-shadow relative">
+                <a href="{{ route('items.show', [$item->id, 'home']) }}" class="loading-spinner p-2 bg-white rounded shadow drop-shadow relative">
                     <div>
                         @if (count($item->item_photos))
                         <img src="{{ asset("storage/" . $item->item_photos[0]->photo->path) }}" alt="item_photo" class="w-full">

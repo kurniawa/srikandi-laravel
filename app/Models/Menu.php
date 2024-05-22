@@ -48,7 +48,8 @@ class Menu extends Model
                     $menus->push(
                         // ['name'=>'Your Profile','route'=>'user.profile'],
                         // ['name'=>'Settings','route'=>'settings'],
-                        ['name'=>'Daftar item Anda','route'=>'users.list_of_items', 'params'=>$user->id],
+                        ['name'=>'Surat / Transaksi','route'=>'surat_pembelian.index', 'params'=>$user->id],
+                        ['name'=>'Accounting','route'=>'cashflow.index', 'params'=>$user->id],
                         ['name'=>'Artisan Commands','route'=>'artisans.index'],
                         ['name'=>'Log Out','route'=>'logout'],
                     );
@@ -56,6 +57,7 @@ class Menu extends Model
                     $menus->push(
                         // ['name'=>'Your Profile','route'=>'user.profile'],
                         // ['name'=>'Settings','route'=>'settings'],
+                        ['name'=>'Daftar Pelanggan','route'=>'pelanggans.index'],
                         ['name'=>'Surat / Transaksi','route'=>'surat_pembelian.index', 'params'=>$user->id],
                         ['name'=>'Accounting','route'=>'cashflow.index', 'params'=>$user->id],
                         ['name'=>'Log Out','route'=>'logout'],
@@ -81,16 +83,16 @@ class Menu extends Model
         return $menus;
     }
 
-    public static function get_spk_menus() {
-        $menus = collect([
-            ['name'=>'SPK','route'=>'home'],
-            ['name'=>'Pelanggan','route'=>'pelanggans.index'],
-            ['name'=>'Ekspedisi','route'=>'ekspedisis.index'],
-            ['name'=>'Produk','route'=>'produks.index'],
-        ]);
+    // public static function get_spk_menus() {
+    //     $menus = collect([
+    //         ['name'=>'SPK','route'=>'home'],
+    //         ['name'=>'Pelanggan','route'=>'pelanggans.index'],
+    //         ['name'=>'Ekspedisi','route'=>'ekspedisis.index'],
+    //         ['name'=>'Produk','route'=>'produks.index'],
+    //     ]);
 
-        return $menus;
-    }
+    //     return $menus;
+    // }
 
     public static function get_accounting_menus() {
         return [
