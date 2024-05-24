@@ -4,8 +4,6 @@
     <x-errors-any></x-errors-any>
     <x-validation-feedback></x-validation-feedback>
 
-
-
     <div>
         @csrf
         <div class="p-2">

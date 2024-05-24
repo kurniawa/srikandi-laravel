@@ -3,7 +3,13 @@
     <main class="p-2">
         <x-errors-any></x-errors-any>
         <x-validation-feedback></x-validation-feedback>
-        <h1 class="text-2xl font-bold text-slate-500">Daftar Pelanggan</h1>
+
+        <div class="flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-slate-500">Daftar Pelanggan</h1>
+            <div>
+                <a href="{{ route('pelanggans.create', $user->id) }}" class="bg-emerald-300 text-white font-bold rounded-lg px-2 py-1">+ NEW P</a>
+            </div>
+        </div>
         <table class="w-full mt-5 text-slate-500">
             @foreach ($pelanggans as $key => $pelanggan)
             <tr class="border-t">

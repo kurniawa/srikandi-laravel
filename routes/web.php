@@ -45,7 +45,10 @@ Route::controller(AuthController::class)->group(function(){
 
 Route::controller(UserController::class)->group(function(){
     Route::get('/pelanggans/index','index')->name('pelanggans.index')->middleware('level3');
+    Route::get('/pelanggans/create','pelanggans_create')->name('pelanggans.create')->middleware('level3');
+    Route::post('/pelanggans/store','pelanggans_store')->name('pelanggans.store')->middleware('level3');
     Route::get('/pelanggans/{pelanggan}/show','show')->name('pelanggans.show')->middleware('level3');
+    Route::get('/pelanggans/{pelanggan}/edit','edit')->name('pelanggans.edit')->middleware('level3');
     Route::get('/users/{user}/list_of_items','list_of_items')->name('users.list_of_items')->middleware('level3');
 
 });
