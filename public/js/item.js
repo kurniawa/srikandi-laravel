@@ -115,6 +115,10 @@ function generateNama() {
     let kadar = document.getElementById('kadar').value;
     let berat = document.getElementById('berat').value;
     let kondisi = document.getElementById('kondisi').value;
+    if (kondisi) {
+        kondisi = ` zu:${kondisi}`;
+    }
+
     let cap = document.getElementById('cap').value;
     if (cap) {
         cap = ` c:${cap}`;
@@ -129,7 +133,7 @@ function generateNama() {
     }
     let merk = document.getElementById('merk').value;
     if (merk) {
-        merk = `merk:${merk}`
+        merk = ` merk:${merk}`
     }
     let plat = document.getElementById('plat').value;
     if (plat) {
@@ -137,7 +141,7 @@ function generateNama() {
     }
 
     let nama_short = `${tipe_perhiasan} ${jenis_perhiasan}${warna_emas} ${kadar}% ${berat}gr`;
-    let nama_long = `${tipe_perhiasan} ${jenis_perhiasan}${warna_emas} ${kadar}% ${berat}gr${cap}${ukuran}${range_usia}${merk}${plat}`;
+    let nama_long = `${tipe_perhiasan} ${jenis_perhiasan}${warna_emas} ${kadar}% ${berat}gr${cap}${ukuran}${range_usia}${merk}${plat}${kondisi}`;
     // nama_long = nama_long.split("  ").join(" ");
     document.getElementById('nama_short').value = nama_short;
     document.getElementById('nama_long').value = nama_long;

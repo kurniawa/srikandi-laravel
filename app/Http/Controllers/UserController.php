@@ -7,6 +7,7 @@ use App\Models\Menu;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -181,5 +182,106 @@ class UserController extends Controller
 
     function edit(User $pelanggan) {
         dd($pelanggan);
+    }
+
+    function edit_profile_picture(User $pelanggan) {
+        // dd($pelanggan);
+        $user = Auth::user();
+        $cart = Cart::where('user_id', $user->id)->first();
+
+        $data = [
+            'menus' => Menu::get(),
+            'route_now' => 'pelanggans.edit_profile_picture',
+            'profile_menus' => Menu::get_profile_menus($user),
+            'parent_route' => 'home',
+            // 'spk_menus' => Menu::get_spk_menus(),
+            'back' => true,
+            'backRoute' => 'pelanggans.show',
+            'backRouteParams' => [$pelanggan->id],
+            'cart' => $cart,
+            'user' => $user,
+            'pelanggan' => $pelanggan,
+            // 'cart_item' => $cart_item,
+            // 'related_user' => $related_user,
+            // 'peminat_items' => $peminat_items,
+        ];
+
+        return view('pelanggans.edit_profile_picture', $data);
+    }
+
+    function update_profile_picture(User $pelanggan, Request $request) {
+        // $post = $request->post();
+        $file_photo = $request->file('photo');
+        // dd($file_photo);
+        // dump($post);
+        // dump($photo);
+        // dd($cart_item);
+
+        $request->validate([
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $success_ = "";
+
+        $time = time();
+        $file_name = $time . "." . $file_photo->extension();
+        $file_photo->storeAs('pelanggans/profile_pictures', $file_name);
+
+        $pelanggan->profile_picture_path = "pelanggans/profile_pictures/$file_name";
+        $pelanggan->save();
+
+        $success_ .= "-Pelanggan->profile_picture_path $pelanggan->profile_picture_path created-";
+
+        $feedback = [
+            "success_" => $success_
+        ];
+
+        return back()->with($feedback);
+    }
+
+    function delete_profile_picture(User $pelanggan) {
+        $warnings_ = "";
+        if (Storage::exists($pelanggan->profile_picture_path)) {
+            Storage::delete($pelanggan->profile_picture_path);
+        }
+        $warnings_ .= "-File Profile Picture dihapus-";
+
+        $pelanggan->profile_picture_path = null;
+        $pelanggan->save();
+
+        $warnings_ .= "-Data Pelanggan diupdate-";
+
+        $feedback = [
+            "warnings_" => $warnings_,
+        ];
+
+        return back()->with($feedback);
+    }
+
+    function delete(User $pelanggan) {
+        // dd($pelanggan);
+        $dangers_ = "";
+        if ($pelanggan->profile_picture_path) {
+            if (Storage::exists($pelanggan->profile_picture_path)) {
+                Storage::delete($pelanggan->profile_picture_path);
+            }
+            $dangers_ .= "-ProfilePicture dihapus-";
+        }
+
+        if ($pelanggan->id_photo_path) {
+            if (Storage::exists($pelanggan->id_photo_path)) {
+                Storage::delete($pelanggan->id_photo_path);
+            }
+            $dangers_ .= "-ID-Photo dihapus-";
+        }
+
+        $pelanggan->delete();
+        $dangers_ .= "-Data pelanggan dihapus-";
+
+        $feedback = [
+            "dangers_" => $dangers_
+        ];
+
+        return redirect()->route("pelanggans.index")->with($feedback);
     }
 }

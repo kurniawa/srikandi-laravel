@@ -49,6 +49,10 @@ Route::controller(UserController::class)->group(function(){
     Route::post('/pelanggans/store','pelanggans_store')->name('pelanggans.store')->middleware('level3');
     Route::get('/pelanggans/{pelanggan}/show','show')->name('pelanggans.show')->middleware('level3');
     Route::get('/pelanggans/{pelanggan}/edit','edit')->name('pelanggans.edit')->middleware('level3');
+    Route::get('/pelanggans/{pelanggan}/edit_profile_picture','edit_profile_picture')->name('pelanggans.edit_profile_picture')->middleware('level3');
+    Route::post('/pelanggans/{pelanggan}/update_profile_picture','update_profile_picture')->name('pelanggans.update_profile_picture')->middleware('level3');
+    Route::post('/pelanggans/{pelanggan}/delete_profile_picture','delete_profile_picture')->name('pelanggans.delete_profile_picture')->middleware('level3');
+    Route::post('/pelanggans/{pelanggan}/delete','delete')->name('pelanggans.delete')->middleware('level3');
     Route::get('/users/{user}/list_of_items','list_of_items')->name('users.list_of_items')->middleware('level3');
 
 });

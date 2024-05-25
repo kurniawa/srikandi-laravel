@@ -130,37 +130,37 @@
                         <label for="kondisi" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">kondisi</label>
                         <select id="kondisi" name="kondisi" onchange="generateNama()" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             @if (old('kondisi'))
-                            @if (old('kondisi') == "99")
-                            <option value="99" selected>99 - mulus</option>
+                            @if (old('kondisi') == "9")
+                            <option value="9" selected>9 - mulus</option>
                             @else
-                            <option value="99">99 - mulus</option>
+                            <option value="9">9 - mulus</option>
                             @endif
-                            @if (old('kondisi') == "80")
-                            <option value="80" selected>80 - sedikit cacat/hampir tidak terlihat</option>
+                            @if (old('kondisi') == "8")
+                            <option value="8" selected>8 - sedikit cacat/hampir tidak terlihat</option>
                             @else
-                            <option value="80">80 - sedikit cacat/hampir tidak terlihat</option>
+                            <option value="8">8 - sedikit cacat/hampir tidak terlihat</option>
                             @endif
-                            @if (old('kondisi') == "70")
-                            <option value="70" selected>70 - cacat jelas terlihat</option>
+                            @if (old('kondisi') == "7")
+                            <option value="7" selected>7 - cacat jelas terlihat</option>
                             @else
-                            <option value="70">70 - cacat jelas terlihat</option>
+                            <option value="7">7 - cacat jelas terlihat</option>
                             @endif
-                            @if (old('kondisi') == "60")
-                            <option value="60" selected>60 - cacat banget</option>
+                            @if (old('kondisi') == "6")
+                            <option value="6" selected>6 - cacat banget</option>
                             @else
-                            <option value="60">60 - cacat banget</option>
+                            <option value="6">6 - cacat banget</option>
                             @endif
-                            @if (old('kondisi') == "50")
-                            <option value="50" selected>50 - ancur / rusak</option>
+                            @if (old('kondisi') == "5")
+                            <option value="5" selected>5 - ancur / rusak</option>
                             @else
-                            <option value="50">50 - ancur / rusak</option>
+                            <option value="5">5 - ancur / rusak</option>
                             @endif
                             @else
-                            <option value="99">99 - mulus</option>
-                            <option value="80">80 - sedikit cacat/hampir tidak terlihat</option>
-                            <option value="70">70 - cacat jelas terlihat</option>
-                            <option value="60">60 - cacat banget</option>
-                            <option value="50">50 - ancur / rusak</option>
+                            <option value="9">9 - mulus</option>
+                            <option value="8">8 - sedikit cacat/hampir tidak terlihat</option>
+                            <option value="7">7 - cacat jelas terlihat</option>
+                            <option value="6">6 - cacat banget</option>
+                            <option value="5">5 - ancur / rusak</option>
                             @endif
                         </select>
                     </div>
