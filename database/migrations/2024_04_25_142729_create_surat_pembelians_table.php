@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('surat_pembelians', function (Blueprint $table) {
             $table->id();
             $table->timestamp('tanggal_surat'); // ada created_at dan ada juga tanggal surat supaya datanya lengkap
-            $table->string('no_surat')->unique(); // id.jumlah_item.time()-1.678.420.000
+            $table->string('nomor_surat')->unique(); // id.jumlah_item.time()-1.678.420.000
             $table->bigInteger('time_key'); // id.jumlah_item.time()-1.678.420.000
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
             $table->string('username', 50); // username

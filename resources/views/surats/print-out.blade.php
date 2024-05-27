@@ -34,7 +34,7 @@
                 <div class="text-xs font-bold text-slate-400">e-invoice</div>
                 <table class="text-sm text-slate-400 border border-collapse">
                     <tr class="border border-collapse"><td>Tanggal</td><td>:</td><td>{{ date("d-m-Y", strtotime($surat_pembelian->tanggal_surat)) }}</td></tr>
-                    <tr class="border border-collapse"><td>Invoice-ID</td><td>:</td><td class=" font-bold">{{ $surat_pembelian->no_surat }}</td></tr>
+                    <tr class="border border-collapse"><td>Invoice-ID</td><td>:</td><td class=" font-bold">{{ $surat_pembelian->nomor_surat }}</td></tr>
                 </table>
             </div>
         </div>

@@ -22,6 +22,12 @@
             <img src="{{ asset("storage/" . $pelanggan->profile_picture_path) }}" alt="">
         </div>
     </div>
+    <form action="{{ route('pelanggans.delete_profile_picture', $pelanggan->id) }}" method="POST" onsubmit="return confirm('Yakin ingin hapus Profile Picture ini?')" class="mt-2">
+        @csrf
+        <div class="flex justify-center">
+            <button class="bg-rose-300 font-bold text-white p-1 rounded-lg">Hapus Profile Picture</button>
+        </div>
+    </form>
     @else
     <div class="flex justify-center mt-5">
         <div class="bg-slate-50 shadow drop-shadow text-slate-400 w-3/4 rounded-full overflow-hidden">
@@ -30,14 +36,74 @@
             </svg>
         </div>
     </div>
+    <form method="POST" action="{{ route('pelanggans.update_profile_picture', $pelanggan->id) }}" class="mb-1" enctype="multipart/form-data">
+        @csrf
+        {{-- PROFILE PICTURE --}}
+        <!-- Foto Profile -->
+        <div id="div-preview-profile-photo" class="mt-3 hidden">
+            <div class="flex justify-end">
+                <button type="button" class="bg-rose-300 text-white rounded-full p-1" onclick="removeImage('input-profile-photo', 'div-preview-profile-photo', 'preview-profile-photo', 'label-input-profile-photo')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="size-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="flex justify-center py-3 border-2 border-rose-300 rounded">
+                <div class="w-2/3">
+                    <img src="" alt="avatar_foto" id="preview-profile-photo" />
+                </div>
+            </div>
+
+            <div class="mt-3 text-center">
+                <button type="submit" class="bg-emerald-300 text-white font-bold rounded-lg p-2">Update Profile Picture</button>
+            </div>
+        </div>
+
+        <div id="label-input-profile-photo" class="flex justify-center">
+            <label for="input-profile-photo" class="border-2 border-rose-300 rounded p-2 mt-2 hover:cursor-pointer text-slate-500">
+                <div class="flex items-center">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="w-6 h-6"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z"
+                        />
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z"
+                        />
+                    </svg>
+
+                    <div class="ml-1 font-bold">Foto Profile</div>
+                </div>
+            </label>
+        </div>
+        <input
+            id="input-profile-photo"
+            name="photo"
+            type="file"
+            accept=".jpg, .jpeg, .png"
+            onchange="previewImage(this.files[0], 'div-preview-profile-photo', 'preview-profile-photo', 'label-input-profile-photo')"
+            class="hidden"
+        />
+
+    </form>
     @endif
-    <div class="flex justify-end">
+    {{-- <div class="flex justify-end">
         <a href="{{ route("pelanggans.edit_profile_picture", [$pelanggan->id]) }}" class="text-slate-400" >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
             </svg>
         </a>
-    </div>
+    </div> --}}
 
     <div class="mx-2">
         <div class="mt-5">
@@ -102,7 +168,8 @@
             <span>Edit Data Pelanggan</span>
         </a>
     </div>
-    <form action="{{ route('pelanggans.delete', $pelanggan-.id) }}" method="POST" class="mt-2" onsubmit="return confirm('Yakin ingin hapus pelanggan ini?')">
+    <form action="{{ route('pelanggans.delete', $pelanggan->id) }}" method="POST" class="mt-2" onsubmit="return confirm('Yakin ingin hapus pelanggan ini?')">
+        @csrf
         <div class="flex justify-center">
             <button class="flex items-center gap-2 p-2 bg-rose-300 text-white font-bold rounded-lg">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6">
@@ -112,8 +179,105 @@
             </button>
         </div>
     </form>
+
+    @if ($pelanggan->id_photo_path)
+    <div class="flex justify-center mt-5">
+        <div class="border-2 text-slate-400 w-4/5 p-2 rounded-lg">
+            <img src="{{ asset("storage/" . $pelanggan->id_photo_path) }}" alt="">
+        </div>
+    </div>
+    <form action="{{ route('pelanggans.delete_id_photo', $pelanggan->id) }}" method="POST" onsubmit="return confirm('Yakin ingin hapus ID Photo ini?')" class="mt-2">
+        @csrf
+        <div class="flex justify-center">
+            <button class="bg-rose-300 font-bold text-white p-1 rounded-lg">Hapus ID Photo</button>
+        </div>
+    </form>
+    @else
+    <div class="flex justify-center mt-3">
+        <div class="w-3/4 text-slate-200 border-2 rounded-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Zm6-10.125a1.875 1.875 0 1 1-3.75 0 1.875 1.875 0 0 1 3.75 0Zm1.294 6.336a6.721 6.721 0 0 1-3.17.789 6.721 6.721 0 0 1-3.168-.789 3.376 3.376 0 0 1 6.338 0Z" />
+            </svg>
+        </div>
+    </div>
+    {{-- ID PICTURE / PHOTO --}}
+    <form method="POST" action="{{ route('pelanggans.update_id_photo', $pelanggan->id) }}" class="mb-1" enctype="multipart/form-data">
+        @csrf
+        <div id="div-preview-id-photo" class="mt-3 hidden">
+            <div class="flex justify-end">
+                <button type="button" class="bg-rose-300 text-white rounded-full p-1" onclick="removeImage('input-id-photo', 'div-preview-id-photo', 'preview-id-photo', 'label-input-id-photo')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="size-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="flex justify-center py-3 border-2 border-rose-300 rounded">
+                <div class="w-2/3">
+                    <img src="" alt="avatar_foto" id="preview-id-photo" />
+                </div>
+            </div>
+
+            <div class="mt-3 text-center">
+                <button type="submit" class="bg-emerald-300 text-white font-bold rounded-lg p-2">Update ID Photo</button>
+            </div>
+        </div>
+
+        <div id="label-input-id-photo" class="flex justify-center">
+            <label for="input-id-photo" class="border-2 border-indigo-300 rounded p-2 mt-2 hover:cursor-pointer text-slate-500">
+                <div class="flex items-center">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="w-6 h-6"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z"
+                        />
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z"
+                        />
+                    </svg>
+
+                    <div class="ml-1">Foto ID</div>
+                </div>
+            </label>
+        </div>
+        <input
+            id="input-id-photo"
+            name="photo"
+            type="file"
+            accept=".jpg, .jpeg, .png"
+            onchange="previewImage(this.files[0], 'div-preview-id-photo', 'preview-id-photo', 'label-input-id-photo')"
+            class="hidden"
+        />
+
+    </form>
+    @endif
+
+    <div class="mt-5">
+        <h3 class="font-bold text-slate-400">Histori Pembelian</h3>
+    </div>
+    @if (count($surat_pembelians))
+    <div class="mt-2">
+        <table>
+            @foreach ($surat_pembelians as $surat_pembelian)
+            <tr><td><div class="bg-indigo-300 text-white p-1 text-xs rounded">{{ $surat_pembelian->nomor_surat }}</div></td></tr>
+            @endforeach
+        </table>
+    </div>
+    @else
+    <p class="italic text-slate-400">- belum ada pembelian -</p>
+    @endif
 </main>
 
 <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button>
+<script src="{{ asset('js/item.js') }}"></script>
 
 @endsection

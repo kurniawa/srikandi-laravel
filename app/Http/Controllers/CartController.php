@@ -11,6 +11,7 @@ use App\Models\JenisPerhiasan;
 use App\Models\Mainan;
 use App\Models\Mata;
 use App\Models\Menu;
+use App\Models\Saldo;
 use App\Models\SuratPembelian;
 use App\Models\SuratPembelianItem;
 use App\Models\SuratPembelianPhoto;
@@ -207,7 +208,7 @@ class CartController extends Controller
         $time_key = time();
         $pembelian_new = SuratPembelian::create([
             'tanggal_surat' => date('Y-m-d', strtotime("$post[hari]-$post[bulan]-$post[tahun]")) . 'T' . date('H:i:s', $time_key),
-            'no_surat' => uniqid(),
+            'nomor_surat' => uniqid(),
             'time_key' => $time_key,
             'user_id' => Auth::user()->id,
             'username' => Auth::user()->username,
@@ -230,18 +231,73 @@ class CartController extends Controller
         }
         $success_ .= 'Pembelian baru dibuat!';
 
-        $no_surat = SuratPembelian::generate_no_surat($pembelian_new->id, $pelanggan_id, count($post['cart_item_ids']), $time_key);
-        $pembelian_new->no_surat = $no_surat;
+        $nomor_surat = SuratPembelian::generate_nomor_surat($pembelian_new->id, $pelanggan_id, count($post['cart_item_ids']), $time_key);
+        $pembelian_new->nomor_surat = $nomor_surat;
         $pembelian_new->save();
-        $success_ .= '-no_surat, status_bb Pembelian diupdate!-';
+        $success_ .= '-nomor_surat, status_bb Pembelian diupdate!-';
 
-        // CREATE SURAT_PEMBELIAN_ITEM DAN CASHFLOW
+        // CREATE SURAT_PEMBELIAN_ITEM
         foreach ($post['cart_item_ids'] as $cart_item_id) {
-            SuratPembelianItem::create_surat_pembelian_item_and_cashflow($post, $pembelian_new, $cart_item_id, $time_key);
+            SuratPembelianItem::create_surat_pembelian_item_and_cashflow($pembelian_new, $cart_item_id);
         }
         $success_ .= '-Items diinput! Stok diupdate!-';
 
-        // END - CREATE SURAT_PEMBELIAN_ITEM DAN CASHFLOW
+        // END - CREATE SURAT_PEMBELIAN_ITEM
+
+        // CASHFLOW
+        $jumlah = 0;
+        if (isset($post['jumlah_tunai'])) {
+            if ($post['jumlah_tunai'] !== null) {
+                if ((int)$post['sisa_bayar'] < 0) {
+                    $jumlah = ((float)$post['jumlah_tunai'] * 100) + ((float)$post['sisa_bayar'] * 100);
+                } else {
+                    $jumlah = (float)$post['jumlah_tunai'] * 100;
+                }
+                $wallet = Wallet::where('tipe', 'laci')->where('nama', 'cash')->first();
+                $cashflow = Cashflow::create([
+                    'user_id' => Auth::user()->id,
+                    'time_key' => $time_key,
+                    // 'surat_pembelian_id' => $surat_pembelian->id,
+                    // 'surat_pembelian_item_id' => $surat_pembelian_item->id,
+                    // 'nama_transaksi' => $nama_transaksi,
+                    'tipe' => 'pemasukan',
+                    'kategori_wallet' => $wallet->kategori,
+                    'tipe_wallet' => $wallet->tipe,
+                    'nama_wallet' => $wallet->nama,
+                    'jumlah' => $jumlah,
+                ]);
+                // self::create_update_neraca($tipe_wallet, $nama_wallet, $jumlah);
+
+                // CEK Saldo terkait
+
+                Saldo::cek_saldo_wallet_sebelumnya_dan_create_apabila_belum_ada($time_key, $wallet, $jumlah);
+            }
+        }
+
+        if (isset($post['jumlah'])) { // kodingan pada blade sempat di edit, js dipake bareng2, awalnya ini namanya jumlah_non_tunai
+            foreach ($post['jumlah'] as $key => $jumlah_non_tunai) {
+                if ($jumlah_non_tunai !== null) {
+                    $wallet = Wallet::where('tipe', $post['tipe_instansi'][$key])->where('nama', $post['nama_instansi'][$key])->first();
+                    // $tipe_wallet = $post['tipe_instansi'][$key];
+                    // $nama_wallet = $post['nama_instansi'][$key];
+                    $jumlah = $jumlah_non_tunai * 100;
+                    $cashflow = Cashflow::create([
+                        'user_id' => Auth::user()->id,
+                        'time_key' => $time_key,
+                        // 'surat_pembelian_id' => $surat_pembelian->id,
+                        // 'nama_transaksi' => $nama_transaksi,
+                        'tipe' => 'pemasukan',
+                        'kategori_wallet' => $wallet->kategori,
+                        'tipe_wallet' => $wallet->tipe,
+                        'nama_wallet' => $wallet->nama,
+                        'jumlah' => $jumlah,
+                    ]);
+                    // self::create_update_neraca($tipe_wallet, $nama_wallet, $jumlah);
+                    Saldo::cek_saldo_wallet_sebelumnya_dan_create_apabila_belum_ada($time_key, $wallet, $jumlah);
+                }
+            }
+        }
+        // END - CASHFLOW
 
             // // ITEM PHOTO APAKAH DARI YANG BARUSAN DI UPLOAD ATAU DARI FOTO ITEM YANG SUDAH ADA DI DB ATAU TIDAK ADA PHOTO?
             // $files = $request->file();
@@ -278,18 +334,18 @@ class CartController extends Controller
             // END - PHOTO
 
 
-        // UPDATE no_surat dan time_key dan status_bb
+        // UPDATE nomor_surat dan time_key dan status_bb
         // $status_bb_pembelian = null;
         // if ($jumlah_item_perhiasan > 0) {
         //     $status_bb_pembelian = 'ada';
         // }
-        // list($no_surat) = SuratPembelian::generate_no_surat($pembelian_new->id, $pelanggan_id, count($post['item_id']), $time_key);
-        // $no_surat = SuratPembelian::generate_no_surat($pembelian_new->id, $pelanggan_id, count($post['item_id']), $time_key);
-        // $pembelian_new->no_surat = $no_surat;
+        // list($nomor_surat) = SuratPembelian::generate_nomor_surat($pembelian_new->id, $pelanggan_id, count($post['item_id']), $time_key);
+        // $nomor_surat = SuratPembelian::generate_nomor_surat($pembelian_new->id, $pelanggan_id, count($post['item_id']), $time_key);
+        // $pembelian_new->nomor_surat = $nomor_surat;
         // // $pembelian_new->time_key = $time_key;
         // // $pembelian_new->status_bb = $status_bb_pembelian;
         // $pembelian_new->save();
-        // $success_ .= '-no_surat, status_bb Pembelian diupdate!-';
+        // $success_ .= '-nomor_surat, status_bb Pembelian diupdate!-';
 
         // CASHFLOW
         /**

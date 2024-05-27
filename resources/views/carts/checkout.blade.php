@@ -9,7 +9,7 @@
     <div class="w-full">
         <img src="{{ asset("storage/" . $cart->photo_path) }}" alt="item_photo" class="w-full">
     </div>
-    <form action="{{ route('photos.delete_cart_photo', $cart->id) }}" method="POST" onsubmit="return confirm('Anda yakin ingin hapus foto cart ini?')">
+    <form action="{{ route('photos.delete_cart_photo', $cart->id) }}" method="POST" onsubmit="return confirm('Anda yakin ingin hapus foto cart ini?')" class="mt-2">
         @csrf
         <div class="flex justify-center">
             <button type="submit" class="bg-pink-300 text-white rounded p-1 flex gap-2 items-center">

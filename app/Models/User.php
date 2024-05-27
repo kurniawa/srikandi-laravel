@@ -78,4 +78,17 @@ class User extends Authenticatable
 
         return array($pelanggan, $error_cari_data_pelanggan, $feedback);
     }
+
+    static function histori_pembelian($pelanggan) {
+        $surat_pembelians = SuratPembelian::where('pelanggan_username', $pelanggan->username)->get();
+        $arr_surat_pembelian_items = array();
+        foreach ($surat_pembelians as $surat_pembelian) {
+            $surat_pembelian_items = SuratPembelianItem::where('surat_pembelian_id', $surat_pembelian->id)->get();
+            if (count($surat_pembelian_items)) {
+                $arr_surat_pembelian_items[] = $surat_pembelian_items;
+            }
+        }
+
+        return array($surat_pembelians, $arr_surat_pembelian_items);
+    }
 }

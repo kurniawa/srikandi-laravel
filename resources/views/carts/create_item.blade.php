@@ -360,7 +360,7 @@
         </div>
 
         <div class="text-center mt-10">
-            <button type="submit" class="bg-emerald-300 text-white px-3 py-2 rounded font-bold">+ Tambah Item Baru</button>
+            <button type="submit" class="loading-spinner bg-emerald-300 text-white px-3 py-2 rounded font-bold">+ Tambah Item Baru</button>
         </div>
     </form>
 

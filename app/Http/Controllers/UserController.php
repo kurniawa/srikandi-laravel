@@ -99,8 +99,13 @@ class UserController extends Controller
             $id_photo_path = "pelanggans/id_photos/$filename_id_photo";
         }
 
-        $arr_nama = explode(" ", strtolower($post['nama']));
-        $username = implode($arr_nama);
+        $username = null;
+        if (isset($post['username'])) {
+            $username = $post["username"];
+        } else {
+            $arr_nama = explode(" ", strtolower($post['nama']));
+            $username = implode($arr_nama);
+        }
 
         // CEK USERNAME APAKAH SUDAH DIPAKAI
         $username_exist = User::where('username', $username)->first();
@@ -159,7 +164,7 @@ class UserController extends Controller
     function show(User $pelanggan) {
         $user = Auth::user();
         $cart = Cart::where('user_id', $user->id)->first();
-
+        list($surat_pembelians, $arr_surat_pembelian_items) = User::histori_pembelian($pelanggan);
         $data = [
             'menus' => Menu::get(),
             'route_now' => 'pelanggans.show',
@@ -172,6 +177,8 @@ class UserController extends Controller
             'cart' => $cart,
             'user' => $user,
             'pelanggan' => $pelanggan,
+            'surat_pembelians' => $surat_pembelians,
+            'arr_surat_pembelian_items' => $arr_surat_pembelian_items,
             // 'cart_item' => $cart_item,
             // 'related_user' => $related_user,
             // 'peminat_items' => $peminat_items,
@@ -247,6 +254,55 @@ class UserController extends Controller
         $warnings_ .= "-File Profile Picture dihapus-";
 
         $pelanggan->profile_picture_path = null;
+        $pelanggan->save();
+
+        $warnings_ .= "-Data Pelanggan diupdate-";
+
+        $feedback = [
+            "warnings_" => $warnings_,
+        ];
+
+        return back()->with($feedback);
+    }
+
+    function update_id_photo(User $pelanggan, Request $request) {
+        // $post = $request->post();
+        $file_photo = $request->file('photo');
+        // dd($file_photo);
+        // dump($post);
+        // dump($photo);
+        // dd($cart_item);
+
+        $request->validate([
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $success_ = "";
+
+        $time = time();
+        $file_name = $time . "." . $file_photo->extension();
+        $file_photo->storeAs('pelanggans/id_photos', $file_name);
+
+        $pelanggan->id_photo_path = "pelanggans/id_photos/$file_name";
+        $pelanggan->save();
+
+        $success_ .= "-Pelanggan->id_photo_path $pelanggan->id_photo_path created-";
+
+        $feedback = [
+            "success_" => $success_
+        ];
+
+        return back()->with($feedback);
+    }
+
+    function delete_id_photo(User $pelanggan) {
+        $warnings_ = "";
+        if (Storage::exists($pelanggan->id_photo_path)) {
+            Storage::delete($pelanggan->id_photo_path);
+        }
+        $warnings_ .= "-File ID Photo dihapus-";
+
+        $pelanggan->id_photo_path = null;
         $pelanggan->save();
 
         $warnings_ .= "-Data Pelanggan diupdate-";

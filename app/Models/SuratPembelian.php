@@ -11,7 +11,7 @@ class SuratPembelian extends Model
     use HasFactory;
     protected $guarded = ['id'];
 
-    static function generate_no_surat($pembelian_id, $pelanggan_id, $jumlah_item, $time_key)
+    static function generate_nomor_surat($pembelian_id, $pelanggan_id, $jumlah_item, $time_key)
     {
         // $time = time();
         // $last_four_digit = substr(strval($time),-4);
@@ -56,11 +56,11 @@ class SuratPembelian extends Model
         $faktor_bagi = $day + $month + $year;
         $nomor_surat = (int)($time_key / $faktor_bagi);
 
-        $no_surat = "$pembelian_id_formatted.$user_id.$kode_pelanggan.$jumlah_item_formatted-$nomor_surat";
+        $nomor_surat = "$pembelian_id_formatted.$user_id.$kode_pelanggan.$jumlah_item_formatted-$nomor_surat";
         // terdiri dari tiga bagian 11.22.33 -> nomor surat juga harusnya akan selalu unik
 
-        // return array($no_surat, $time_key);
-        return $no_surat;
+        // return array($nomor_surat, $time_key);
+        return $nomor_surat;
         // dump($last_four_digit);
         // dd($time_key);
     }

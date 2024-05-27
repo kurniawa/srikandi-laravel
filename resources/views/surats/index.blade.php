@@ -28,10 +28,10 @@
                 <td colspan="4" class="pb-1">
                     <div id="surat_pembelian_items-{{ $key }}" class="border border-indigo-400 rounded p-2 hidden">
                         <h3 class="font-bold text-slate-500">Data Barang:</h3>
-                        <div class="flex gap-1 justify-between items-center border-y text-slate-400">
+                        <div class="grid grid-cols-12 gap-1 justify-between items-center border-y text-slate-400">
                             @foreach ($surat_pembelian->items as $item)
-                            <span>{{ $item->nama_short }}</span>
-                            <div class="text-xs">
+                            <span class="col-span-8">{{ $item->nama_short }}</span>
+                            <div class="col-span-4 text-xs">
                                 <div>@ {{ my_decimal_format($item->harga_g) }}</div>
                                 <div>o: {{ my_decimal_format($item->ongkos_g) }}</div>
                                 <div>{{ my_decimal_format($item->harga_t) }}</div>
