@@ -16,13 +16,13 @@
     </div>
 
     <h3 class="text-xl font-bold text-slate-500">Foto Transaksi</h3>
-    @if (count($surat_pembelian->photos))
+    @if ($surat_pembelian->photo_path)
     <div class="w-full">
-        <img src="{{ asset("storage/" . $surat_pembelian->photos[0]->path) }}" alt="item_photo" class="w-full">
+        <img src="{{ asset("storage/" . $surat_pembelian->photo_path) }}" alt="item_photo" class="w-full">
     </div>
-    <form action="{{ route('photos.delete_cart_photo', $surat_pembelian->photos[0]->id) }}" method="POST" onsubmit="return confirm('Anda yakin ingin hapus foto cart ini?')">
+    <form action="{{ route('photos.delete_cart_photo', $surat_pembelian->id) }}" method="POST" onsubmit="return confirm('Anda yakin ingin hapus foto cart ini?')" class="mt-2">
         @csrf
-        <div class="flex justify-end">
+        <div class="flex justify-center">
             <button type="submit" class="bg-pink-300 text-white rounded p-1 flex gap-2 items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
@@ -32,7 +32,7 @@
         </div>
     </form>
     @else
-    <form method="POST" action="{{ route('photos.add_cart_photo', $surat_pembelian->photos[0]->id) }}" class="mb-1" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('photos.add_cart_photo', $surat_pembelian->id) }}" class="mb-1" enctype="multipart/form-data">
         @csrf
         <label for="input-photo" class="block hover:cursor-pointer mt-2" id="label-input-photo">
             <div class="flex justify-center">
@@ -98,17 +98,17 @@
 
         <h3 class="text-lg font-bold text-slate-500 mt-5">Data Barang</h3>
         <div class="mt-5">
-            @foreach ($surat_pembelian->items as $key => $item)
+            @foreach ($surat_pembelian->items as $key => $surat_pembelian_item)
             <div class="grid grid-cols-12 border-y py-3">
                 <div class="col-span-3 foto-barang flex items-center">
-                    @if (count($item->photos))
+                    @if ($surat_pembelian_item->photo_path)
                     <div class="w-full flex justify-center">
-                        <img src="{{ asset("storage/" . $item->photos[0]->path) }}" alt="item_photo" class="w-full">
+                        <img src="{{ asset("storage/" . $surat_pembelian_item->photo_path) }}" alt="item_photo" class="w-full">
                     </div>
                     @else
-                    @if (count($item->photos))
+                    @if ($surat_pembelian_item->photo_path)
                     <div class="w-full flex justify-center">
-                        <img src="{{ asset("storage/" . $item->photos[0]->path) }}" alt="item_photo" class="w-full">
+                        <img src="{{ asset("storage/" . $surat_pembelian_item->photo_path) }}" alt="item_photo" class="w-full">
                     </div>
                     @else
                     <div class="w-full flex justify-center text-slate-400">
@@ -122,11 +122,11 @@
                 </div>
                 <div class="col-span-9 flex justify-between">
                     <div>
-                        <div class="font-bold text-slate-500">{{ $item->nama_short }}</div>
-                        <div class="font-bold text-slate-600 text-xs">Rp {{ number_format((string)((float)$item->harga_g / 100), 2, ',', '.') }} / g</div>
-                        <div class="font-bold text-slate-500">Rp {{ number_format((string)((float)$item->harga_t / 100), 2, ',', '.') }}</div>
-                        <input type="hidden" name="harga_t[]" value="{{ (string)((float)$item->harga_t / 100) }}" class="binder_harga_t">
-                        <input type="hidden" name="cart_item_ids[]" value="{{ $item->id }}">
+                        <div class="font-bold text-slate-500">{{ $surat_pembelian_item->nama_short }}</div>
+                        <div class="font-bold text-slate-600 text-xs">Rp {{ my_decimal_format($surat_pembelian_item->harga_g) }} / g</div>
+                        <div class="font-bold text-slate-500">Rp {{ my_decimal_format($surat_pembelian_item->harga_t) }}</div>
+                        <input type="hidden" name="harga_t[]" value="{{ (string)((float)$surat_pembelian_item->harga_t / 100) }}" class="binder_harga_t">
+                        <input type="hidden" name="cart_item_ids[]" value="{{ $surat_pembelian_item->id }}">
                     </div>
                     <div class="w-6 h-6 flex justify-center border font-bold text-slate-500">1</div>
                     {{-- <div class="flex justify-end">
@@ -243,7 +243,7 @@
         </button>
     </form>
 
-    <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button>
+    {{-- <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button> --}}
     {{-- @if ($back === true)
     <div class="fixed bottom-0 left-0">
         <div class="flex">

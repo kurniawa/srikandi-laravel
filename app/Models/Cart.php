@@ -30,10 +30,15 @@ class Cart extends Model
                 'user_id' => $user->id,
             ]);
         }
+        $photo_path = null;
+        if (count($item->item_photos)) {
+            $photo_path = $item->item_photos[0]->photo->path;
+        }
         CartItem::create([
             'cart_id' => $cart->id,
             'item_id' => $item->id,
             'harga_t' => $item->harga_t,
+            'photo_path' => $photo_path,
         ]);
 
         if ($cart->harga_total) {

@@ -72,11 +72,11 @@
         </div>
 
         <div class="text-center mt-10">
-            <button type="submit" class="bg-emerald-300 text-white px-3 py-2 rounded font-bold">Konfirmasi</button>
+            <a href="{{ route('items.show', $item->id) }}" class="loading-spinner bg-rose-300 text-white px-3 py-2 rounded font-bold">Kembali</a>
         </div>
     </div>
 
-    <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button>
+    {{-- <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button> --}}
 </main>
 <script src="{{ asset('js/item.js') }}"></script>
 

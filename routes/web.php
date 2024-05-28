@@ -60,10 +60,10 @@ Route::controller(UserController::class)->group(function(){
 });
 
 Route::controller(ItemController::class)->group(function(){
-    Route::get('/items/{from}/pilih_tipe_barang','pilih_tipe_barang')->name('add_new_item.pilih_tipe_barang')->middleware('level3');
-    Route::get('/items/{from}/{tipe_barang}/create_item','create_item')->name('add_new_item.create')->middleware('level3');
-    Route::post('/items/{from}/store','store')->name('items.store')->middleware('level3');
-    Route::get('/items/{item}/{from}/show','show')->name('items.show')->middleware('auth');
+    Route::get('/items/pilih_tipe_barang','pilih_tipe_barang')->name('add_new_item.pilih_tipe_barang')->middleware('level3');
+    Route::get('/items/{tipe_barang}/create_item','create_item')->name('add_new_item.create')->middleware('level3');
+    Route::post('/items/store','store')->name('items.store')->middleware('level3');
+    Route::get('/items/{item}/show','show')->name('items.show')->middleware('auth');
     Route::get('/items/{item}/edit','edit')->name('items.edit')->middleware('level3');
     Route::post('/items/{item}/update','update')->name('items.update')->middleware('level3');
     Route::post('/items/{item}/delete','delete')->name('items.delete')->middleware('level3');
@@ -87,6 +87,7 @@ Route::controller(CartController::class)->group(function(){
     Route::get('/carts/{cart}/checkout','checkout')->name('carts.checkout')->middleware('level3');
     Route::post('/carts/{cart}/proses_checkout','proses_checkout')->name('carts.proses_checkout')->middleware('level3');
     Route::post('/carts/{item}/{user}/insert_to_cart','insert_to_cart')->name('carts.insert_to_cart')->middleware('level3');
+    // Route::post('/carts/{cart}/delete_cart_photo','delete_cart_photo')->name('photos.delete_cart_photo')->middleware('level3');
 });
 
 Route::controller(CartItemController::class)->group(function(){

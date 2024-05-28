@@ -46,7 +46,7 @@
                 <img id="preview-photo"></img>
             </div>
             <div class="flex justify-center mt-1">
-                <button type="submit" class="bg-emerald-300 text-white border-2 border-emerald-400 font-bold rounded px-3 py-1 text-sm">+ Tambah Photo</button>
+                <button type="submit" class="bg-emerald-300 text-white border-2 border-emerald-400 font-bold rounded px-3 py-1 text-sm animate-pulse">+ Tambah Photo</button>
             </div>
         </div>
     </form>
@@ -235,7 +235,7 @@
         </div>
     </form>
 
-    <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button>
+    {{-- <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button> --}}
     {{-- @if ($back === true)
     <div class="fixed bottom-0 left-0">
         <div class="flex">

@@ -149,7 +149,7 @@ class PhotoController extends Controller
 
     }
 
-    function delete_cart_photo(CartItem $cart) {
+    function delete_cart_photo(Cart $cart) {
         $warnings_ = "";
         if (Storage::exists($cart->photo_path)) {
             Storage::delete($cart->photo_path);

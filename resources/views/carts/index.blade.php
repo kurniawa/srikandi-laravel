@@ -99,7 +99,7 @@
     @endforeach
     @endif
 
-    <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button>
+    {{-- <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button> --}}
     {{-- @if ($back === true)
     <div class="fixed bottom-0 left-0">
         <div class="flex">

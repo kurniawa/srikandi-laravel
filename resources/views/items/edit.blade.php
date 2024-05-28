@@ -534,7 +534,7 @@
         <button class="bg-rose-300 text-white px-3 py-2 rounded font-bold" onclick="history.back()">Cancel</button>
     </div>
 
-    <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button>
+    {{-- <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button> --}}
 </main>
 
 <script src="{{ asset('js/item.js') }}"></script>

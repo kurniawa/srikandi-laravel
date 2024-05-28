@@ -83,7 +83,7 @@
         </form>
         @endif
     </div>
-    <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button>
+    {{-- <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button> --}}
 </main>
 
 <script src="{{ asset('js/item.js') }}"></script>

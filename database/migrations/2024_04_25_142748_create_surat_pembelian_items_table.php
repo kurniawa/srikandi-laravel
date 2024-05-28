@@ -39,7 +39,7 @@ return new class extends Migration
             $table->string('deskripsi')->nullable();
             $table->string('keterangan')->nullable();
             // $table->string('status', 20)->nullable(); // ready, terjual, cuci, dll
-            $table->string('item_photo')->nullable();
+            $table->string('photo_path')->nullable();
             $table->smallInteger('jumlah')->default(1); // smallint    | 2 bytes  -32768 to 32767                              0 to 65535
 
             // Berikutnya adalah kolom yang berkaitan dengan penjualan

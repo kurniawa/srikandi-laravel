@@ -20,6 +20,7 @@ use App\Models\User;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class CartController extends Controller
 {
@@ -113,6 +114,23 @@ class CartController extends Controller
         // dump($cart);
         // dd($post);
 
+        // PENGECEKAN File Storage Photo
+
+        // foreach ($post['cart_item_ids'] as $cart_item_id) {
+        //     $cart_item = CartItem::find($cart_item_id);
+        //     if ($cart_item->photo_path) {
+        //         dump($cart_item->photo_path);
+        //         dump(Storage::exists($cart_item->photo_path));
+        //     } else {
+        //         if (count($cart_item->item->item_photos)) {
+        //             dump($cart_item->item->item_photos[0]->photo);
+        //             dump(Storage::exists($cart_item->item->item_photos[0]->photo));
+        //         }
+        //     }
+        // }
+        // dd('stop');
+        
+        // END - PENGECEKAN File Storage Photo
 
         $success_ = '';
         $warnings_ = '';
@@ -206,6 +224,16 @@ class CartController extends Controller
         // dd($status_bayar);
 
         $time_key = time();
+        $photo_path = null;
+        if ($cart->photo_path) {
+            if (Storage::exists($cart->photo_path)) {
+                $exploded_filenamepath = explode("/", $cart->photo_path);
+                $name_index = count($exploded_filenamepath) - 1;
+                $filename = $exploded_filenamepath[$name_index];
+                $photo_path = "surat_pembelians/photos/$filename";
+                Storage::move($cart->photo_path, $photo_path);
+            }
+        }
         $pembelian_new = SuratPembelian::create([
             'tanggal_surat' => date('Y-m-d', strtotime("$post[hari]-$post[bulan]-$post[tahun]")) . 'T' . date('H:i:s', $time_key),
             'nomor_surat' => uniqid(),
@@ -221,14 +249,9 @@ class CartController extends Controller
             'total_bayar' => (string)$total_bayar,
             'sisa_bayar' => (string)$sisa_bayar,
             'status_bayar' => $status_bayar,
+            'photo_path' => $photo_path,
         ]);
 
-        if ($cart->photo_path) {
-            SuratPembelianPhoto::create([
-                'surat_pembelian_id' => $pembelian_new->id,
-                'path' => $cart->photo_path
-            ]);
-        }
         $success_ .= 'Pembelian baru dibuat!';
 
         $nomor_surat = SuratPembelian::generate_nomor_surat($pembelian_new->id, $pelanggan_id, count($post['cart_item_ids']), $time_key);
@@ -238,7 +261,7 @@ class CartController extends Controller
 
         // CREATE SURAT_PEMBELIAN_ITEM
         foreach ($post['cart_item_ids'] as $cart_item_id) {
-            SuratPembelianItem::create_surat_pembelian_item_and_cashflow($pembelian_new, $cart_item_id);
+            SuratPembelianItem::create_surat_pembelian_item($pembelian_new, $cart_item_id);
         }
         $success_ .= '-Items diinput! Stok diupdate!-';
 
@@ -257,7 +280,7 @@ class CartController extends Controller
                 $cashflow = Cashflow::create([
                     'user_id' => Auth::user()->id,
                     'time_key' => $time_key,
-                    // 'surat_pembelian_id' => $surat_pembelian->id,
+                    'surat_pembelian_id' => $pembelian_new->id,
                     // 'surat_pembelian_item_id' => $surat_pembelian_item->id,
                     // 'nama_transaksi' => $nama_transaksi,
                     'tipe' => 'pemasukan',
@@ -284,7 +307,7 @@ class CartController extends Controller
                     $cashflow = Cashflow::create([
                         'user_id' => Auth::user()->id,
                         'time_key' => $time_key,
-                        // 'surat_pembelian_id' => $surat_pembelian->id,
+                        'surat_pembelian_id' => $pembelian_new->id,
                         // 'nama_transaksi' => $nama_transaksi,
                         'tipe' => 'pemasukan',
                         'kategori_wallet' => $wallet->kategori,
@@ -373,6 +396,13 @@ class CartController extends Controller
 
         // HAPUS CART
         if (count($cart->cart_items) === 0) {
+            // Sebelum dihapus cari dulu apakah ada foto transaksi?
+            if ($cart->photo_path) {
+                if (Storage::exists($cart->photo_path)) {
+                    Storage::delete($cart->photo_path);
+                }
+                $success_ .= "-Foto Transaksi dihapus-";
+            }
             $cart->delete();
             $success_ .= '-Cart dihapus!-';
         }
@@ -393,6 +423,10 @@ class CartController extends Controller
         $feedback = [
             'success_' => $success_
         ];
-        return redirect()->route('carts.index', $user->id)->with($feedback);
+        return back()->with($feedback);
+    }
+
+    function delete_cart_photo(Cart $cart) {
+
     }
 }

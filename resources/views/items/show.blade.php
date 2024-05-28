@@ -184,10 +184,10 @@
         @endif --}}
 
         <div class="mt-12">
-            <form action="{{ route('carts.insert_to_cart', [$item->id, $user->id]) }}" method="POST" class="mt-2" onsubmit="showLoadingSpinner()">
+            <form action="{{ route('carts.insert_to_cart', [$item->id, $user->id]) }}" method="POST" class="mt-2">
                 @csrf
                 @if ((int)$item->stock >= 1)
-                <button type="submit" class="mt-2 py-2 bg-emerald-400 rounded w-full text-white flex items-center justify-center gap-1 font-bold">
+                <button type="submit" class="loading-spinner mt-2 py-2 bg-emerald-400 rounded w-full text-white flex items-center justify-center gap-1 font-bold">
                     <span>+ Keranjang</span>
                 </button>
                 @else
@@ -211,7 +211,7 @@
     </div>
 </main>
 
-<x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button>
+{{-- <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button> --}}
 
 <script>
     function toggleWarna(toggle_button, id_to_toggle, class_warna) {

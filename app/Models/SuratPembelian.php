@@ -73,10 +73,6 @@ class SuratPembelian extends Model
         return $this->hasMany(Cashflow::class);
     }
 
-    function photos() {
-        return $this->hasMany(SuratPembelianPhoto::class);
-    }
-
     function user() {
         return $this->hasOne(User::class, 'id', 'user_id');
     }

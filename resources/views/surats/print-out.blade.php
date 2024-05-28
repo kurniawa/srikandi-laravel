@@ -39,10 +39,10 @@
             </div>
         </div>
         {{-- FOTO TRANSAKSI --}}
-        <div class="border-2 border-slate-200 rounded-lg max-h-32">
+        <div class="w-1/3 flex justify-end">
             @if (count($surat_pembelian->photos))
-            <div class="w-full">
-                <img src="{{ asset("storage/" . $surat_pembelian->photos[0]->path) }}" alt="item_photo" class="h-full">
+            <div class="w-4/5 border-2 border-slate-200 rounded-lg overflow-hidden p-1">
+                <img src="{{ asset("storage/" . $surat_pembelian->photos[0]->path) }}" alt="item_photo" class="w-full">
             </div>
             @else
             <label for="input-photo" class="block hover:cursor-pointer mt-2" id="label-input-photo">
@@ -156,16 +156,19 @@
         <div class="text-xs font-bold text-red-400">PERHATIAN</div>
         <div class="pl-3">
             <ol class="list-decimal list-outside text-xs text-red-400">
-                <li>E-invoice ini akan tercatat dalam sistem. Selama pelanggan terdaftar dalam sistem, maka penjualan kembali tanpa surat, masih bisa dilakukan. Terutama apabila penjualan tidak diwakilkan oleh orang lain.</li>
+                <li>E-invoice ini tercatat/tersimpan dalam sistem. Selama pelanggan terdaftar dalam sistem, maka penjualan kembali tanpa surat masih bisa dilakukan apabila foto transaksi cukup jelas dan sesuai dengan pemilik surat/barang.</li>
                 <li>Perhiasan telah ditimbang ulang dan disaksikan oleh pembeli. Keakuratan hingga 2 angka di belakang koma.</li>
-                <li>Pada saat penjualan kembali, berat perhiasan bisa saja berkurang/menyusut. Penyebab penyusutan diantaranya: gesekan, barang rusak sehingga ada bagian yang hilang, dll.</li>
+                <li>Pada saat penjualan kembali, berat perhiasan bisa saja berkurang/menyusut. Penyebab penyusutan diantaranya: gesekan, barang rusak sehingga ada bagian yang hilang, dll. Apabila terjadi penyusutan yang cukup signifikan, maka harga jual kembali pun akan disesuaikan.</li>
             </ol>
 
         </div>
     </div>
 
-    <div class="mt-5 text-center no-print">
+    <div class="mt-5 flex justify-center no-print">
         <button class="bg-emerald-300 text-white rounded-lg border-2 border-emerald-400 px-3 py-1" onclick="window.print(); return false;">Cetak</button>
+    </div>
+    <div class="mt-2 flex justify-center no-print">
+        <button class="bg-rose-300 text-white rounded-lg border-2 border-rose-400 px-3 py-1" onclick="window.history.back(); return false;">Kembali</button>
     </div>
 </main>
 

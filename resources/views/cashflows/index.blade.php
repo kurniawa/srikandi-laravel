@@ -41,6 +41,6 @@
             </tr>
             @endforeach
         </table>
-        <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button>
+        {{-- <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button> --}}
     </main>
 @endsection

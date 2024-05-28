@@ -257,7 +257,7 @@
 
 </main>
 
-<x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button>
+{{-- <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button> --}}
 <script src="{{ asset('js/item.js') }}"></script>
 
 @endsection

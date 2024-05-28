@@ -5,13 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class SuratPembelianItem extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
 
-    static function create_surat_pembelian_item_and_cashflow($surat_pembelian, $cart_item_id) {
+    static function create_surat_pembelian_item($surat_pembelian, $cart_item_id) {
         // dd($cart_item_id);
         $cart_item = CartItem::find($cart_item_id);
         $stock = $cart_item->item->stock - 1;
@@ -50,7 +51,26 @@ class SuratPembelianItem extends Model
         /**
          * ITEM PHOTO
          */
-        $item_photo = null;
+        $photo_path = null;
+        if ($cart_item->photo_path) {
+            if (Storage::exists($cart_item->photo_path)) {
+                $exploded_filenamepath = explode("/", $cart_item->photo_path);
+                $name_index = count($exploded_filenamepath) - 1;
+                $filename = $exploded_filenamepath[$name_index];
+                $photo_path = "surat_pembelian_items/photos/$filename";
+                Storage::move($cart_item->photo_path, $photo_path);
+            }
+        } else {
+            if (count($cart_item->item->item_photos)) {
+                if (Storage::exists($cart_item->item->item_photos[0]->photo->path)) {
+                    $exploded_filenamepath = explode("/", $cart_item->item->item_photos[0]->photo->path);
+                    $name_index = count($exploded_filenamepath) - 1;
+                    $filename = $exploded_filenamepath[$name_index];
+                    $photo_path = "surat_pembelian_items/photos/$filename";
+                    Storage::copy($cart_item->item->item_photos[0]->photo, $photo_path);
+                }
+            }
+        }
         // if ($cart_item->item->tipe_barang === 'perhiasan' || $cart_item->item->tipe_barang === 'LM') {
         //     $item_photo = $cart_item->item->photo_utama[0]->path;
         // }
@@ -83,7 +103,7 @@ class SuratPembelianItem extends Model
             'barcode' => $cart_item->item->barcode,
             'deskripsi' => $cart_item->item->deskripsi,
             'keterangan' => $cart_item->item->keterangan,
-            'item_photo' => $item_photo,
+            'photo_path' => $photo_path,
             'jumlah' => $cart_item->jumlah,
             // Data penjualan udah diisi juga sebagian, selama item memang bisa BB
             'status_bb' => $status_bb,
@@ -99,12 +119,6 @@ class SuratPembelianItem extends Model
             'keterangan_lain' => $keterangan_lain,
         ]);
 
-        if ($cart_item->photo_path) {
-            SuratPembelianItemPhoto::create([
-                'surat_pembelian_item_id' => $surat_pembelian_item->id,
-                'path' => $cart_item->photo_path,
-            ]);
-        }
 
         $cart_item->delete();
     }
@@ -113,7 +127,4 @@ class SuratPembelianItem extends Model
         return $this->hasOne(Item::class, "id", "item_id");
     }
 
-    function photos() {
-        return $this->hasMany(SuratPembelianItemPhoto::class);
-    }
 }

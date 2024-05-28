@@ -33,6 +33,7 @@ return new class extends Migration
             // $table->enum('status_terima_bb',['lunas','belum-lunas'])->nullable();
             $table->timestamp('tanggal_bb')->nullable(); // tanggal kapan terjual semua
             $table->foreignId('updated_by')->nullable()->constrained('users','id')->onDelete('set null');
+            $table->string('photo_path')->nullable();
             $table->timestamps();
         });
     }

@@ -21,7 +21,8 @@ use Illuminate\Support\Facades\Storage;
 
 class ItemController extends Controller
 {
-    function pilih_tipe_barang($from) {
+    // function pilih_tipe_barang($from) {
+    function pilih_tipe_barang() {
         // dd($from);
         $cart = Cart::where('user_id', Auth::user()->id)->first();
 
@@ -34,7 +35,7 @@ class ItemController extends Controller
             'parent_route' => 'home',
             // 'spk_menus' => Menu::get_spk_menus(),
             // 'user' => Auth::user(),
-            'from' => $from,
+            // 'from' => $from,
             'back' => true,
             'backRoute' => 'carts.index',
             'backRouteParams' => [Auth::user()->id],
@@ -44,7 +45,8 @@ class ItemController extends Controller
         return view('carts.pilih_tipe_barang', $data);
     }
 
-    function create_item($from, $tipe_barang) {
+    // function create_item($from, $tipe_barang) {
+    function create_item($tipe_barang) {
         // dump($from);
         // dd($tipe_barang);
         $time = time();
@@ -65,15 +67,15 @@ class ItemController extends Controller
             // 'goback' => 'home',
             // 'user_role' => $user_role,
             'menus' => Menu::get(),
-            'route_now' => 'home',
+            'route_now' => 'items.create_item',
             'profile_menus' => Menu::get_profile_menus(Auth::user()),
-            'parent_route' => 'home',
-            'back' => true,
-            'backRoute' => 'add_new_item.pilih_tipe_barang',
-            'backRouteParams' => [$from],
+            // 'parent_route' => 'home',
+            // 'back' => true,
+            // 'backRoute' => 'add_new_item.pilih_tipe_barang',
+            // 'backRouteParams' => [$from],
             // 'spk_menus' => Menu::get_spk_menus(),
             // 'user' => Auth::user(),
-            'from' => $from,
+            // 'from' => $from,
             'tipe_barang' => $tipe_barang,
             'tipe_perhiasans' => $tipe_perhiasans,
             'jenis_perhiasans' => $jenis_perhiasans,
@@ -88,7 +90,8 @@ class ItemController extends Controller
         return view('carts.create_item', $data);
     }
 
-    function store($from, Request $request) {
+    // function store($from, Request $request) {
+    function store(Request $request) {
         $post = $request->post();
         // dump($from);
         // dd($post);
@@ -247,26 +250,28 @@ class ItemController extends Controller
 
         $success_ = '-item baru telah diinput-';
 
-        $user = Auth::user();
-        if ($from === 'cart') {
-            // MULAI INPUT KE CART
-            Cart::insert_to_cart_helper($item_new, $user);
-            $success_ .= '-item telah diinput ke cart-';
-            // END - INPUT KE CART
-        }
+        // $user = Auth::user();
+        // if ($from === 'cart') {
+        //     // MULAI INPUT KE CART
+        //     Cart::insert_to_cart_helper($item_new, $user);
+        //     $success_ .= '-item telah diinput ke cart-';
+        //     // END - INPUT KE CART
+        // }
 
         $feedback = [
             'success_' => $success_,
         ];
 
-        if ($from === 'cart') {
-            return redirect()->route('carts.index', $user->id)->with($feedback);
-        } else {
-            return redirect()->route('items.show', [$item_new->id, 'home'])->with($feedback);
-        }
+        return redirect()->route('items.show', [$item_new->id, 'home'])->with($feedback);
+
+        // if ($from === 'cart') {
+        //     return redirect()->route('carts.index', $user->id)->with($feedback);
+        // } else {
+        //     return redirect()->route('items.show', [$item_new->id, 'home'])->with($feedback);
+        // }
     }
 
-    function show(Item $item, $from) {
+    function show(Item $item) {
         // dd($item);
         // $item_photos = ItemPhoto::where('item_id', $item->id)->orderBy('photo_index')->get();
         $user = Auth::user();
@@ -287,12 +292,12 @@ class ItemController extends Controller
 
         $data = [
             'menus' => Menu::get(),
-            'route_now' => 'home',
+            'route_now' => 'items.show',
             'profile_menus' => Menu::get_profile_menus(Auth::user()),
             'parent_route' => 'home',
-            'back' => true,
-            'backRoute' => $from,
-            'backRouteParams' => [$user->id],
+            // 'back' => true,
+            // 'backRoute' => $from,
+            // 'backRouteParams' => [$user->id],
             // 'spk_menus' => Menu::get_spk_menus(),
             'item' => $item,
             // 'item_photos' => $item_photos,

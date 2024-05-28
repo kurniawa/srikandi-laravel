@@ -7,6 +7,7 @@ use App\Models\CartItem;
 use App\Models\Menu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class CartItemController extends Controller
 {
@@ -37,7 +38,13 @@ class CartItemController extends Controller
         // dump($cart);
         // dd($cart_item);
         $dangers_ = "";
-
+        // Cek apakah cart_item ini ada fotonya?
+        if ($cart_item->photo_path) {
+            if (Storage::exists($cart_item->photo_path)) {
+                Storage::delete($cart_item->photo_path);
+            }
+            $dangers_ .= "-Foto CartItem dihapus-";
+        }
         $cart_item->delete();
         $dangers_ .= "-CartItem dihapus-";
 

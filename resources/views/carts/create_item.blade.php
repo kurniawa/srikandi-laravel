@@ -4,7 +4,8 @@
     <x-errors-any></x-errors-any>
     <x-validation-feedback></x-validation-feedback>
 
-    <form action="{{ route('items.store', $from) }}" method="POST">
+    {{-- <form action="{{ route('items.store', $from) }}" method="POST"> --}}
+    <form action="{{ route('items.store') }}" method="POST">
         @csrf
         <div class="p-2">
             <div class="grid grid-cols-2 gap-2">
@@ -364,7 +365,7 @@
         </div>
     </form>
 
-    <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button>
+    {{-- <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button> --}}
 </main>
 
 <script>
