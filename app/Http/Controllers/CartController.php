@@ -129,7 +129,7 @@ class CartController extends Controller
         //     }
         // }
         // dd('stop');
-        
+
         // END - PENGECEKAN File Storage Photo
 
         $success_ = '';
@@ -240,7 +240,7 @@ class CartController extends Controller
             'time_key' => $time_key,
             'user_id' => Auth::user()->id,
             'username' => Auth::user()->username,
-            'pelanggan_id' => $cart->pelanggan_id,
+            'pelanggan_id' => $pelanggan_id,
             'pelanggan_nama' => $pelanggan_nama,
             'pelanggan_username' => $pelanggan_username,
             'pelanggan_nik' => $pelanggan_nik,
@@ -426,7 +426,4 @@ class CartController extends Controller
         return back()->with($feedback);
     }
 
-    function delete_cart_photo(Cart $cart) {
-
-    }
 }

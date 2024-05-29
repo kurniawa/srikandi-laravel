@@ -85,6 +85,7 @@
         </div>
     </div> --}}
 
+
     <x-form-cari-data-pelanggan :pelangganid="$pelangganid" :pelanggannama="$pelanggannama" :pelangganusername="$pelangganusername" :pelanggannik="$pelanggannik" :route="$route_cari_data_pelanggan" :params="$surat_pembelian->id"></x-form-cari-data-pelanggan>
 
     <div>

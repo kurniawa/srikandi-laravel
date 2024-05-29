@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\Menu;
+use App\Models\Saldo;
 use App\Models\SuratPembelian;
 use App\Models\User;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class SuratPembelianController extends Controller
 {
@@ -199,6 +201,51 @@ class SuratPembelianController extends Controller
     }
 
     function delete(SuratPembelian $surat_pembelian) {
-        dd($surat_pembelian);
+        // dd($surat_pembelian);
+        $dangers_ = "";
+        foreach ($surat_pembelian->items as $surat_pembelian_item) {
+            if ($surat_pembelian_item->photo_path) {
+                if (Storage::exists($surat_pembelian_item->photo_path)) {
+                    Storage::delete($surat_pembelian_item->photo_path);
+                    $dangers_ .= "-SPI-Photo $surat_pembelian->id dihapus-";
+                }
+            }
+            $surat_pembelian_item->delete();
+            $dangers_ .= "-SPI $surat_pembelian_item->id dihapus-";
+        }
+
+        foreach ($surat_pembelian->cashflows as $cashflow) {
+            $cashflow_date = date("Y-m-d", strtotime($cashflow->created_at));
+            $last_hour_of_date = date("Y-m-d H:i:s", strtotime("$cashflow_date 23:59:59"));
+
+            $saldo = Saldo::where('kategori_wallet', $cashflow->kategori_wallet)->where('tipe_wallet', $cashflow->tipe_wallet)->where('nama_wallet', $cashflow->nama_wallet)->whereBetween("created_at", [$cashflow_date, $last_hour_of_date])->latest()->first();
+            $jumlah_saldo = (int)$saldo->saldo_akhir;
+            if ($cashflow->tipe == 'pengeluaran') {
+                $saldo->saldo_akhir = (string)($jumlah_saldo + (int)$cashflow->jumlah);
+                $saldo->save();
+            } else if ($cashflow->tipe == 'pemasukan') {
+                $saldo->saldo_akhir = (string)($jumlah_saldo - (int)$cashflow->jumlah);
+                $saldo->save();
+            }
+            $dangers_ .= "-Saldo diupdate-";
+        }
+
+        if ($surat_pembelian->photo_path) {
+            if ($surat_pembelian->photo_path) {
+                if (Storage::exists($surat_pembelian->photo_path)) {
+                    Storage::delete($surat_pembelian->photo_path);
+                    $dangers_ .= "-SP-Photo $surat_pembelian->id dihapus-";
+                }
+            }
+        }
+
+        $surat_pembelian->delete();
+        $dangers_ .= "-SP $surat_pembelian->id dihapus-";
+
+        $feedback = [
+            "dangers_" => $dangers_,
+        ];
+
+        return redirect()->route('surat_pembelian.index')->with($feedback);
     }
 }

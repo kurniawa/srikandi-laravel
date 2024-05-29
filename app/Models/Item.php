@@ -31,6 +31,6 @@ class Item extends Model
     }
 
     function item_photos() {
-        return $this->hasMany(ItemPhoto::class, 'photo_id', 'id')->orderBy('photo_index');
+        return $this->hasMany(ItemPhoto::class)->orderBy('photo_index');
     }
 }

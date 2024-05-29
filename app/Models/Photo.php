@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class Photo extends Model
@@ -14,11 +15,12 @@ class Photo extends Model
 
     static function cek_photo_path($folder, $extension) {
         $time = time();
+        $user = Auth::user();
         $file_exist = true;
         $file_name = "";
         $photo_path = "";
         while ($file_exist) {
-            $file_name = $time . "." . $extension;
+            $file_name = "$time-$user->id." . $extension;
             $photo_path = "$folder/$file_name";
 
             if (Storage::exists($photo_path)) {

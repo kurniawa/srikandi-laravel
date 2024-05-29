@@ -628,4 +628,22 @@ class ItemController extends Controller
         return redirect()->route('home')->with($feedback);
     }
 
+    function update_stock(Item $item, Request $request) {
+        $post = $request->post();
+        $request->validate([
+            'stock' => 'required|numeric'
+        ]);
+        $success_ = "";
+
+        $item->stock = $post['stock'];
+        $item->save();
+        $success_ .= "-Stock diupdate-";
+        $feedback = [
+            'success_' => $success_
+        ];
+
+        return back()->with($feedback);
+
+    }
+
 }

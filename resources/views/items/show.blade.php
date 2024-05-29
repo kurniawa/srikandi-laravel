@@ -58,7 +58,16 @@
         </div>
         <div class="text-slate-500 flex justify-between">
             <span>@ {{ number_format((int)$item->harga_g / 100,2,',','.') }}</span>
-            <span>stok: {{ $item->stock }}</span>
+            <div>
+                <span onclick="toggle_element('form-update-stock')">stok: {{ $item->stock }}</span>
+                <form action="{{ route('items.update_stock', $item->id) }}" method="POST" class="mb-3 hidden" id="form-update-stock">
+                    @csrf
+                    <input type="number" name="stock" id="stock" value="{{ $item->stock }}" class="w-12 rounded p-1">
+                    <div class="mt-2">
+                        <button class="bg-emerald-300 text-white font-bold rounded-lg px-1">Ubah</button>
+                    </div>
+                </form>
+            </div>
         </div>
         <div class="flex justify-between items-center">
             <div class="font-bold text-xl text-slate-600">

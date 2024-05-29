@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 
 class Cart extends Model
 {
@@ -32,6 +33,14 @@ class Cart extends Model
         }
         $photo_path = null;
         if (count($item->item_photos)) {
+            if (Storage::exists($item->item_photos[0]->photo->path)) {
+                $time = time();
+                $exploded_path = explode(".", $item->item_photos[0]->photo->path);
+                $file_extension = $exploded_path[count($exploded_path) - 1];
+                $filename = "$time-$user->id.$file_extension";
+                $photo_path = "cart_items/photos/$filename";
+                Storage::copy($item->item_photos[0]->photo->path, $photo_path);
+            }
             $photo_path = $item->item_photos[0]->photo->path;
         }
         CartItem::create([

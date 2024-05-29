@@ -40,9 +40,9 @@
         </div>
         {{-- FOTO TRANSAKSI --}}
         <div class="w-1/3 flex justify-end">
-            @if (count($surat_pembelian->photos))
+            @if ($surat_pembelian->photo_path)
             <div class="w-4/5 border-2 border-slate-200 rounded-lg overflow-hidden p-1">
-                <img src="{{ asset("storage/" . $surat_pembelian->photos[0]->path) }}" alt="item_photo" class="w-full">
+                <img src="{{ asset("storage/" . $surat_pembelian->photo_path) }}" alt="item_photo" class="w-full">
             </div>
             @else
             <label for="input-photo" class="block hover:cursor-pointer mt-2" id="label-input-photo">
@@ -70,14 +70,9 @@
         <div class="grid grid-cols-12 border-y py-3">
             <div class="col-span-3 foto-barang flex items-center">
                 <div class="text-slate-500">{{ $key + 1 }}.</div>
-                @if (count($item->photos))
+                @if ($item->photo_path)
                 <div class="w-full flex justify-center">
-                    <img src="{{ asset("storage/" . $item->photos[0]->path) }}" alt="item_photo" class="w-full">
-                </div>
-                @else
-                @if (count($item->item->photos))
-                <div class="w-full flex justify-center">
-                    <img src="{{ asset("storage/" . $item->item->photos[0]->path) }}" alt="item_photo" class="w-full">
+                    <img src="{{ asset("storage/" . $item->photo_path) }}" alt="item_photo" class="w-full">
                 </div>
                 @else
                 <div class="w-full flex justify-center text-slate-400">
@@ -86,7 +81,6 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" />
                     </svg>
                 </div>
-                @endif
                 @endif
             </div>
             <div class="col-span-9 flex justify-between items-center">

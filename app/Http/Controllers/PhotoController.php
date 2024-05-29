@@ -8,6 +8,7 @@ use App\Models\Item;
 use App\Models\ItemPhoto;
 use App\Models\Photo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class PhotoController extends Controller
@@ -27,7 +28,8 @@ class PhotoController extends Controller
         $success_ = "";
 
         $time = time();
-        $file_name = $time . "." . $file_photo->extension();
+        $user = Auth::user();
+        $file_name = "$time-$user->id" . "." . $file_photo->extension();
         $file_photo->storeAs('items/photos', $file_name);
 
         $photo = Photo::create([
@@ -84,7 +86,8 @@ class PhotoController extends Controller
         $success_ = "";
 
         $time = time();
-        $file_name = $time . "." . $file_photo->extension();
+        $user = Auth::user();
+        $file_name = "$time-$user->id." . $file_photo->extension();
         $file_photo->storeAs('cart_items/photos', $file_name);
 
         $cart_item->photo_path = "cart_items/photos/$file_name";

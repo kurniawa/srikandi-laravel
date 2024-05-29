@@ -69,6 +69,7 @@ Route::controller(ItemController::class)->group(function(){
     Route::post('/items/{item}/delete','delete')->name('items.delete')->middleware('level3');
     Route::post('/items/{item}/{item_photo}/{photo}/delete_photo','delete_photo')->name('items.delete_photo')->middleware('level3');
     Route::get('/items/{item}/add_photo','add_photo')->name('items.add_photo')->middleware('level3');
+    Route::post('/items/{item}/update_stock','update_stock')->name('items.update_stock')->middleware('level3');
     // Route::post('/items/{item}/mau','mau')->name('items.mau');
     // Route::post('/items/{item}/{peminat_item}/hapus_peminat','hapus_peminat')->name('items.hapus_peminat');
 });
@@ -100,7 +101,7 @@ Route::controller(SuratPembelianController::class)->group(function(){
     Route::get('/surat_pembelian/{surat_pembelian}/show','show')->name('surat_pembelian.show')->middleware('level3');
     Route::post('/surat_pembelian/{surat_pembelian}/update_data_pelanggan','update_data_pelanggan')->name('surat_pembelian.update_data_pelanggan')->middleware('level3');
     Route::get('/surat_pembelian/{surat_pembelian}/print_out','print_out')->name('surat_pembelian.print_out')->middleware('level3');
-    Route::get('/surat_pembelian/{surat_pembelian}/delete','delete')->name('surat_pembelian.delete')->middleware('level3');
+    Route::get('/surat_pembelian/{surat_pembelian}/delete','delete')->name('surat_pembelian.delete')->middleware('level5');
 });
 
 Route::controller(CashflowController::class)->group(function(){

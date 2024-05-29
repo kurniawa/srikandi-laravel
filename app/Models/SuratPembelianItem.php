@@ -52,22 +52,24 @@ class SuratPembelianItem extends Model
          * ITEM PHOTO
          */
         $photo_path = null;
+        $time = time();
+        $user = Auth::user();
         if ($cart_item->photo_path) {
             if (Storage::exists($cart_item->photo_path)) {
-                $exploded_filenamepath = explode("/", $cart_item->photo_path);
-                $name_index = count($exploded_filenamepath) - 1;
-                $filename = $exploded_filenamepath[$name_index];
+                $exploded_path = explode(".", $cart_item->photo_path);
+                $file_extension = $exploded_path[count($exploded_path) - 1];
+                $filename = "$time-$user->id.$file_extension";
                 $photo_path = "surat_pembelian_items/photos/$filename";
                 Storage::move($cart_item->photo_path, $photo_path);
             }
         } else {
             if (count($cart_item->item->item_photos)) {
                 if (Storage::exists($cart_item->item->item_photos[0]->photo->path)) {
-                    $exploded_filenamepath = explode("/", $cart_item->item->item_photos[0]->photo->path);
-                    $name_index = count($exploded_filenamepath) - 1;
-                    $filename = $exploded_filenamepath[$name_index];
+                    $exploded_path = explode(".", $$cart_item->item->item_photos[0]->photo->path);
+                    $file_extension = $exploded_path[count($exploded_path) - 1];
+                    $filename = "$time-$user->id.$file_extension";
                     $photo_path = "surat_pembelian_items/photos/$filename";
-                    Storage::copy($cart_item->item->item_photos[0]->photo, $photo_path);
+                    Storage::copy($cart_item->item->item_photos[0]->photo->path, $photo_path);
                 }
             }
         }

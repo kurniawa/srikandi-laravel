@@ -76,6 +76,8 @@ class HomeController extends Controller
             'cart' => $cart,
             'items' => $items,
         ];
+        // dump($items[0]);
+        // dd($items[0]->item_photos);
         return view('app', $data)->with($feedback);
     }
 }
