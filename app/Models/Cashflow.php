@@ -14,7 +14,7 @@ class Cashflow extends Model
         return $this->hasOne(User::class, "id", "user_id");
     }
 
-    function surat_pembelian_item() {
-        return $this->hasOne(SuratPembelianItem::class, "id", "surat_pembelian_item_id");
+    function surat_pembelian() {
+        return $this->hasOne(SuratPembelian::class, 'id', 'surat_pembelian_id');
     }
 }

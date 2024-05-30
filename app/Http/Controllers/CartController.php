@@ -110,7 +110,6 @@ class CartController extends Controller
 
     function proses_checkout(Cart $cart, Request $request) {
         $post = $request->post();
-        $user = Auth::user();
         // dump($cart);
         // dd($post);
 
@@ -208,6 +207,7 @@ class CartController extends Controller
             $request->validate(['error'=>'required'],['error.required'=>$feedback_cek_pelanggan]);
         }
 
+        $user = Auth::user();
         $pelanggan_id = null;
         $pelanggan_nama = null;
         $pelanggan_username = null;
@@ -217,6 +217,7 @@ class CartController extends Controller
             $pelanggan_nama = $pelanggan->nama;
             $pelanggan_username = $pelanggan->username;
             $pelanggan_nik = $pelanggan->nik;
+            SuratPembelian::customer_cannot_be_user($user->id, $pelanggan_id, $request);
         }
         // dd($cart);
         // dump((int)$post['sisa_bayar']);

@@ -20,7 +20,7 @@
     <div class="w-full">
         <img src="{{ asset("storage/" . $surat_pembelian->photo_path) }}" alt="item_photo" class="w-full">
     </div>
-    <form action="{{ route('photos.delete_cart_photo', $surat_pembelian->id) }}" method="POST" onsubmit="return confirm('Anda yakin ingin hapus foto cart ini?')" class="mt-2">
+    <form action="{{ route('surat_pembelian.delete_photo', $surat_pembelian->id) }}" method="POST" onsubmit="return confirm('Anda yakin ingin hapus foto cart ini?')" class="mt-2">
         @csrf
         <div class="flex justify-center">
             <button type="submit" class="bg-pink-300 text-white rounded p-1 flex gap-2 items-center">
@@ -32,7 +32,7 @@
         </div>
     </form>
     @else
-    <form method="POST" action="{{ route('photos.add_cart_photo', $surat_pembelian->id) }}" class="mb-1" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('surat_pembelian.update_photo', $surat_pembelian->id) }}" class="mb-1" enctype="multipart/form-data">
         @csrf
         <label for="input-photo" class="block hover:cursor-pointer mt-2" id="label-input-photo">
             <div class="flex justify-center">
@@ -65,28 +65,72 @@
     @endif
 
     <h3 class="text-lg font-bold text-slate-500">Data Pelanggan</h3>
-    {{-- <div class="flex justify-between mt-3 items-center">
-        @if ($surat_pembelian->pelanggan_id)
-        <table>
+
+    <div class="flex justify-between mt-1 items-center">
+        @if ($pelangganid)
+        <table class="text-sm border">
             <tr>
                 <td><label for="pelanggan_nama">Nama</label></td><td><span class="mx-2">:</span></td>
-                <td><input type="text" name="pelanggan_nama" id="pelanggan_nama" class="border rounded p-1" value="{{ $pelanggan_nama }}"></td>
+                <td><input type="text" name="pelanggan_nama" id="pelanggan_nama" value="{{ $pelanggannama }}" class="border-0 p-0" readonly></td>
             </tr>
             <tr>
                 <td><label for="pelanggan_username">Username</label></td><td><span class="mx-2">:</span></td>
-                <td><input type="text" name="pelanggan_username" id="pelanggan_username" value="{{ $pelanggan_username }}" class="border rounded p-1"></td>
+                <td><input type="text" name="pelanggan_username" id="pelanggan_username" value="{{ $pelangganusername }}" class="border-0 p-0" readonly></td>
+            </tr>
+            <tr>
+                <td><label for="pelanggan_nik">NIK</label></td><td><span class="mx-2">:</span></td>
+                <td><input type="text" name="pelanggan_nik" id="pelanggan_nik" value="{{ $pelanggannik }}" class="border-0 p-0" readonly></td>
             </tr>
         </table>
         @else
         <div id="tampilan_pelanggan_guest" class="mt-3 text-slate-500">- Pelanggan guest -</div>
+        <table id="tampilan_data_pelanggan" class="hidden bg-slate-200">
+            <tr>
+                <td><label for="pelanggan_nama">Nama</label></td><td><span class="mx-2">:</span></td>
+                <td><input type="text" name="pelanggan_nama" id="pelanggan_nama" value="guest" class="border rounded p-1 bg-slate-100" readonly></td>
+            </tr>
+            <tr>
+                <td><label for="pelanggan_username">Username</label></td><td><span class="mx-2">:</span></td>
+                <td><input type="text" name="pelanggan_username" id="pelanggan_username" class="border rounded p-1 bg-slate-100" readonly></td>
+            </tr>
+            <tr>
+                <td><label for="pelanggan_nik">NIK</label></td><td><span class="mx-2">:</span></td>
+                <td><input type="text" name="pelanggan_nik" id="pelanggan_nik" class="border rounded p-1 bg-slate-100" readonly></td>
+            </tr>
+        </table>
         @endif
         <div>
             <button type="button" id="btn-ganti" class="border-2 rounded px-2 py-1 text-slate-500 font-bold" onclick="toggle_light(this.id, 'form-cari-data-pelanggan', ['text-slate-500'], ['text-white', 'bg-slate-400'], 'block'); ">ganti</button>
         </div>
-    </div> --}}
+    </div>
 
-
-    <x-form-cari-data-pelanggan :pelangganid="$pelangganid" :pelanggannama="$pelanggannama" :pelangganusername="$pelangganusername" :pelanggannik="$pelanggannik" :route="$route_cari_data_pelanggan" :params="$surat_pembelian->id"></x-form-cari-data-pelanggan>
+    <form action="{{ route('surat_pembelian.update_data_pelanggan', $surat_pembelian->id) }}" method="POST" id="form-cari-data-pelanggan" class="mt-3 hidden">
+        @csrf
+        <table>
+            <tr>
+                <td><label for="cari_pelanggan_nama">Nama</label></td><td><span class="mx-2">:</span></td>
+                <td><input type="text" name="pelanggan_nama" id="cari_pelanggan_nama" class="border rounded p-1"></td>
+            </tr>
+            <tr>
+                <td><label for="cari_pelanggan_username">Username</label></td><td><span class="mx-2">:</span></td>
+                <td><input type="text" name="pelanggan_username" id="cari_pelanggan_username" class="border rounded p-1"></td>
+            </tr>
+            <tr>
+                <td><label for="cari_nik_pelanggan">NIK</label></td><td><span class="mx-2">:</span></td>
+                <td><input type="text" name="pelanggan_nik" id="cari_nik_pelanggan" class="border rounded p-1"></td>
+            </tr>
+            <tr>
+                <td colspan="3"><div id="feedback_cari_pelanggan" class="text-xs text-red-500"></div></td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <div class="flex justify-center mt-2">
+                        <button type="submit" class="loading-spinner p-1 rounded-xl border-2 border-emerald-300 text-emerald-500 font-bold text-sm">Tetapkan</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
 
     <div>
         <div class="flex gap-1 mt-5 items-center">
@@ -130,25 +174,6 @@
                         <input type="hidden" name="cart_item_ids[]" value="{{ $surat_pembelian_item->id }}">
                     </div>
                     <div class="w-6 h-6 flex justify-center border font-bold text-slate-500">1</div>
-                    {{-- <div class="flex justify-end">
-                        <div class="flex">
-                            <button type="submit" name="delete" value="{{ $item->id }}" onclick="return confirm('Ingin hapus item ini dari keranjang?')" class="loading-spinner border-y border-l rounded-l-xl w-6 h-6 flex items-center justify-center text-slate-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                                </svg>
-                            </button>
-                            <button type="button" class="border-y border-l w-6 h-6 flex items-center justify-center text-slate-300">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
-                                </svg>
-                            </button>
-                            <button type="button" class="border-r border-y rounded-r-xl w-6 h-6 flex items-center justify-center text-slate-300">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                                </svg>
-                            </button>
-                        </div>
-                    </div> --}}
                 </div>
             </div>
             @endforeach
@@ -181,36 +206,6 @@
             @endforeach
         </table>
 
-        <div id="div-non-tunai" class="hidden">
-            <div id="daftar-input-pembayaran-non-tunai"></div>
-            <div class="relative w-3/4 ml-5 mt-1">
-                <div class="border rounded p-3 flex items-center justify-between hover:cursor-pointer hover:bg-slate-100" onclick="toggleEWallet()">
-                    <span>Pilih Bank/E-Wallet</span>
-                    <div class="border rounded bg-white shadow drop-shadow">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                        </svg>
-                    </div>
-                </div>
-                <div id="dd-daftar-ewallet" class="border absolute top-12 bg-white w-full z-20 hidden">
-                    @foreach ($wallets_non_tunai as $wallet)
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('{{ $wallet->tipe }}', '{{ $wallet->nama }}')" id="{{ $wallet->nama }}"><img src="{{ asset("img/logo-$wallet->tipe-$wallet->nama.png") }}" class="h-full"></div>
-                    @endforeach
-                    {{-- <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('bank','BRI')" id="BRI"><img src="{{ asset('img/logo-bank-bri.png') }}" class="h-full"><span class="font-bold text-blue-800 text-base ml-2">BRI</span></div>
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('bank','Mandiri')" id="Mandiri"><img src="{{ asset('img/logo-bank-mandiri.png') }}" class="h-full"></div>
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('bank','BNI')" id="BNI"><img src="{{ asset('img/logo-bank-bni.png') }}" class="h-full"></div>
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('bank','CIMB')" id="CIMB"><img src="{{ asset('img/logo-bank-cimb.png') }}" class="h-full"></div>
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('bank','OCBC')" id="OCBC"><img src="{{ asset('img/logo-bank-ocbc.jpg') }}" class="h-full"></div>
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('bank','BJB')" id="BJB"><img src="{{ asset('img/logo-bank-bjb.png') }}" class="h-full"></div>
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('bank','Maybank')" id="Maybank"><img src="{{ asset('img/logo-bank-maybank.svg') }}" class="h-full"></div>
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('ewallet','GoPay')" id="GoPay"><img src="{{ asset('img/logo-ewallet-gopay.png') }}" class="h-full"></div>
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('ewallet','ShopeePay')" id="ShopeePay"><img src="{{ asset('img/logo-ewallet-shopee.png') }}" class="h-full"></div>
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('ewallet','Dana')" id="Dana"><img src="{{ asset('img/logo-ewallet-dana.png') }}" class="h-full"></div>
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('ewallet','OVO')" id="OVO"><img src="{{ asset('img/logo-ewallet-ovo.png') }}" class="h-full"><span class="font-bold text-violet-800 text-base ml-2">OVO</span></div> --}}
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('lain-lain','lain-lain')"><span class="font-bold text-base ml-2">Lain - lain</span></div>
-                </div>
-            </div>
-        </div>
         <div class="flex justify-end mt-5">
             <div class="">
                 @if ((float)$surat_pembelian->sisa_bayar < 0)
@@ -265,13 +260,8 @@
 <script src="{{ asset('js/checkout.js') }}"></script>
 
 <script>
-    const users = {!! json_encode($users, JSON_HEX_TAG) !!};
     let total_tagihan = {!! json_encode($surat_pembelian->harga_total, JSON_HEX_TAG) !!}
     // console.log(users);
-
-    function cariDataPelanggan() {
-        return cariDataPelangganF(users);
-    }
 
     function hitungTotalBayar() {
         let arr_jumlah_bayar = document.querySelectorAll('.jumlah-bayar');

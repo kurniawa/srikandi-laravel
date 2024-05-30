@@ -60,15 +60,25 @@ class SuratPembelianItem extends Model
                 $file_extension = $exploded_path[count($exploded_path) - 1];
                 $filename = "$time-$user->id.$file_extension";
                 $photo_path = "surat_pembelian_items/photos/$filename";
+                while (Storage::exists($photo_path)) {
+                    $time++;
+                    $filename = "$time-$user->id.$file_extension";
+                    $photo_path = "surat_pembelian_items/photos/$filename";
+                }
                 Storage::move($cart_item->photo_path, $photo_path);
             }
         } else {
             if (count($cart_item->item->item_photos)) {
                 if (Storage::exists($cart_item->item->item_photos[0]->photo->path)) {
-                    $exploded_path = explode(".", $$cart_item->item->item_photos[0]->photo->path);
+                    $exploded_path = explode(".", $cart_item->item->item_photos[0]->photo->path);
                     $file_extension = $exploded_path[count($exploded_path) - 1];
                     $filename = "$time-$user->id.$file_extension";
                     $photo_path = "surat_pembelian_items/photos/$filename";
+                    while (Storage::exists($photo_path)) {
+                        $time++;
+                        $filename = "$time-$user->id.$file_extension";
+                        $photo_path = "surat_pembelian_items/photos/$filename";
+                    }
                     Storage::copy($cart_item->item->item_photos[0]->photo->path, $photo_path);
                 }
             }

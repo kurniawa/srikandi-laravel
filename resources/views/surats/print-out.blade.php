@@ -68,7 +68,7 @@
         </div>
         @foreach ($surat_pembelian->items as $key => $item)
         <div class="grid grid-cols-12 border-y py-3">
-            <div class="col-span-3 foto-barang flex items-center">
+            <div class="col-span-2 foto-barang flex items-center">
                 <div class="text-slate-500">{{ $key + 1 }}.</div>
                 @if ($item->photo_path)
                 <div class="w-full flex justify-center">
@@ -83,7 +83,7 @@
                 </div>
                 @endif
             </div>
-            <div class="col-span-9 flex justify-between items-center">
+            <div class="col-span-10 flex justify-between items-center">
                 <div>
                     <div class="font-bold text-slate-500">{{ $item->nama_short }}</div>
                     <div class="grid grid-cols-5 text-slate-400 text-xs gap-x-2">

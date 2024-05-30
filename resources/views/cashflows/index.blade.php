@@ -22,13 +22,13 @@
             </tr>
             @foreach ($col_cashflow["cashflows"] as $cashflow)
             <tr class="border-t text-xs font-bold text-slate-500">
-                <td class="py-1"><div class="text-center">{{ $cashflow->user->username }}</div></td>
-                <td class="py-1"><div>{{ pangkas_string_25($cashflow->surat_pembelian_item->item->nama_short) }}</div></td>
+                <td colspan="2" class="py-1"><div class="text-center">{{ $cashflow->user->username }} - {{ $cashflow->surat_pembelian->pelanggan_nama }} - {{ $cashflow->nama_wallet }}</div></td>
+                {{-- <td class="py-1"><div>{{ pangkas_string_25($cashflow->surat_pembelian_item->item->nama_short) }}</div></td> --}}
                 <td class="py-1">
                     @if ($cashflow->tipe === "pemasukan")
-                    <div class="text-center text-emerald-400 font-bold">{{ my_decimal_format($cashflow->surat_pembelian_item->harga_t) }}</div>
+                    <div class="text-center text-emerald-400 font-bold">{{ my_decimal_format($cashflow->jumlah) }}</div>
                     @else
-                    <div class="text-center text-rose-400 font-bold">{{ my_decimal_format($cashflow->surat_pembelian_item->harga_t) }}</div>
+                    <div class="text-center text-rose-400 font-bold">{{ my_decimal_format($cashflow->jumlah) }}</div>
                     @endif
                 </td>
             </tr>

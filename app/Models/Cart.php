@@ -32,8 +32,11 @@ class Cart extends Model
             ]);
         }
         $photo_path = null;
+        // dump($item->item_photos);
         if (count($item->item_photos)) {
+            // dump($item->item_photos[0]->photo->path);
             if (Storage::exists($item->item_photos[0]->photo->path)) {
+                // dump('storage exist');
                 $time = time();
                 $exploded_path = explode(".", $item->item_photos[0]->photo->path);
                 $file_extension = $exploded_path[count($exploded_path) - 1];
@@ -41,8 +44,9 @@ class Cart extends Model
                 $photo_path = "cart_items/photos/$filename";
                 Storage::copy($item->item_photos[0]->photo->path, $photo_path);
             }
-            $photo_path = $item->item_photos[0]->photo->path;
+            // dd('stop');
         }
+
         CartItem::create([
             'cart_id' => $cart->id,
             'item_id' => $item->id,

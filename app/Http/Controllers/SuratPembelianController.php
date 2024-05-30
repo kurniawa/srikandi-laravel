@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\Menu;
+use App\Models\Photo;
 use App\Models\Saldo;
 use App\Models\SuratPembelian;
 use App\Models\User;
@@ -107,7 +108,8 @@ class SuratPembelianController extends Controller
         $post = $request->post();
         // dump($post);
         // dd($surat_pembelian);
-
+        // dump($user->id);
+        // dd($surat_pembelian->pelanggan_id);
         $success_ = "";
 
         $pelanggan = null;
@@ -120,14 +122,21 @@ class SuratPembelianController extends Controller
             $request->validate(['error'=>'required'],['error.required'=>$feedback_cek_pelanggan]);
         }
 
+        $user = Auth::user();
         if ($pelanggan) {
             $surat_pembelian->pelanggan_id = $pelanggan->id;
             $surat_pembelian->pelanggan_nama = $pelanggan->nama;
             $surat_pembelian->pelanggan_username = $pelanggan->username;
             $surat_pembelian->pelanggan_nik = $pelanggan->nik;
-            $surat_pembelian->save();
-            $success_ .= "-Data pelanggan telah diupdate-";
+            SuratPembelian::customer_cannot_be_user($user->id, $pelanggan->id, $request);
+        } else {
+            $surat_pembelian->pelanggan_id = null;
+            $surat_pembelian->pelanggan_nama = null;
+            $surat_pembelian->pelanggan_username = null;
+            $surat_pembelian->pelanggan_nik = null;
         }
+        $surat_pembelian->save();
+        $success_ .= "-Data pelanggan telah diupdate-";
 
         $feedback = [
             "success_" => $success_
@@ -248,4 +257,56 @@ class SuratPembelianController extends Controller
 
         return redirect()->route('surat_pembelian.index')->with($feedback);
     }
+
+    function delete_photo(SuratPembelian $surat_pembelian) {
+        $dangers_ = "";
+        if ($surat_pembelian->photo_path) {
+            if (Storage::exists($surat_pembelian->photo_path)) {
+                Storage::delete($surat_pembelian->photo_path);
+                $dangers_ .= "-File Foto dihapus-";
+            }
+        }
+
+        $surat_pembelian->photo_path = null;
+        $surat_pembelian->save();
+
+        $feedback = [
+            'dangers_' => $dangers_
+        ];
+
+        return back()->with($feedback);
+    }
+
+    function update_photo(SuratPembelian $surat_pembelian, Request $request) {
+        $file_photo = $request->file('photo');
+        // dump($post);
+        // dump($photo);
+        // dd($cart);
+
+        $request->validate([
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $success_ = "";
+
+        list($file_name, $photo_path) = Photo::cek_photo_path('surat_pembelians/photos', $file_photo->extension());
+        // dd($file_name, $photo_path);
+        $file_photo->storeAs('surat_pembelians/photos', $file_name);
+
+        $surat_pembelian->photo_path = $photo_path;
+        $surat_pembelian->save();
+
+        $success_ .= "-surat_pembelian->photo_path $surat_pembelian->photo_path created-";
+
+        $feedback = [
+            "success_" => $success_
+        ];
+
+        return back()->with($feedback);
+    }
+
+    function buyback(SuratPembelian $surat_pembelian) {
+        dd($surat_pembelian);
+    }
+
 }

@@ -76,4 +76,10 @@ class SuratPembelian extends Model
     function user() {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
+
+    static function customer_cannot_be_user($user_id, $customer_id, $request) {
+        if ($user_id == $customer_id) {
+            $request->validate(['error' => 'required'], ['error.required'=>'-customer cannot be user-']);
+        }
+    }
 }
