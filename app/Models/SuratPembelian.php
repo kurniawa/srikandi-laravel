@@ -82,4 +82,8 @@ class SuratPembelian extends Model
             $request->validate(['error' => 'required'], ['error.required'=>'-customer cannot be user-']);
         }
     }
+
+    function pelanggan() {
+        return $this->hasOne(User::class, 'id', 'pelanggan_id');
+    }
 }

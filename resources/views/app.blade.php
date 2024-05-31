@@ -17,8 +17,8 @@
                         </div>
                         @endif
                     </div>
-                    <div><span class="font-bold text-slate-500">{{ $item->nama_short }}</span></div>
-                    <div class="text-xl font-bold text-slate-600"><span>Rp </span><span>{{ number_format(((float)$item->harga_t / 100), 2, ',', '.') }}</span></div>
+                    <div><span class="font-bold text-xs text-slate-500">{{ $item->nama_short }}</span></div>
+                    <div class="font-bold text-slate-600"><span>Rp </span><span>{{ number_format(((float)$item->harga_t / 100), 2, ',', '.') }}</span></div>
                     {{-- <div class="text-slate-500">By: {{ $item->user->username }}</div> --}}
                 </a>
             @endforeach

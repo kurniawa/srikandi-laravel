@@ -306,7 +306,27 @@ class SuratPembelianController extends Controller
     }
 
     function buyback(SuratPembelian $surat_pembelian) {
-        dd($surat_pembelian);
+        // dd($surat_pembelian);
+        $user = Auth::user();
+        $cart = null;
+        if ($user) {
+            $cart = Cart::where('user_id', $user->id)->first();
+        }
+
+        $data = [
+            // 'goback' => 'home',
+            // 'user_role' => $user_role,
+            'menus' => Menu::get(),
+            'route_now' => 'home',
+            'profile_menus' => Menu::get_profile_menus(Auth::user()),
+            'parent_route' => 'home',
+            // 'spk_menus' => Menu::get_spk_menus(),
+            // 'user' => Auth::user(),
+            'cart' => $cart,
+            'surat_pembelian' => $surat_pembelian,
+        ];
+        // dd($data);
+        return view('surats.buyback', $data);
     }
 
 }
