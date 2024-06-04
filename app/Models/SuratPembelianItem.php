@@ -12,7 +12,7 @@ class SuratPembelianItem extends Model
     use HasFactory;
     protected $guarded = ['id'];
 
-    static function create_surat_pembelian_item($surat_pembelian, $cart_item_id) {
+    static function create_surat_pembelian_item($surat_pembelian, $cart_item_id, $kode_accounting) {
         // dd($cart_item_id);
         $cart_item = CartItem::find($cart_item_id);
         $stock = $cart_item->item->stock - 1;
@@ -131,6 +131,18 @@ class SuratPembelianItem extends Model
             'keterangan_lain' => $keterangan_lain,
         ]);
 
+        $kategori_2 = 'Penjualan Perhiasan';
+        if ($surat_pembelian_item->tipe_barang == "LM") {
+            $kategori_2 = 'Penjualan LM';
+        }
+        Accounting::create([
+            'kode_accounting' => $kode_accounting,
+            'user_id' => $user->id,
+            'tipe' => 'pemasukan',
+            'kategori' => 'Penjualan Barang',
+            'kategori_2' => $kategori_2,
+            'jumlah' => $surat_pembelian_item->harga_t,
+        ]);
 
         $cart_item->delete();
     }

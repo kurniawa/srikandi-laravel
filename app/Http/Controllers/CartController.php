@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Accounting;
 use App\Models\Cap;
 use App\Models\Cart;
 use App\Models\CartItem;
@@ -225,6 +226,8 @@ class CartController extends Controller
         // dd($status_bayar);
 
         $time_key = time();
+        $simple_time_key = Accounting::simple_time_key($time_key);
+
         $photo_path = null;
         if ($cart->photo_path) {
             if (Storage::exists($cart->photo_path)) {
@@ -255,14 +258,17 @@ class CartController extends Controller
 
         $success_ .= 'Pembelian baru dibuat!';
 
-        $nomor_surat = SuratPembelian::generate_nomor_surat($pembelian_new->id, $pelanggan_id, count($post['cart_item_ids']), $time_key);
+        $nomor_surat = SuratPembelian::generate_nomor_surat($pembelian_new->id, $pelanggan_id, count($post['cart_item_ids']), $simple_time_key);
         $pembelian_new->nomor_surat = $nomor_surat;
         $pembelian_new->save();
         $success_ .= '-nomor_surat, status_bb Pembelian diupdate!-';
 
         // CREATE SURAT_PEMBELIAN_ITEM
+        // Create kode_accounting
+        $kode_accounting = "$user->id.$pelanggan_id.$simple_time_key";
+
         foreach ($post['cart_item_ids'] as $cart_item_id) {
-            SuratPembelianItem::create_surat_pembelian_item($pembelian_new, $cart_item_id);
+            SuratPembelianItem::create_surat_pembelian_item($pembelian_new, $cart_item_id, $kode_accounting);
         }
         $success_ .= '-Items diinput! Stok diupdate!-';
 
@@ -281,6 +287,7 @@ class CartController extends Controller
                 $cashflow = Cashflow::create([
                     'user_id' => Auth::user()->id,
                     'time_key' => $time_key,
+                    'kode_accounting' => $kode_accounting,
                     'surat_pembelian_id' => $pembelian_new->id,
                     // 'surat_pembelian_item_id' => $surat_pembelian_item->id,
                     // 'nama_transaksi' => $nama_transaksi,
@@ -308,8 +315,9 @@ class CartController extends Controller
                     $cashflow = Cashflow::create([
                         'user_id' => Auth::user()->id,
                         'time_key' => $time_key,
+                        'kode_accounting' => $kode_accounting,
                         'surat_pembelian_id' => $pembelian_new->id,
-                        // 'nama_transaksi' => $nama_transaksi,
+                    // 'nama_transaksi' => $nama_transaksi,
                         'tipe' => 'pemasukan',
                         'kategori_wallet' => $wallet->kategori,
                         'tipe_wallet' => $wallet->tipe,
