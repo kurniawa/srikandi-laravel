@@ -72,7 +72,7 @@
               <div class="">
                 <div class="ml-4 flex items-center md:ml-6 gap-2">
                     @auth
-                    <a href="{{ route('add_new_item.pilih_tipe_barang', 'items') }}" class="loading-spinner w-7 h-7 rounded-full bg-emerald-300 flex justify-center items-center font-bold text-white text-2xl">+</a>
+                    <a href="{{ route('choose_action') }}" class="loading-spinner w-7 h-7 rounded-full bg-emerald-300 flex justify-center items-center font-bold text-white text-2xl">+</a>
                     @endauth
                     <button type="button" class="rounded-full bg-rose-200 p-1 text-gray-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                       <span class="sr-only">View notifications</span>

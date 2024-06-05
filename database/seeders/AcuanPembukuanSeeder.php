@@ -19,10 +19,9 @@ class AcuanPembukuanSeeder extends Seeder
             ['tipe'=>'pemasukan', 'kategori'=>'Penjualan Barang', 'kategori_2'=>'Penjualan Kotak Perhiasan'],
             ['tipe'=>'pemasukan', 'kategori'=>'Mutasi'],
             // PENGELUARAN
-            ['tipe'=>'pengeluaran', 'kategori'=>'Buyback Perhiasan'],
-            ['tipe'=>'pengeluaran', 'kategori'=>'Buyback LM'],
             ['tipe'=>'pengeluaran', 'kategori'=>'Pembelian Aset', 'kategori_2'=>'Pembelian Perhiasan'],
             ['tipe'=>'pengeluaran', 'kategori'=>'Pembelian Aset', 'kategori_2'=>'Pembelian LM'],
+            ['tipe'=>'pengeluaran', 'kategori'=>'Buyback Perhiasan'],
             ['tipe'=>'pengeluaran', 'kategori'=>'Pembayaran Gaji Karyawan'],
             ['tipe'=>'pengeluaran', 'kategori'=>'Tunjangan Karyawan', 'kategori_2'=>'Uang Makan'],
             ['tipe'=>'pengeluaran', 'kategori'=>'Tunjangan Karyawan', 'kategori_2'=>'Uang Transport'],

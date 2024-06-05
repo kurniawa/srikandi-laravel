@@ -153,7 +153,7 @@
                                 </a>
                             </div>
                             <div>
-                                <a href="{{ route('surat_pembelian.show', $surat_pembelian->id) }}" class="bg-yellow-200 text-slate-400 px-2 py-1 rounded-xl border border-yellow-400">Detail</a>
+                                <a href="{{ route('surat_pembelian.show', $surat_pembelian->id) }}" class="loading-spinner bg-yellow-200 text-slate-400 px-2 py-1 rounded-xl border border-yellow-400">Detail</a>
                             </div>
                         </div>
                     </div>

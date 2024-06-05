@@ -131,6 +131,7 @@ class SuratPembelianItem extends Model
             'keterangan_lain' => $keterangan_lain,
         ]);
 
+        // ACCOUNTING
         $kategori_2 = 'Penjualan Perhiasan';
         if ($surat_pembelian_item->tipe_barang == "LM") {
             $kategori_2 = 'Penjualan LM';
@@ -143,6 +144,7 @@ class SuratPembelianItem extends Model
             'kategori_2' => $kategori_2,
             'jumlah' => $surat_pembelian_item->harga_t,
         ]);
+        // END - ACCOUNTING
 
         $cart_item->delete();
     }

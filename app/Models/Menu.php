@@ -58,8 +58,8 @@ class Menu extends Model
                         // ['name'=>'Your Profile','route'=>'user.profile'],
                         // ['name'=>'Settings','route'=>'settings'],
                         ['name'=>'Daftar Pelanggan','route'=>'pelanggans.index'],
-                        ['name'=>'Surat / Transaksi','route'=>'surat_pembelian.index', 'params'=>$user->id],
-                        ['name'=>'Accounting','route'=>'cashflow.index', 'params'=>$user->id],
+                        ['name'=>'Surat Pembelian','route'=>'surat_pembelian.index', 'params'=>$user->id],
+                        ['name'=>'Cash Flow','route'=>'cashflow.index', 'params'=>$user->id],
                         ['name'=>'Log Out','route'=>'logout'],
                     );
                 }

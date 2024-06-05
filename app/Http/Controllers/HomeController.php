@@ -80,4 +80,30 @@ class HomeController extends Controller
         // dd($items[0]->item_photos);
         return view('app', $data)->with($feedback);
     }
+
+    function choose_action() {
+        $user = Auth::user();
+        $cart = null;
+        if ($user) {
+            $cart = Cart::where('user_id', $user->id)->first();
+        }
+
+        $data = [
+            // 'goback' => 'home',
+            // 'user_role' => $user_role,
+            'menus' => Menu::get(),
+            'route_now' => 'home',
+            'profile_menus' => Menu::get_profile_menus($user),
+            'parent_route' => 'home',
+            'back' => false,
+            'backRoute' => null,
+            'backRouteParams' => null,
+            // 'spk_menus' => Menu::get_spk_menus(),
+            // 'user' => Auth::user(),
+            'cart' => $cart,
+        ];
+        // dump($items[0]);
+        // dd($items[0]->item_photos);
+        return view('choose_action', $data);
+    }
 }

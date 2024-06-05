@@ -265,7 +265,7 @@ class CartController extends Controller
 
         // CREATE SURAT_PEMBELIAN_ITEM
         // Create kode_accounting
-        $kode_accounting = "$user->id.$pelanggan_id.$simple_time_key";
+        $kode_accounting = "$user->id.$time_key";
 
         foreach ($post['cart_item_ids'] as $cart_item_id) {
             SuratPembelianItem::create_surat_pembelian_item($pembelian_new, $cart_item_id, $kode_accounting);
@@ -276,6 +276,7 @@ class CartController extends Controller
 
         // CASHFLOW
         $jumlah = 0;
+        $jumlah_terima_total = 0;
         if (isset($post['jumlah_tunai'])) {
             if ($post['jumlah_tunai'] !== null) {
                 if ((int)$post['sisa_bayar'] < 0) {
@@ -303,6 +304,7 @@ class CartController extends Controller
 
                 Saldo::cek_saldo_wallet_sebelumnya_dan_create_apabila_belum_ada($time_key, $wallet, $jumlah);
             }
+            $jumlah_terima_total += $jumlah;
         }
 
         if (isset($post['jumlah'])) { // kodingan pada blade sempat di edit, js dipake bareng2, awalnya ini namanya jumlah_non_tunai
@@ -326,10 +328,12 @@ class CartController extends Controller
                     ]);
                     // self::create_update_neraca($tipe_wallet, $nama_wallet, $jumlah);
                     Saldo::cek_saldo_wallet_sebelumnya_dan_create_apabila_belum_ada($time_key, $wallet, $jumlah);
+                    $jumlah_terima_total += $jumlah;
                 }
             }
         }
         // END - CASHFLOW
+
 
             // // ITEM PHOTO APAKAH DARI YANG BARUSAN DI UPLOAD ATAU DARI FOTO ITEM YANG SUDAH ADA DI DB ATAU TIDAK ADA PHOTO?
             // $files = $request->file();

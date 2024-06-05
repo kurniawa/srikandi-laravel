@@ -33,6 +33,7 @@ Route::get('/test', function () {
 
 Route::controller(HomeController::class)->group(function(){
     Route::get('/','home')->name('home');
+    Route::get('/choose_action','choose_action')->name('choose_action');
 });
 
 Route::controller(AuthController::class)->group(function(){
@@ -108,7 +109,9 @@ Route::controller(SuratPembelianController::class)->group(function(){
 });
 
 Route::controller(CashflowController::class)->group(function(){
-    Route::get('/cashflow/index','index')->name('cashflow.index')->middleware('level3');
+    Route::get('/cashflow/index','index')->name('cashflow.index')->middleware('level5');
+    Route::get('/cashflow/transaksi/{tipe_transaksi}','transaksi')->name('cashflow.transaksi')->middleware('level3');
+    Route::post('/cashflow/store_transaction','store_transaction')->name('cashflow.store_transaction')->middleware('level3');
 });
 
 Route::controller(ArtisanController::class)->group(function(){

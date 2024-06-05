@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AcuanPembukuan;
 use App\Models\Cart;
 use App\Models\Cashflow;
 use App\Models\Menu;
@@ -81,5 +82,37 @@ class CashflowController extends Controller
         ];
         // dd($data);
         return view('cashflows.index', $data);
+    }
+
+    function transaksi($tipe_transaksi) {
+        $user = Auth::user();
+        $cart = null;
+        if ($user) {
+            $cart = Cart::where('user_id', $user->id)->first();
+        }
+
+        $acuan_pembukuans = AcuanPembukuan::all();
+        // dd($acuan_pembukuans);
+        $data = [
+            // 'goback' => 'home',
+            // 'user_role' => $user_role,
+            'menus' => Menu::get(),
+            'route_now' => 'home',
+            'profile_menus' => Menu::get_profile_menus(Auth::user()),
+            'parent_route' => 'home',
+            // 'spk_menus' => Menu::get_spk_menus(),
+            // 'user' => Auth::user(),
+            'cart' => $cart,
+            'tipe' => $tipe_transaksi,
+            'acuan_pembukuans' => $acuan_pembukuans,
+        ];
+        // dd($data);
+        return view('cashflows.transaksi', $data);
+    }
+
+
+    function store_transaction(Request $request) {
+        $post = $request->post();
+        dd($post);
     }
 }

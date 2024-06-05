@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->enum('tipe',['pemasukan', 'pengeluaran']);
             $table->string('kategori', 50);
-            $table->string('kategori_2', 50);
+            $table->string('kategori_2', 50)->nullable();
         });
     }
 
