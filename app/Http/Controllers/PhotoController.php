@@ -29,7 +29,7 @@ class PhotoController extends Controller
 
         $time = time();
         $user = Auth::user();
-        $file_name = "$time-$user->id" . "." . $file_photo->extension();
+        $file_name = "$user->id-$time" . "." . $file_photo->extension();
         $file_photo->storeAs('items/photos', $file_name);
 
         $photo = Photo::create([
@@ -87,7 +87,7 @@ class PhotoController extends Controller
 
         $time = time();
         $user = Auth::user();
-        $file_name = "$time-$user->id." . $file_photo->extension();
+        $file_name = "$user->id-$time." . $file_photo->extension();
         $file_photo->storeAs('cart_items/photos', $file_name);
 
         $cart_item->photo_path = "cart_items/photos/$file_name";

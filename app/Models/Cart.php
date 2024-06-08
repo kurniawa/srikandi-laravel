@@ -40,7 +40,7 @@ class Cart extends Model
                 $time = time();
                 $exploded_path = explode(".", $item->item_photos[0]->photo->path);
                 $file_extension = $exploded_path[count($exploded_path) - 1];
-                $filename = "$time-$user->id.$file_extension";
+                $filename = "$user->id-$time.$file_extension";
                 $photo_path = "cart_items/photos/$filename";
                 Storage::copy($item->item_photos[0]->photo->path, $photo_path);
             }

@@ -395,7 +395,7 @@
         // var tipe_perhiasan = JSON.parse(data_tipe_perhiasan);
 
         var pilihan_jenis_perhiasans = jenis_perhiasans.filter((o) => o.tipe_perhiasan == tipe_perhiasan);
-        console.log(pilihan_jenis_perhiasans);
+        // console.log(pilihan_jenis_perhiasans);
         $('#jenis_perhiasan').autocomplete({
             source: pilihan_jenis_perhiasans,
             select: function (event, ui) {

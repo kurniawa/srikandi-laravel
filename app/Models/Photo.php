@@ -20,7 +20,7 @@ class Photo extends Model
         $file_name = "";
         $photo_path = "";
         while ($file_exist) {
-            $file_name = "$time-$user->id." . $extension;
+            $file_name = "$user->id-$time." . $extension;
             $photo_path = "$folder/$file_name";
 
             if (Storage::exists($photo_path)) {

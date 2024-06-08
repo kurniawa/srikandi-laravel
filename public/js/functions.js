@@ -4,7 +4,7 @@ function toggleMenu(menu_id, close_layer_id) {
 }
 
 function hideMenuCloseLayer(menu_id, close_layer_id) {
-    console.log("hideMenuCloseLayer");
+    // console.log("hideMenuCloseLayer");
     $(`#${menu_id}`).hide(350);
     $(`#${close_layer_id}`).hide();
 }

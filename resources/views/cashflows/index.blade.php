@@ -3,7 +3,18 @@
     <main class="p-2">
         <x-errors-any></x-errors-any>
         <x-validation-feedback></x-validation-feedback>
-        <h1 class="text-2xl font-bold text-slate-500">Accounting / Cash Flow</h1>
+        <div class="flex">
+            <div class="bg-white shadow drop-shadow p-1 rounded">
+                <h1 class="font-bold text-slate-500">Accounting / Cash Flow</h1>
+            </div>
+        </div>
+        <div class="flex justify-end">
+            <table class="text-slate-400 text-xs font-bold border">
+                @foreach ($saldos as $saldo)
+                <tr><td>{{ $saldo->nama_wallet }}</td><td>:</td><td>Rp {{ my_decimal_format($saldo->saldo_akhir) }}</td></tr>
+                @endforeach
+            </table>
+        </div>
         <table class="w-full mt-5">
             <tr class="text-slate-500"><th></th><th>Saldo Awal</th><th>Saldo Akhir</th></tr>
             @foreach ($col_cashflows as  $key => $col_cashflow)

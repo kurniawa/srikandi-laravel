@@ -64,6 +64,10 @@ class CashflowController extends Controller
             ]);
         }
 
+        // SALDO PADA WALLET
+        $saldos = Saldo::all();
+        // END - SALDO PADA WALLET
+
         $data = [
             // 'goback' => 'home',
             // 'user_role' => $user_role,
@@ -76,6 +80,7 @@ class CashflowController extends Controller
             'cart' => $cart,
             'col_cashflows' => $col_cashflows,
             'col_saldos' => $col_saldos,
+            'saldos' => $saldos,
             'back' => true,
             'backRoute' => 'home',
             'backRouteParams' => null,
