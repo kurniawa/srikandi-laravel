@@ -30,6 +30,7 @@ class CashflowController extends Controller
             $starting_time = "$get_year-$get_month-$i";
             $ending_time = "$get_year-$get_month-$i 23:59:59";
 
+
             $cashflows = Cashflow::whereBetween('created_at', [$starting_time, $ending_time])->orderByDesc("created_at")->get();
             $day = $i;
             $month = $get_month;
@@ -65,7 +66,14 @@ class CashflowController extends Controller
         }
 
         // SALDO PADA WALLET
-        $saldos = Saldo::all();
+        $wallets = Saldo::select('nama_wallet')->groupBy('nama_wallet')->get();
+        // dd($wallets);
+        $saldos = collect();
+        foreach ($wallets as $wallet) {
+            $saldo = Saldo::where('nama_wallet', $wallet->nama_wallet)->latest()->first();
+            $saldos->push($saldo);
+        }
+        // $saldos = Saldo::all();
         // END - SALDO PADA WALLET
 
         $data = [

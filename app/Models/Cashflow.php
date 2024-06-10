@@ -17,4 +17,9 @@ class Cashflow extends Model
     function surat_pembelian() {
         return $this->hasOne(SuratPembelian::class, 'id', 'surat_pembelian_id');
     }
+
+    function accounting() {
+        $accounting = Accounting::where('kode_accounting', $this->kode_accounting)->first();
+        return $accounting;
+    }
 }

@@ -382,6 +382,7 @@ function preformatDotToComa(float_value) {
 }
 
 function pangkasDesimal(str_value) {
+    // Terkadang hasil perhitungan bisa jadi panjang sekali decimal ke belakang, jadi ini untuk pangkas jadi dua angka di belakang koma.
     let float_value = parseFloat(str_value);
     let get_decimal = float_value % 1;
     // console.log(get_decimal);

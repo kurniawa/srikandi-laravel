@@ -31,7 +31,7 @@
                     </svg>
                 </div>
             </label>
-            <input id="input-photo" type="file" name="photo" onchange="previewImage(this.files[0], 'div-preview-photo', 'preview-photo', 'label-input-photo')" class="hidden">
+            <input id="input-photo" type="file" name="photo" ="previewImage(this.files[0], 'div-preview-photo', 'preview-photo', 'label-input-photo')" class="hidden">
             {{-- <input type="hidden" name="photo_index" value="{{ $key }}"> --}}
             <div id="div-preview-photo" class="hidden">
                 <div class="flex justify-end">

@@ -46,23 +46,25 @@ return new class extends Migration
             // perlu diperhatikan disini banyak nullable, karena item belum tentu perhiasan yang bisa BB
             // $table->string('proses_bb', 20)->nullable(); // ['ready','finished'] // nullable untuk barang yang bukan bb_able atau bukan perhiasan
             // selama status_bb = ada, maka proses_bb akan tetap null, tidak berubah menjadi ready
-            $table->string('status_bb', 20)->nullable(); // ['ada','bb', 'tukar', 'tukar-tambah', 'tukar-kurang'] // nullable untuk barang yang bukan bb_able atau bukan perhiasan
-            $table->string('kondisi_bb', 20)->nullable(); // ['sama', 'mulus','tidak-mulus', 'rusak-ringan', 'rusak-berat'] // nullable karena bisa jadi barang nya bukan perhiasan
+            $table->string('status_buyback', 20)->nullable(); // ['ada','bb', 'tukar', 'tukar-tambah', 'tukar-kurang'] // nullable untuk barang yang bukan bb_able atau bukan perhiasan
+            $table->string('kondisi_buyback', 20)->nullable(); // ['sama', 'mulus','tidak-mulus', 'rusak-ringan', 'rusak-berat'] // nullable karena bisa jadi barang nya bukan perhiasan
             $table->enum('berat_susut', ['ya', 'tidak'])->nullable();
-            $table->smallInteger('berat_bb')->nullable();
+            $table->smallInteger('berat_buyback')->nullable();
             $table->string('photo_bb')->nullable();
-            $table->integer('potongan_susut')->nullable();
             $table->integer('potongan_ongkos')->nullable();
-            $table->integer('potongan_tambahan')->nullable();
-            $table->smallInteger('persentase_potongan_tambahan')->nullable();
+            $table->integer('potongan_mata')->nullable();
+            $table->integer('potongan_rusak')->nullable();
+            $table->integer('potongan_susut')->nullable();
+            $table->integer('potongan_lain')->nullable();
+            // $table->smallInteger('persentase_potongan_tambahan')->nullable();
             $table->integer('total_potongan')->nullable();
-            $table->integer('total_bb')->nullable(); // total_bb berlaku juga untuk barang di tukar, intinya kan kita terima kembali itu barang
+            $table->integer('harga_buyback')->nullable(); // total_bb berlaku juga untuk barang di tukar, intinya kan kita terima kembali itu barang
             // $table->integer('total_bayar')->nullable();
             // $table->integer('sisa_bayar')->nullable();
             // $table->enum('status_bayar', ['lunas', 'belum-lunas'])->nullable();
-            $table->string('keterangan_lain')->nullable();
+            $table->string('keterangan_buyback')->nullable();
             $table->timestamps();
-            $table->timestamp('tanggal_bb')->nullable(); // bukan tanggal_jual, karena siapa tau barang ditukar
+            $table->timestamp('tanggal_buyback')->nullable(); // bukan tanggal_jual, karena siapa tau barang ditukar
             // int/integer | 4 bytes  -2147483648 to 2147483647                    0 to 4294967295
             // smallint    | 2 bytes  -32768 to 32767                              0 to 65535
         });

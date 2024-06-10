@@ -33,7 +33,15 @@
             </tr>
             @foreach ($col_cashflow["cashflows"] as $cashflow)
             <tr class="border-t text-xs font-bold text-slate-500">
-                <td colspan="2" class="py-1"><div class="text-center">{{ $cashflow->user->username }} - {{ $cashflow->surat_pembelian->pelanggan_nama }} - {{ $cashflow->nama_wallet }}</div></td>
+                @if ($cashflow->surat_pembelian_id)
+                <td colspan="2" class="py-1"><div class="text-center">{{ $cashflow->user->username }} - {{ $cashflow->surat_pembelian->pelanggan_nama }} - <a href="{{ route('surat_pembelian.show', $cashflow->id) }}" class="text-sky-400 font-bold">{{ $cashflow->surat_pembelian->nomor_surat }}</a> - {{ $cashflow->nama_wallet }}</div></td>
+                @else
+                @if ($cashflow->accounting->kategori_2)
+                <td colspan="2" class="py-1"><div class="text-center">{{ $cashflow->user->username }} - {{ $cashflow->surat_pembelian->pelanggan_nama }} - {{ $cashflow->accounting->kategori_2 }} - {{ $cashflow->nama_wallet }}</div></td>
+                @else
+                <td colspan="2" class="py-1"><div class="text-center">{{ $cashflow->user->username }} - {{ $cashflow->surat_pembelian->pelanggan_nama }} - {{ $cashflow->accounting->kategori }} - {{ $cashflow->nama_wallet }}</div></td>
+                @endif
+                @endif
                 {{-- <td class="py-1"><div>{{ pangkas_string_25($cashflow->surat_pembelian_item->item->nama_short) }}</div></td> --}}
                 <td class="py-1">
                     @if ($cashflow->tipe === "pemasukan")
@@ -43,7 +51,9 @@
                     @endif
                 </td>
             </tr>
-
+            <tr>
+                <td></td>
+            </tr>
             @endforeach
             <tr>
                 <td colspan="3">

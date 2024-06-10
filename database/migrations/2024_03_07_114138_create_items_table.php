@@ -38,7 +38,7 @@ return new class extends Migration
             $table->integer('barcode')->nullable()->unique();
             $table->string('deskripsi')->nullable();
             $table->string('keterangan')->nullable();
-            $table->string('status', 20)->nullable(); // ready, terjual, cuci, dll
+            $table->string('status', 20)->nullable(); // ready, terjual, cuci, sortir-buyback, dll
             $table->timestamps();
         });
     }

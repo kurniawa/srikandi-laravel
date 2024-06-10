@@ -33,5 +33,19 @@ class Saldo extends Model
             "saldo_awal" => (string)$saldo_awal,
             "saldo_akhir" => (string)$saldo_akhir,
         ]);
+        // $saldo_awal = 0;
+        // $saldo_akhir = $jumlah;
+        // $last_saldo = Saldo::where('kategori_wallet', $wallet->kategori)->where('tipe_wallet', $wallet->tipe)->where('nama_wallet', $wallet->nama)->latest()->first();
+        // if ($last_saldo) {
+        //     $saldo_awal = (int)$last_saldo->saldo_akhir;
+        //     $saldo_akhir = $saldo_awal + $jumlah;
+        // }
+        // $saldo = Saldo::create([
+        //     "kategori_wallet" => $wallet->kategori,
+        //     "tipe_wallet" => $wallet->tipe,
+        //     "nama_wallet" => $wallet->nama,
+        //     "saldo_awal" => (string)$saldo_awal,
+        //     "saldo_akhir" => (string)$saldo_akhir,
+        // ]);
     }
 }
