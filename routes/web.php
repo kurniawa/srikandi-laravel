@@ -106,6 +106,7 @@ Route::controller(SuratPembelianController::class)->group(function(){
     Route::post('/surat_pembelian/{surat_pembelian}/delete_photo','delete_photo')->name('surat_pembelian.delete_photo')->middleware('level5');
     Route::post('/surat_pembelian/{surat_pembelian}/update_photo','update_photo')->name('surat_pembelian.update_photo')->middleware('level3');
     Route::get('/surat_pembelian/{surat_pembelian}/buyback','buyback')->name('surat_pembelian.buyback')->middleware('level3');
+    Route::post('/surat_pembelian/{surat_pembelian}/proses_buyback','proses_buyback')->name('surat_pembelian.proses_buyback')->middleware('level3');
 });
 
 Route::controller(CashflowController::class)->group(function(){

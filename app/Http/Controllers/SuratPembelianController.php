@@ -329,4 +329,10 @@ class SuratPembelianController extends Controller
         return view('surats.buyback', $data);
     }
 
+    function proses_buyback(SuratPembelian $surat_pembelian, Request $request) {
+        $post = $request->post();
+        // dump($surat_pembelian);
+        dd($post);
+    }
+
 }

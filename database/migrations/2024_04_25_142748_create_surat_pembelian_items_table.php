@@ -46,11 +46,11 @@ return new class extends Migration
             // perlu diperhatikan disini banyak nullable, karena item belum tentu perhiasan yang bisa BB
             // $table->string('proses_bb', 20)->nullable(); // ['ready','finished'] // nullable untuk barang yang bukan bb_able atau bukan perhiasan
             // selama status_bb = ada, maka proses_bb akan tetap null, tidak berubah menjadi ready
-            $table->string('status_buyback', 20)->nullable(); // ['ada','bb', 'tukar', 'tukar-tambah', 'tukar-kurang'] // nullable untuk barang yang bukan bb_able atau bukan perhiasan
+            $table->string('status_buyback', 20)->nullable(); // ['ada','buyback', 'tukar', 'tukar-tambah', 'tukar-kurang'] // nullable untuk barang yang bukan bb_able atau bukan perhiasan
             $table->string('kondisi_buyback', 20)->nullable(); // ['sama', 'mulus','tidak-mulus', 'rusak-ringan', 'rusak-berat'] // nullable karena bisa jadi barang nya bukan perhiasan
             $table->enum('berat_susut', ['ya', 'tidak'])->nullable();
             $table->smallInteger('berat_buyback')->nullable();
-            $table->string('photo_bb')->nullable();
+            $table->string('buyback_photo_path')->nullable();
             $table->integer('potongan_ongkos')->nullable();
             $table->integer('potongan_mata')->nullable();
             $table->integer('potongan_rusak')->nullable();

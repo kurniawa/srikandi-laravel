@@ -28,10 +28,10 @@ return new class extends Migration
             $table->integer('harga_total');
             $table->integer('total_bayar');
             $table->integer('sisa_bayar');
-            $table->string('status_bb', 20)->nullable(); // nullable untuk barang yang bukan perhiasan -> ['ada','bb-all','bb-sebagian']
+            $table->string('status_buyback', 20)->nullable(); // nullable untuk barang yang bukan perhiasan -> ['ada','finished','buyback-sebagian']
             $table->string('status_bayar', 20); // ['lunas','belum-lunas']
             // $table->enum('status_terima_bb',['lunas','belum-lunas'])->nullable();
-            $table->timestamp('tanggal_bb')->nullable(); // tanggal kapan terjual semua
+            $table->timestamp('tanggal_buyback')->nullable(); // tanggal kapan terjual semua
             $table->foreignId('updated_by')->nullable()->constrained('users','id')->onDelete('set null');
             $table->string('photo_path')->nullable();
             $table->timestamps();
