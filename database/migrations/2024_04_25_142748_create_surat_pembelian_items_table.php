@@ -46,6 +46,7 @@ return new class extends Migration
             // perlu diperhatikan disini banyak nullable, karena item belum tentu perhiasan yang bisa BB
             // $table->string('proses_bb', 20)->nullable(); // ['ready','finished'] // nullable untuk barang yang bukan bb_able atau bukan perhiasan
             // selama status_bb = ada, maka proses_bb akan tetap null, tidak berubah menjadi ready
+            $table->string('locked_buyback', 10)->nullable(); // yes or no
             $table->string('status_buyback', 20)->nullable(); // ['ada','buyback', 'tukar', 'tukar-tambah', 'tukar-kurang'] // nullable untuk barang yang bukan bb_able atau bukan perhiasan
             $table->string('kondisi_buyback', 20)->nullable(); // ['sama', 'mulus','tidak-mulus', 'rusak-ringan', 'rusak-berat'] // nullable karena bisa jadi barang nya bukan perhiasan
             $table->enum('berat_susut', ['ya', 'tidak'])->nullable();

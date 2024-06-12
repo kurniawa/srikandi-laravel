@@ -7,6 +7,7 @@ use App\Models\Menu;
 use App\Models\Photo;
 use App\Models\Saldo;
 use App\Models\SuratPembelian;
+use App\Models\SuratPembelianItem;
 use App\Models\User;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
@@ -333,6 +334,57 @@ class SuratPembelianController extends Controller
         $post = $request->post();
         // dump($surat_pembelian);
         dd($post);
+        $time_key = time();
+        if (isset($post['locked'])) {
+            $request->validate(['locked'=>'numeric']);
+            $index_locked = (int)$post['locked'];
+            $surat_pembelian_item = SuratPembelianItem::find($post['surat_pembelian_item_id'][$index_locked]);
+            $harga_t = (float)$post['harga_t'][$index_locked] * 100;
+            $berat_buyback = (float)$post['berat_buyback'] * 100;
+            $potongan_ongkos = 0;
+            if ($post['potongan_ongkos'][$index_locked]) {
+                $potongan_ongkos = (float)$post['potongan_ongkos'][$index_locked] * 100;
+            }
+
+            $potongan_mata = 0;
+            if ($post['potongan_mata'][$index_locked]) {
+                $potongan_mata = (float)$post['potongan_mata'][$index_locked] * 100;
+            }
+
+            $potongan_rusak = 0;
+            if ($post['potongan_rusak'][$index_locked]) {
+                $potongan_rusak = (float)$post['potongan_rusak'][$index_locked] * 100;
+            }
+
+            $potongan_susut = 0;
+            if ($post['potongan_susut'][$index_locked]) {
+                $potongan_susut = (float)$post['potongan_susut'][$index_locked] * 100;
+            }
+
+            $potongan_lain = 0;
+            if ($post['potongan_lain'][$index_locked]) {
+                $potongan_lain = (float)$post['potongan_lain'][$index_locked] * 100;
+            }
+
+            $total_potongan = $potongan_ongkos + $potongan_mata + $potongan_rusak + $potongan_susut + $potongan_lain;
+
+
+            $surat_pembelian_item->update([
+                'locked_buyback' => 'yes',
+                'status_buyback' => $post['status_buyback'][$index_locked],
+                'kondisi_buyback' => $post['kondisi_buyback'][$index_locked],
+                'berat_buyback' => (string)$berat_buyback,
+                'potongan_ongkos' => (string)($potongan_ongkos / 100),
+                'potongan_mata' => (string)($potongan_mata / 100),
+                'potongan_rusak' => (string)($potongan_rusak / 100),
+                'potongan_susut' => (string)($potongan_susut / 100),
+                'potongan_lain' => (string)($potongan_lain / 100),
+                'total_potongan' => (string)($total_potongan / 100),
+                'harga_buyback' => (float)$post['harga_buyback'][$index_locked] * 100,
+                'keterangan_buyback' => $post['keterangan_buyback'][$index_locked],
+                'tanggal_buyback' => date('Y-m-d', strtotime($post['hari'][$index_locked] . "-" . $post['bulan'][$index_locked] . "-" . $post['tahun'][$index_locked])) . 'T' . date('H:i:s', $time_key),
+            ]);
+        }
     }
 
 }

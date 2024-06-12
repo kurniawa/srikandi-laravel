@@ -81,6 +81,7 @@
         <div id="tombol-toggle-{{ $key }}" class="mt-2">
             <label class="inline-flex items-center cursor-pointer">
                 <input type="checkbox" class="sr-only peer checkbox-toggle-buyback" onclick="toggleBuyback({{ $key }}, this)">
+                <input type="hidden" name="surat_pembelian_item_id[]" value="{{ $surat_pembelian_item->id }}">
                 <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                 <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Buyback</span>
             </label>
@@ -90,6 +91,11 @@
                 <div class="bg-yellow-200 p-1 shadow drop-shadow"><h5>Data Buyback / Jual Kembali / Tukar</h5></div>
             </div>
             <table class="mt-2">
+                <tr>
+                    <td colspan="3">
+                        <x-tanggal-multiple></x-tanggal-multiple>
+                    </td>
+                </tr>
                 <tr>
                     <td>Buyback</td><td>:</td>
                     <td>
@@ -452,15 +458,17 @@
         document.getElementById('total_buyback').value = pangkasDesimal(total_buyback);
     }
 
-    function toggleBuyback(index, buyback) {
+    function toggleBuyback(index, buyback_toggle) {
         // console.log(index);
         // console.log(buyback);
         $buyback_form = $(`#buyback_form-${index}`);
-        if (buyback.checked) {
+        if (buyback_toggle.checked) {
             $buyback_form.show(300);
+            // buyback_toggle.value = surat_pembelian_items[index].id;
             // buyback.value = surat_pembelian_items[index].id;
             hitungHargaBuyback(index);
         } else {
+            // buyback_toggle.value = null;
             $buyback_form.hide(300);
             // buyback.value = "";
             cancelHargaBuyback(index);

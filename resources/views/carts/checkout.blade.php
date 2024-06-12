@@ -107,6 +107,7 @@
             {{-- kalau nanti ada fungsi pengubahan tanggal surat, maka ini boleh dihapus --}}
             <input type="hidden" name="hari" value="{{ date('d') }}" readonly>
             <input type="hidden" name="bulan" value="{{ date('m') }}" readonly>
+            {{-- select tidak bisa readonly, oleh karena itu tertulis disable, sedangkan disable artinya tidak terbaca oleh post() --}}
         </div>
 
         <h3 class="text-xl font-bold text-slate-500 mt-5">Checkout</h3>
