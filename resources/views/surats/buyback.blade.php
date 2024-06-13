@@ -80,13 +80,21 @@
         </div>
         <div id="tombol-toggle-{{ $key }}" class="mt-2">
             <label class="inline-flex items-center cursor-pointer">
+                @if ($surat_pembelian_item->locked_buyback == 'yes')
+                <input type="checkbox" class="sr-only peer checkbox-toggle-buyback" onclick="toggleBuyback({{ $key }}, this)" checked>
+                @else
                 <input type="checkbox" class="sr-only peer checkbox-toggle-buyback" onclick="toggleBuyback({{ $key }}, this)">
+                @endif
                 <input type="hidden" name="surat_pembelian_item_id[]" value="{{ $surat_pembelian_item->id }}">
                 <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                 <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Buyback</span>
             </label>
         </div>
+        @if ($surat_pembelian_item->locked_buyback == 'yes')
+        <div id="buyback_form-{{ $key }}" class="grid-cols-12 bg-orange-100 text-slate-500 p-2 rounded">
+        @else
         <div id="buyback_form-{{ $key }}" class="grid-cols-12 bg-violet-100 text-slate-500 p-2 rounded hidden">
+        @endif
             <div class="flex text-slate-500 justify-center">
                 <div class="bg-yellow-200 p-1 shadow drop-shadow"><h5>Data Buyback / Jual Kembali / Tukar</h5></div>
             </div>
@@ -121,6 +129,29 @@
                             @else
                             <option value="tukar-tambah">Tukar Tambah</option>
                             @endif
+                            @elseif ($surat_pembelian_item->status_buyback)
+                            {{--  --}}
+                            @if ($surat_pembelian_item->status_buyback == 'buyback')
+                            <option value="buyback" selected>Buyback</option>
+                            @else
+                            <option value="buyback">Buyback</option>
+                            @endif
+                            @if ($surat_pembelian_item->status_buyback == 'tukar')
+                            <option value="tukar" selected>Tukar</option>
+                            @else
+                            <option value="tukar">Tukar</option>
+                            @endif
+                            @if ($surat_pembelian_item->status_buyback == 'tukar-kurang')
+                            <option value="tukar-kurang" selected>Tukar Kurang</option>
+                            @else
+                            <option value="tukar-kurang">Tukar Kurang</option>
+                            @endif
+                            @if ($surat_pembelian_item->status_buyback == 'tukar-tambah')
+                            <option value="tukar-tambah" selected>Tukar Tambah</option>
+                            @else
+                            <option value="tukar-tambah">Tukar Tambah</option>
+                            @endif
+                            {{--  --}}
                             @else
                             <option value="buyback">Buyback</option>
                             <option value="tukar">Tukar</option>
@@ -160,6 +191,34 @@
                             @else
                             <option value="5">5 - ancur / rusak</option>
                             @endif
+                            @elseif ($surat_pembelian_item->kondisi_buyback)
+                            {{--  --}}
+                            @if ($surat_pembelian_item->kondisi_buyback == "9")
+                            <option value="9" selected>9 - mulus</option>
+                            @else
+                            <option value="9">9 - mulus</option>
+                            @endif
+                            @if ($surat_pembelian_item->kondisi_buyback == "8")
+                            <option value="8" selected>8 - sedikit cacat/hampir tidak terlihat</option>
+                            @else
+                            <option value="8">8 - sedikit cacat/hampir tidak terlihat</option>
+                            @endif
+                            @if ($surat_pembelian_item->kondisi_buyback == "7")
+                            <option value="7" selected>7 - cacat jelas terlihat</option>
+                            @else
+                            <option value="7">7 - cacat jelas terlihat</option>
+                            @endif
+                            @if ($surat_pembelian_item->kondisi_buyback == "6")
+                            <option value="6" selected>6 - cacat banget</option>
+                            @else
+                            <option value="6">6 - cacat banget</option>
+                            @endif
+                            @if ($surat_pembelian_item->kondisi_buyback == "5")
+                            <option value="5" selected>5 - ancur / rusak</option>
+                            @else
+                            <option value="5">5 - ancur / rusak</option>
+                            @endif
+                            {{--  --}}
                             @else
                             <option value="9">9 - mulus</option>
                             <option value="8">8 - sedikit cacat/hampir tidak terlihat</option>
@@ -177,6 +236,11 @@
                         <input type="text" id="berat_buyback_formatted" class="rounded p-1" value="{{ old('berat_buyback_formatted') }}">
                         <input type="hidden" id="berat_buyback" name="berat_buyback[]" value="{{ old('berat_buyback') }}">
                     </td>
+                    @elseif ($surat_pembelian_item->berat_buyback)
+                    <td>
+                        <input type="text" id="berat_buyback_formatted" class="rounded p-1" value="{{ casual_decimal_format($surat_pembelian_item->berat_buyback) }}">
+                        <input type="hidden" id="berat_buyback" name="berat_buyback[]" value="{{ (float)$surat_pembelian_item->berat_buyback / 100 }}">
+                    </td>
                     @else
                     <td>
                         <input type="text" id="berat_buyback_formatted" class="rounded p-1" value="{{ casual_decimal_format($surat_pembelian_item->berat) }}">
@@ -191,6 +255,11 @@
                         <input type="text" id="potongan_ongkos_formatted-{{ $key }}" class="rounded p-1" onchange="formatNumber(this, 'potongan_ongkos-{{ $key }}');hitungHargaBuyback({{ $key }})" value="{{ old('potongan_ongkos_formatted') }}">
                         <input type="hidden" name="potongan_ongkos[]" id="potongan_ongkos-{{ $key }}"  value="{{ old('potongan_ongkos') }}">
                     </td>
+                    @elseif ($surat_pembelian_item->potongan_ongkos)
+                    <td>
+                        <input type="text" id="potongan_ongkos_formatted-{{ $key }}" class="rounded p-1" onchange="formatNumber(this, 'potongan_ongkos-{{ $key }}');hitungHargaBuyback({{ $key }})" value="{{ casual_decimal_format($surat_pembelian_item->potongan_ongkos) }}">
+                        <input type="hidden" name="potongan_ongkos[]" id="potongan_ongkos-{{ $key }}"  value="{{ (float)$surat_pembelian_item->potongan_ongkos / 100 }}">
+                    </td>
                     @else
                     <td>
                         <input type="text" id="potongan_ongkos_formatted-{{ $key }}" class="rounded p-1" onchange="formatNumber(this, 'potongan_ongkos-{{ $key }}');hitungHargaBuyback({{ $key }})" value="{{ casual_decimal_format((float)$surat_pembelian_item->ongkos_g * (float)$surat_pembelian_item->berat / 100) }}">
@@ -203,7 +272,12 @@
                     @if (old('potongan_mata'))
                     <td>
                         <input type="text" id="potongan_mata_formatted-{{ $key }}" onchange="formatNumber(this, 'potongan_mata-{{ $key }}');hitungHargaBuyback({{ $key }})" class="rounded p-1" value="{{ old('potongan_mata_formatted') }}">
-                        <input type="hidden" name="potongan_mata[]" id="potongan_mata-{{ $key }}" >
+                        <input type="hidden" name="potongan_mata[]" id="potongan_mata-{{ $key }}" value="{{ old('potongan_mata') }}">
+                    </td>
+                    @elseif ($surat_pembelian_item->potongan_mata)
+                    <td>
+                        <input type="text" id="potongan_mata_formatted-{{ $key }}" onchange="formatNumber(this, 'potongan_mata-{{ $key }}');hitungHargaBuyback({{ $key }})" class="rounded p-1" value="{{ casual_decimal_format($surat_pembelian_item->potongan_mata) }}">
+                        <input type="hidden" name="potongan_mata[]" id="potongan_mata-{{ $key }}" value="{{ (float)$surat_pembelian_item->potongan_mata / 100 }}">
                     </td>
                     @else
                     <td>
@@ -219,6 +293,11 @@
                         <input type="text" id="potongan_rusak_formatted-{{ $key }}" onchange="formatNumber(this, 'potongan_rusak-{{ $key }}');hitungHargaBuyback({{ $key }})" class="rounded p-1" value="{{ old('potongan_rusak_formatted') }}">
                         <input type="hidden" name="potongan_rusak[]" id="potongan_rusak-{{ $key }}" value="{{ old('potongan_rusak') }}">
                     </td>
+                    @elseif ($surat_pembelian_item->potongan_rusak)
+                    <td>
+                        <input type="text" id="potongan_rusak_formatted-{{ $key }}" onchange="formatNumber(this, 'potongan_rusak-{{ $key }}');hitungHargaBuyback({{ $key }})" class="rounded p-1" value="{{ casual_decimal_format($surat_pembelian_item->potongan_rusak) }}">
+                        <input type="hidden" name="potongan_rusak[]" id="potongan_rusak-{{ $key }}" value="{{ (float)$surat_pembelian_item->potongan_rusak / 100 }}">
+                    </td>
                     @else
                     <td>
                         <input type="text" id="potongan_rusak_formatted-{{ $key }}" onchange="formatNumber(this, 'potongan_rusak-{{ $key }}');hitungHargaBuyback({{ $key }})" class="rounded p-1">
@@ -232,6 +311,11 @@
                     <td>
                         <input type="text" id="potongan_susut_formatted-{{ $key }}" class="rounded p-1" onchange="formatNumber(this, 'potongan_susut-{{ $key }}');hitungHargaBuyback({{ $key }})" value="{{ old('potongan_susut_formatted') }}">
                         <input type="hidden" name="potongan_susut[]" id="potongan_susut-{{ $key }}"  value="{{ old('potongan_susut') }}">
+                    </td>
+                    @elseif ($surat_pembelian_item->potongan_susut)
+                    <td>
+                        <input type="text" id="potongan_susut_formatted-{{ $key }}" onchange="formatNumber(this, 'potongan_susut-{{ $key }}');hitungHargaBuyback({{ $key }})" class="rounded p-1" value="{{ casual_decimal_format($surat_pembelian_item->potongan_susut) }}">
+                        <input type="hidden" name="potongan_susut[]" id="potongan_susut-{{ $key }}" value="{{ (float)$surat_pembelian_item->potongan_susut / 100 }}">
                     </td>
                     @else
                     <td>
@@ -247,6 +331,11 @@
                         <input type="text" id="potongan_lain_formatted-{{ $key }}" onchange="formatNumber(this, 'potongan_lain-{{ $key }}');hitungHargaBuyback({{ $key }})" class="rounded p-1" value="{{ old('potongan_lain_formatted') }}">
                         <input type="hidden" name="potongan_lain[]" id="potongan_lain-{{ $key }}"  value="{{ old('potongan_lain') }}">
                     </td>
+                    @elseif ($surat_pembelian_item->potongan_lain)
+                    <td>
+                        <input type="text" id="potongan_lain_formatted-{{ $key }}" onchange="formatNumber(this, 'potongan_lain-{{ $key }}');hitungHargaBuyback({{ $key }})" class="rounded p-1" value="{{ casual_decimal_format($surat_pembelian_item->potongan_lain) }}">
+                        <input type="hidden" name="potongan_lain[]" id="potongan_lain-{{ $key }}" value="{{ (float)$surat_pembelian_item->potongan_lain / 100 }}">
+                    </td>
                     @else
                     <td>
                         <input type="text" id="potongan_lain_formatted-{{ $key }}" onchange="formatNumber(this, 'potongan_lain-{{ $key }}');hitungHargaBuyback({{ $key }})" class="rounded p-1">
@@ -260,6 +349,10 @@
                     <td>
                         <textarea name="keterangan_buyback[]" id="keterangan_buyback-{{ $key }}" rows="3" class="border rounded p-2">{{ old('keterangan_buyback') }}</textarea>
                     </td>
+                    @elseif ($surat_pembelian_item->keterangan_buyback)
+                    <td>
+                        <textarea name="keterangan_buyback[]" id="keterangan_buyback-{{ $key }}" rows="3" class="border rounded p-2">{{ $surat_pembelian_item->keterangan_buyback }}</textarea>
+                    </td>
                     @else
                     <td>
                         <textarea name="keterangan_buyback[]" id="keterangan_buyback-{{ $key }}" rows="3" class="border rounded p-2"></textarea>
@@ -271,18 +364,41 @@
                 <div>
                     <div class="font-bold text-indigo-400 text-end">Harga Terima</div>
                     <div class="font-bold text-rose-400 text-xl">
+                        @if (old('harga_buyback'))
+                        <span>Rp</span> <span id="harga_buyback_formatted-{{ $key }}">{{ my_decimal_format(old('harga_buyback')) }}</span>
+                        <input type="hidden" name="harga_buyback[]" id="harga_buyback-{{ $key }}" value="{{ old('harga_buyback') }}">
+                        @elseif ($surat_pembelian_item->harga_buyback)
+                        <span>Rp</span> <span id="harga_buyback_formatted-{{ $key }}">{{ my_decimal_format($surat_pembelian_item->harga_buyback) }}</span>
+                        <input type="hidden" name="harga_buyback[]" id="harga_buyback-{{ $key }}" value="{{ (float)$surat_pembelian_item->harga_buyback / 100 }}">
+                        @else
                         <span>Rp</span> <span id="harga_buyback_formatted-{{ $key }}"></span>
                         <input type="hidden" name="harga_buyback[]" id="harga_buyback-{{ $key }}">
+                        @endif
                     </div>
                 </div>
             </div>
-            <div class="flex justify-center mt-3">
+            <div class="flex justify-center mt-3 gap-2">
+                @if ($surat_pembelian_item->locked_buyback == 'yes')
+                <button type="submit" name="unlocked" value="{{ $key }}" class="bg-indigo-300 p-2 rounded-lg text-white flex justify-center items-center gap-2 font-bold">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="size-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 1 1 9 0v3.75M3.75 21.75h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H3.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                    </svg>
+                    <span>Unlocked</span>
+                </button>
+                <button type="submit" name="unlocked" value="{{ $key }}" class="bg-slate-400 p-2 rounded-lg text-white flex justify-center items-center gap-2 font-bold">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                    </svg>
+                    <span>Edit Locked</span>
+                </button>
+                @else
                 <button type="submit" name="locked" value="{{ $key }}" class="bg-slate-400 p-2 rounded-lg text-white flex justify-center items-center gap-2 font-bold">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="size-5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
                     </svg>
                     <span>Locked</span>
                 </button>
+                @endif
             </div>
         </div>
         @endforeach
