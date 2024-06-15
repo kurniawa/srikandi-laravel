@@ -335,9 +335,9 @@ class SuratPembelianController extends Controller
         $success_ = "";
         $errors_ = "";
         // dump($surat_pembelian);
-        // dd($post);
+        dd($post);
         $time_key = time();
-        if (isset($post['locked'])) {
+        if ( isset($post['locked']) ) {
             $request->validate(['locked'=>'numeric']);
             $index_locked = (int)$post['locked'];
             $surat_pembelian_item = SuratPembelianItem::find($post['surat_pembelian_item_id'][$index_locked]);
@@ -396,6 +396,16 @@ class SuratPembelianController extends Controller
             ]);
             $success_ .= "-Buyback locked-";
             return back()->with('success_', $success_);
+        } elseif (isset($post['unlocked'])) {
+            $request->validate(['unlocked'=>'numeric']);
+            $index_unlocked = (int)$post['unlocked'];
+            $surat_pembelian_item = SuratPembelianItem::find($post['surat_pembelian_item_id'][$index_unlocked]);
+            $surat_pembelian_item->locked_buyback = null;
+            $surat_pembelian_item->save();
+            $success_ .= "-Buyback unlocked-";
+            return back()->with('success_', $success_);
+        } elseif(isset($post['konfirmasi_buyback'])) {
+
         }
 
         // dd($post);

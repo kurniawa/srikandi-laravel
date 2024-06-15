@@ -81,9 +81,9 @@
         <div id="tombol-toggle-{{ $key }}" class="mt-2">
             <label class="inline-flex items-center cursor-pointer">
                 @if ($surat_pembelian_item->locked_buyback == 'yes')
-                <input type="checkbox" class="sr-only peer checkbox-toggle-buyback" onclick="toggleBuyback({{ $key }}, this)" checked>
+                <input type="checkbox" name="surat_pembelian_item_id_confirmed[]" value="{{ $surat_pembelian_item->id }}" class="sr-only peer checkbox-toggle-buyback" onclick="toggleBuyback({{ $key }}, this)" checked>
                 @else
-                <input type="checkbox" class="sr-only peer checkbox-toggle-buyback" onclick="toggleBuyback({{ $key }}, this)">
+                <input type="checkbox" name="surat_pembelian_item_id_confirmed[]" value="{{ $surat_pembelian_item->id }}" class="sr-only peer checkbox-toggle-buyback" onclick="toggleBuyback({{ $key }}, this)">
                 @endif
                 <input type="hidden" name="surat_pembelian_item_id[]" value="{{ $surat_pembelian_item->id }}">
                 <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
@@ -385,7 +385,7 @@
                     </svg>
                     <span>Unlocked</span>
                 </button>
-                <button type="submit" name="unlocked" value="{{ $key }}" class="bg-slate-400 p-2 rounded-lg text-white flex justify-center items-center gap-2 font-bold">
+                <button type="submit" name="locked" value="{{ $key }}" class="bg-slate-400 p-2 rounded-lg text-white flex justify-center items-center gap-2 font-bold">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                     </svg>
@@ -460,7 +460,7 @@
         </div>
 
         <div class="flex justify-center mt-3">
-            <button type="submit" class="bg-emerald-300 text-white font-bold p-2 rounded-lg border-2 border-emerald-400">Konfirmasi Buyback</button>
+            <button type="submit" name="konfirmasi_buyback" class="bg-emerald-300 text-white font-bold p-2 rounded-lg border-2 border-emerald-400">Konfirmasi Buyback</button>
         </div>
         <div class="flex justify-center mt-3">
             <a href="{{ route('surat_pembelian.show', $surat_pembelian->id) }}" class="flex gap-1 justify-center items-center bg-red-200 text-red-500 font-bold rounded-lg px-3 py-2 border-2 border-red-300">
