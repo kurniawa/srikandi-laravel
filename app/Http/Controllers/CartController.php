@@ -25,7 +25,8 @@ use Illuminate\Support\Facades\Storage;
 
 class CartController extends Controller
 {
-    function index(User $user) {
+    function index(User $user)
+    {
         $cart = Cart::where('user_id', $user->id)->first();
 
 
@@ -49,7 +50,8 @@ class CartController extends Controller
 
 
 
-    function checkout(Cart $cart, Request $request) {
+    function checkout(Cart $cart, Request $request)
+    {
         $get = $request->query();
         $user = Auth::user();
 
@@ -109,7 +111,8 @@ class CartController extends Controller
         return view('carts.checkout', $data);
     }
 
-    function proses_checkout(Cart $cart, Request $request) {
+    function proses_checkout(Cart $cart, Request $request)
+    {
         $post = $request->post();
         // dump($cart);
         // dd($post);
@@ -205,7 +208,7 @@ class CartController extends Controller
         list($pelanggan, $error_cari_data_pelanggan, $feedback_cek_pelanggan) = User::cari_data_pelanggan($post['pelanggan_nama'], $post['pelanggan_username'], $post['pelanggan_nik']);
 
         if ($error_cari_data_pelanggan) {
-            $request->validate(['error'=>'required'],['error.required'=>$feedback_cek_pelanggan]);
+            $request->validate(['error' => 'required'], ['error.required' => $feedback_cek_pelanggan]);
         }
 
         $user = Auth::user();
@@ -307,8 +310,8 @@ class CartController extends Controller
             $jumlah_terima_total += $jumlah;
         }
 
-        if (isset($post['jumlah'])) { // kodingan pada blade sempat di edit, js dipake bareng2, awalnya ini namanya jumlah_non_tunai
-            foreach ($post['jumlah'] as $key => $jumlah_non_tunai) {
+        if (isset($post['jumlah_non_tunai'])) { // kodingan pada blade sempat di edit, js dipake bareng2, awalnya ini namanya jumlah_non_tunai
+            foreach ($post['jumlah_non_tunai'] as $key => $jumlah_non_tunai) {
                 if ($jumlah_non_tunai !== null) {
                     $wallet = Wallet::where('tipe', $post['tipe_instansi'][$key])->where('nama', $post['nama_instansi'][$key])->first();
                     // $tipe_wallet = $post['tipe_instansi'][$key];
@@ -319,7 +322,7 @@ class CartController extends Controller
                         'time_key' => $time_key,
                         'kode_accounting' => $kode_accounting,
                         'surat_pembelian_id' => $pembelian_new->id,
-                    // 'nama_transaksi' => $nama_transaksi,
+                        // 'nama_transaksi' => $nama_transaksi,
                         'tipe' => 'pemasukan',
                         'kategori_wallet' => $wallet->kategori,
                         'tipe_wallet' => $wallet->tipe,
@@ -335,39 +338,39 @@ class CartController extends Controller
         // END - CASHFLOW
 
 
-            // // ITEM PHOTO APAKAH DARI YANG BARUSAN DI UPLOAD ATAU DARI FOTO ITEM YANG SUDAH ADA DI DB ATAU TIDAK ADA PHOTO?
-            // $files = $request->file();
-            // $item_photo = null;
-            // // $photo = null;
-            // if (isset($files["item-photo-$key"])) {
-            //     $photo_name = "IP-". uniqid() . "." . $files["item-photo-$key"]->getClientOriginalExtension();
-            //     // $path = Storage::putFileAs(
-            //     //     'public/images/item_photos', $file, $photo_name
-            //     // );
-            //     $path = 'images/pembelian/' . $photo_name;
-            //     if (! Storage::putFileAs('images/pembelian/', $files["item-photo-$key"], $photo_name)) {
-            //         $errors_ .= ' Photo gagal diupload!';
-            //     } else {
-            //         $success_ .= ' Photo storaged!';
-            //         // $photo = Photo::create([
-            //         //     'path' => $path,
-            //         // ]);
-            //         $item_photo = $path;
+        // // ITEM PHOTO APAKAH DARI YANG BARUSAN DI UPLOAD ATAU DARI FOTO ITEM YANG SUDAH ADA DI DB ATAU TIDAK ADA PHOTO?
+        // $files = $request->file();
+        // $item_photo = null;
+        // // $photo = null;
+        // if (isset($files["item-photo-$key"])) {
+        //     $photo_name = "IP-". uniqid() . "." . $files["item-photo-$key"]->getClientOriginalExtension();
+        //     // $path = Storage::putFileAs(
+        //     //     'public/images/item_photos', $file, $photo_name
+        //     // );
+        //     $path = 'images/pembelian/' . $photo_name;
+        //     if (! Storage::putFileAs('images/pembelian/', $files["item-photo-$key"], $photo_name)) {
+        //         $errors_ .= ' Photo gagal diupload!';
+        //     } else {
+        //         $success_ .= ' Photo storaged!';
+        //         // $photo = Photo::create([
+        //         //     'path' => $path,
+        //         // ]);
+        //         $item_photo = $path;
 
-            //     }
-            // }
+        //     }
+        // }
 
-            // if ($item_photo === null) { // kalau tidak upload photo pembelian, maka cari foto utama
-            //     if (count($item->photos) === 0) {
-            //         $pembelian_new->delete();
-            //         $request->validate(['error'=>'required'],['error.required'=>'Pembelian gagal! Terdapat foto barang yang tidak diupload!']);
-            //     } else {
+        // if ($item_photo === null) { // kalau tidak upload photo pembelian, maka cari foto utama
+        //     if (count($item->photos) === 0) {
+        //         $pembelian_new->delete();
+        //         $request->validate(['error'=>'required'],['error.required'=>'Pembelian gagal! Terdapat foto barang yang tidak diupload!']);
+        //     } else {
 
-            //         $item_photo_utama = ItemPhoto::where('item_id', $item->id)->where('tipe', 'utama')->first();
-            //         $item_photo = $item_photo_utama->path;
-            //     }
-            // }
-            // END - PHOTO
+        //         $item_photo_utama = ItemPhoto::where('item_id', $item->id)->where('tipe', 'utama')->first();
+        //         $item_photo = $item_photo_utama->path;
+        //     }
+        // }
+        // END - PHOTO
 
 
         // UPDATE nomor_surat dan time_key dan status_bb
@@ -429,7 +432,8 @@ class CartController extends Controller
         return redirect(route('surat_pembelian.index'))->with($feedback);
     }
 
-    function insert_to_cart(Item $item, User $user) {
+    function insert_to_cart(Item $item, User $user)
+    {
         $success_ = '';
         Cart::insert_to_cart_helper($item, $user);
         $success_ .= "-Item telah diinput ke keranjang-";
@@ -438,5 +442,4 @@ class CartController extends Controller
         ];
         return back()->with($feedback);
     }
-
 }

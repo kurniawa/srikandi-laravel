@@ -16,7 +16,7 @@ function tambahPembayaran(tipe, nama_instansi) {
         <div class="ml-5 flex mt-1">
             <input type="text" name="nama_instansi[]" placeholder="nama..." class="input w-1/4">
             <input type="text" class="input ml-1" onchange="formatNumber(this, 'jumlah-non-tunai-${nama_instansi}'); hitungTotalBayar()">
-            <input type="hidden" name="jumlah[]" id="jumlah-non-tunai-${nama_instansi}" class="jumlah-bayar">
+            <input type="hidden" name="jumlah_non_tunai[]" id="jumlah-non-tunai-${nama_instansi}" class="jumlah-bayar">
             <input type="hidden" name="tipe_instansi[]" value="${tipe}" readonly>
         </div>
         `;
@@ -25,7 +25,7 @@ function tambahPembayaran(tipe, nama_instansi) {
         <div class="ml-5 flex mt-1">
             <input type="text" name="nama_instansi[]" value="${nama_instansi}" class="input bg-slate-100 w-1/4" readonly>
             <input type="text" class="input ml-1" onchange="formatNumber(this, 'jumlah-non-tunai-${nama_instansi}'); hitungTotalBayar()">
-            <input type="hidden" name="jumlah[]" id="jumlah-non-tunai-${nama_instansi}" class="jumlah-bayar">
+            <input type="hidden" name="jumlah_non_tunai[]" id="jumlah-non-tunai-${nama_instansi}" class="jumlah-bayar">
             <input type="hidden" name="tipe_instansi[]" value="${tipe}" readonly>
         </div>
         `;
