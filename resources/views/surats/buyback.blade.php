@@ -120,6 +120,7 @@
                         <h5>Data Buyback / Jual Kembali / Tukar</h5>
                     </div>
                 </div>
+                <input type="hidden" name="tipe_transaksi[]" value="pengeluaran">
                 <table class="mt-2">
                     <tr>
                         <td colspan="3">

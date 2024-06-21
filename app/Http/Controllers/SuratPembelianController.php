@@ -361,7 +361,7 @@ class SuratPembelianController extends Controller
             $request->validate(['error' => 'required'], ['error.required' => 'jumlah pembayaran ke pelanggan, kurang!']);
         }
         // END VALIDASI TOTAL BUYBACK DAN TOTAL BAYAR
-        dd($post);
+        // dd($post);
         $user = Auth::user();
         $time_key = time();
         $kode_accounting = "$user->id.$time_key";
@@ -434,7 +434,9 @@ class SuratPembelianController extends Controller
             $surat_pembelian_item->save();
             $success_ .= "-Buyback unlocked-";
             return back()->with('success_', $success_);
-        } elseif (isset($post['konfirmasi_buyback'])) {
+        } elseif (isset($post['konfirmasi_buyback']) || is_null($post['konfirmasi_buyback'])) {
+            dump($post);
+            dd('masuk ke konfirmasi_buyback');
             foreach ($post['index_to_process'] as $index_to_process) {
                 $index_to_process = (int)$index_to_process;
                 $surat_pembelian_item = SuratPembelianItem::find($post['surat_pembelian_item_id'][$index_to_process]);
@@ -500,20 +502,26 @@ class SuratPembelianController extends Controller
                     // 'kategori_2' => $kategori_2,
                     'jumlah' => (string)$harga_buyback,
                 ]);
-                return back()->with('success_', $success_);
+                $success_ .= "-Accounting created-";
             }
-
+            $jumlah_tunai = null;
             $jumlah_non_tunai = null;
             $tipe_instansis = null;
             $nama_instansis = null;
+            if (isset($post['jumlah_tunai'])) {
+                $jumlah_tunai = $post['jumlah_tunai'];
+            }
             if (isset($post['jumlah_non_tunai'])) {
                 $jumlah_non_tunai = $post['jumlah_non_tunai'];
                 $tipe_instansis = $post['tipe_instansi'];
                 $nama_instansis = $post['nama_instansi'];
             }
-            Cashflow::create_cashflow($user->id, $time_key, $kode_accounting, $surat_pembelian_item->pembelian_id, $post['jumlah_tunai'], $sisa_bayar, $jumlah_non_tunai, $tipe_instansis, $nama_instansis);
+            Cashflow::create_cashflow($user->id, $time_key, $kode_accounting, $surat_pembelian_item->pembelian_id, $post['tipe_transaksi'][0], $jumlah_tunai, $sisa_bayar, $jumlah_non_tunai, $tipe_instansis, $nama_instansis);
+            $success_ .= "-Cashflow noted!-";
+            return back()->with('success_', $success_);
         }
 
-        // dd($post);
+        dump($post);
+        dd("tidak ada yang opsi yang sesuai");
     }
 }

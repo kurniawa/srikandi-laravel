@@ -14,23 +14,25 @@ class AcuanPembukuanSeeder extends Seeder
     public function run(): void
     {
         $acuan_pembukuans = [
-            ['tipe'=>'pemasukan', 'kategori'=>'Penjualan Barang', 'kategori_2'=>'Penjualan Perhiasan'],
-            ['tipe'=>'pemasukan', 'kategori'=>'Penjualan Barang', 'kategori_2'=>'Penjualan LM'],
-            ['tipe'=>'pemasukan', 'kategori'=>'Penjualan Barang', 'kategori_2'=>'Penjualan Kotak Perhiasan'],
-            ['tipe'=>'pemasukan', 'kategori'=>'Mutasi'],
+            ['tipe' => 'pemasukan', 'kategori' => 'Penjualan Barang', 'kategori_2' => 'Penjualan Perhiasan'],
+            ['tipe' => 'pemasukan', 'kategori' => 'Penjualan Barang', 'kategori_2' => 'Penjualan LM'],
+            ['tipe' => 'pemasukan', 'kategori' => 'Penjualan Barang', 'kategori_2' => 'Penjualan Kotak Perhiasan'],
+            ['tipe' => 'pemasukan', 'kategori' => 'Mutasi'],
+            ['tipe' => 'pemasukan', 'kategori' => 'Penyesuaian Saldo'],
             // PENGELUARAN
-            ['tipe'=>'pengeluaran', 'kategori'=>'Pembelian Aset', 'kategori_2'=>'Pembelian Perhiasan'],
-            ['tipe'=>'pengeluaran', 'kategori'=>'Pembelian Aset', 'kategori_2'=>'Pembelian LM'],
-            ['tipe'=>'pengeluaran', 'kategori'=>'Buyback Perhiasan'],
-            ['tipe'=>'pengeluaran', 'kategori'=>'Pembayaran Gaji Karyawan'],
-            ['tipe'=>'pengeluaran', 'kategori'=>'Tunjangan Karyawan', 'kategori_2'=>'Uang Makan'],
-            ['tipe'=>'pengeluaran', 'kategori'=>'Tunjangan Karyawan', 'kategori_2'=>'Uang Transport'],
-            ['tipe'=>'pengeluaran', 'kategori'=>'Tunjangan Karyawan', 'kategori_2'=>'Tunjangan Kesehatan'],
-            ['tipe'=>'pengeluaran', 'kategori'=>'Pembayaran Tagihan', 'kategori_2'=>'Listrik'],
-            ['tipe'=>'pengeluaran', 'kategori'=>'Pembayaran Tagihan', 'kategori_2'=>'Air'],
-            ['tipe'=>'pengeluaran', 'kategori'=>'Inventaris Kantor'],
-            ['tipe'=>'pengeluaran', 'kategori'=>'Pembayaran Pajak'],
-            ['tipe'=>'pengeluaran', 'kategori'=>'Mutasi'],
+            ['tipe' => 'pengeluaran', 'kategori' => 'Pembelian Aset', 'kategori_2' => 'Pembelian Perhiasan'],
+            ['tipe' => 'pengeluaran', 'kategori' => 'Pembelian Aset', 'kategori_2' => 'Pembelian LM'],
+            ['tipe' => 'pengeluaran', 'kategori' => 'Buyback Perhiasan'],
+            ['tipe' => 'pengeluaran', 'kategori' => 'Pembayaran Gaji Karyawan'],
+            ['tipe' => 'pengeluaran', 'kategori' => 'Tunjangan Karyawan', 'kategori_2' => 'Uang Makan'],
+            ['tipe' => 'pengeluaran', 'kategori' => 'Tunjangan Karyawan', 'kategori_2' => 'Uang Transport'],
+            ['tipe' => 'pengeluaran', 'kategori' => 'Tunjangan Karyawan', 'kategori_2' => 'Tunjangan Kesehatan'],
+            ['tipe' => 'pengeluaran', 'kategori' => 'Pembayaran Tagihan', 'kategori_2' => 'Listrik'],
+            ['tipe' => 'pengeluaran', 'kategori' => 'Pembayaran Tagihan', 'kategori_2' => 'Air'],
+            ['tipe' => 'pengeluaran', 'kategori' => 'Inventaris Kantor'],
+            ['tipe' => 'pengeluaran', 'kategori' => 'Pembayaran Pajak'],
+            ['tipe' => 'pengeluaran', 'kategori' => 'Mutasi'],
+            ['tipe' => 'pengeluaran', 'kategori' => 'Penyesuaian Saldo'],
         ];
 
         foreach ($acuan_pembukuans as $acuan_pembukuan) {
@@ -39,9 +41,9 @@ class AcuanPembukuanSeeder extends Seeder
                 $kategori_2 = $acuan_pembukuan['kategori_2'];
             }
             AcuanPembukuan::create([
-                'tipe'=>$acuan_pembukuan['tipe'],
-                'kategori'=>$acuan_pembukuan['kategori'],
-                'kategori_2'=>$kategori_2,
+                'tipe' => $acuan_pembukuan['tipe'],
+                'kategori' => $acuan_pembukuan['kategori'],
+                'kategori_2' => $kategori_2,
             ]);
         }
     }

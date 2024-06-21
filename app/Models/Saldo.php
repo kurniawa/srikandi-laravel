@@ -10,7 +10,8 @@ class Saldo extends Model
     use HasFactory;
     protected $guarded = ['id'];
 
-    static function cek_saldo_wallet_sebelumnya_dan_create_apabila_belum_ada($time_key, $wallet, $jumlah) {
+    static function cek_saldo_wallet_sebelumnya_dan_create_apabila_belum_ada($time_key, $wallet, $jumlah)
+    {
         $saldo_akhir = $jumlah;
         $saldo_awal = 0;
         $today = date("Y-m-d", $time_key);
@@ -22,7 +23,6 @@ class Saldo extends Model
                 $saldo_akhir = (int)$saldo_yesterday->saldo_akhir + $jumlah;
                 $saldo_awal = $saldo_yesterday->saldo_akhir;
             }
-
         } else {
             $saldo_akhir = (int)$saldo_today->saldo_akhir + $jumlah;
         }
