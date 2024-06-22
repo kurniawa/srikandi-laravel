@@ -151,9 +151,9 @@ class CartController extends Controller
         ]);
         // END - VALIDASI
 
-        $harga_total = (string)($post['harga_total'] * 100) + 0;
-        $total_bayar = (string)($post['total_bayar'] * 100) + 0;
-        $sisa_bayar = (string)($post['sisa_bayar'] * 100) + 0;
+        $harga_total = (float)$post['harga_total'];
+        $total_bayar = (float)$post['total_bayar'];
+        $sisa_bayar = (float)$post['sisa_bayar'];
         // dump(time());
         // dd($sisa_bayar);
 
@@ -252,9 +252,9 @@ class CartController extends Controller
             'pelanggan_username' => $pelanggan_username,
             'pelanggan_nik' => $pelanggan_nik,
             'keterangan' => $cart->keterangan,
-            'harga_total' => (string)$harga_total,
-            'total_bayar' => (string)$total_bayar,
-            'sisa_bayar' => (string)$sisa_bayar,
+            'harga_total' => (string)($harga_total * 100),
+            'total_bayar' => (string)($total_bayar * 100),
+            'sisa_bayar' => (string)($sisa_bayar * 100),
             'status_bayar' => $status_bayar,
             'photo_path' => $photo_path,
         ]);
@@ -290,6 +290,13 @@ class CartController extends Controller
             $tipe_instansis = $post['tipe_instansi'];
             $nama_instansis = $post['nama_instansi'];
         }
+        // dump($post);
+        // $jumlah = ((float)$jumlah_tunai + (float)$sisa_bayar) * 100;
+        // dump($jumlah_tunai);
+        // dump((float)$jumlah_tunai);
+        // dump($sisa_bayar);
+        // dump((float)$sisa_bayar);
+        // dd($jumlah);
         $total_bayar_2 = Cashflow::create_cashflow($user->id, $time_key, $kode_accounting, $pembelian_new->id, 'pemasukan', $jumlah_tunai, $sisa_bayar, $jumlah_non_tunai, $tipe_instansis, $nama_instansis);
         // $jumlah = 0;
         // $jumlah_terima_total = 0;

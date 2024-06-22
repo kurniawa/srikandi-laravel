@@ -22,7 +22,8 @@ use Illuminate\Support\Facades\Storage;
 class ItemController extends Controller
 {
     // function pilih_tipe_barang($from) {
-    function pilih_tipe_barang() {
+    function pilih_tipe_barang()
+    {
         // dd($from);
         $cart = Cart::where('user_id', Auth::user()->id)->first();
 
@@ -46,7 +47,8 @@ class ItemController extends Controller
     }
 
     // function create_item($from, $tipe_barang) {
-    function create_item($tipe_barang) {
+    function create_item($tipe_barang)
+    {
         // dump($from);
         // dd($tipe_barang);
         $time = time();
@@ -91,16 +93,17 @@ class ItemController extends Controller
     }
 
     // function store($from, Request $request) {
-    function store(Request $request) {
+    function store(Request $request)
+    {
         $post = $request->post();
         // dump($from);
         // dd($post);
 
         $request->validate([
-            'tipe_barang'=> 'required',
-            'harga_t'=> 'required|numeric',
-            'nama_short'=> 'required',
-            'nama_long'=> 'required',
+            'tipe_barang' => 'required',
+            'harga_t' => 'required|numeric',
+            'nama_short' => 'required',
+            'nama_long' => 'required',
         ]);
         $harga_t = (float)$post['harga_t'] * 100;
 
@@ -162,7 +165,7 @@ class ItemController extends Controller
         foreach ($post['warna_mata'] as $key_warna_mata => $warna_mata) {
             if ($warna_mata) {
                 if ($post['jumlah_mata'][$key_warna_mata] == 0 || $post['jumlah_mata'][$key_warna_mata] === null) {
-                    $request->validate(['error'=>'required'], ['error.required'=>'-jumlah_mata tidak sesuai-']);
+                    $request->validate(['error' => 'required'], ['error.required' => '-jumlah_mata tidak sesuai-']);
                 }
             }
         }
@@ -170,8 +173,8 @@ class ItemController extends Controller
         // VALIDASI MAINAN
         foreach ($post['tipe_mainan'] as $key_tipe_mainan => $tipe_mainan) {
             if ($tipe_mainan) {
-                if ($post['jumlah_mainan'][$key_tipe_mainan] === null || $post['jumlah_mainan'][$key_tipe_mainan] == 0 ) {
-                    $request->validate(['error'=>'required'],['error.required'=>'-jumlah_mainan tidak sesuai-']);
+                if ($post['jumlah_mainan'][$key_tipe_mainan] === null || $post['jumlah_mainan'][$key_tipe_mainan] == 0) {
+                    $request->validate(['error' => 'required'], ['error.required' => '-jumlah_mainan tidak sesuai-']);
                 }
             }
         }
@@ -271,7 +274,8 @@ class ItemController extends Controller
         // }
     }
 
-    function show(Item $item) {
+    function show(Item $item)
+    {
         // dd($item);
         // $item_photos = ItemPhoto::where('item_id', $item->id)->orderBy('photo_index')->get();
         $user = Auth::user();
@@ -310,7 +314,8 @@ class ItemController extends Controller
         return view('items.show', $data);
     }
 
-    function edit(Item $item) {
+    function edit(Item $item)
+    {
         $user = Auth::user();
         $cart = Cart::where('user_id', $user->id)->first();
         // if (count($item->item_photos)) {
@@ -323,7 +328,7 @@ class ItemController extends Controller
         $item_photos = collect();
         $photos = collect();
 
-        for ($i=0 ; $i < 5 ; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             $item_photo = ItemPhoto::where('item_id', $item->id)->where('photo_index', $i)->first();
 
             $item_photos->push($item_photo);
@@ -393,16 +398,17 @@ class ItemController extends Controller
         return view('items.edit', $data);
     }
 
-    function update(Item $item, Request $request) {
+    function update(Item $item, Request $request)
+    {
         $post = $request->post();
         // dump($from);
         // dd($post);
 
         $request->validate([
-            'tipe_barang'=> 'required',
-            'harga_t'=> 'required|numeric',
-            'nama_short'=> 'required',
-            'nama_long'=> 'required',
+            'tipe_barang' => 'required',
+            'harga_t' => 'required|numeric',
+            'nama_short' => 'required',
+            'nama_long' => 'required',
         ]);
         $harga_t = (float)$post['harga_t'] * 100;
 
@@ -461,7 +467,7 @@ class ItemController extends Controller
         foreach ($post['warna_mata'] as $key_warna_mata => $warna_mata) {
             if ($warna_mata) {
                 if ($post['jumlah_mata'][$key_warna_mata] == 0 || $post['jumlah_mata'][$key_warna_mata] === null) {
-                    $request->validate(['error'=>'required'], ['error.required'=>'-jumlah_mata tidak sesuai-']);
+                    $request->validate(['error' => 'required'], ['error.required' => '-jumlah_mata tidak sesuai-']);
                 }
             }
         }
@@ -469,8 +475,8 @@ class ItemController extends Controller
         // VALIDASI MAINAN
         foreach ($post['tipe_mainan'] as $key_tipe_mainan => $tipe_mainan) {
             if ($tipe_mainan) {
-                if ($post['jumlah_mainan'][$key_tipe_mainan] === null || $post['jumlah_mainan'][$key_tipe_mainan] == 0 ) {
-                    $request->validate(['error'=>'required'],['error.required'=>'-jumlah_mainan tidak sesuai-']);
+                if ($post['jumlah_mainan'][$key_tipe_mainan] === null || $post['jumlah_mainan'][$key_tipe_mainan] == 0) {
+                    $request->validate(['error' => 'required'], ['error.required' => '-jumlah_mainan tidak sesuai-']);
                 }
             }
         }
@@ -559,7 +565,8 @@ class ItemController extends Controller
         return redirect()->route('items.show', [$item->id, 'home'])->with($feedback);
     }
 
-    function add_photo(Item $item, Request $request) {
+    function add_photo(Item $item, Request $request)
+    {
         // dd($item);
         $user = Auth::user();
         $cart = Cart::where('user_id', $user->id)->first();
@@ -567,7 +574,7 @@ class ItemController extends Controller
         $item_photos = collect();
         $photos = collect();
 
-        for ($i=0 ; $i < 5 ; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             $item_photo = ItemPhoto::where('item_id', $item->id)->where('photo_index', $i)->first();
 
             $item_photos->push($item_photo);
@@ -600,7 +607,8 @@ class ItemController extends Controller
         return view('items.add_photos', $data);
     }
 
-    function delete(Item $item) {
+    function delete(Item $item)
+    {
         $dangers_ = '';
         // CEK apakah item ini ada fotonya
         if (count($item->photos)) {
@@ -628,7 +636,8 @@ class ItemController extends Controller
         return redirect()->route('home')->with($feedback);
     }
 
-    function update_stock(Item $item, Request $request) {
+    function update_stock(Item $item, Request $request)
+    {
         $post = $request->post();
         $request->validate([
             'stock' => 'required|numeric'
@@ -643,7 +652,5 @@ class ItemController extends Controller
         ];
 
         return back()->with($feedback);
-
     }
-
 }

@@ -12,9 +12,11 @@ class SuratPembelianItem extends Model
     use HasFactory;
     protected $guarded = ['id'];
 
-    static function create_surat_pembelian_item($surat_pembelian, $cart_item_id, $kode_accounting) {
+    static function create_surat_pembelian_item($surat_pembelian, $cart_item_id, $kode_accounting)
+    {
         // dd($cart_item_id);
         $cart_item = CartItem::find($cart_item_id);
+        // dd($cart_item);
         $stock = $cart_item->item->stock - 1;
 
         if ($stock <= 0) {
@@ -149,8 +151,8 @@ class SuratPembelianItem extends Model
         $cart_item->delete();
     }
 
-    function item() {
+    function item()
+    {
         return $this->hasOne(Item::class, "id", "item_id");
     }
-
 }

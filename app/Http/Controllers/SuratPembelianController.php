@@ -435,8 +435,8 @@ class SuratPembelianController extends Controller
             $success_ .= "-Buyback unlocked-";
             return back()->with('success_', $success_);
         } elseif (isset($post['konfirmasi_buyback']) || is_null($post['konfirmasi_buyback'])) {
-            dump($post);
-            dd('masuk ke konfirmasi_buyback');
+            // dump($post);
+            // dd('masuk ke konfirmasi_buyback');
             foreach ($post['index_to_process'] as $index_to_process) {
                 $index_to_process = (int)$index_to_process;
                 $surat_pembelian_item = SuratPembelianItem::find($post['surat_pembelian_item_id'][$index_to_process]);
@@ -477,7 +477,8 @@ class SuratPembelianController extends Controller
                 if ($harga_buyback != ($post_harga_buyback)) {
                     $request->validate(['error' => 'requrired'], ['error.required' => "harga_buyback berbeda: $harga_buyback vs $post_harga_buyback"]);
                 }
-
+                // dump($surat_pembelian_item);
+                // dd($surat_pembelian_item->surat_pembelian_id);
                 $surat_pembelian_item->update([
                     'locked_buyback' => $post['locked_buyback'][$index_to_process],
                     'status_buyback' => $post['status_buyback'][$index_to_process],
@@ -516,7 +517,7 @@ class SuratPembelianController extends Controller
                 $tipe_instansis = $post['tipe_instansi'];
                 $nama_instansis = $post['nama_instansi'];
             }
-            Cashflow::create_cashflow($user->id, $time_key, $kode_accounting, $surat_pembelian_item->pembelian_id, $post['tipe_transaksi'][0], $jumlah_tunai, $sisa_bayar, $jumlah_non_tunai, $tipe_instansis, $nama_instansis);
+            Cashflow::create_cashflow($user->id, $time_key, $kode_accounting, $surat_pembelian_item->surat_pembelian_id, $post['tipe_transaksi'][0], $jumlah_tunai, $sisa_bayar, $jumlah_non_tunai, $tipe_instansis, $nama_instansis);
             $success_ .= "-Cashflow noted!-";
             return back()->with('success_', $success_);
         }

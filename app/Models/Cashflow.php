@@ -39,7 +39,10 @@ class Cashflow extends Model
             }
             $wallet = Wallet::where('tipe', 'laci')->where('nama', 'cash')->first();
             $cashflow_sebelum = Cashflow::where('kategori_wallet', $wallet->kategori)->where('tipe_wallet', $wallet->tipe)->where('nama_wallet', $wallet->nama)->latest()->first();
-            $saldo_akhir = (int)$cashflow_sebelum->saldo * 100;
+            $saldo_akhir = 0;
+            if ($cashflow_sebelum) {
+                $saldo_akhir = (int)$cashflow_sebelum->saldo;
+            }
             if ($tipe_transaksi == 'pemasukan') {
                 $saldo_akhir += $jumlah;
             } elseif ($tipe_transaksi == 'pengeluaran') {
@@ -56,8 +59,8 @@ class Cashflow extends Model
                 'kategori_wallet' => $wallet->kategori,
                 'tipe_wallet' => $wallet->tipe,
                 'nama_wallet' => $wallet->nama,
-                'jumlah' => $jumlah,
-                'saldo' => $saldo_akhir,
+                'jumlah' => (string)$jumlah,
+                'saldo' => (string)$saldo_akhir,
             ]);
             // self::create_update_neraca($tipe_wallet, $nama_wallet, $jumlah);
 
@@ -71,10 +74,14 @@ class Cashflow extends Model
             foreach ($jumlah_non_tunai as $key => $jumlah_nt) {
                 if ($jumlah_nt !== null) {
                     $wallet = Wallet::where('tipe', $tipe_instansis[$key])->where('nama', $nama_instansis[$key])->first();
+                    $cashflow_sebelum = Cashflow::where('kategori_wallet', $wallet->kategori)->where('tipe_wallet', $wallet->tipe)->where('nama_wallet', $wallet->nama)->latest()->first();
                     // $tipe_wallet = $post['tipe_instansi'][$key];
                     // $nama_wallet = $post['nama_instansi'][$key];
                     $jumlah = $jumlah_nt * 100;
-                    $saldo_akhir = (int)$cashflow_sebelum->saldo * 100;
+                    $saldo_akhir = 0;
+                    if ($cashflow_sebelum) {
+                        $saldo_akhir = (int)$cashflow_sebelum->saldo;
+                    }
                     if ($tipe_transaksi == 'pemasukan') {
                         $saldo_akhir += $jumlah;
                     } elseif ($tipe_transaksi == 'pengeluaran') {
@@ -90,7 +97,8 @@ class Cashflow extends Model
                         'kategori_wallet' => $wallet->kategori,
                         'tipe_wallet' => $wallet->tipe,
                         'nama_wallet' => $wallet->nama,
-                        'saldo' => $saldo_akhir,
+                        'jumlah' => (string)$jumlah,
+                        'saldo' => (string)$saldo_akhir,
                     ]);
                     // self::create_update_neraca($tipe_wallet, $nama_wallet, $jumlah);
                     // Saldo::cek_saldo_wallet_sebelumnya_dan_create_apabila_belum_ada($time_key, $wallet, $jumlah);

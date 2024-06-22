@@ -15,17 +15,17 @@ class UserSeeder extends Seeder
     {
         //
         $user = [
-            ['nama' => 'Adi Kurniawan', 'username' => 'cibinongguy', 'password' => 'ffloveakunsomuch','role'=>'Developer', 'clearance_level'=>6],
-            ['nama' => 'Adi Kurniawan', 'username' => 'kuruniawa', 'password' => 'ddloveakunsomuch','role'=>'SuperAdmin', 'clearance_level'=>5],
-            ['nama' => 'Aldebaran', 'username' => 'aldebaran', 'password' => 'aldebaran','role'=>'Admin', 'clearance_level'=>3],
-            ['nama' => 'Andin', 'username' => 'andin', 'password' => 'andin','role'=>'User', 'clearance_level'=>1],
-            ['nama' => 'Udin', 'username' => 'udin', 'password' => 'udin','role'=>'Client', 'clearance_level'=>1],
+            ['nama' => 'Adi Kurniawan', 'username' => 'cibinongguy', 'password' => 'ffloveakunsomuch', 'role' => 'Developer', 'clearance_level' => 6],
+            ['nama' => 'Adi Kurniawan', 'username' => 'kuruniawa', 'password' => 'ddloveakunsomuch', 'role' => 'SuperAdmin', 'clearance_level' => 5],
+            ['nama' => 'Aldebaran Al-Fahri', 'username' => 'aldebaran', 'password' => 'aldebaran', 'role' => 'Admin', 'clearance_level' => 3],
+            ['nama' => 'Andini Kharisma Putri', 'username' => 'andin', 'password' => 'andin', 'role' => 'User', 'clearance_level' => 1],
+            ['nama' => 'Udin', 'username' => 'udin', 'password' => 'udin', 'role' => 'Client', 'clearance_level' => 1],
         ];
 
         for ($i = 0; $i < count($user); $i++) {
-            $password=$user[$i]['password'];
-            if ($user[$i]['username']!=='Dian' || $user[$i]['username']!=='Albert21') {
-                $password=bcrypt($password);
+            $password = $user[$i]['password'];
+            if ($user[$i]['username'] !== 'Dian' || $user[$i]['username'] !== 'Albert21') {
+                $password = bcrypt($password);
             }
             DB::table('users')->insert([
                 'nama' => $user[$i]['nama'],
@@ -35,6 +35,5 @@ class UserSeeder extends Seeder
                 'clearance_level' => $user[$i]['clearance_level'],
             ]);
         }
-
     }
 }

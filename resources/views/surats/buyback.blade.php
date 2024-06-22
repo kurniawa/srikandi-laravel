@@ -647,6 +647,17 @@
         //     hitungHargaBuyback(i);
         //     i++;
         // });
+        examineLockedBuyback();
+
+        function examineLockedBuyback() {
+            const toggle_buyback = document.querySelectorAll('.checkbox-toggle-buyback');
+            // console.log(toggle_buyback);
+            toggle_buyback.forEach((toggle, index) => {
+                if (toggle.checked) {
+                    hitungHargaBuyback(index);
+                }
+            });
+        }
 
         function hitungHargaBuyback(index) {
             // console.log(index);
