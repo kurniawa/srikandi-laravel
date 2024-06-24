@@ -497,6 +497,9 @@ class SuratPembelianController extends Controller
                 $success_ .= "-Status buyback-";
                 Accounting::create([
                     'kode_accounting' => $kode_accounting,
+                    'surat_pembelian_id' => $surat_pembelian->id,
+                    'surat_pembelian_item_id' => $surat_pembelian_item->nama_short,
+                    'nama_barang' => $surat_pembelian_item->id,
                     'user_id' => $user->id,
                     'tipe' => 'pengeluaran',
                     'kategori' => 'Buyback Perhiasan',

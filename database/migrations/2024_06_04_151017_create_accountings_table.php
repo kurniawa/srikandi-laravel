@@ -14,8 +14,11 @@ return new class extends Migration
         Schema::create('accountings', function (Blueprint $table) {
             $table->id();
             $table->string('kode_accounting'); // Untuk Identifikasi ke Cashflow yang mana yang terkait dengan entry accounting ini
+            $table->foreignId('surat_pembelian_id')->nullable()->constrained()->onDelete('cascade')->onUpdate('cascade'); // identifikasi surat atau item yang terkait
+            $table->foreignId('surat_pembelian_item_id')->nullable()->constrained()->onDelete('cascade')->onUpdate('cascade'); // identifikasi surat atau item yang terkait
+            $table->string('nama_barang')->nullable(); // identifikasi nama barang dan untuk mempermudah sorting, apabila diperlukan
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null')->onUpdate('cascade');
-            $table->enum('tipe',['pemasukan', 'pengeluaran']);
+            $table->enum('tipe', ['pemasukan', 'pengeluaran']);
             $table->string('kategori', 50)->nullable();
             $table->string('kategori_2', 50)->nullable();
             $table->bigInteger('jumlah'); // nullable karena masih belum bisa jelas apabila semua barang dalam satu surat pembelian dijual semua, lalu penjualan tersebut kombinasi antara tunai dan non-tunai

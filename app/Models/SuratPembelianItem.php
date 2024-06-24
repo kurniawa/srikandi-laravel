@@ -140,6 +140,9 @@ class SuratPembelianItem extends Model
         }
         Accounting::create([
             'kode_accounting' => $kode_accounting,
+            'surat_pembelian_id' => $surat_pembelian->id,
+            'surat_pembelian_item_id' => $surat_pembelian_item->id,
+            'nama_barang' => $surat_pembelian_item->nama_short,
             'user_id' => $user->id,
             'tipe' => 'pemasukan',
             'kategori' => 'Penjualan Barang',
