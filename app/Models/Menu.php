@@ -10,7 +10,8 @@ class Menu extends Model
 {
     use HasFactory;
 
-    public static function get() {
+    public static function get()
+    {
         $user = Auth::user();
 
         if ($user) {
@@ -40,7 +41,8 @@ class Menu extends Model
         return $menus;
     }
 
-    public static function get_profile_menus($user) {
+    public static function get_profile_menus($user)
+    {
         $menus = collect();
         if (isset($user)) {
             if ($user !== null) {
@@ -48,36 +50,37 @@ class Menu extends Model
                     $menus->push(
                         // ['name'=>'Your Profile','route'=>'user.profile'],
                         // ['name'=>'Settings','route'=>'settings'],
-                        ['name'=>'Surat / Transaksi','route'=>'surat_pembelian.index', 'params'=>$user->id],
-                        ['name'=>'Accounting','route'=>'cashflow.index', 'params'=>$user->id],
-                        ['name'=>'Artisan Commands','route'=>'artisans.index'],
-                        ['name'=>'Log Out','route'=>'logout'],
+                        ['name' => 'Surat / Transaksi', 'route' => 'surat_pembelian.index'],
+                        ['name' => 'Accounting', 'route' => 'cashflow.index'],
+                        ['name' => 'Artisan Commands', 'route' => 'artisans.index'],
+                        ['name' => 'Log Out', 'route' => 'logout'],
                     );
                 } else {
                     $menus->push(
                         // ['name'=>'Your Profile','route'=>'user.profile'],
                         // ['name'=>'Settings','route'=>'settings'],
-                        ['name'=>'Daftar Pelanggan','route'=>'pelanggans.index'],
-                        ['name'=>'Surat Pembelian','route'=>'surat_pembelian.index', 'params'=>$user->id],
-                        ['name'=>'Cash Flow','route'=>'cashflow.index', 'params'=>$user->id],
-                        ['name'=>'Log Out','route'=>'logout'],
+                        ['name' => 'Daftar Pelanggan', 'route' => 'pelanggans.index'],
+                        ['name' => 'Surat Pembelian', 'route' => 'surat_pembelian.index'],
+                        ['name' => 'Cash Flow', 'route' => 'cashflow.index'],
+                        ['name' => 'Log Out', 'route' => 'logout'],
                     );
                 }
             }
         } else {
             $menus->push(
-                ['name'=>'Log in','route'=>'login']
+                ['name' => 'Log in', 'route' => 'login']
             );
         }
 
         return $menus;
     }
 
-    public static function get_pembelian_menus() {
+    public static function get_pembelian_menus()
+    {
         $menus = collect([
-            ['name'=>'Pembelian','route'=>'pembelians.index'],
-            ['name'=>'Barang','route'=>'barangs.index'],
-            ['name'=>'Supplier','route'=>'suppliers.index'],
+            ['name' => 'Pembelian', 'route' => 'pembelians.index'],
+            ['name' => 'Barang', 'route' => 'barangs.index'],
+            ['name' => 'Supplier', 'route' => 'suppliers.index'],
         ]);
 
         return $menus;
@@ -94,10 +97,11 @@ class Menu extends Model
     //     return $menus;
     // }
 
-    public static function get_accounting_menus() {
+    public static function get_accounting_menus()
+    {
         return [
-            ['name'=>'Instansi','route'=>'accounting.index'],
-            ['name'=>'Relasi Transaksi','route'=>'accounting.transactions_relations'],
+            ['name' => 'Instansi', 'route' => 'accounting.index'],
+            ['name' => 'Relasi Transaksi', 'route' => 'accounting.transactions_relations'],
         ];
     }
 }

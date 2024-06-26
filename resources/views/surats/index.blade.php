@@ -28,7 +28,7 @@
             <form action="" method="GET">
                 <table>
                     <tr>
-                        <td>Customer</td>
+                        <td>Nama Pelanggan</td>
                         <td>:</td>
                         <td><input type="text" class="border rounded text-xs p-1" name="pelanggan_nama"
                                 placeholder="nama/username..."></td>
@@ -36,7 +36,7 @@
                     <tr>
                         <td>Admin</td>
                         <td>:</td>
-                        <td><input type="text" class="border rounded text-xs p-1" name="user_nama"
+                        <td><input type="text" class="border rounded text-xs p-1" name="username"
                                 placeholder="nama/username..."></td>
                     </tr>
                 </table>
@@ -141,10 +141,17 @@
                 <tr class="border-t">
                     <td class="pt-1" onclick="$('#surat_pembelian_items-{{ $key }}').toggle(300)">
                         <div class="flex justify-center font-bold">
-                            @if ($surat_pembelian->status_bayar === 'lunas')
-                                <div class="p-1 rounded text-white border-2 bg-emerald-400 border-emerald-500">
-                                @else
-                                    <div class="p-1 rounded text-white border-2 bg-yellow-400 border-yellow-500">
+                            @if ($surat_pembelian->status_buyback == 'all')
+                                <div class="p-1 rounded text-white border-2 bg-slate-400 border-slate-500">
+                                @elseif ($surat_pembelian->status_buyback == 'sebagian')
+                                    <div class="p-1 rounded text-white border-2 bg-orange-400 border-orange-500">
+                                    @else
+                                        @if ($surat_pembelian->status_bayar === 'lunas')
+                                            <div class="p-1 rounded text-white border-2 bg-emerald-400 border-emerald-500">
+                                            @else
+                                                <div
+                                                    class="p-1 rounded text-white border-2 bg-yellow-400 border-yellow-500">
+                                        @endif
                             @endif
                             <div class="text-center">{{ date('d-m', strtotime($surat_pembelian->tanggal_surat)) }}</div>
                             <div class="text-center">{{ date('Y', strtotime($surat_pembelian->tanggal_surat)) }}</div>
@@ -169,7 +176,15 @@
                             <h3 class="font-bold text-slate-500">Data Barang:</h3>
                             <div class="grid grid-cols-12 gap-1 justify-between items-center border-y text-slate-400">
                                 @foreach ($surat_pembelian->items as $item)
-                                    <span class="col-span-8">{{ $item->nama_short }}</span>
+                                    @if ($item->status_buyback)
+                                        <div class="col-span-8">
+                                            <div>{{ $item->nama_short }}</div>
+                                            <div class="text-xs font-bold">({{ $item->status_buyback }} ->
+                                                {{ my_decimal_format($item->harga_buyback) }})</div>
+                                        </div>
+                                    @else
+                                        <span class="col-span-8">{{ $item->nama_short }}</span>
+                                    @endif
                                     <div class="col-span-4 text-xs">
                                         <div>@ {{ my_decimal_format($item->harga_g) }}</div>
                                         <div>o: {{ my_decimal_format($item->ongkos_g) }}</div>

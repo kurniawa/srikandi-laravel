@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Storage;
 
 class SuratPembelianController extends Controller
 {
-    function index()
+    function index(Request $request)
     {
         $user = Auth::user();
         $cart = null;
@@ -26,7 +26,38 @@ class SuratPembelianController extends Controller
             $cart = Cart::where('user_id', $user->id)->first();
         }
 
-        $surat_pembelians = SuratPembelian::orderByDesc('created_at')->limit(200)->get();
+        $get = $request->query();
+        if ($get) {
+            // dd($get);
+            if ($get['pelanggan_nama'] && $get['username'] && $get['from_day'] && $get['from_month'] && $get['from_year'] && $get['to_day'] && $get['to_month'] && $get['to_year']) {
+                $from = "$get[from_year]-$get[from_month]-$get[from_day]";
+                $until = "$get[to_year]-$get[to_month]-$get[to_day] 23:59:59";
+                $surat_pembelians = SuratPembelian::where('pelanggan_nama', 'like', "%$get[pelanggan_nama]%")->where('username', $get['username'])->whereBetween('created_at', [$from, $until])->orderByDesc('created_at')->orderByDesc('created_at')->get();
+            } elseif ($get['pelanggan_nama'] && !$get['username'] && $get['from_month'] && $get['from_year'] && $get['to_day'] && $get['to_month'] && $get['to_year']) {
+                $from = "$get[from_year]-$get[from_month]-$get[from_day]";
+                $until = "$get[to_year]-$get[to_month]-$get[to_day] 23:59:59";
+                $surat_pembelians = SuratPembelian::where('pelanggan_nama', 'like', "%$get[pelanggan_nama]%")->whereBetween('created_at', [$from, $until])->orderByDesc('created_at')->get();
+            } elseif (!$get['pelanggan_nama'] && $get['username'] && $get['from_month'] && $get['from_year'] && $get['to_day'] && $get['to_month'] && $get['to_year']) {
+                $from = "$get[from_year]-$get[from_month]-$get[from_day]";
+                $until = "$get[to_year]-$get[to_month]-$get[to_day] 23:59:59";
+                $surat_pembelians = SuratPembelian::where('username', $get['username'])->whereBetween('created_at', [$from, $until])->orderByDesc('created_at')->get();
+            } elseif (!$get['pelanggan_nama'] && !$get['username'] && $get['from_month'] && $get['from_year'] && $get['to_day'] && $get['to_month'] && $get['to_year']) {
+                $from = "$get[from_year]-$get[from_month]-$get[from_day]";
+                $until = "$get[to_year]-$get[to_month]-$get[to_day] 23:59:59";
+                $surat_pembelians = SuratPembelian::whereBetween('created_at', [$from, $until])->orderByDesc('created_at')->get();
+            } elseif ($get['pelanggan_nama'] && $get['username']) {
+                $surat_pembelians = SuratPembelian::where('pelanggan_nama', 'like', "%$get[pelanggan_nama]%")->where('username', $get['username'])->orderByDesc('created_at')->get();
+            } elseif ($get['pelanggan_nama'] && !$get['username']) {
+                $surat_pembelians = SuratPembelian::where('pelanggan_nama', 'like', "%$get[pelanggan_nama]%")->orderByDesc('created_at')->get();
+            } elseif (!$get['pelanggan_nama'] && $get['username']) {
+                $surat_pembelians = SuratPembelian::where('username', $get['username'])->orderByDesc('created_at')->get();
+            } else {
+                dump($get);
+                dd('ada kesalahan pada filter');
+            }
+        } else {
+            $surat_pembelians = SuratPembelian::orderByDesc('created_at')->limit(200)->get();
+        }
         // my_decimal_format(100000);
         // my_decimal_format(100002);
         // my_decimal_format(100023);
@@ -437,7 +468,11 @@ class SuratPembelianController extends Controller
         } elseif (isset($post['konfirmasi_buyback']) || is_null($post['konfirmasi_buyback'])) {
             // dump($post);
             // dd('masuk ke konfirmasi_buyback');
-            foreach ($post['index_to_process'] as $index_to_process) {
+            $tanggal_buyback = '';
+            foreach ($post['index_to_process'] as $key => $index_to_process) {
+                if ($key === 0) {
+                    $tanggal_buyback = date('Y-m-d', strtotime($post['hari'][$index_to_process] . "-" . $post['bulan'][$index_to_process] . "-" . $post['tahun'][$index_to_process])) . 'T' . date('H:i:s', $time_key);
+                }
                 $index_to_process = (int)$index_to_process;
                 $surat_pembelian_item = SuratPembelianItem::find($post['surat_pembelian_item_id'][$index_to_process]);
                 $harga_t = (float)$post['harga_t'][$index_to_process] * 100;
@@ -492,7 +527,7 @@ class SuratPembelianController extends Controller
                     'total_potongan' => (string)($total_potongan),
                     'harga_buyback' => (string)$harga_buyback,
                     'keterangan_buyback' => $post['keterangan_buyback'][$index_to_process],
-                    'tanggal_buyback' => date('Y-m-d', strtotime($post['hari'][$index_to_process] . "-" . $post['bulan'][$index_to_process] . "-" . $post['tahun'][$index_to_process])) . 'T' . date('H:i:s', $time_key),
+                    'tanggal_buyback' => $tanggal_buyback,
                 ]);
                 $success_ .= "-Status buyback-";
                 Accounting::create([
@@ -507,6 +542,25 @@ class SuratPembelianController extends Controller
                     'jumlah' => (string)$harga_buyback,
                 ]);
                 $success_ .= "-Accounting created-";
+                // UPDATE STATUS BUYBACK SURAT_PEMBELIAN
+                $jumlah_sudah_buyback = 0;
+                foreach ($surat_pembelian->items as $surat_pembelian_item) {
+                    if ($surat_pembelian_item->status_buyback) {
+                        $jumlah_sudah_buyback++;
+                    }
+                }
+                if ($jumlah_sudah_buyback) {
+                    $surat_pembelian->tanggal_buyback = $tanggal_buyback;
+                    $jumlah_item_pada_surat = count($surat_pembelian->items);
+                    if ($jumlah_sudah_buyback === $jumlah_item_pada_surat) {
+                        $surat_pembelian->status_buyback = 'all';
+                    } elseif ($jumlah_sudah_buyback < $jumlah_item_pada_surat) {
+                        $surat_pembelian->status_buyback = 'sebagian';
+                    }
+                    $surat_pembelian->save();
+                    $success_ .= "-status_buyback dan tanggal_buyback pada surat_pembelian telah diupdate-";
+                }
+                // END UPDATE STATUS BUYBACK SURAT PEMBELIAN
             }
             $jumlah_tunai = null;
             $jumlah_non_tunai = null;
