@@ -142,19 +142,21 @@
                     <td class="pt-1" onclick="$('#surat_pembelian_items-{{ $key }}').toggle(300)">
                         <div class="flex justify-center font-bold">
                             @if ($surat_pembelian->status_buyback == 'all')
-                                <div class="p-1 rounded text-white border-2 bg-slate-400 border-slate-500">
+                                <div class="rounded text-white border-2 bg-slate-400 border-slate-500">
                                 @elseif ($surat_pembelian->status_buyback == 'sebagian')
-                                    <div class="p-1 rounded text-white border-2 bg-orange-400 border-orange-500">
+                                    <div class="rounded text-white border-2 bg-orange-400 border-orange-500">
                                     @else
                                         @if ($surat_pembelian->status_bayar === 'lunas')
-                                            <div class="p-1 rounded text-white border-2 bg-emerald-400 border-emerald-500">
+                                            <div class="rounded text-white border-2 bg-emerald-400 border-emerald-500">
                                             @else
-                                                <div
-                                                    class="p-1 rounded text-white border-2 bg-yellow-400 border-yellow-500">
+                                                <div class="rounded text-white border-2 bg-yellow-400 border-yellow-500">
                                         @endif
                             @endif
-                            <div class="text-center">{{ date('d-m', strtotime($surat_pembelian->tanggal_surat)) }}</div>
-                            <div class="text-center">{{ date('Y', strtotime($surat_pembelian->tanggal_surat)) }}</div>
+                            <div class="text-center"><span
+                                    class="whitespace-nowrap text-xs font-bold">{{ date('d-m', strtotime($surat_pembelian->tanggal_surat)) }}</span>
+                            </div>
+                            <div class="text-center text-xs font-bold">
+                                {{ date('Y', strtotime($surat_pembelian->tanggal_surat)) }}</div>
                         </div>
                         </div>
                     </td>
@@ -162,10 +164,12 @@
                         <div class="text-center text-slate-500">{{ $surat_pembelian->username }}</div>
                     </td>
                     <td class="py-1">
-                        <div class="text-center text-slate-500">{{ $surat_pembelian->pelanggan_nama }}</div>
+                        <div class="text-center text-slate-500 text-xs font-bold">{{ $surat_pembelian->pelanggan_nama }}
+                        </div>
                     </td>
                     <td class="py-1">
-                        <div class="text-center text-slate-500">{{ my_decimal_format($surat_pembelian->harga_total) }}
+                        <div class="text-center text-slate-500">
+                            {{ my_decimal_format($surat_pembelian->harga_total) }}
                         </div>
                     </td>
                 </tr>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Accounting;
 use App\Models\AcuanPembukuan;
 use App\Models\Cart;
 use App\Models\Cashflow;
@@ -12,7 +13,8 @@ use Illuminate\Support\Facades\Auth;
 
 class CashflowController extends Controller
 {
-    function index(Request $request) {
+    function index(Request $request)
+    {
         $user = Auth::user();
         $cart = null;
         if ($user) {
@@ -25,13 +27,15 @@ class CashflowController extends Controller
 
         $col_cashflows = collect();
         $col_saldos = collect();
+        $col_accountings = collect();
+        $col_total = collect();
 
-        for ($i=$get_day; $i >= 1 ; $i--) {
-            $starting_time = "$get_year-$get_month-$i";
-            $ending_time = "$get_year-$get_month-$i 23:59:59";
+        for ($i = $get_day; $i >= 1; $i--) {
+            $from = "$get_year-$get_month-$i";
+            $until = "$get_year-$get_month-$i 23:59:59";
 
 
-            $cashflows = Cashflow::whereBetween('created_at', [$starting_time, $ending_time])->orderByDesc("created_at")->get();
+            $cashflows = Cashflow::whereBetween('created_at', [$from, $until])->orderByDesc("created_at")->get();
             $day = $i;
             $month = $get_month;
 
@@ -48,21 +52,48 @@ class CashflowController extends Controller
                 "tahun" => $get_year,
                 "cashflows" => $cashflows,
             ]);
-
-            // SALDO
-            $saldos = Saldo::whereBetween("created_at", [$starting_time, $ending_time])->get();
-            $saldo_awal = 0;
-            $saldo_akhir = 0;
-            if (count($saldos)) {
-                foreach ($saldos as $saldo) {
-                    $saldo_awal += $saldo->saldo_awal;
-                    $saldo_akhir += $saldo->saldo_akhir;
+            // Accounting
+            $accountings = Accounting::whereBetween('created_at', [$from, $until])->orderByDesc("created_at")->get();
+            // if (count($accountings)) {
+            //     dump($accountings);
+            // }
+            $col_accountings->push([
+                "hari" => $day,
+                "bulan" => $month,
+                "tahun" => $get_year,
+                "accountings" => $accountings,
+            ]);
+            $pemasukan = 0;
+            $pengeluaran = 0;
+            foreach ($accountings as $accounting) {
+                if ($accounting->tipe == 'pemasukan') {
+                    $pemasukan += (int)$accounting->jumlah;
+                } elseif ($accounting->tipe == 'pengeluaran') {
+                    $pengeluaran += (int)$accounting->jumlah;
                 }
             }
-            $col_saldos->push([
-                'saldo_awal' => $saldo_awal,
-                'saldo_akhir' => $saldo_akhir,
-            ]);
+            $col_total->push(
+                [
+                    'total_pemasukan' => $pemasukan,
+                    'total_pengeluaran' => $pengeluaran,
+
+                ]
+            );
+
+            // SALDO
+            // $saldos = Saldo::whereBetween("created_at", [$from, $until])->get();
+            // $saldo_awal = 0;
+            // $saldo_akhir = 0;
+            // if (count($saldos)) {
+            //     foreach ($saldos as $saldo) {
+            //         $saldo_awal += $saldo->saldo_awal;
+            //         $saldo_akhir += $saldo->saldo_akhir;
+            //     }
+            // }
+            // $col_saldos->push([
+            //     'saldo_awal' => $saldo_awal,
+            //     'saldo_akhir' => $saldo_akhir,
+            // ]);
         }
 
         // SALDO PADA WALLET
@@ -88,16 +119,19 @@ class CashflowController extends Controller
             'cart' => $cart,
             'col_cashflows' => $col_cashflows,
             'col_saldos' => $col_saldos,
+            'col_accountings' => $col_accountings,
+            'col_total' => $col_total,
             'saldos' => $saldos,
             'back' => true,
             'backRoute' => 'home',
             'backRouteParams' => null,
         ];
-        // dd($data);
+        // dd('stop');
         return view('cashflows.index', $data);
     }
 
-    function transaksi($tipe_transaksi) {
+    function transaksi($tipe_transaksi)
+    {
         $user = Auth::user();
         $cart = null;
         if ($user) {
@@ -124,7 +158,8 @@ class CashflowController extends Controller
     }
 
 
-    function store_transaction(Request $request) {
+    function store_transaction(Request $request)
+    {
         $post = $request->post();
         dd($post);
     }

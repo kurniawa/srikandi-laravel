@@ -48,17 +48,18 @@ class Menu extends Model
             if ($user !== null) {
                 if ($user->clearance_level == 6) {
                     $menus->push(
-                        // ['name'=>'Your Profile','route'=>'user.profile'],
-                        // ['name'=>'Settings','route'=>'settings'],
-                        ['name' => 'Surat / Transaksi', 'route' => 'surat_pembelian.index'],
-                        ['name' => 'Accounting', 'route' => 'cashflow.index'],
+                        ['name' => 'Profile', 'route' => 'users.profile'],
+                        ['name' => 'Daftar User', 'route' => 'users.index'],
+                        ['name' => 'Daftar Pelanggan', 'route' => 'pelanggans.index'],
+                        ['name' => 'Surat Pembelian', 'route' => 'surat_pembelian.index'],
+                        ['name' => 'Cash Flow', 'route' => 'cashflow.index'],
                         ['name' => 'Artisan Commands', 'route' => 'artisans.index'],
                         ['name' => 'Log Out', 'route' => 'logout'],
                     );
-                } else {
+                } elseif ($user->clearance_level >= 3) {
                     $menus->push(
-                        // ['name'=>'Your Profile','route'=>'user.profile'],
-                        // ['name'=>'Settings','route'=>'settings'],
+                        ['name' => 'Profile', 'route' => 'users.show', 'params' => $user->id],
+                        ['name' => 'Daftar User', 'route' => 'users.index'],
                         ['name' => 'Daftar Pelanggan', 'route' => 'pelanggans.index'],
                         ['name' => 'Surat Pembelian', 'route' => 'surat_pembelian.index'],
                         ['name' => 'Cash Flow', 'route' => 'cashflow.index'],

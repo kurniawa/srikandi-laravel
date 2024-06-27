@@ -4,35 +4,55 @@
         <x-errors-any></x-errors-any>
         <x-validation-feedback></x-validation-feedback>
 
-        <div class="inline-block rounded p-2 bg-white shadow drop-shadow">
-            <div class="flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
-                </svg>
-
-                <h3 class="ml-1 font-bold">+ Pelanggan Baru</h3>
+        <div class="flex gap-2 items-center">
+            <div class="inline-block rounded p-2 bg-white shadow drop-shadow">
+                <div class="flex items-center text-slate-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                        stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                    </svg>
+                    <h1 class="ml-1 font-bold">Edit Data Pelanggan</h1>
+                </div>
             </div>
         </div>
 
-        <form method="POST" action="{{ route('pelanggans.store', $user->id) }}"
+        {{-- @if ($pelanggan->profile_picture_path)
+            <div class="flex justify-center mt-5">
+                <div class="bg-slate-50 shadow drop-shadow text-slate-400 w-3/4 rounded-full overflow-hidden">
+                    <img src="{{ asset('storage/' . $pelanggan->profile_picture_path) }}" alt="">
+                </div>
+            </div>
+        @else
+            <div class="flex justify-center mt-5">
+                <div class="bg-slate-50 shadow drop-shadow text-slate-400 w-3/4 rounded-full overflow-hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                        stroke="currentColor" class="w-full">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                    </svg>
+                </div>
+            </div>
+        @endif --}}
+
+        <form method="POST" action="{{ route('pelanggans.update', $pelanggan->id) }}"
             class="p-5 border rounded bg-white shadow drop-shadow mt-2">
             @csrf
             <div class="">
                 <label for="displayName">Nama :</label>
-                <input type="text" id="displayName" name="nama" placeholder="Aldebaran Al Fahri"
-                    class="border border-slate-400 text-slate-700 shadow rounded w-full px-3 py-2 block placeholder:text-slate-400 focus:outline-none focus:border-none focus:ring-1 focus:ring-blue-500 invalid:text-pink-700 invalid:focus:ring-pink-700;"
-                    value="{{ old('nama') ? old('nama') : '' }}" required />
+                <div>
+                    <input type="text" id="displayName" name="nama" class="rounded text-slate-600 w-full"
+                        value="{{ old('nama') ? old('nama') : $pelanggan->nama }}" required />
+                </div>
             </div>
 
             <div class="mt-3">
                 <label for="username">Username :</label>
-                <input type="text" id="username" name="username" placeholder="aldebaran"
-                    class="border border-slate-400 text-slate-700 shadow rounded w-full px-3 py-2 block placeholder:text-slate-400 focus:outline-none focus:border-none focus:ring-1 focus:ring-blue-500 invalid:text-pink-700 invalid:focus:ring-pink-700;"
-                    value="{{ old('username') ? old('username') : '' }}" />
+                <div>
+                    <input type="text" id="username" name="username" class="rounded text-slate-600 w-full"
+                        value="{{ old('username') ? old('username') : $pelanggan->username }}" />
+                </div>
             </div>
-            <div class="italic text-xs">(akan otomatis dibuatkan, apabila tidak diisi)</div>
 
             <div class="mt-3">
                 <label for="gender" class="block">Gender :</label>
@@ -50,72 +70,89 @@
                             <label for="wanita" class="ml-1">wanita</label>
                         @endif
                     @else
-                        <input type="radio" name="gender" id="pria" value='pria' />
-                        <label for="pria" class="ml-1">pria</label>
-                        <input type="radio" name="gender" id="wanita"value='wanita' class="ml-3" />
-                        <label for="wanita" class="ml-1">wanita</label>
+                        @if ($pelanggan->gender == 'pria')
+                            <input type="radio" name="gender" id="pria" value='pria' checked />
+                            <label for="pria" class="ml-1">pria</label>
+                            <input type="radio" name="gender" id="wanita"value='wanita' class="ml-3" />
+                            <label for="wanita" class="ml-1">wanita</label>
+                        @elseif ($pelanggan->gender == 'wanita')
+                            <input type="radio" name="gender" id="pria" value='pria' />
+                            <label for="pria" class="ml-1">pria</label>
+                            <input type="radio" name="gender" id="wanita"value='wanita' class="ml-3" checked />
+                            <label for="wanita" class="ml-1">wanita</label>
+                        @else
+                            <input type="radio" name="gender" id="pria" value='pria' />
+                            <label for="pria" class="ml-1">pria</label>
+                            <input type="radio" name="gender" id="wanita"value='wanita' class="ml-3" />
+                            <label for="wanita" class="ml-1">wanita</label>
+                        @endif
                     @endif
                 </div>
             </div>
 
             <div class="mt-3">
                 <label for="nik">NIK / Nomor ID :</label>
-                <input name="nik" type="text" id="nik" placeholder="320101 . . ."
-                    class="border border-slate-400 text-slate-700 shadow rounded w-full px-3 py-2 block placeholder:text-slate-400 focus:outline-none focus:border-none focus:ring-1 focus:ring-blue-500 invalid:text-pink-700 invalid:focus:ring-pink-700;"
-                    value="{{ old('nik') ? old('nik') : '' }}" />
+                <div>
+                    <input name="nik" type="text" id="nik" class="rounded text-slate-600 w-full"
+                        value="{{ old('nik') ? old('nik') : $pelanggan->nik }}" />
+                </div>
             </div>
 
             <div class="mt-3">
                 <label for="nomor_wa">No. WA :</label>
-                <input name="nomor_wa" type="text" id="nomor_wa" placeholder="0889 . . ."
-                    class="border border-slate-400 text-slate-700 shadow rounded w-full px-3 py-2 block placeholder:text-slate-400 focus:outline-none focus:border-none focus:ring-1 focus:ring-blue-500 invalid:text-pink-700 invalid:focus:ring-pink-700;"
-                    value="{{ old('nomor_wa') ? old('nomor_wa') : '' }}" />
+                <div>
+                    <input name="nomor_wa" type="text" id="nomor_wa" class="rounded text-slate-600 w-full"
+                        value="{{ old('nomor_wa') ? old('nomor_wa') : $pelanggan->nomor_wa }}" />
+                </div>
             </div>
 
             <div class="mt-3">
                 <label for="email">Email :</label>
-                <input type="email" id="email" name="email" placeholder="nagita@slavina.com"
-                    class="border border-slate-400 text-slate-700 shadow rounded w-full px-3 py-2 block placeholder:text-slate-400 focus:outline-none focus:border-none focus:ring-1 focus:ring-blue-500 invalid:text-pink-700 invalid:focus:ring-pink-700;"
-                    value="{{ old('email') ? old('email') : '' }}" />
+                <div>
+                    <input type="email" id="email" name="email" class="rounded text-slate-600 w-full"
+                        value="{{ old('email') ? old('email') : $pelanggan->email }}" />
+                </div>
             </div>
 
             <label for="alamat" class="block mt-3 font-semibold">Alamat</label>
             <div class="p-2 border-4 border-indigo-200 rounded">
                 <label for="baris-1">Baris 1 :</label>
-                <input type="text" id="baris-1" name="alamat_baris_1"
-                    class="border border-slate-400 text-slate-700 shadow rounded w-full px-3 py-2 block placeholder:text-slate-400 focus:outline-none focus:border-none focus:ring-1 focus:ring-blue-500 invalid:text-pink-700 invalid:focus:ring-pink-700;"
-                    value="{{ old('alamat_baris_1') ? old('alamat_baris_1') : '' }}" />
+                <div>
+                    <input type="text" id="baris-1" name="alamat_baris_1" class="rounded text-slate-600 w-full"
+                        value="{{ old('alamat_baris_1') ? old('alamat_baris_1') : $pelanggan->alamat_baris_1 }}" />
+                </div>
                 <label for="baris-2">Baris 2 :</label>
-                <input type="text" id="baris-2" name="alamat_baris_2"
-                    class="border border-slate-400 text-slate-700 shadow rounded w-full px-3 py-2 block placeholder:text-slate-400 focus:outline-none focus:border-none focus:ring-1 focus:ring-blue-500 invalid:text-pink-700 invalid:focus:ring-pink-700;"
-                    value="{{ old('alamat_baris_2') ? old('alamat_baris_2') : '' }}" />
+                <div>
+                    <input type="text" id="baris-2" name="alamat_baris_2" class="rounded text-slate-600 w-full"
+                        value="{{ old('alamat_baris_2') ? old('alamat_baris_2') : $pelanggan->alamat_baris_2 }}" />
+                </div>
                 <label for="baris-3">Baris 3 :</label>
-                <input type="text" id="baris-3" name="alamat_baris_3"
-                    class="border border-slate-400 text-slate-700 shadow rounded w-full px-3 py-2 block placeholder:text-slate-400 focus:outline-none focus:border-none focus:ring-1 focus:ring-blue-500 invalid:text-pink-700 invalid:focus:ring-pink-700;"
-                    value="{{ old('alamat_baris_3') ? old('alamat_baris_3') : '' }}" />
+                <div>
+                    <input type="text" id="baris-3" name="alamat_baris_3" class="rounded text-slate-600 w-full"
+                        value="{{ old('alamat_baris_3') ? old('alamat_baris_3') : $pelanggan->alamat_baris_3 }}" />
+                </div>
                 <label for="provinsi">Provinsi :</label>
-                <input type="text" id="provinsi" name="provinsi"
-                    class="border border-slate-400 text-slate-700 shadow rounded w-full px-3 py-2 block placeholder:text-slate-400 focus:outline-none focus:border-none focus:ring-1 focus:ring-blue-500 invalid:text-pink-700 invalid:focus:ring-pink-700;"
-                    value="{{ old('provinsi') ? old('provinsi') : '' }}" />
+                <div>
+                    <input type="text" id="provinsi" name="provinsi" class="rounded text-slate-600 w-full"
+                        value="{{ old('provinsi') ? old('provinsi') : $pelanggan->provinsi }}" />
+                </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
                         <label for="kota">Kota :</label>
-                        <input type="text" id="kota" name="kota"
-                            class="border border-slate-400 text-slate-700 shadow rounded w-full px-3 py-2 block placeholder:text-slate-400 focus:outline-none focus:border-none focus:ring-1 focus:ring-blue-500 invalid:text-pink-700 invalid:focus:ring-pink-700;"
-                            value="{{ old('kota') ? old('kota') : '' }}" />
+                        <input type="text" id="kota" name="kota" class="rounded text-slate-600 w-full"
+                            value="{{ old('kota') ? old('kota') : $pelanggan->kota }}" />
                     </div>
                     <div>
                         <label for="kodepos">Kode POS :</label>
-                        <input type="text" id="kodepos" name="kodepos"
-                            class="border border-slate-400 text-slate-700 shadow rounded w-full px-3 py-2 block placeholder:text-slate-400 focus:outline-none focus:border-none focus:ring-1 focus:ring-blue-500 invalid:text-pink-700 invalid:focus:ring-pink-700;"
-                            value="{{ old('kodepos') ? old('kodepos') : '' }}" />
+                        <input type="text" id="kodepos" name="kodepos" class="rounded text-slate-600 w-full"
+                            value="{{ old('kodepos') ? old('kodepos') : $pelanggan->kodepos }}" />
                     </div>
                 </div>
             </div>
 
             {{-- PROFILE PICTURE --}}
             <!-- Foto Profile -->
-            <div id="div-preview-profile-photo" class="mt-3 hidden">
+            {{-- <div id="div-preview-profile-photo" class="mt-3 hidden">
                 <div class="flex justify-end">
                     <button type="button" class="bg-rose-300 text-white rounded-full p-1"
                         onclick="removeImage('input-profile-photo', 'div-preview-profile-photo', 'preview-profile-photo', 'label-input-profile-photo')">
@@ -149,11 +186,11 @@
             </div>
             <input id="input-profile-photo" name="profile_picture" type="file" accept=".jpg, .jpeg, .png"
                 onchange="previewImage(this.files[0], 'div-preview-profile-photo', 'preview-profile-photo', 'label-input-profile-photo')"
-                class="hidden" />
+                class="hidden" /> --}}
 
             {{-- ID PICTURE / PHOTO --}}
 
-            <div id="div-preview-id-photo" class="mt-3 hidden">
+            {{-- <div id="div-preview-id-photo" class="mt-3 hidden">
                 <div class="flex justify-end">
                     <button type="button" class="bg-rose-300 text-white rounded-full p-1"
                         onclick="removeImage('input-id-photo', 'div-preview-id-photo', 'preview-id-photo', 'label-input-id-photo')">
@@ -187,15 +224,14 @@
             </div>
             <input id="input-id-photo" name="id_photo" type="file" accept=".jpg, .jpeg, .png"
                 onchange="previewImage(this.files[0], 'div-preview-id-photo', 'preview-id-photo', 'label-input-id-photo')"
-                class="hidden" />
+                class="hidden" /> --}}
 
             <div class="mt-5 text-center">
                 <button type="submit"
-                    class="loading-spinner bg-emerald-300 rounded text-white font-bold px-3 py-2 hover:bg-emerald-400 disabled:opacity-25">+Tambah
-                    Pelanggan</button>
+                    class="loading-spinner bg-emerald-300 rounded text-white font-bold px-3 py-2 hover:bg-emerald-400 disabled:opacity-25">Konfirmasi
+                    Edit</button>
             </div>
         </form>
-
     </main>
 
     {{-- <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button> --}}

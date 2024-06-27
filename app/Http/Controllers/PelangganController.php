@@ -9,13 +9,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-class UserController extends Controller
+class PelangganController extends Controller
 {
     function index()
     {
         $user = Auth::user();
         $cart = Cart::where('user_id', $user->id)->first();
-        $users = User::where('clearance_level', '>', 3)->orderBy('username')->get();
+        $pelanggans = User::where('clearance_level', 1)->orderBy('nama')->get();
 
         $data = [
             'menus' => Menu::get(),
@@ -28,42 +28,42 @@ class UserController extends Controller
             'backRouteParams' => [$user->id],
             'cart' => $cart,
             'user' => $user,
-            'users' => $users,
+            'pelanggans' => $pelanggans,
             // 'cart_item' => $cart_item,
             // 'related_user' => $related_user,
             // 'peminat_items' => $peminat_items,
         ];
 
-        return view('users.index', $data);
+        return view('pelanggans.index', $data);
     }
 
-    function users_create()
+    function pelanggans_create()
     {
         $user = Auth::user();
         $cart = Cart::where('user_id', $user->id)->first();
-        $users = User::where('clearance_level', 1)->orderBy('nama')->get();
+        $pelanggans = User::where('clearance_level', 1)->orderBy('nama')->get();
 
         $data = [
             'menus' => Menu::get(),
-            'route_now' => 'users.create',
+            'route_now' => 'pelanggans.create',
             'profile_menus' => Menu::get_profile_menus($user),
             'parent_route' => 'home',
             // 'spk_menus' => Menu::get_spk_menus(),
             'back' => true,
-            'backRoute' => 'users.index',
+            'backRoute' => 'pelanggans.index',
             'backRouteParams' => null,
             'cart' => $cart,
             'user' => $user,
-            'users' => $users,
+            'pelanggans' => $pelanggans,
             // 'cart_item' => $cart_item,
             // 'related_user' => $related_user,
             // 'peminat_items' => $peminat_items,
         ];
 
-        return view('users.create', $data);
+        return view('pelanggans.create', $data);
     }
 
-    function users_store(Request $request)
+    function pelanggans_store(Request $request)
     {
         $post = $request->post();
         $success_ = "";
@@ -87,7 +87,7 @@ class UserController extends Controller
             ]);
             $file_profile_picture = $request->file('profile_picture');
             $filename_profile_picture = $time . "." . $file_profile_picture->extension();
-            $profile_picture_path = "users/profile_pictures/$filename_profile_picture";
+            $profile_picture_path = "pelanggans/profile_pictures/$filename_profile_picture";
         }
 
         $file_id_photo = null;
@@ -99,7 +99,7 @@ class UserController extends Controller
             ]);
             $file_id_photo = $request->file('id_photo');
             $filename_id_photo = $time . "." . $file_id_photo->extension();
-            $id_photo_path = "users/id_photos/$filename_id_photo";
+            $id_photo_path = "pelanggans/id_photos/$filename_id_photo";
         }
 
         $username = null;
@@ -132,7 +132,7 @@ class UserController extends Controller
             $gender = $post["gender"];
         }
         $user = Auth::user();
-        $user = User::create([
+        $pelanggan = User::create([
             "nama" => $post["nama"],
             "username" => $username,
             "password" => $password,
@@ -153,12 +153,12 @@ class UserController extends Controller
         $success_ .= "-User baru dibuat-";
 
         if ($file_profile_picture) {
-            $file_profile_picture->storeAs('users/profile_pictures', $filename_profile_picture);
+            $file_profile_picture->storeAs('pelanggans/profile_pictures', $filename_profile_picture);
             $success_ .= "-Profile Picture terupload-";
         }
 
         if ($file_id_photo) {
-            $file_id_photo->storeAs('users/id_photos', $filename_id_photo);
+            $file_id_photo->storeAs('pelanggans/id_photos', $filename_id_photo);
             $success_ .= "-ID Photo terupload-";
         }
 
@@ -166,26 +166,26 @@ class UserController extends Controller
             "success_" => $success_
         ];
 
-        return redirect()->route('users.show', $user->id)->with($feedback);
+        return redirect()->route('pelanggans.show', $pelanggan->id)->with($feedback);
     }
 
-    function show(User $user)
+    function show(User $pelanggan)
     {
         $user = Auth::user();
         $cart = Cart::where('user_id', $user->id)->first();
-        list($surat_pembelians, $arr_surat_pembelian_items) = User::histori_pembelian($user);
+        list($surat_pembelians, $arr_surat_pembelian_items) = User::histori_pembelian($pelanggan);
         $data = [
             'menus' => Menu::get(),
-            'route_now' => 'users.show',
+            'route_now' => 'pelanggans.show',
             'profile_menus' => Menu::get_profile_menus($user),
             'parent_route' => 'home',
             // 'spk_menus' => Menu::get_spk_menus(),
             'back' => true,
-            'backRoute' => 'users.index',
+            'backRoute' => 'pelanggans.index',
             'backRouteParams' => null,
             'cart' => $cart,
             'user' => $user,
-            'user' => $user,
+            'pelanggan' => $pelanggan,
             'surat_pembelians' => $surat_pembelians,
             'arr_surat_pembelian_items' => $arr_surat_pembelian_items,
             // 'cart_item' => $cart_item,
@@ -193,41 +193,86 @@ class UserController extends Controller
             // 'peminat_items' => $peminat_items,
         ];
 
-        return view('users.show', $data);
+        return view('pelanggans.show', $data);
     }
 
-    function edit(User $user)
+    function edit(User $pelanggan)
     {
-        dd($user);
+        $user = Auth::user();
+        $cart = Cart::where('user_id', $user->id)->first();
+        $data = [
+            'menus' => Menu::get(),
+            'route_now' => 'pelanggans.show',
+            'profile_menus' => Menu::get_profile_menus($user),
+            'cart' => $cart,
+            'user' => $user,
+            'pelanggan' => $pelanggan,
+        ];
+
+        return view('pelanggans.edit', $data);
     }
 
-    function edit_profile_picture(User $user)
+    function update(User $pelanggan, Request $request)
     {
-        // dd($user);
+        $post = $request->post();
+        dump($pelanggan);
+        dd($post);
+        $request->validate([
+            "nama" => "required|string",
+            "nik" => "nullable|numeric",
+            "email" => "nullable|email",
+        ]);
+
+        $success_ = "";
+
+        $pelanggan->update([
+            "nama" => $post["nama"],
+            "username" => $post['username'],
+            "nik" => $post["nik"],
+            "gender" => $post['gender'],
+            "nomor_wa" => $post["nomor_wa"],
+            "alamat_baris_1" => $post["alamat_baris_1"],
+            "alamat_baris_2" => $post["alamat_baris_2"],
+            "alamat_baris_3" => $post["alamat_baris_3"],
+            "provinsi" => $post["provinsi"],
+            "kota" => $post["kota"],
+            "kodepos" => $post["kodepos"],
+        ]);
+
+        $success_ .= '-data pelanggan diupdate-';
+        $feedback = [
+            'success_' => $success_
+        ];
+        return redirect()->route('pelanggans.show', $pelanggan->id)->with($feedback);
+    }
+
+    function edit_profile_picture(User $pelanggan)
+    {
+        // dd($pelanggan);
         $user = Auth::user();
         $cart = Cart::where('user_id', $user->id)->first();
 
         $data = [
             'menus' => Menu::get(),
-            'route_now' => 'users.edit_profile_picture',
+            'route_now' => 'pelanggans.edit_profile_picture',
             'profile_menus' => Menu::get_profile_menus($user),
             'parent_route' => 'home',
             // 'spk_menus' => Menu::get_spk_menus(),
             'back' => true,
-            'backRoute' => 'users.show',
-            'backRouteParams' => [$user->id],
+            'backRoute' => 'pelanggans.show',
+            'backRouteParams' => [$pelanggan->id],
             'cart' => $cart,
             'user' => $user,
-            'user' => $user,
+            'pelanggan' => $pelanggan,
             // 'cart_item' => $cart_item,
             // 'related_user' => $related_user,
             // 'peminat_items' => $peminat_items,
         ];
 
-        return view('users.edit_profile_picture', $data);
+        return view('pelanggans.edit_profile_picture', $data);
     }
 
-    function update_profile_picture(User $user, Request $request)
+    function update_profile_picture(User $pelanggan, Request $request)
     {
         // $post = $request->post();
         $file_photo = $request->file('photo');
@@ -244,12 +289,12 @@ class UserController extends Controller
 
         $time = time();
         $file_name = $time . "." . $file_photo->extension();
-        $file_photo->storeAs('users/profile_pictures', $file_name);
+        $file_photo->storeAs('pelanggans/profile_pictures', $file_name);
 
-        $user->profile_picture_path = "users/profile_pictures/$file_name";
-        $user->save();
+        $pelanggan->profile_picture_path = "pelanggans/profile_pictures/$file_name";
+        $pelanggan->save();
 
-        $success_ .= "-user->profile_picture_path $user->profile_picture_path created-";
+        $success_ .= "-Pelanggan->profile_picture_path $pelanggan->profile_picture_path created-";
 
         $feedback = [
             "success_" => $success_
@@ -258,18 +303,18 @@ class UserController extends Controller
         return back()->with($feedback);
     }
 
-    function delete_profile_picture(User $user)
+    function delete_profile_picture(User $pelanggan)
     {
         $warnings_ = "";
-        if (Storage::exists($user->profile_picture_path)) {
-            Storage::delete($user->profile_picture_path);
+        if (Storage::exists($pelanggan->profile_picture_path)) {
+            Storage::delete($pelanggan->profile_picture_path);
         }
         $warnings_ .= "-File Profile Picture dihapus-";
 
-        $user->profile_picture_path = null;
-        $user->save();
+        $pelanggan->profile_picture_path = null;
+        $pelanggan->save();
 
-        $warnings_ .= "-Data user diupdate-";
+        $warnings_ .= "-Data Pelanggan diupdate-";
 
         $feedback = [
             "warnings_" => $warnings_,
@@ -278,7 +323,7 @@ class UserController extends Controller
         return back()->with($feedback);
     }
 
-    function update_id_photo(User $user, Request $request)
+    function update_id_photo(User $pelanggan, Request $request)
     {
         // $post = $request->post();
         $file_photo = $request->file('photo');
@@ -295,12 +340,12 @@ class UserController extends Controller
 
         $time = time();
         $file_name = $time . "." . $file_photo->extension();
-        $file_photo->storeAs('users/id_photos', $file_name);
+        $file_photo->storeAs('pelanggans/id_photos', $file_name);
 
-        $user->id_photo_path = "users/id_photos/$file_name";
-        $user->save();
+        $pelanggan->id_photo_path = "pelanggans/id_photos/$file_name";
+        $pelanggan->save();
 
-        $success_ .= "-user->id_photo_path $user->id_photo_path created-";
+        $success_ .= "-Pelanggan->id_photo_path $pelanggan->id_photo_path created-";
 
         $feedback = [
             "success_" => $success_
@@ -309,18 +354,18 @@ class UserController extends Controller
         return back()->with($feedback);
     }
 
-    function delete_id_photo(User $user)
+    function delete_id_photo(User $pelanggan)
     {
         $warnings_ = "";
-        if (Storage::exists($user->id_photo_path)) {
-            Storage::delete($user->id_photo_path);
+        if (Storage::exists($pelanggan->id_photo_path)) {
+            Storage::delete($pelanggan->id_photo_path);
         }
         $warnings_ .= "-File ID Photo dihapus-";
 
-        $user->id_photo_path = null;
-        $user->save();
+        $pelanggan->id_photo_path = null;
+        $pelanggan->save();
 
-        $warnings_ .= "-Data user diupdate-";
+        $warnings_ .= "-Data Pelanggan diupdate-";
 
         $feedback = [
             "warnings_" => $warnings_,
@@ -329,31 +374,31 @@ class UserController extends Controller
         return back()->with($feedback);
     }
 
-    function delete(User $user)
+    function delete(User $pelanggan)
     {
-        // dd($user);
+        // dd($pelanggan);
         $dangers_ = "";
-        if ($user->profile_picture_path) {
-            if (Storage::exists($user->profile_picture_path)) {
-                Storage::delete($user->profile_picture_path);
+        if ($pelanggan->profile_picture_path) {
+            if (Storage::exists($pelanggan->profile_picture_path)) {
+                Storage::delete($pelanggan->profile_picture_path);
             }
             $dangers_ .= "-ProfilePicture dihapus-";
         }
 
-        if ($user->id_photo_path) {
-            if (Storage::exists($user->id_photo_path)) {
-                Storage::delete($user->id_photo_path);
+        if ($pelanggan->id_photo_path) {
+            if (Storage::exists($pelanggan->id_photo_path)) {
+                Storage::delete($pelanggan->id_photo_path);
             }
             $dangers_ .= "-ID-Photo dihapus-";
         }
 
-        $user->delete();
-        $dangers_ .= "-Data user dihapus-";
+        $pelanggan->delete();
+        $dangers_ .= "-Data pelanggan dihapus-";
 
         $feedback = [
             "dangers_" => $dangers_
         ];
 
-        return redirect()->route("users.index")->with($feedback);
+        return redirect()->route("pelanggans.index")->with($feedback);
     }
 }
