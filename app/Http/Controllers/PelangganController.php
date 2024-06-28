@@ -7,6 +7,7 @@ use App\Models\Menu;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class PelangganController extends Controller
@@ -215,8 +216,8 @@ class PelangganController extends Controller
     function update(User $pelanggan, Request $request)
     {
         $post = $request->post();
-        dump($pelanggan);
-        dd($post);
+        // dump($pelanggan);
+        // dd($post);
         $request->validate([
             "nama" => "required|string",
             "nik" => "nullable|numeric",
@@ -400,5 +401,50 @@ class PelangganController extends Controller
         ];
 
         return redirect()->route("pelanggans.index")->with($feedback);
+    }
+
+    function change_password(User $pelanggan)
+    {
+        $user = Auth::user();
+        $cart = Cart::where('user_id', $user->id)->first();
+        $data = [
+            'menus' => Menu::get(),
+            'route_now' => 'pelanggans.show',
+            'profile_menus' => Menu::get_profile_menus($user),
+            'cart' => $cart,
+            'user' => $user,
+            'pelanggan' => $pelanggan,
+        ];
+
+        return view('pelanggans.change_password', $data);
+    }
+
+    function update_password(User $pelanggan, Request $request)
+    {
+        // $post = $request->post();
+        // dump($post);
+        // dd($pelanggan);
+        # Validation
+        $request->validate([
+            'old_password' => 'required',
+            'new_password' => 'required|confirmed|min:8',
+        ]);
+
+
+        #Match The Old Password
+        // dump($pelanggan);
+        // dump($pelanggan->password);
+        // dd(Hash::check($request->old_password, $pelanggan->password));
+        if (!Hash::check($request->old_password, $pelanggan->password)) {
+            return back()->with("errors_", "Old Password Doesn't match!");
+        }
+
+
+        #Update the new Password
+        User::whereId($pelanggan->id)->update([
+            'password' => Hash::make($request->new_password)
+        ]);
+
+        return back()->with("success_", "Password changed successfully!");
     }
 }

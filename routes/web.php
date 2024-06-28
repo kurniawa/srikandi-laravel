@@ -59,6 +59,8 @@ Route::controller(PelangganController::class)->group(function () {
     Route::post('/pelanggans/{pelanggan}/delete_id_photo', 'delete_id_photo')->name('pelanggans.delete_id_photo')->middleware('level3');
     Route::post('/pelanggans/{pelanggan}/delete', 'delete')->name('pelanggans.delete')->middleware('level3');
     Route::get('/pelanggans/{pelanggan}/list_of_items', 'list_of_items')->name('pelanggans.list_of_items')->middleware('level3');
+    Route::get('/pelanggans/{pelanggan}/change_password', 'change_password')->name('pelanggans.change_password')->middleware('level3');
+    Route::post('/pelanggans/{pelanggan}/update_password', 'update_password')->name('pelanggans.update_password')->middleware('level3');
 });
 
 Route::controller(UserController::class)->group(function () {
@@ -75,6 +77,8 @@ Route::controller(UserController::class)->group(function () {
     Route::post('/users/{user}/delete_id_photo', 'delete_id_photo')->name('users.delete_id_photo')->middleware('level3');
     Route::post('/users/{user}/delete', 'delete')->name('users.delete')->middleware('level3');
     Route::get('/users/{user}/list_of_items', 'list_of_items')->name('users.list_of_items')->middleware('level3');
+    Route::get('/users/{user}/change_password', 'change_password')->name('users.change_password')->middleware('level3');
+    Route::post('/users/{user}/update_password', 'update_password')->name('users.update_password')->middleware('level3');
 });
 
 Route::controller(ItemController::class)->group(function () {

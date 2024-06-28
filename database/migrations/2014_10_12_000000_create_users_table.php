@@ -19,16 +19,9 @@ return new class extends Migration
             $table->string('email')->nullable()->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('role',['Developer', 'SuperAdmin', 'Admin', 'User', 'Client'])->default('Client');
+            $table->enum('role', ['Developer', 'SuperAdmin', 'Admin', 'User', 'Client'])->default('Client');
             $table->smallInteger('clearance_level')->default(1);
             $table->string('gender', 20)->nullable(); // pria atau wanita
-            $table->string('nomor_wa', 20)->nullable();
-            $table->string('alamat_baris_1')->nullable();
-            $table->string('alamat_baris_2')->nullable();
-            $table->string('alamat_baris_3')->nullable();
-            $table->string('provinsi', 20)->nullable();
-            $table->string('kota', 20)->nullable();
-            $table->string('kode_pos', 20)->nullable();
             $table->string('profile_picture_path')->nullable();
             $table->string('id_photo_path')->nullable();
             $table->string('created_by', 20)->nullable()->default("self"); // username dari auth user yang membuat

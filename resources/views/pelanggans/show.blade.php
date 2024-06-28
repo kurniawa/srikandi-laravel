@@ -111,46 +111,80 @@
 
             <div class="mt-3">
                 <label class="text-slate-500">Gender :</label>
-                <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">{{ $pelanggan->gender }}</div>
+                @if ($pelanggan->gender)
+                    <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">{{ $pelanggan->gender }}</div>
+                @else
+                    <span>-</span>
+                @endif
             </div>
 
             <div class="mt-3">
                 <label class="text-slate-500">NIK / Nomor ID :</label>
-                <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">{{ $pelanggan->nik }}</div>
+                @if ($pelanggan->nik)
+                    <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">{{ $pelanggan->nik }}</div>
+                @else
+                    <span>-</span>
+                @endif
             </div>
 
             <div class="mt-3">
                 <label class="text-slate-500">No. WA :</label>
-                <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">{{ $pelanggan->nomor_wa }}</div>
+                @if ($pelanggan->no_wa)
+                    <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">{{ $pelanggan->nomor_wa }}
+                    </div>
+                @else
+                    <span>-</span>
+                @endif
             </div>
 
             <div class="mt-3">
                 <label class="text-slate-500">Email :</label>
-                <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">{{ $pelanggan->email }}</div>
+                @if ($pelanggan->email)
+                    <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">{{ $pelanggan->email }}</div>
+                @else
+                    <span>-</span>
+                @endif
             </div>
 
             <div class="mt-3">
                 <label class="text-slate-500">Alamat :</label>
-                <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">
-                    <div>{{ $pelanggan->alamat_baris_1 }}</div>
-                    <div>{{ $pelanggan->alamat_baris_2 }}</div>
-                    <div>{{ $pelanggan->alamat_baris_3 }}</div>
-                </div>
+                @if ($pelanggan->alamat_baris_1 || $pelanggan->alamat_baris_2 || $pelanggan->alamat_baris_3)
+                    <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">
+                        <div>{{ $pelanggan->alamat_baris_1 }}</div>
+                        <div>{{ $pelanggan->alamat_baris_2 }}</div>
+                        <div>{{ $pelanggan->alamat_baris_3 }}</div>
+                    </div>
+                @else
+                    <span>-</span>
+                @endif
                 <div class="grid grid-cols-2 gap-2 mt-3">
                     <div>
                         <label class="text-slate-500">Provinsi :</label>
-                        <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">
-                            {{ $pelanggan->provinsi }}</div>
+                        @if ($pelanggan->provinsi)
+                            <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">
+                                {{ $pelanggan->provinsi }}</div>
+                        @else
+                            <span>-</span>
+                        @endif
                     </div>
                     <div>
                         <label class="text-slate-500">Kota :</label>
-                        <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">{{ $pelanggan->kota }}
-                        </div>
+                        @if ($pelanggan->kota)
+                            <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">
+                                {{ $pelanggan->kota }}
+                            </div>
+                        @else
+                            <span>-</span>
+                        @endif
                     </div>
                     <div>
                         <label class="text-slate-500">Kode POS :</label>
-                        <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">
-                            {{ $pelanggan->kodepos }}</div>
+                        @if ($pelanggan->kodepos)
+                            <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">
+                                {{ $pelanggan->kodepos }}</div>
+                        @else
+                            <span>-</span>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -158,7 +192,7 @@
 
         <div class="flex justify-center mt-5">
             <a href="{{ route('pelanggans.edit', $pelanggan->id) }}"
-                class="bg-slate-300 text-white p-2 rounded-lg font-bold flex items-center gap-2">
+                class="loading-spinner bg-slate-300 text-white p-2 rounded-lg font-bold flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                     stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -167,11 +201,22 @@
                 <span>Edit Data Pelanggan</span>
             </a>
         </div>
+        <div class="flex justify-center mt-2">
+            <a href="{{ route('pelanggans.change_password', $pelanggan->id) }}"
+                class="loading-spinner bg-indigo-300 text-white p-2 rounded-lg font-bold flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                    stroke="currentColor" class="size-5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M15.75 5.25a3 3 0 0 1 3 3m3 0a6 6 0 0 1-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1 1 21.75 8.25Z" />
+                </svg>
+                <span>Change Password</span>
+            </a>
+        </div>
         <form action="{{ route('pelanggans.delete', $pelanggan->id) }}" method="POST" class="mt-2"
             onsubmit="return confirm('Yakin ingin hapus pelanggan ini?')">
             @csrf
             <div class="flex justify-center">
-                <button class="flex items-center gap-2 p-2 bg-rose-300 text-white font-bold rounded-lg">
+                <button class="loading-spinner flex items-center gap-2 p-2 bg-rose-300 text-white font-bold rounded-lg">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                         stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round"

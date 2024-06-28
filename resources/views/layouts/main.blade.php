@@ -307,6 +307,10 @@
             @if (Auth::user())
                 <div class="text-center">
                     <span>Welcome, {{ Auth::user()->username }}!</span>
+                    @if (Auth::user()->clearance_level < 3)
+                        <div class="bg-rose-400 text-white text-xs font-bold p-1 my-2 rounded">-Anda tidak
+                            dapat mengakses sistem ini-</div>
+                    @endif
                 </div>
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
