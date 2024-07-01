@@ -129,8 +129,9 @@
 
             <div class="mt-3">
                 <label class="text-slate-500">No. WA :</label>
-                @if ($pelanggan->no_wa)
-                    <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">{{ $pelanggan->nomor_wa }}
+                @if (count($pelanggan->kontaks))
+                    <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">
+                        {{ $pelanggan->kontaks[0]->nomor }}
                     </div>
                 @else
                     <span>-</span>
@@ -148,45 +149,45 @@
 
             <div class="mt-3">
                 <label class="text-slate-500">Alamat :</label>
-                @if ($pelanggan->alamat_baris_1 || $pelanggan->alamat_baris_2 || $pelanggan->alamat_baris_3)
+                @if (count($pelanggan->alamats))
                     <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">
-                        <div>{{ $pelanggan->alamat_baris_1 }}</div>
-                        <div>{{ $pelanggan->alamat_baris_2 }}</div>
-                        <div>{{ $pelanggan->alamat_baris_3 }}</div>
+                        <div>{{ $pelanggan->alamats[0]->alamat_baris_1 }}</div>
+                        <div>{{ $pelanggan->alamats[0]->alamat_baris_2 }}</div>
+                        <div>{{ $pelanggan->alamats[0]->alamat_baris_3 }}</div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 mt-3">
+                        <div>
+                            <label class="text-slate-500">Provinsi :</label>
+                            @if ($pelanggan->alamats[0]->provinsi)
+                                <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">
+                                    {{ $pelanggan->alamats[0]->provinsi }}</div>
+                            @else
+                                <span>-</span>
+                            @endif
+                        </div>
+                        <div>
+                            <label class="text-slate-500">Kota :</label>
+                            @if ($pelanggan->alamats[0]->kota)
+                                <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">
+                                    {{ $pelanggan->alamats[0]->kota }}
+                                </div>
+                            @else
+                                <span>-</span>
+                            @endif
+                        </div>
+                        <div>
+                            <label class="text-slate-500">Kode POS :</label>
+                            @if ($pelanggan->alamats[0]->kodepos)
+                                <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">
+                                    {{ $pelanggan->alamats[0]->kodepos }}</div>
+                            @else
+                                <span>-</span>
+                            @endif
+                        </div>
                     </div>
                 @else
                     <span>-</span>
                 @endif
-                <div class="grid grid-cols-2 gap-2 mt-3">
-                    <div>
-                        <label class="text-slate-500">Provinsi :</label>
-                        @if ($pelanggan->provinsi)
-                            <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">
-                                {{ $pelanggan->provinsi }}</div>
-                        @else
-                            <span>-</span>
-                        @endif
-                    </div>
-                    <div>
-                        <label class="text-slate-500">Kota :</label>
-                        @if ($pelanggan->kota)
-                            <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">
-                                {{ $pelanggan->kota }}
-                            </div>
-                        @else
-                            <span>-</span>
-                        @endif
-                    </div>
-                    <div>
-                        <label class="text-slate-500">Kode POS :</label>
-                        @if ($pelanggan->kodepos)
-                            <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">
-                                {{ $pelanggan->kodepos }}</div>
-                        @else
-                            <span>-</span>
-                        @endif
-                    </div>
-                </div>
             </div>
         </div>
 

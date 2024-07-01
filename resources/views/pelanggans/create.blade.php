@@ -16,7 +16,7 @@
             </div>
         </div>
 
-        <form method="POST" action="{{ route('pelanggans.store', $user->id) }}"
+        <form method="POST" action="{{ route('pelanggans.store') }}"
             class="p-5 border rounded bg-white shadow drop-shadow mt-2">
             @csrf
             <div class="">

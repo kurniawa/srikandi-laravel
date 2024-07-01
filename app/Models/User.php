@@ -4,6 +4,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -45,7 +47,8 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    static function cari_data_pelanggan($nama, $username, $nik) {
+    static function cari_data_pelanggan($nama, $username, $nik)
+    {
         $feedback = "";
         $pelanggan = null;
         $error_cari_data_pelanggan = false;
@@ -79,7 +82,8 @@ class User extends Authenticatable
         return array($pelanggan, $error_cari_data_pelanggan, $feedback);
     }
 
-    static function histori_pembelian($pelanggan) {
+    static function histori_pembelian($pelanggan)
+    {
         $surat_pembelians = SuratPembelian::where('pelanggan_username', $pelanggan->username)->get();
         $arr_surat_pembelian_items = array();
         foreach ($surat_pembelians as $surat_pembelian) {
@@ -90,5 +94,15 @@ class User extends Authenticatable
         }
 
         return array($surat_pembelians, $arr_surat_pembelian_items);
+    }
+
+    function kontaks(): HasMany
+    {
+        return $this->hasMany(UserKontak::class);
+    }
+
+    function alamats(): HasMany
+    {
+        return $this->hasMany(UserAlamat::class);
     }
 }

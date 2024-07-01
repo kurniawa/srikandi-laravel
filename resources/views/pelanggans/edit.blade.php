@@ -100,10 +100,17 @@
 
             <div class="mt-3">
                 <label for="nomor_wa">No. WA :</label>
-                <div>
-                    <input name="nomor_wa" type="text" id="nomor_wa" class="rounded text-slate-600 w-full"
-                        value="{{ old('nomor_wa') ? old('nomor_wa') : $pelanggan->nomor_wa }}" />
-                </div>
+                @if (count($pelanggan->kontaks))
+                    <div>
+                        <input name="nomor_wa" type="text" id="nomor_wa" class="rounded text-slate-600 w-full"
+                            value="{{ old('nomor_wa') ? old('nomor_wa') : $pelanggan->kontaks[0]->nomor }}" />
+                    </div>
+                @else
+                    <div>
+                        <input name="nomor_wa" type="text" id="nomor_wa" class="rounded text-slate-600 w-full"
+                            value="{{ old('nomor_wa') ? old('nomor_wa') : '' }}" />
+                    </div>
+                @endif
             </div>
 
             <div class="mt-3">
@@ -115,40 +122,77 @@
             </div>
 
             <label for="alamat" class="block mt-3 font-semibold">Alamat</label>
-            <div class="p-2 border-4 border-indigo-200 rounded">
-                <label for="baris-1">Baris 1 :</label>
-                <div>
-                    <input type="text" id="baris-1" name="alamat_baris_1" class="rounded text-slate-600 w-full"
-                        value="{{ old('alamat_baris_1') ? old('alamat_baris_1') : $pelanggan->alamat_baris_1 }}" />
-                </div>
-                <label for="baris-2">Baris 2 :</label>
-                <div>
-                    <input type="text" id="baris-2" name="alamat_baris_2" class="rounded text-slate-600 w-full"
-                        value="{{ old('alamat_baris_2') ? old('alamat_baris_2') : $pelanggan->alamat_baris_2 }}" />
-                </div>
-                <label for="baris-3">Baris 3 :</label>
-                <div>
-                    <input type="text" id="baris-3" name="alamat_baris_3" class="rounded text-slate-600 w-full"
-                        value="{{ old('alamat_baris_3') ? old('alamat_baris_3') : $pelanggan->alamat_baris_3 }}" />
-                </div>
-                <label for="provinsi">Provinsi :</label>
-                <div>
-                    <input type="text" id="provinsi" name="provinsi" class="rounded text-slate-600 w-full"
-                        value="{{ old('provinsi') ? old('provinsi') : $pelanggan->provinsi }}" />
-                </div>
-                <div class="grid grid-cols-2 gap-2">
+            @if (count($pelanggan->alamats))
+                <div class="p-2 border-4 border-indigo-200 rounded">
+                    <label for="baris-1">Baris 1 :</label>
                     <div>
-                        <label for="kota">Kota :</label>
-                        <input type="text" id="kota" name="kota" class="rounded text-slate-600 w-full"
-                            value="{{ old('kota') ? old('kota') : $pelanggan->kota }}" />
+                        <input type="text" id="baris-1" name="alamat_baris_1" class="rounded text-slate-600 w-full"
+                            value="{{ old('alamat_baris_1') ? old('alamat_baris_1') : $pelanggan->alamats[0]->alamat_baris_1 }}" />
                     </div>
+                    <label for="baris-2">Baris 2 :</label>
                     <div>
-                        <label for="kodepos">Kode POS :</label>
-                        <input type="text" id="kodepos" name="kodepos" class="rounded text-slate-600 w-full"
-                            value="{{ old('kodepos') ? old('kodepos') : $pelanggan->kodepos }}" />
+                        <input type="text" id="baris-2" name="alamat_baris_2" class="rounded text-slate-600 w-full"
+                            value="{{ old('alamat_baris_2') ? old('alamat_baris_2') : $pelanggan->alamats[0]->alamat_baris_2 }}" />
+                    </div>
+                    <label for="baris-3">Baris 3 :</label>
+                    <div>
+                        <input type="text" id="baris-3" name="alamat_baris_3" class="rounded text-slate-600 w-full"
+                            value="{{ old('alamat_baris_3') ? old('alamat_baris_3') : $pelanggan->alamats[0]->alamat_baris_3 }}" />
+                    </div>
+                    <label for="provinsi">Provinsi :</label>
+                    <div>
+                        <input type="text" id="provinsi" name="provinsi" class="rounded text-slate-600 w-full"
+                            value="{{ old('provinsi') ? old('provinsi') : $pelanggan->alamats[0]->provinsi }}" />
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label for="kota">Kota :</label>
+                            <input type="text" id="kota" name="kota" class="rounded text-slate-600 w-full"
+                                value="{{ old('kota') ? old('kota') : $pelanggan->alamats[0]->kota }}" />
+                        </div>
+                        <div>
+                            <label for="kodepos">Kode POS :</label>
+                            <input type="text" id="kodepos" name="kodepos" class="rounded text-slate-600 w-full"
+                                value="{{ old('kodepos') ? old('kodepos') : $pelanggan->alamats[0]->kodepos }}" />
+                        </div>
                     </div>
                 </div>
-            </div>
+            @else
+                <div class="p-2 border-4 border-indigo-200 rounded">
+                    <label for="baris-1">Baris 1 :</label>
+                    <div>
+                        <input type="text" id="baris-1" name="alamat_baris_1" class="rounded text-slate-600 w-full"
+                            value="{{ old('alamat_baris_1') ? old('alamat_baris_1') : '' }}" />
+                    </div>
+                    <label for="baris-2">Baris 2 :</label>
+                    <div>
+                        <input type="text" id="baris-2" name="alamat_baris_2" class="rounded text-slate-600 w-full"
+                            value="{{ old('alamat_baris_2') ? old('alamat_baris_2') : '' }}" />
+                    </div>
+                    <label for="baris-3">Baris 3 :</label>
+                    <div>
+                        <input type="text" id="baris-3" name="alamat_baris_3" class="rounded text-slate-600 w-full"
+                            value="{{ old('alamat_baris_3') ? old('alamat_baris_3') : '' }}" />
+                    </div>
+                    <label for="provinsi">Provinsi :</label>
+                    <div>
+                        <input type="text" id="provinsi" name="provinsi" class="rounded text-slate-600 w-full"
+                            value="{{ old('provinsi') ? old('provinsi') : '' }}" />
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label for="kota">Kota :</label>
+                            <input type="text" id="kota" name="kota" class="rounded text-slate-600 w-full"
+                                value="{{ old('kota') ? old('kota') : '' }}" />
+                        </div>
+                        <div>
+                            <label for="kodepos">Kode POS :</label>
+                            <input type="text" id="kodepos" name="kodepos" class="rounded text-slate-600 w-full"
+                                value="{{ old('kodepos') ? old('kodepos') : '' }}" />
+                        </div>
+                    </div>
+                </div>
+            @endif
 
             {{-- PROFILE PICTURE --}}
             <!-- Foto Profile -->

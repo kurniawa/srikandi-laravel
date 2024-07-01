@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\Menu;
 use App\Models\User;
+use App\Models\UserAlamat;
+use App\Models\UserKontak;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -124,7 +126,6 @@ class PelangganController extends Controller
             }
         }
 
-
         $password = bcrypt($username);
 
         // MULAI CREATE USER
@@ -139,13 +140,7 @@ class PelangganController extends Controller
             "password" => $password,
             "nik" => $post["nik"],
             "gender" => $gender,
-            "nomor_wa" => $post["nomor_wa"],
-            "alamat_baris_1" => $post["alamat_baris_1"],
-            "alamat_baris_2" => $post["alamat_baris_2"],
-            "alamat_baris_3" => $post["alamat_baris_3"],
-            "provinsi" => $post["provinsi"],
-            "kota" => $post["kota"],
-            "kodepos" => $post["kodepos"],
+
             "profile_picture_path" => $profile_picture_path,
             "id_photo_path" => $id_photo_path,
             "created_by" => $user->username,
@@ -163,6 +158,31 @@ class PelangganController extends Controller
             $success_ .= "-ID Photo terupload-";
         }
 
+        if ($post['alamat_baris_1']) {
+
+            UserAlamat::create([
+                'user_id' => $pelanggan->id,
+                'tipe' => 'UTAMA',
+                "alamat_baris_1" => $post["alamat_baris_1"],
+                "alamat_baris_2" => $post["alamat_baris_2"],
+                "alamat_baris_3" => $post["alamat_baris_3"],
+                "provinsi" => $post["provinsi"],
+                "kota" => $post["kota"],
+                "kodepos" => $post["kodepos"],
+            ]);
+            $success_ .= "-UserAlamat baru dibuat-";
+        }
+
+        if ($post['nomor_wa']) {
+            UserKontak::create([
+                'user_id' => $pelanggan->id,
+                'tipe' => 'WA',
+                "nomor" => $post["nomor_wa"],
+                "is_aktual" => 'yes',
+            ]);
+            $success_ .= "-UserKontak baru dibuat-";
+        }
+
         $feedback = [
             "success_" => $success_
         ];
@@ -175,6 +195,8 @@ class PelangganController extends Controller
         $user = Auth::user();
         $cart = Cart::where('user_id', $user->id)->first();
         list($surat_pembelians, $arr_surat_pembelian_items) = User::histori_pembelian($pelanggan);
+        // dd($pelanggan->kontaks);
+        // dd($pelanggan->alamats);
         $data = [
             'menus' => Menu::get(),
             'route_now' => 'pelanggans.show',
@@ -223,6 +245,16 @@ class PelangganController extends Controller
             "nik" => "nullable|numeric",
             "email" => "nullable|email",
         ]);
+
+        $auth_user = Auth::user();
+        if ($auth_user->clearance_level < 3) {
+            $request->validate(['error' => 'required'], ['error.required' => '-You are not authorized-']);
+        }
+        if ($auth_user->id != $pelanggan->id) {
+            if ($auth_user->clearance_level <= $pelanggan->clearance_level) {
+                $request->validate(['error' => 'required'], ['error.required' => '-You are not authorized-']);
+            }
+        }
 
         $success_ = "";
 
