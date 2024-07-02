@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\Menu;
 use App\Models\User;
+use App\Models\UserAlamat;
+use App\Models\UserKontak;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
@@ -15,23 +18,14 @@ class UserController extends Controller
     {
         $user = Auth::user();
         $cart = Cart::where('user_id', $user->id)->first();
-        $users = User::where('clearance_level', '>', 3)->orderBy('username')->get();
+        $users = User::where('clearance_level', '>=', 3)->orderBy('nama')->get();
 
         $data = [
             'menus' => Menu::get(),
-            'route_now' => 'cart_items.add_photo',
             'profile_menus' => Menu::get_profile_menus($user),
-            'parent_route' => 'home',
-            // 'spk_menus' => Menu::get_spk_menus(),
-            'back' => true,
-            'backRoute' => 'carts.index',
-            'backRouteParams' => [$user->id],
             'cart' => $cart,
             'user' => $user,
             'users' => $users,
-            // 'cart_item' => $cart_item,
-            // 'related_user' => $related_user,
-            // 'peminat_items' => $peminat_items,
         ];
 
         return view('users.index', $data);
@@ -41,23 +35,14 @@ class UserController extends Controller
     {
         $user = Auth::user();
         $cart = Cart::where('user_id', $user->id)->first();
-        $users = User::where('clearance_level', 1)->orderBy('nama')->get();
+        $users = User::where('clearance_level', '>=', 3)->orderBy('nama')->get();
 
         $data = [
             'menus' => Menu::get(),
-            'route_now' => 'users.create',
             'profile_menus' => Menu::get_profile_menus($user),
-            'parent_route' => 'home',
-            // 'spk_menus' => Menu::get_spk_menus(),
-            'back' => true,
-            'backRoute' => 'users.index',
-            'backRouteParams' => null,
             'cart' => $cart,
             'user' => $user,
             'users' => $users,
-            // 'cart_item' => $cart_item,
-            // 'related_user' => $related_user,
-            // 'peminat_items' => $peminat_items,
         ];
 
         return view('users.create', $data);
@@ -123,7 +108,6 @@ class UserController extends Controller
             }
         }
 
-
         $password = bcrypt($username);
 
         // MULAI CREATE USER
@@ -138,13 +122,6 @@ class UserController extends Controller
             "password" => $password,
             "nik" => $post["nik"],
             "gender" => $gender,
-            "nomor_wa" => $post["nomor_wa"],
-            "alamat_baris_1" => $post["alamat_baris_1"],
-            "alamat_baris_2" => $post["alamat_baris_2"],
-            "alamat_baris_3" => $post["alamat_baris_3"],
-            "provinsi" => $post["provinsi"],
-            "kota" => $post["kota"],
-            "kodepos" => $post["kodepos"],
             "profile_picture_path" => $profile_picture_path,
             "id_photo_path" => $id_photo_path,
             "created_by" => $user->username,
@@ -153,14 +130,18 @@ class UserController extends Controller
         $success_ .= "-User baru dibuat-";
 
         if ($file_profile_picture) {
-            $file_profile_picture->storeAs('users/profile_pictures', $filename_profile_picture);
+            $file_profile_picture->storeAs('users/profile_pictures', $user->id . "-" . $filename_profile_picture);
             $success_ .= "-Profile Picture terupload-";
         }
 
         if ($file_id_photo) {
-            $file_id_photo->storeAs('users/id_photos', $filename_id_photo);
+            $file_id_photo->storeAs('users/id_photos', $user->id . "-" . $filename_id_photo);
             $success_ .= "-ID Photo terupload-";
         }
+
+        UserAlamat::create_new_alamat($post, $user, false);
+
+        UserKontak::create_new_kontak($post, $user, false);
 
         $feedback = [
             "success_" => $success_
@@ -171,26 +152,17 @@ class UserController extends Controller
 
     function show(User $user)
     {
-        $user = Auth::user();
         $cart = Cart::where('user_id', $user->id)->first();
         list($surat_pembelians, $arr_surat_pembelian_items) = User::histori_pembelian($user);
+        // dd($user->kontaks);
+        // dd($user->alamats);
         $data = [
             'menus' => Menu::get(),
-            'route_now' => 'users.show',
             'profile_menus' => Menu::get_profile_menus($user),
-            'parent_route' => 'home',
-            // 'spk_menus' => Menu::get_spk_menus(),
-            'back' => true,
-            'backRoute' => 'users.index',
-            'backRouteParams' => null,
             'cart' => $cart,
-            'user' => $user,
             'user' => $user,
             'surat_pembelians' => $surat_pembelians,
             'arr_surat_pembelian_items' => $arr_surat_pembelian_items,
-            // 'cart_item' => $cart_item,
-            // 'related_user' => $related_user,
-            // 'peminat_items' => $peminat_items,
         ];
 
         return view('users.show', $data);
@@ -198,30 +170,68 @@ class UserController extends Controller
 
     function edit(User $user)
     {
-        dd($user);
+        $auth_user = Auth::user();
+        $cart = Cart::where('user_id', $auth_user->id)->first();
+        $data = [
+            'menus' => Menu::get(),
+            'profile_menus' => Menu::get_profile_menus($user),
+            'cart' => $cart,
+            'user' => $user,
+        ];
+
+        return view('users.edit', $data);
+    }
+
+    function update(User $user, Request $request)
+    {
+        $post = $request->post();
+        // dump($user);
+        // dd($post);
+        $request->validate([
+            "nama" => "required|string",
+            "nik" => "nullable|numeric",
+            "email" => "nullable|email",
+        ]);
+
+        User::edit_user_validation($request, $user);
+
+        $success_ = "";
+
+        $gender = null;
+        if (isset($post['gender'])) {
+            $gender = $post['gender'];
+        }
+
+        $user->update([
+            "nama" => $post["nama"],
+            // "username" => $post['username'], // Username tidak boleh sembarang diganti
+            "nik" => $post["nik"],
+            "gender" => $gender,
+
+        ]);
+
+        $success_ .= '-data user diupdate-';
+
+        UserAlamat::update_alamat($post, $user);
+        UserKontak::update_kontak($post, $user);
+
+        $feedback = [
+            'success_' => $success_
+        ];
+        return redirect()->route('users.show', $user->id)->with($feedback);
     }
 
     function edit_profile_picture(User $user)
     {
         // dd($user);
-        $user = Auth::user();
-        $cart = Cart::where('user_id', $user->id)->first();
+        $auth_user = Auth::user();
+        $cart = Cart::where('user_id', $auth_user->id)->first();
 
         $data = [
             'menus' => Menu::get(),
-            'route_now' => 'users.edit_profile_picture',
             'profile_menus' => Menu::get_profile_menus($user),
-            'parent_route' => 'home',
-            // 'spk_menus' => Menu::get_spk_menus(),
-            'back' => true,
-            'backRoute' => 'users.show',
-            'backRouteParams' => [$user->id],
             'cart' => $cart,
             'user' => $user,
-            'user' => $user,
-            // 'cart_item' => $cart_item,
-            // 'related_user' => $related_user,
-            // 'peminat_items' => $peminat_items,
         ];
 
         return view('users.edit_profile_picture', $data);
@@ -243,7 +253,7 @@ class UserController extends Controller
         $success_ = "";
 
         $time = time();
-        $file_name = $time . "." . $file_photo->extension();
+        $file_name = $user->id . "-" . $time . "." . $file_photo->extension();
         $file_photo->storeAs('users/profile_pictures', $file_name);
 
         $user->profile_picture_path = "users/profile_pictures/$file_name";
@@ -294,7 +304,7 @@ class UserController extends Controller
         $success_ = "";
 
         $time = time();
-        $file_name = $time . "." . $file_photo->extension();
+        $file_name = $user->id . "-" . $time . "." . $file_photo->extension();
         $file_photo->storeAs('users/id_photos', $file_name);
 
         $user->id_photo_path = "users/id_photos/$file_name";
@@ -355,5 +365,47 @@ class UserController extends Controller
         ];
 
         return redirect()->route("users.index")->with($feedback);
+    }
+
+    function change_password(User $user)
+    {
+        $cart = Cart::where('user_id', $user->id)->first();
+        $data = [
+            'menus' => Menu::get(),
+            'profile_menus' => Menu::get_profile_menus($user),
+            'cart' => $cart,
+            'user' => $user,
+        ];
+
+        return view('users.change_password', $data);
+    }
+
+    function update_password(User $user, Request $request)
+    {
+        // $post = $request->post();
+        // dump($post);
+        // dd($user);
+        # Validation
+        $request->validate([
+            'old_password' => 'required',
+            'new_password' => 'required|confirmed|min:8',
+        ]);
+
+
+        #Match The Old Password
+        // dump($user);
+        // dump($user->password);
+        // dd(Hash::check($request->old_password, $user->password));
+        if (!Hash::check($request->old_password, $user->password)) {
+            return back()->with("errors_", "Old Password Doesn't match!");
+        }
+
+
+        #Update the new Password
+        User::whereId($user->id)->update([
+            'password' => Hash::make($request->new_password)
+        ]);
+
+        return back()->with("success_", "Password changed successfully!");
     }
 }

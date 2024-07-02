@@ -146,7 +146,7 @@ class PelangganController extends Controller
             "created_by" => $user->username,
         ]);
 
-        $success_ .= "-User baru dibuat-";
+        $success_ .= "-Pelanggan baru dibuat-";
 
         if ($file_profile_picture) {
             $file_profile_picture->storeAs('pelanggans/profile_pictures', $filename_profile_picture);
@@ -158,30 +158,9 @@ class PelangganController extends Controller
             $success_ .= "-ID Photo terupload-";
         }
 
-        if ($post['alamat_baris_1']) {
+        UserAlamat::create_new_alamat($post, $pelanggan, false);
 
-            UserAlamat::create([
-                'user_id' => $pelanggan->id,
-                'tipe' => 'UTAMA',
-                "alamat_baris_1" => $post["alamat_baris_1"],
-                "alamat_baris_2" => $post["alamat_baris_2"],
-                "alamat_baris_3" => $post["alamat_baris_3"],
-                "provinsi" => $post["provinsi"],
-                "kota" => $post["kota"],
-                "kodepos" => $post["kodepos"],
-            ]);
-            $success_ .= "-UserAlamat baru dibuat-";
-        }
-
-        if ($post['nomor_wa']) {
-            UserKontak::create([
-                'user_id' => $pelanggan->id,
-                'tipe' => 'WA',
-                "nomor" => $post["nomor_wa"],
-                "is_aktual" => 'yes',
-            ]);
-            $success_ .= "-UserKontak baru dibuat-";
-        }
+        UserKontak::create_new_kontak($post, $pelanggan, false);
 
         $feedback = [
             "success_" => $success_
@@ -246,33 +225,28 @@ class PelangganController extends Controller
             "email" => "nullable|email",
         ]);
 
-        $auth_user = Auth::user();
-        if ($auth_user->clearance_level < 3) {
-            $request->validate(['error' => 'required'], ['error.required' => '-You are not authorized-']);
-        }
-        if ($auth_user->id != $pelanggan->id) {
-            if ($auth_user->clearance_level <= $pelanggan->clearance_level) {
-                $request->validate(['error' => 'required'], ['error.required' => '-You are not authorized-']);
-            }
-        }
+        User::edit_user_validation($request, $pelanggan);
 
         $success_ = "";
 
+        $gender = null;
+        if (isset($post['gender'])) {
+            $gender = $post['gender'];
+        }
+
         $pelanggan->update([
             "nama" => $post["nama"],
-            "username" => $post['username'],
+            // "username" => $post['username'], // Username tidak boleh sembarang diganti
             "nik" => $post["nik"],
-            "gender" => $post['gender'],
-            "nomor_wa" => $post["nomor_wa"],
-            "alamat_baris_1" => $post["alamat_baris_1"],
-            "alamat_baris_2" => $post["alamat_baris_2"],
-            "alamat_baris_3" => $post["alamat_baris_3"],
-            "provinsi" => $post["provinsi"],
-            "kota" => $post["kota"],
-            "kodepos" => $post["kodepos"],
+            "gender" => $gender,
+
         ]);
 
         $success_ .= '-data pelanggan diupdate-';
+
+        UserAlamat::update_alamat($post, $pelanggan);
+        UserKontak::update_kontak($post, $pelanggan);
+
         $feedback = [
             'success_' => $success_
         ];
@@ -321,7 +295,7 @@ class PelangganController extends Controller
         $success_ = "";
 
         $time = time();
-        $file_name = $time . "." . $file_photo->extension();
+        $file_name = $pelanggan->id . "-" . $time . "." . $file_photo->extension();
         $file_photo->storeAs('pelanggans/profile_pictures', $file_name);
 
         $pelanggan->profile_picture_path = "pelanggans/profile_pictures/$file_name";
@@ -372,7 +346,7 @@ class PelangganController extends Controller
         $success_ = "";
 
         $time = time();
-        $file_name = $time . "." . $file_photo->extension();
+        $file_name = $pelanggan->id . "-" . $time . "." . $file_photo->extension();
         $file_photo->storeAs('pelanggans/id_photos', $file_name);
 
         $pelanggan->id_photo_path = "pelanggans/id_photos/$file_name";

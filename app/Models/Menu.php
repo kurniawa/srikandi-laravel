@@ -48,7 +48,7 @@ class Menu extends Model
             if ($user !== null) {
                 if ($user->clearance_level == 6) {
                     $menus->push(
-                        ['name' => 'Profile', 'route' => 'users.profile'],
+                        ['name' => 'Profile', 'route' => 'users.show', 'params' => $user->id],
                         ['name' => 'Daftar User', 'route' => 'users.index'],
                         ['name' => 'Daftar Pelanggan', 'route' => 'pelanggans.index'],
                         ['name' => 'Surat Pembelian', 'route' => 'surat_pembelian.index'],

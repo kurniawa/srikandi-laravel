@@ -13,7 +13,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                     </svg>
-                    <h1 class="ml-1 font-bold">Detail User / Admin</h1>
+                    <h1 class="ml-1 font-bold">Detail User</h1>
                 </div>
             </div>
         </div>
@@ -28,7 +28,8 @@
                 onsubmit="return confirm('Yakin ingin hapus Profile Picture ini?')" class="mt-2">
                 @csrf
                 <div class="flex justify-center">
-                    <button class="bg-rose-300 font-bold text-white p-1 rounded-lg">Hapus Profile Picture</button>
+                    <button class="loading-spinner bg-rose-300 font-bold text-white p-1 rounded-lg">Hapus Profile
+                        Picture</button>
                 </div>
             </form>
         @else
@@ -48,7 +49,7 @@
                 <!-- Foto Profile -->
                 <div id="div-preview-profile-photo" class="mt-3 hidden">
                     <div class="flex justify-end">
-                        <button type="button" class="bg-rose-300 text-white rounded-full p-1"
+                        <button type="button" class="loading-spinner bg-rose-300 text-white rounded-full p-1"
                             onclick="removeImage('input-profile-photo', 'div-preview-profile-photo', 'preview-profile-photo', 'label-input-profile-photo')">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3"
                                 stroke="currentColor" class="size-4">
@@ -63,7 +64,8 @@
                     </div>
 
                     <div class="mt-3 text-center">
-                        <button type="submit" class="bg-emerald-300 text-white font-bold rounded-lg p-2">Update Profile
+                        <button type="submit"
+                            class="loading-spinner bg-emerald-300 text-white font-bold rounded-lg p-2">Update Profile
                             Picture</button>
                     </div>
                 </div>
@@ -111,68 +113,113 @@
 
             <div class="mt-3">
                 <label class="text-slate-500">Gender :</label>
-                <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">{{ $user->gender }}</div>
+                @if ($user->gender)
+                    <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">{{ $user->gender }}</div>
+                @else
+                    <span>-</span>
+                @endif
             </div>
 
             <div class="mt-3">
                 <label class="text-slate-500">NIK / Nomor ID :</label>
-                <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">{{ $user->nik }}</div>
+                @if ($user->nik)
+                    <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">{{ $user->nik }}</div>
+                @else
+                    <span>-</span>
+                @endif
             </div>
 
             <div class="mt-3">
                 <label class="text-slate-500">No. WA :</label>
-                <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">{{ $user->nomor_wa }}</div>
+                @if (count($user->kontaks))
+                    <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">
+                        {{ $user->kontaks[0]->nomor }}
+                    </div>
+                @else
+                    <span>-</span>
+                @endif
             </div>
 
             <div class="mt-3">
                 <label class="text-slate-500">Email :</label>
-                <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">{{ $user->email }}</div>
+                @if ($user->email)
+                    <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">{{ $user->email }}</div>
+                @else
+                    <span>-</span>
+                @endif
             </div>
 
             <div class="mt-3">
                 <label class="text-slate-500">Alamat :</label>
-                <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">
-                    <div>{{ $user->alamat_baris_1 }}</div>
-                    <div>{{ $user->alamat_baris_2 }}</div>
-                    <div>{{ $user->alamat_baris_3 }}</div>
-                </div>
-                <div class="grid grid-cols-2 gap-2 mt-3">
-                    <div>
-                        <label class="text-slate-500">Provinsi :</label>
-                        <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">{{ $user->provinsi }}
+                @if (count($user->alamats))
+                    <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">
+                        <div>{{ $user->alamats[0]->alamat_baris_1 }}</div>
+                        <div>{{ $user->alamats[0]->alamat_baris_2 }}</div>
+                        <div>{{ $user->alamats[0]->alamat_baris_3 }}</div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 mt-3">
+                        <div>
+                            <label class="text-slate-500">Provinsi :</label>
+                            @if ($user->alamats[0]->provinsi)
+                                <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">
+                                    {{ $user->alamats[0]->provinsi }}</div>
+                            @else
+                                <span>-</span>
+                            @endif
+                        </div>
+                        <div>
+                            <label class="text-slate-500">Kota :</label>
+                            @if ($user->alamats[0]->kota)
+                                <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">
+                                    {{ $user->alamats[0]->kota }}
+                                </div>
+                            @else
+                                <span>-</span>
+                            @endif
+                        </div>
+                        <div>
+                            <label class="text-slate-500">Kode POS :</label>
+                            @if ($user->alamats[0]->kodepos)
+                                <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">
+                                    {{ $user->alamats[0]->kodepos }}</div>
+                            @else
+                                <span>-</span>
+                            @endif
                         </div>
                     </div>
-                    <div>
-                        <label class="text-slate-500">Kota :</label>
-                        <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">{{ $user->kota }}
-                        </div>
-                    </div>
-                    <div>
-                        <label class="text-slate-500">Kode POS :</label>
-                        <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">{{ $user->kodepos }}
-                        </div>
-                    </div>
-                </div>
+                @else
+                    <span>-</span>
+                @endif
             </div>
         </div>
 
-        @if (Auth::user()->id == $user->id || Auth::user()->clearance_level > 3)
-            <div class="flex justify-center mt-5">
-                <a href="" class="bg-slate-300 text-white p-2 rounded-lg font-bold flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                        stroke="currentColor" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                    </svg>
-                    <span>Edit Data</span>
-                </a>
-            </div>
-        @endif
+        <div class="flex justify-center mt-5">
+            <a href="{{ route('users.edit', $user->id) }}"
+                class="loading-spinner bg-slate-300 text-white p-2 rounded-lg font-bold flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                    stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                </svg>
+                <span>Edit Data User</span>
+            </a>
+        </div>
+        <div class="flex justify-center mt-2">
+            <a href="{{ route('users.change_password', $user->id) }}"
+                class="loading-spinner bg-indigo-300 text-white p-2 rounded-lg font-bold flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                    stroke="currentColor" class="size-5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M15.75 5.25a3 3 0 0 1 3 3m3 0a6 6 0 0 1-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1 1 21.75 8.25Z" />
+                </svg>
+                <span>Change Password</span>
+            </a>
+        </div>
         <form action="{{ route('users.delete', $user->id) }}" method="POST" class="mt-2"
             onsubmit="return confirm('Yakin ingin hapus user ini?')">
             @csrf
             <div class="flex justify-center">
-                <button class="flex items-center gap-2 p-2 bg-rose-300 text-white font-bold rounded-lg">
+                <button class="loading-spinner flex items-center gap-2 p-2 bg-rose-300 text-white font-bold rounded-lg">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                         stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -193,7 +240,7 @@
                 onsubmit="return confirm('Yakin ingin hapus ID Photo ini?')" class="mt-2">
                 @csrf
                 <div class="flex justify-center">
-                    <button class="bg-rose-300 font-bold text-white p-1 rounded-lg">Hapus ID Photo</button>
+                    <button class="loading-spinner bg-rose-300 font-bold text-white p-1 rounded-lg">Hapus ID Photo</button>
                 </div>
             </form>
         @else
@@ -227,7 +274,8 @@
                     </div>
 
                     <div class="mt-3 text-center">
-                        <button type="submit" class="bg-emerald-300 text-white font-bold rounded-lg p-2">Update ID
+                        <button type="submit"
+                            class="loading-spinner bg-emerald-300 text-white font-bold rounded-lg p-2">Update ID
                             Photo</button>
                     </div>
                 </div>

@@ -68,6 +68,7 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/users/create', 'users_create')->name('users.create')->middleware('level3');
     Route::post('/users/store', 'users_store')->name('users.store')->middleware('level3');
     Route::get('/users/{user}/show', 'show')->name('users.show')->middleware('level3');
+    Route::get('/users/{user}/profile', 'profile')->name('users.profile')->middleware('level3');
     Route::get('/users/{user}/edit', 'edit')->name('users.edit')->middleware('level3');
     Route::post('/users/{user}/update', 'update')->name('users.update')->middleware('level3');
     Route::get('/users/{user}/edit_profile_picture', 'edit_profile_picture')->name('users.edit_profile_picture')->middleware('level3');

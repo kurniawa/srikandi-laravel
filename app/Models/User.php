@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -104,5 +105,21 @@ class User extends Authenticatable
     function alamats(): HasMany
     {
         return $this->hasMany(UserAlamat::class);
+    }
+
+    static function edit_user_validation($request, $user)
+    {
+        // Yang berhak mengubah data user adalah user admin
+        $auth_user = Auth::user();
+        if ($auth_user->clearance_level < 3) {
+            $request->validate(['error' => 'required'], ['error.required' => '-You are not authorized-']);
+        }
+        // User admin tidak berhak mengubah data user admin lainnya dengan clearance level yang sama atau diatasnya.
+        // Hanya User dengan clearance_level yang lebih tinggi yang dapat mengubah data.
+        if ($auth_user->id != $user->id) {
+            if ($auth_user->clearance_level <= $user->clearance_level) {
+                $request->validate(['error' => 'required'], ['error.required' => '-You are not authorized-']);
+            }
+        }
     }
 }

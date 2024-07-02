@@ -28,7 +28,8 @@
                 onsubmit="return confirm('Yakin ingin hapus Profile Picture ini?')" class="mt-2">
                 @csrf
                 <div class="flex justify-center">
-                    <button class="bg-rose-300 font-bold text-white p-1 rounded-lg">Hapus Profile Picture</button>
+                    <button class="loading-spinner bg-rose-300 font-bold text-white p-1 rounded-lg">Hapus Profile
+                        Picture</button>
                 </div>
             </form>
         @else
@@ -63,7 +64,8 @@
                     </div>
 
                     <div class="mt-3 text-center">
-                        <button type="submit" class="bg-emerald-300 text-white font-bold rounded-lg p-2">Update Profile
+                        <button type="submit"
+                            class="loading-spinner bg-emerald-300 text-white font-bold rounded-lg p-2">Update Profile
                             Picture</button>
                     </div>
                 </div>
@@ -238,7 +240,7 @@
                 onsubmit="return confirm('Yakin ingin hapus ID Photo ini?')" class="mt-2">
                 @csrf
                 <div class="flex justify-center">
-                    <button class="bg-rose-300 font-bold text-white p-1 rounded-lg">Hapus ID Photo</button>
+                    <button class="loading-spinner bg-rose-300 font-bold text-white p-1 rounded-lg">Hapus ID Photo</button>
                 </div>
             </form>
         @else
@@ -272,7 +274,8 @@
                     </div>
 
                     <div class="mt-3 text-center">
-                        <button type="submit" class="bg-emerald-300 text-white font-bold rounded-lg p-2">Update ID
+                        <button type="submit"
+                            class="loading-spinner bg-emerald-300 text-white font-bold rounded-lg p-2">Update ID
                             Photo</button>
                     </div>
                 </div>
