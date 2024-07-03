@@ -91,6 +91,14 @@ function addMainan__(index_mainan, mainans) {
     setAutocompleteMainan(`tipe_mainan-${index_mainan}`, mainans);
 }
 
+function existElementMata() {
+    let warna_matas = document.querySelectorAll('.warna-mata');
+    console.log(warna_matas.length);
+    if (!warna_matas.length) {
+        addMata();
+    }
+}
+
 function formatDecimal(params) {
     let str_params = params.toString();
     let splitted_params = str_params.split(".");
@@ -139,6 +147,11 @@ function generateNama() {
     if (plat) {
         plat = ` plat:${plat}`;
     }
+
+    let warna_mata = '';
+    let warna_matas = document.querySelectorAll('.warna-mata');
+    let jumlah_matas = document.querySelectorAll('.jumlah-mata');
+    console.log(warna_matas.length);
 
     let nama_short = `${tipe_perhiasan} ${jenis_perhiasan}${warna_emas} ${kadar}% ${berat}gr`;
     let nama_long = `${tipe_perhiasan} ${jenis_perhiasan}${warna_emas} ${kadar}% ${berat}gr${cap}${ukuran}${range_usia}${merk}${plat}${kondisi}`;

@@ -65,8 +65,8 @@ Route::controller(PelangganController::class)->group(function () {
 
 Route::controller(UserController::class)->group(function () {
     Route::get('/users/index', 'index')->name('users.index')->middleware('level3');
-    Route::get('/users/create', 'users_create')->name('users.create')->middleware('level3');
-    Route::post('/users/store', 'users_store')->name('users.store')->middleware('level3');
+    Route::get('/users/create', 'users_create')->name('users.create')->middleware('level5');
+    Route::post('/users/store', 'users_store')->name('users.store')->middleware('level5');
     Route::get('/users/{user}/show', 'show')->name('users.show')->middleware('level3');
     Route::get('/users/{user}/profile', 'profile')->name('users.profile')->middleware('level3');
     Route::get('/users/{user}/edit', 'edit')->name('users.edit')->middleware('level3');

@@ -14,11 +14,30 @@ use Illuminate\Support\Facades\Storage;
 
 class PelangganController extends Controller
 {
-    function index()
+    function index(Request $request)
     {
         $user = Auth::user();
         $cart = Cart::where('user_id', $user->id)->first();
-        $pelanggans = User::where('clearance_level', 1)->orderBy('nama')->get();
+        $get = $request->query();
+
+        $pelanggans = collect();
+        if (count($get)) {
+            // dd($get);
+            if ($get['search_key']) {
+                $results_by_name = User::where('clearance_level', 1)->where('nama', 'like', "%$get[search_key]%")->get();
+                $results_by_username = User::where('clearance_level', 1)->where('username', 'like', "%$get[search_key]%")->get();
+                // dump($results_by_name);
+                // dump($results_by_username);
+                // dd($results_by_name->merge($results_by_username));
+                $pelanggans = $results_by_name->merge($results_by_username);
+            } else {
+                $pelanggans = User::where('clearance_level', 1)->orderBy('nama')->get();
+            }
+        } else {
+            $pelanggans = User::where('clearance_level', 1)->orderBy('nama')->get();
+        }
+
+        // dd($pelanggans);
 
         $data = [
             'menus' => Menu::get(),

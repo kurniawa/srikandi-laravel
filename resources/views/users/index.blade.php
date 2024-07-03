@@ -10,7 +10,7 @@
             </div>
             <div>
                 <a href="{{ route('users.create', $user->id) }}"
-                    class="bg-emerald-300 text-white font-bold rounded-lg px-2 py-1">+ NEW P</a>
+                    class="bg-emerald-300 text-white font-bold rounded-lg px-2 py-1">+ NEW</a>
             </div>
         </div>
         <table class="w-full mt-5 text-slate-500">
