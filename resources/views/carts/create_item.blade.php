@@ -406,14 +406,14 @@
             <div class="fixed z-30 bottom-0 bg-violet-200 rounded w-4/5 px-2">
                 <div class="grid grid-cols-3 gap-2">
                     <div class="flex gap-1 items-center">
-                        <input type="checkbox" name="toggle_mata" id="toggle_mata"
-                            onclick="toggleCheckbox(this, 'div_mata'); existElementMata()"><label
-                            for="toggle_mata">mata</label>
+                        <input type="checkbox" name="checkbox_mata" id="checkbox_mata"
+                            onclick="toggleCheckbox(this, 'div_mata'); existElementMata(this)"><label
+                            for="checkbox_mata">mata</label>
                     </div>
                     <div class="flex gap-1 items-center">
-                        <input type="checkbox" name="toggle_mainan" id="toggle_mainan"
-                            onclick="toggleCheckbox(this, 'div_mainan'); existElementMainan()"><label
-                            for="toggle_mainan"><label for="toggle_mainan">mainan</label>
+                        <input type="checkbox" name="checkbox_mainan" id="checkbox_mainan"
+                            onclick="toggleCheckbox(this, 'div_mainan'); existElementMainan(this)"><label
+                            for="checkbox_mainan"><label for="checkbox_mainan">mainan</label>
                     </div>
                     <div class="flex gap-1 items-center">
                         <input type="checkbox" name="toggle_ukuran" id="toggle_ukuran"
@@ -555,6 +555,27 @@
             //     setAutocompleteMainan(`tipe_mainan-${index_mainan}`);
             addMainan__(index_mainan, mainans);
             index_mainan++;
+        }
+
+        function existElementMata(checkbox_mata) {
+            if (checkbox_mata.checked) {
+                let input_warna_matas = document.querySelectorAll('.warna-mata');
+                // console.log(input_warna_matas.length);
+                if (!input_warna_matas.length) {
+                    addMata();
+                }
+            }
+        }
+
+        function existElementMainan(checkbox_mainan) {
+            console.log(checkbox_mainan.checked);
+            if (checkbox_mainan.checked) {
+                let input_tipe_mainans = document.querySelectorAll('.tipe-mainan');
+                // console.log(input_tipe_mainans.length);
+                if (!input_tipe_mainans.length) {
+                    addMainan();
+                }
+            }
         }
 
         function setAutocompleteMainan(element_id) {

@@ -91,13 +91,7 @@ function addMainan__(index_mainan, mainans) {
     setAutocompleteMainan(`tipe_mainan-${index_mainan}`, mainans);
 }
 
-function existElementMata() {
-    let warna_matas = document.querySelectorAll('.warna-mata');
-    console.log(warna_matas.length);
-    if (!warna_matas.length) {
-        addMata();
-    }
-}
+
 
 function formatDecimal(params) {
     let str_params = params.toString();

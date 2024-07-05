@@ -97,7 +97,7 @@ class ItemController extends Controller
     {
         $post = $request->post();
         // dump($from);
-        // dd($post);
+        dd($post);
 
         $request->validate([
             'tipe_barang' => 'required',
