@@ -13,9 +13,17 @@ class MataSeeder extends Seeder
      */
     public function run(): void
     {
-        $warnas = ['putih', 'merah', 'biru', 'kuning', 'ungu', 'hijau', 'pink', 'lila', 'hitam', 'coklat'];
+        $warnas = [
+            ['nama' => 'putih', 'codename' => 'mp'],
+            ['nama' => 'merah', 'codename' => 'mm'],
+            ['nama' => 'biru', 'codename' => 'mb'],
+            ['nama' => 'kuning', 'codename' => 'mk'],
+            ['nama' => 'ungu', 'codename' => 'mu'],
+            ['nama' => 'hijau', 'codename' => 'mh'],
+            ['nama' => 'pink', 'codename' => 'mpink'], 'lila', 'hitam', 'coklat'
+        ];
 
-        $level_warnas = ['netral', 'muda', 'tua'];
+        $level_warnas = ['neutral', 'muda', 'tua'];
 
         $opacities = ['transparent', 'half-transparent', 'non-transparent'];
 

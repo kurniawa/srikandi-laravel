@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('matas', function (Blueprint $table) {
             $table->id();
             $table->string('warna', 20);
-            $table->string('level_warna', 20); // netral, tua, muda
+            $table->string('level_warna', 20); // neutral, tua, muda
             $table->string('opacity', 20); // transparent, half-transparent, non-transparent
             $table->string('codename', 50)->nullable();
             $table->timestamps();

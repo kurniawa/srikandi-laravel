@@ -305,10 +305,10 @@
                                 <div class="mb-1">
                                     <select id="level_warna" name="level_warna[]" class="level-warna bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                         @if (old('level_warna.0'))
-                                        @if (old('level_warna.0') == 'netral')
-                                        <option value="netral" selected>netral</option>
+                                        @if (old('level_warna.0') == 'neutral')
+                                        <option value="neutral" selected>neutral</option>
                                         @else
-                                        <option value="netral">netral</option>
+                                        <option value="neutral">neutral</option>
                                         @endif
                                         @if (old('level_warna.0') == 'tua')
                                         <option value="tua" selected>tua</option>
@@ -321,7 +321,7 @@
                                         <option value="muda">muda</option>
                                         @endif
                                         @else
-                                        <option value="netral">netral</option>
+                                        <option value="neutral">neutral</option>
                                         <option value="tua">tua</option>
                                         <option value="muda">muda</option>
                                         @endif
@@ -488,7 +488,7 @@
         //         </div>
         //         <div class="mb-1">
         //             <select id="level_warna" name="level_warna[]" class="level-warna bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-        //                 <option value="netral">netral</option>
+        //                 <option value="neutral">neutral</option>
         //                 <option value="tua">tua</option>
         //                 <option value="muda">muda</option>
         //             </select>

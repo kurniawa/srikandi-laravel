@@ -32,7 +32,7 @@ function addMata__(index_mata, warna_matas) {
             </div>
             <div class="mb-1">
                 <select id="level_warna" name="level_warna[]" class="level-warna bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <option value="netral">netral</option>
+                    <option value="neutral">neutral</option>
                     <option value="tua">tua</option>
                     <option value="muda">muda</option>
                 </select>
@@ -145,10 +145,13 @@ function generateNama() {
     let warna_mata = '';
     let warna_matas = document.querySelectorAll('.warna-mata');
     let jumlah_matas = document.querySelectorAll('.jumlah-mata');
-    console.log(warna_matas.length);
+    for (let i = 0; i < warna_matas.length; i++) {
+        warna_mata += ` m${warna_matas[i].value}:${jumlah_matas[i].value}`;
+    }
+    // console.log(warna_mata);
 
     let nama_short = `${tipe_perhiasan} ${jenis_perhiasan}${warna_emas} ${kadar}% ${berat}gr`;
-    let nama_long = `${tipe_perhiasan} ${jenis_perhiasan}${warna_emas} ${kadar}% ${berat}gr${cap}${ukuran}${range_usia}${merk}${plat}${kondisi}`;
+    let nama_long = `${tipe_perhiasan} ${jenis_perhiasan}${warna_emas} ${kadar}% ${berat}gr${cap}${ukuran}${range_usia}${merk}${plat}${kondisi}${warna_mata}`;
     // nama_long = nama_long.split("  ").join(" ");
     document.getElementById('nama_short').value = nama_short;
     document.getElementById('nama_long').value = nama_long;

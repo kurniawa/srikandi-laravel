@@ -97,7 +97,7 @@ class ItemController extends Controller
     {
         $post = $request->post();
         // dump($from);
-        dd($post);
+        // dd($post);
 
         $request->validate([
             'tipe_barang' => 'required',
@@ -162,30 +162,33 @@ class ItemController extends Controller
         }
 
         // VALIDASI MATA
-        foreach ($post['warna_mata'] as $key_warna_mata => $warna_mata) {
-            if ($warna_mata) {
-                if ($post['jumlah_mata'][$key_warna_mata] == 0 || $post['jumlah_mata'][$key_warna_mata] === null) {
-                    $request->validate(['error' => 'required'], ['error.required' => '-jumlah_mata tidak sesuai-']);
+        if (isset($post['checkbox_mata'])) {
+            if ($post['checkbox_mata'] == 'on') {
+                foreach ($post['warna_mata'] as $key_warna_mata => $warna_mata) {
+                    if ($warna_mata) {
+                        if ($post['jumlah_mata'][$key_warna_mata] == 0 || $post['jumlah_mata'][$key_warna_mata] === null) {
+                            $request->validate(['error' => 'required'], ['error.required' => '-jumlah_mata tidak sesuai-']);
+                        }
+                    }
                 }
             }
         }
 
         // VALIDASI MAINAN
-        foreach ($post['tipe_mainan'] as $key_tipe_mainan => $tipe_mainan) {
-            if ($tipe_mainan) {
-                if ($post['jumlah_mainan'][$key_tipe_mainan] === null || $post['jumlah_mainan'][$key_tipe_mainan] == 0) {
-                    $request->validate(['error' => 'required'], ['error.required' => '-jumlah_mainan tidak sesuai-']);
+        if (isset($post['checkbox_mainan'])) {
+            if ($post['checkbox_mainan'] == 'on') {
+                foreach ($post['tipe_mainan'] as $key_tipe_mainan => $tipe_mainan) {
+                    if ($tipe_mainan) {
+                        if ($post['jumlah_mainan'][$key_tipe_mainan] === null || $post['jumlah_mainan'][$key_tipe_mainan] == 0) {
+                            $request->validate(['error' => 'required'], ['error.required' => '-jumlah_mainan tidak sesuai-']);
+                        }
+                    }
                 }
             }
         }
 
-        // cek apakah ada item yang sama
-        $item_exist = Item::where('nama_long', $post['nama_long'])->get();
-
-        if (count($item_exist) !== 0) { // pindah ke halaman untuk memilih item yang mirip-mirip
-            dump('item exist');
-            dd($item_exist);
-        }
+        // CEK APAKAH ADA ITEM YANG SAMA
+        Item::cek_item_exists($post);
 
         $item_new = Item::create([
             'tipe_barang' => $post['tipe_barang'],
