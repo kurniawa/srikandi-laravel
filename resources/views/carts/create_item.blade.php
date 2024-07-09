@@ -151,19 +151,13 @@
                         class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
                     <label id="label_nama_long" for="nama_long"
                         class="mt-1 block text-sm font-medium text-gray-900 dark:text-white">nama_long</label>
-                    <textarea id="nama_long" name="nama_long" rows="4"
-                        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-300 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    {{ old('nama_long') ? old('nama_long') : '' }}
-                </textarea>
+                    <textarea id="nama_long" name="nama_long" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-300 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">{{ old('nama_long') ? old('nama_long') : '' }}</textarea>
                     {{-- <input type="text" id="nama_long" name="nama_long" class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"> --}}
                 </div>
                 <div class="mb-5">
                     <label for="keterangan"
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">keterangan (opt.)</label>
-                    <textarea id="keterangan" rows="4"
-                        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    {{ old('keterangan') ? old('keterangan') : '' }}
-                </textarea>
+                    <textarea id="keterangan" rows="4" name="keterangan" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">{{ old('keterangan') ? old('keterangan') : '' }}</textarea>
                 </div>
                 {{-- ATRIBUT LAIN --}}
                 <div class="border border-indigo-300 p-2 rounded">
@@ -407,12 +401,12 @@
                 <div class="grid grid-cols-3 gap-2">
                     <div class="flex gap-1 items-center">
                         <input type="checkbox" name="checkbox_mata" id="checkbox_mata"
-                            onclick="toggleCheckbox(this, 'div_mata'); existElementMata(this)"><label
+                            onclick="toggleCheckbox(this, 'div_mata'); existElementMata(this); generateNama();"><label
                             for="checkbox_mata">mata</label>
                     </div>
                     <div class="flex gap-1 items-center">
                         <input type="checkbox" name="checkbox_mainan" id="checkbox_mainan"
-                            onclick="toggleCheckbox(this, 'div_mainan'); existElementMainan(this)"><label
+                            onclick="toggleCheckbox(this, 'div_mainan'); existElementMainan(this); generateNama();"><label
                             for="checkbox_mainan"><label for="checkbox_mainan">mainan</label>
                     </div>
                     <div class="flex gap-1 items-center">
@@ -442,9 +436,10 @@
     <script>
         let jenis_perhiasans = {!! json_encode($jenis_perhiasans, JSON_HEX_TAG) !!}
         let caps = {!! json_encode($caps, JSON_HEX_TAG) !!}
-        let warna_matas = {!! json_encode($warna_matas, JSON_HEX_TAG) !!}
-        let mainans = {!! json_encode($mainans, JSON_HEX_TAG) !!}
-        // console.log(mainans);
+        let label_matas = {!! json_encode($label_matas, JSON_HEX_TAG) !!}
+        let matas = {!! json_encode($matas, JSON_HEX_TAG) !!}
+        let label_mainans = {!! json_encode($label_mainans, JSON_HEX_TAG) !!}
+        // console.log(label_mainans);
         // console.log(jenis_perhiasans);
         // $('#tipe_perhiasan').autocomplete({
         //     source: jenis_perhiasans,
@@ -514,8 +509,8 @@
         // </div>`
             //     );
 
-            //     setAutocompleteWarnaMata(`warna_mata-${index_mata}`, warna_matas);
-            addMata__(index_mata, warna_matas);
+            //     setAutocompleteWarnaMata(`warna_mata-${index_mata}`, label_matas);
+            addMata__(index_mata, label_matas);
             index_mata++;
 
         }
@@ -527,7 +522,7 @@
         //     });
         // }
 
-        // setAutocompleteWarnaMata(`warna_mata-0`, warna_matas);
+        // setAutocompleteWarnaMata(`warna_mata-0`, label_matas);
 
         let index_mainan = 0;
 
@@ -553,15 +548,15 @@
             //     );
 
             //     setAutocompleteMainan(`tipe_mainan-${index_mainan}`);
-            addMainan__(index_mainan, mainans);
+            addMainan__(index_mainan, label_mainans);
             index_mainan++;
         }
 
         function existElementMata(checkbox_mata) {
             if (checkbox_mata.checked) {
-                let input_warna_matas = document.querySelectorAll('.warna-mata');
-                // console.log(input_warna_matas.length);
-                if (!input_warna_matas.length) {
+                let input_label_matas = document.querySelectorAll('.warna-mata');
+                // console.log(input_label_matas.length);
+                if (!input_label_matas.length) {
                     addMata();
                 }
             }
@@ -570,9 +565,9 @@
         function existElementMainan(checkbox_mainan) {
             console.log(checkbox_mainan.checked);
             if (checkbox_mainan.checked) {
-                let input_tipe_mainans = document.querySelectorAll('.tipe-mainan');
-                // console.log(input_tipe_mainans.length);
-                if (!input_tipe_mainans.length) {
+                let input_tipe_label_mainans = document.querySelectorAll('.tipe-mainan');
+                // console.log(input_tipe_label_mainans.length);
+                if (!input_tipe_label_mainans.length) {
                     addMainan();
                 }
             }
@@ -580,7 +575,7 @@
 
         function setAutocompleteMainan(element_id) {
             $(`#${element_id}`).autocomplete({
-                source: mainans,
+                source: label_mainans,
             });
         }
 

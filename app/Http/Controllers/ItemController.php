@@ -58,8 +58,9 @@ class ItemController extends Controller
         $tipe_perhiasans = TipePerhiasan::all();
         $jenis_perhiasans = JenisPerhiasan::select('id', 'nama as label', 'nama as value', 'tipe_perhiasan_id', 'tipe_perhiasan')->get();
         $caps = Cap::select('id', 'nama as label', 'nama as value', 'codename')->get();
-        $warna_matas = Mata::select('warna as label', 'warna as value')->groupBy('warna')->get();
-        $mainans = Mainan::select('id', 'nama as label', 'nama as value')->get();
+        $label_matas = Mata::select('warna as label', 'warna as value')->groupBy('warna')->get();
+        $matas = Mata::all();
+        $label_mainans = Mainan::select('id', 'nama as label', 'nama as value', 'codename')->get();
         // dd($tipe_perhiasans);
         // dd($jenis_perhiasans);
 
@@ -82,8 +83,9 @@ class ItemController extends Controller
             'tipe_perhiasans' => $tipe_perhiasans,
             'jenis_perhiasans' => $jenis_perhiasans,
             'caps' => $caps,
-            'warna_matas' => $warna_matas,
-            'mainans' => $mainans,
+            'label_matas' => $label_matas,
+            'matas' => $matas,
+            'label_mainans' => $label_mainans,
             'cart' => $cart,
         ];
 
@@ -187,10 +189,7 @@ class ItemController extends Controller
             }
         }
 
-        // CEK APAKAH ADA ITEM YANG SAMA
-        Item::cek_item_exists($post);
-
-        $item_new = Item::create([
+        $candidate_new_item = [
             'tipe_barang' => $post['tipe_barang'],
             'tipe_perhiasan' => $tipe_perhiasan,
             'jenis_perhiasan' => $jenis_perhiasan,
@@ -213,44 +212,66 @@ class ItemController extends Controller
             'stock' => 1,
             // 'kode_item',
             // 'barcode',
-            // 'deskripsi',
-            // 'keterangan',
+            'deskripsi' => $post['deskripsi'],
+            'keterangan' => $post['keterangan'],
             // 'status',
-        ]);
+        ];
+
+        // CEK APAKAH ADA ITEM YANG SAMA
+        $item_exists = Item::where('nama_long', $post['nama_long'])->get();
+        if (count($item_exists)) {
+            $data = [
+                'similiar_items' => $item_exists,
+                'candidate_new_item' => $candidate_new_item
+            ];
+
+            return view('items.found_similiar_items', $data);
+        }
+        // END - CEK ITEM YANG SAMA
+
+        $item_new = Item::create($candidate_new_item);
 
         // MATA
-        foreach ($post['warna_mata'] as $key_warna_mata => $warna_mata) {
-            if ($warna_mata) {
-                $mata = Mata::where('warna', $warna_mata)->where('level_warna', $post['level_warna'][$key_warna_mata])->where('opacity', $post['opacity'][$key_warna_mata])->first();
-                if (!$mata) {
-                    $mata = Mata::create([
-                        'warna' => $warna_mata,
-                        'level_warna' => $post['level_warna'][$key_warna_mata],
-                        'opacity' => $post['opacity'][$key_warna_mata],
-                    ]);
+        if (isset($post['checkbox_mata'])) {
+            if ($post['checkbox_mata'] == 'on') {
+                foreach ($post['warna_mata'] as $key_warna_mata => $warna_mata) {
+                    if ($warna_mata) {
+                        $mata = Mata::where('warna', $warna_mata)->where('level_warna', $post['level_warna'][$key_warna_mata])->where('opacity', $post['opacity'][$key_warna_mata])->first();
+                        if (!$mata) {
+                            $mata = Mata::create([
+                                'warna' => $warna_mata,
+                                'level_warna' => $post['level_warna'][$key_warna_mata],
+                                'opacity' => $post['opacity'][$key_warna_mata],
+                            ]);
+                        }
+                        ItemMata::create([
+                            'item_id' => $item_new->id,
+                            'mata_id' => $mata->id,
+                            'jumlah_mata' => $post['jumlah_mata'][$key_warna_mata],
+                        ]);
+                    }
                 }
-                ItemMata::create([
-                    'item_id' => $item_new->id,
-                    'mata_id' => $mata->id,
-                    'jumlah_mata' => $post['jumlah_mata'][$key_warna_mata],
-                ]);
             }
         }
 
         // MAINAN
-        foreach ($post['tipe_mainan'] as $key_tipe_mainan => $tipe_mainan) {
-            if ($tipe_mainan) {
-                $mainan = Mainan::where('nama', $tipe_mainan)->first();
-                if (!$mainan) {
-                    $mainan = Mainan::create([
-                        'nama' => $tipe_mainan,
-                    ]);
+        if (isset($post['checkbox_mainan'])) {
+            if ($post['checkbox_mainan'] == 'on') {
+                foreach ($post['tipe_mainan'] as $key_tipe_mainan => $tipe_mainan) {
+                    if ($tipe_mainan) {
+                        $mainan = Mainan::where('nama', $tipe_mainan)->first();
+                        if (!$mainan) {
+                            $mainan = Mainan::create([
+                                'nama' => $tipe_mainan,
+                            ]);
+                        }
+                        ItemMainan::create([
+                            'item_id' => $item_new->id,
+                            'mainan_id' => $mainan->id,
+                            'jumlah_mainan' => $post['jumlah_mainan'][$key_tipe_mainan]
+                        ]);
+                    }
                 }
-                ItemMainan::create([
-                    'item_id' => $item_new->id,
-                    'mainan_id' => $mainan->id,
-                    'jumlah_mainan' => $post['jumlah_mainan'][$key_tipe_mainan]
-                ]);
             }
         }
 

@@ -14,12 +14,12 @@ class MainanSeeder extends Seeder
     public function run(): void
     {
         $mainans = [
-            [ 'nama'=>'Bola', 'codename'=> 'maiBola' ],
-            [ 'nama'=>'Dora', 'codename'=> 'maiDora' ],
-            [ 'nama'=>'Hello Kitty', 'codename'=> 'maiHelloKitty' ],
-            [ 'nama'=>'Lonceng', 'codename'=> 'maiLonceng' ],
-            [ 'nama'=>'Patrick', 'codename'=> 'maiPatrick' ],
-            [ 'nama'=>'SpongeBob', 'codename'=> 'maiSpongeBob' ],
+            ['nama' => 'Bola', 'codename' => 'mai.Bola'],
+            ['nama' => 'Dora', 'codename' => 'mai.Dora'],
+            ['nama' => 'Hello Kitty', 'codename' => 'mai.HelloKitty'],
+            ['nama' => 'Lonceng', 'codename' => 'mai.Lonceng'],
+            ['nama' => 'Patrick', 'codename' => 'mai.Patrick'],
+            ['nama' => 'SpongeBob', 'codename' => 'mai.SpongeBob'],
         ];
 
         foreach ($mainans as $mainan) {

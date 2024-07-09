@@ -1,19 +1,22 @@
-
 function pilihanJenisPerhiasan__(tipe_perhiasan, jenis_perhiasans) {
     // console.log(data_tipe_perhiasan);
     // console.log(JSON.parse(data_tipe_perhiasan));
     // var tipe_perhiasan = JSON.parse(data_tipe_perhiasan);
 
-    var pilihan_jenis_perhiasans = jenis_perhiasans.filter((o) => o.tipe_perhiasan == tipe_perhiasan);
+    var pilihan_jenis_perhiasans = jenis_perhiasans.filter(
+        (o) => o.tipe_perhiasan == tipe_perhiasan
+    );
     console.log(pilihan_jenis_perhiasans);
-    $('#jenis_perhiasan').autocomplete({
+    $("#jenis_perhiasan").autocomplete({
         source: pilihan_jenis_perhiasans,
         select: function (event, ui) {
-            document.getElementById('jenis_perhiasan').value = ui.item.value;
+            document.getElementById("jenis_perhiasan").value = ui.item.value;
             generateNama();
-        }
-    })
-    document.getElementById('label_jenis_perhiasan').textContent = `jenis ${tipe_perhiasan}`;
+        },
+    });
+    document.getElementById(
+        "label_jenis_perhiasan"
+    ).textContent = `jenis ${tipe_perhiasan}`;
 }
 
 function setAutocompleteWarnaMata(element_id, source) {
@@ -23,29 +26,30 @@ function setAutocompleteWarnaMata(element_id, source) {
     });
 }
 
-function addMata__(index_mata, warna_matas) {
-    document.getElementById('data_mata').insertAdjacentHTML('beforeend',
-    `<div id="data-mata-${index_mata}">
+function addMata__(index_mata, label_matas) {
+    document.getElementById("data_mata").insertAdjacentHTML(
+        "beforeend",
+        `<div id="data-mata-${index_mata}">
         <div class="grid grid-cols-2 gap-2 mt-2 border-t border-b border-violet-300 p-1">
             <div class="mb-1">
-                <input type="text" id="warna_mata-${index_mata}" name="warna_mata[]" placeholder="warna_mata" class="warna-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <input type="text" id="label_mata-${index_mata}" name="warna_mata[]" placeholder="warna_mata" onchange="generateNama()" class="warna-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             </div>
             <div class="mb-1">
-                <select id="level_warna" name="level_warna[]" class="level-warna bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <select id="level_warna" name="level_warna[]" onchange="generateNama()" class="level-warna bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <option value="neutral">neutral</option>
                     <option value="tua">tua</option>
                     <option value="muda">muda</option>
                 </select>
             </div>
             <div class="mb-1">
-                <select id="opacity" name="opacity[]" class="opacity-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <select id="opacity" name="opacity[]" onchange="generateNama()" class="opacity-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <option value="transparent">transparent</option>
                     <option value="non-transparent">non-transparent</option>
                     <option value="half-transparent">half-transparent</option>
                 </select>
             </div>
             <div class="mb-1">
-                <input type="text" id="jumlah_mata" name="jumlah_mata[]" placeholder="jumlah_mata" class="jumlah-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <input type="text" id="jumlah_mata" name="jumlah_mata[]" placeholder="jumlah_mata" onchange="generateNama()" class="jumlah-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             </div>
         </div>
         <div class="flex justify-end mt-1">
@@ -58,7 +62,7 @@ function addMata__(index_mata, warna_matas) {
     </div>`
     );
 
-    setAutocompleteWarnaMata(`warna_mata-${index_mata}`, warna_matas);
+    setAutocompleteWarnaMata(`label_mata-${index_mata}`, label_matas);
 }
 
 function setAutocompleteMainan(element_id, mainans) {
@@ -68,14 +72,15 @@ function setAutocompleteMainan(element_id, mainans) {
 }
 
 function addMainan__(index_mainan, mainans) {
-    document.getElementById('data_mainan').insertAdjacentHTML('beforeend',
-    `<div id="data-mainan-${index_mainan}" class="data-mainan">
+    document.getElementById("data_mainan").insertAdjacentHTML(
+        "beforeend",
+        `<div id="data-mainan-${index_mainan}" class="data-mainan">
         <div class="grid grid-cols-2 gap-2 mt-2 border-t border-b border-violet-300 p-1">
             <div class="mb-1">
-                <input type="text" id="tipe_mainan-${index_mainan}" name="tipe_mainan[]" placeholder="tipe_mainan" class="tipe-mainan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <input type="text" id="tipe_mainan-${index_mainan}" name="tipe_mainan[]" placeholder="tipe_mainan" onchange="generateNama()" class="tipe-mainan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             </div>
             <div class="mb-1">
-                <input type="text" id="jumlah_mainan-${index_mainan}" name="jumlah_mainan[]" placeholder="jumlah_mainan" class="jumlah-mainan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <input type="text" id="jumlah_mainan-${index_mainan}" name="jumlah_mainan[]" placeholder="jumlah_mainan" onchange="generateNama()" class="jumlah-mainan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             </div>
         </div>
         <div class="flex justify-end mt-1">
@@ -91,8 +96,6 @@ function addMainan__(index_mainan, mainans) {
     setAutocompleteMainan(`tipe_mainan-${index_mainan}`, mainans);
 }
 
-
-
 function formatDecimal(params) {
     let str_params = params.toString();
     let splitted_params = str_params.split(".");
@@ -106,55 +109,99 @@ function formatDecimal(params) {
 }
 
 function generateNama() {
-    let tipe_perhiasan = document.getElementById('tipe_perhiasan').value;
-    let jenis_perhiasan = document.getElementById('jenis_perhiasan').value;
-    let warna_emas = document.getElementById('warna_emas').value;
-    if (warna_emas === 'kuning') {
-        warna_emas = ''
+    let tipe_perhiasan = document.getElementById("tipe_perhiasan").value;
+    let jenis_perhiasan = document.getElementById("jenis_perhiasan").value;
+    let warna_emas = document.getElementById("warna_emas").value;
+    if (warna_emas === "kuning") {
+        warna_emas = "";
     } else {
         warna_emas = ` <${warna_emas}>`;
     }
-    let kadar = document.getElementById('kadar').value;
-    let berat = document.getElementById('berat').value;
-    let kondisi = document.getElementById('kondisi').value;
+    let kadar = document.getElementById("kadar").value;
+    let berat = document.getElementById("berat").value;
+    let kondisi = document.getElementById("kondisi").value;
     if (kondisi) {
         kondisi = ` zu:${kondisi}`;
     }
 
-    let cap = document.getElementById('cap').value;
+    let cap = document.getElementById("cap").value;
     if (cap) {
         cap = ` c:${cap}`;
     }
-    let range_usia = document.getElementById('range_usia').value;
+    let range_usia = document.getElementById("range_usia").value;
     if (range_usia) {
         range_usia = ` ru:${range_usia}`;
     }
-    let ukuran = document.getElementById('ukuran').value;
+    let ukuran = document.getElementById("ukuran").value;
     if (ukuran) {
-        ukuran = ` uk:${ukuran}`
+        ukuran = ` uk:${ukuran}`;
     }
-    let merk = document.getElementById('merk').value;
+    let merk = document.getElementById("merk").value;
     if (merk) {
-        merk = ` merk:${merk}`
+        merk = ` merk:${merk}`;
     }
-    let plat = document.getElementById('plat').value;
+    let plat = document.getElementById("plat").value;
     if (plat) {
         plat = ` plat:${plat}`;
     }
 
-    let warna_mata = '';
-    let warna_matas = document.querySelectorAll('.warna-mata');
-    let jumlah_matas = document.querySelectorAll('.jumlah-mata');
-    for (let i = 0; i < warna_matas.length; i++) {
-        warna_mata += ` m${warna_matas[i].value}:${jumlah_matas[i].value}`;
+    // METODE PENAMAAN MATA
+    let codename_mata = "";
+    let checkbox_mata = document.getElementById("checkbox_mata");
+    let warna_matas = document.querySelectorAll(".warna-mata");
+    let level_warnas = document.querySelectorAll(".level-warna");
+    let opacity_matas = document.querySelectorAll(".opacity-mata");
+    let jumlah_matas = document.querySelectorAll(".jumlah-mata");
+
+    // console.log(checkbox_mata.checked);
+    if (checkbox_mata.checked) {
+        for (let i = 0; i < warna_matas.length; i++) {
+            let found_mata = matas.filter((mata) => {
+                if (
+                    mata.warna == warna_matas[i].value &&
+                    mata.level_warna == level_warnas[i].value &&
+                    mata.opacity == opacity_matas[i].value
+                ) {
+                    return mata;
+                }
+            });
+            // console.log(found_mata);
+            if (found_mata.length && jumlah_matas[i].value) {
+                codename_mata += ` ${found_mata[0].codename}:${jumlah_matas[i].value}`;
+            }
+        }
     }
-    // console.log(warna_mata);
+    // END - METODE PENAMAAN MATA
+
+    // METODE PENAMAAN MAINAN
+    let codename_mainan = "";
+    let checkbox_mainan = document.getElementById("checkbox_mainan");
+    let tipe_mainans = document.querySelectorAll(".tipe-mainan");
+    let jumlah_mainans = document.querySelectorAll(".jumlah-mainan");
+
+    // console.log(checkbox_mainan.checked);
+    if (checkbox_mainan.checked) {
+        for (let i = 0; i < tipe_mainans.length; i++) {
+            let found_mainan = label_mainans.filter((mainan) => {
+                // console.log(mainan.value);
+                // console.log(tipe_mainans[i].value);
+                if (mainan.value == tipe_mainans[i].value) {
+                    return mainan;
+                }
+            });
+            // console.log(found_mainan);
+            if (found_mainan.length && jumlah_mainans[i].value) {
+                codename_mainan += ` ${found_mainan[0].codename}:${jumlah_mainans[i].value}`;
+            }
+        }
+    }
+    // END - METODE PENAMAAN MAINAN
 
     let nama_short = `${tipe_perhiasan} ${jenis_perhiasan}${warna_emas} ${kadar}% ${berat}gr`;
-    let nama_long = `${tipe_perhiasan} ${jenis_perhiasan}${warna_emas} ${kadar}% ${berat}gr${cap}${ukuran}${range_usia}${merk}${plat}${kondisi}${warna_mata}`;
+    let nama_long = `${tipe_perhiasan} ${jenis_perhiasan}${warna_emas} ${kadar}% ${berat}gr${cap}${ukuran}${range_usia}${merk}${plat}${kondisi}${codename_mata}${codename_mainan}`;
     // nama_long = nama_long.split("  ").join(" ");
-    document.getElementById('nama_short').value = nama_short;
-    document.getElementById('nama_long').value = nama_long;
+    document.getElementById("nama_short").value = nama_short;
+    document.getElementById("nama_long").value = nama_long;
 }
 
 function removeElement(id) {
@@ -164,68 +211,77 @@ function removeElement(id) {
 function toggleCheckbox(checkbox, element_id) {
     // console.log(checkbox.checked)
     if (checkbox.checked) {
-        $(`#${element_id}`).show(300)
+        $(`#${element_id}`).show(300);
     } else {
-        $(`#${element_id}`).hide(300)
-
+        $(`#${element_id}`).hide(300);
     }
 }
 
 function hitungHargaT() {
-    let berat = parseFloat(document.getElementById('berat').value);
-    let harga_g = parseFloat(document.getElementById('harga_g').value);
+    let berat = parseFloat(document.getElementById("berat").value);
+    let harga_g = parseFloat(document.getElementById("harga_g").value);
     // console.log(berat);
     // console.log(harga_g);
     if (!isNaN(berat) && !isNaN(harga_g)) {
         let harga_t = formatDecimal(berat * harga_g);
-        let harga_t_formatted = document.getElementById('harga_t_formatted');
-        harga_t_formatted.value = harga_t.toString().split('.').join(',');
-        formatNumber2('harga_t_formatted', 'harga_t');
+        let harga_t_formatted = document.getElementById("harga_t_formatted");
+        harga_t_formatted.value = harga_t.toString().split(".").join(",");
+        formatNumber2("harga_t_formatted", "harga_t");
     }
 }
 
 function hitungHargaGr() {
-    let berat = parseFloat(document.getElementById('berat').value);
-    let harga_t = parseFloat(document.getElementById('harga_t').value);
+    let berat = parseFloat(document.getElementById("berat").value);
+    let harga_t = parseFloat(document.getElementById("harga_t").value);
     // console.log(berat);
     // console.log(harga_t);
     if (!isNaN(berat) && !isNaN(harga_t)) {
         let harga_g = formatDecimal(harga_t / berat);
-        let harga_g_formatted = document.getElementById('harga_g_formatted');
-        harga_g_formatted.value = harga_g.toString().split('.').join(',');
+        let harga_g_formatted = document.getElementById("harga_g_formatted");
+        harga_g_formatted.value = harga_g.toString().split(".").join(",");
         // console.log(harga_g)
-        formatNumber2('harga_g_formatted', 'harga_g');
+        formatNumber2("harga_g_formatted", "harga_g");
     }
 }
 
 function hitungHargaGrOrT() {
-    let berat = parseFloat(document.getElementById('berat').value);
-    let harga_g = parseFloat(document.getElementById('harga_g').value);
-    let harga_t = parseFloat(document.getElementById('harga_t').value);
+    let berat = parseFloat(document.getElementById("berat").value);
+    let harga_g = parseFloat(document.getElementById("harga_g").value);
+    let harga_t = parseFloat(document.getElementById("harga_t").value);
     if (!isNaN(berat) && !isNaN(harga_g)) {
         let harga_t = formatDecimal(berat * harga_g);
-        let harga_t_formatted = document.getElementById('harga_t_formatted');
-        harga_t_formatted.value = harga_t.toString().split('.').join(',');
-        formatNumber2('harga_t_formatted', 'harga_t');
+        let harga_t_formatted = document.getElementById("harga_t_formatted");
+        harga_t_formatted.value = harga_t.toString().split(".").join(",");
+        formatNumber2("harga_t_formatted", "harga_t");
     } else if (!isNaN(berat) && !isNaN(harga_t)) {
         let harga_g = formatDecimal(harga_t / berat);
-        let harga_g_formatted = document.getElementById('harga_g_formatted');
-        harga_g_formatted.value = harga_g.toString().split('.').join(',')
-        formatNumber2('harga_g_formatted', 'harga_g');
+        let harga_g_formatted = document.getElementById("harga_g_formatted");
+        harga_g_formatted.value = harga_g.toString().split(".").join(",");
+        formatNumber2("harga_g_formatted", "harga_g");
     }
-
 }
 
-function previewImage(image_file, div_preview_photo, preview_photo, label_input_photo) {
+function previewImage(
+    image_file,
+    div_preview_photo,
+    preview_photo,
+    label_input_photo
+) {
     if (image_file) {
         // console.log(image_file)
-        document.getElementById(preview_photo).src = URL.createObjectURL(image_file);
+        document.getElementById(preview_photo).src =
+            URL.createObjectURL(image_file);
         $(`#${div_preview_photo}`).show();
         $(`#${label_input_photo}`).hide();
     }
 }
 
-function removeImage(input_image, div_preview_photo, preview_photo, label_input_photo) {
+function removeImage(
+    input_image,
+    div_preview_photo,
+    preview_photo,
+    label_input_photo
+) {
     document.getElementById(preview_photo).src = "";
     $(`#${div_preview_photo}`).hide(300);
     $(`#${label_input_photo}`).show(300);

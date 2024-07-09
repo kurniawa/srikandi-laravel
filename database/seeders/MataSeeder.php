@@ -14,26 +14,39 @@ class MataSeeder extends Seeder
     public function run(): void
     {
         $warnas = [
-            ['nama' => 'putih', 'codename' => 'mp'],
-            ['nama' => 'merah', 'codename' => 'mm'],
-            ['nama' => 'biru', 'codename' => 'mb'],
-            ['nama' => 'kuning', 'codename' => 'mk'],
-            ['nama' => 'ungu', 'codename' => 'mu'],
-            ['nama' => 'hijau', 'codename' => 'mh'],
-            ['nama' => 'pink', 'codename' => 'mpink'], 'lila', 'hitam', 'coklat'
+            ['nama' => 'putih', 'codename' => 'm.p'],
+            ['nama' => 'merah', 'codename' => 'm.m'],
+            ['nama' => 'biru', 'codename' => 'm.b'],
+            ['nama' => 'kuning', 'codename' => 'm.k'],
+            ['nama' => 'ungu', 'codename' => 'm.u'],
+            ['nama' => 'hijau', 'codename' => 'm.hijau'],
+            ['nama' => 'pink', 'codename' => 'm.pink'],
+            ['nama' => 'lila', 'codename' => 'm.lila'],
+            ['nama' => 'hitam', 'codename' => 'm.hitam'],
+            ['nama' => 'coklat', 'codename' => 'm.c']
         ];
 
-        $level_warnas = ['neutral', 'muda', 'tua'];
+        $level_warnas = [
+            ['nama' => 'neutral', 'codename' => 'lw.n'],
+            ['nama' => 'muda', 'codename' => 'lw.m'],
+            ['nama' => 'tua', 'codename' => 'lw.t']
+        ];
 
-        $opacities = ['transparent', 'half-transparent', 'non-transparent'];
+        $opacities = [
+            ['nama' => 'transparent', 'codename' => 'opac.t'],
+            ['nama' => 'half-transparent', 'codename' => 'opac.ht'],
+            ['nama' => 'non-transparent', 'codename' => 'opac.nt']
+        ];
 
         foreach ($warnas as $warna) {
             foreach ($level_warnas as $level_warna) {
                 foreach ($opacities as $opacity) {
+                    $codename = "$warna[codename]-$level_warna[codename]-$opacity[codename]";
                     Mata::create([
-                        'warna' => $warna,
-                        'level_warna' => $level_warna,
-                        'opacity' => $opacity,
+                        'warna' => $warna['nama'],
+                        'level_warna' => $level_warna['nama'],
+                        'opacity' => $opacity['nama'],
+                        'codename' => $codename,
                     ]);
                 }
             }
