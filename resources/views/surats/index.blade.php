@@ -182,12 +182,12 @@
                                 @foreach ($surat_pembelian->items as $item)
                                     @if ($item->status_buyback)
                                         <div class="col-span-8">
-                                            <div>{{ $item->nama_short }}</div>
+                                            <div>{{ $item->shortname }}</div>
                                             <div class="text-xs font-bold">({{ $item->status_buyback }} ->
                                                 {{ my_decimal_format($item->harga_buyback) }})</div>
                                         </div>
                                     @else
-                                        <span class="col-span-8">{{ $item->nama_short }}</span>
+                                        <span class="col-span-8">{{ $item->shortname }}</span>
                                     @endif
                                     <div class="col-span-4 text-xs">
                                         <div>@ {{ my_decimal_format($item->harga_g) }}</div>

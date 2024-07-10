@@ -69,7 +69,7 @@
         @endif
         <div class="p-2">
             <div>
-                <span class="font-bold text-lg text-slate-500">{{ $item->nama_short }}</span>
+                <span class="font-bold text-lg text-slate-500">{{ $item->shortname }}</span>
                 @if ($item->deskripsi)
                     <span class="italic">-{{ $item->deskripsi }}-</span>
                 @endif
@@ -242,10 +242,10 @@
                 @endif
             </div>
             <div class="mt-2 text-slate-400">
-                @if ($item->nama_long)
+                @if ($item->longname)
                     <h3 class="font-bold">Longname:</h3>
                     <div class="border rounded p-2">
-                        <p>{{ $item->nama_long }}</p>
+                        <p>{{ $item->longname }}</p>
                     </div>
                 @else
                     <h3 class="font-bold">longname: -</h3>
@@ -290,7 +290,7 @@
                     @csrf
                     @if ((int) $item->stock >= 1)
                         <button type="submit"
-                            class="loading-spinner mt-2 py-2 bg-emerald-400 rounded w-full text-white flex items-center justify-center gap-1 font-bold">
+                            class="loading-spinner mt-2 p-4 bg-emerald-300 rounded w-full text-white flex items-center justify-center gap-1 font-bold">
                             <span>+ Keranjang</span>
                         </button>
                     @else

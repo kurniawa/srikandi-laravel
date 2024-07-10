@@ -24,8 +24,8 @@ return new class extends Migration
             $table->integer('ongkos_g')->nullable(); // nullable untuk barang yang bukan bb_able atau bukan perhiasan
             $table->integer('harga_g')->nullable(); // nullable untuk barang yang bukan bb_able atau bukan perhiasan
             $table->integer('harga_t');
-            $table->string('nama_short');
-            $table->string('nama_long');
+            $table->string('shortname');
+            $table->string('longname');
             $table->smallInteger('kondisi')->nullable(); // 99 => mulus, 80 => cacat dikit hampir tidak terlihat, 75 => cacat lumayan keliatan, 50 => rusak
             $table->string('cap',50)->nullable();
             $table->string('range_usia',20)->nullable(); // bayi, anak, remaja, dewasa

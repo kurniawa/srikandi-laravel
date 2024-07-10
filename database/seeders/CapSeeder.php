@@ -29,11 +29,11 @@ class CapSeeder extends Seeder
             ['nama'=>'NX', 'codename'=> 'c.NX' ],
             ['nama'=>'O', 'codename'=> 'c.O' ],
             ['nama'=>'STM', 'codename'=> 'c.STM' ],
-            ['nama'=>'gbr.Check', 'codename'=> 'c.gCheck' ],
-            ['nama'=>'gbr.Bintang2', 'codename'=> 'c.gBin2' ],
-            ['nama'=>'gbr.BintangBulan', 'codename'=> 'c.gBinBul' ],
-            ['nama'=>'gbr.Roaster', 'codename'=> 'c.gRoaster' ],
-            ['nama'=>'gbr.SBintang', 'codename'=> 'c.gSBin' ],
+            ['nama'=>'gambar Check', 'codename'=> 'c.gbr.Check' ],
+            ['nama'=>'gambar Bintang2', 'codename'=> 'c.gbr.Bin2' ],
+            ['nama'=>'gambar BintangBulan', 'codename'=> 'c.gbr.BinBul' ],
+            ['nama'=>'gambar Roaster', 'codename'=> 'c.gbr.Roaster' ],
+            ['nama'=>'gambar SBintang', 'codename'=> 'c.gbr.SBin' ],
         ];
 
         foreach ($caps as $cap) {

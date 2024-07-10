@@ -533,7 +533,7 @@ class SuratPembelianController extends Controller
                 Accounting::create([
                     'kode_accounting' => $kode_accounting,
                     'surat_pembelian_id' => $surat_pembelian->id,
-                    'surat_pembelian_item_id' => $surat_pembelian_item->nama_short,
+                    'surat_pembelian_item_id' => $surat_pembelian_item->shortname,
                     'nama_barang' => $surat_pembelian_item->id,
                     'user_id' => $user->id,
                     'tipe' => 'pengeluaran',

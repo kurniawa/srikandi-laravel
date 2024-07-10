@@ -85,7 +85,7 @@
             </div>
             <div class="col-span-10 flex justify-between items-center">
                 <div>
-                    <div class="font-bold text-slate-500">{{ $item->nama_short }}</div>
+                    <div class="font-bold text-slate-500">{{ $item->shortname }}</div>
                     <div class="grid grid-cols-5 text-slate-400 text-xs gap-x-2">
                         @if ($item->warna_emas)
                         <span>we:{{ $item->warna_emas }}</span>

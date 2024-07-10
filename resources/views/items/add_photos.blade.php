@@ -8,25 +8,25 @@
             @csrf
             <div class="p-2">
                 <div class="mb-5 border border-emerald-300 rounded p-1">
-                    <label id="label_nama_short" for="nama_short"
-                        class="block text-sm font-medium text-gray-900 dark:text-white">nama_short</label>
-                    @if (old('nama_short'))
-                        <input type="text" id="nama_short" name="nama_short" value="{{ old('nama_short') }}"
+                    <label id="label_shortname" for="shortname"
+                        class="block text-sm font-medium text-gray-900 dark:text-white">shortname</label>
+                    @if (old('shortname'))
+                        <input type="text" id="shortname" name="shortname" value="{{ old('shortname') }}"
                             class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
                     @else
-                        <input type="text" id="nama_short" name="nama_short" value="{{ $item->nama_short }}"
+                        <input type="text" id="shortname" name="shortname" value="{{ $item->shortname }}"
                             class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
                     @endif
-                    <label id="label_nama_long" for="nama_long"
-                        class="mt-1 block text-sm font-medium text-gray-900 dark:text-white">nama_long</label>
-                    @if (old('nama_long'))
-                        <textarea id="nama_long" name="nama_long" rows="4"
-                            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-300 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">{{ old('nama_long') }}</textarea>
+                    <label id="label_longname" for="longname"
+                        class="mt-1 block text-sm font-medium text-gray-900 dark:text-white">longname</label>
+                    @if (old('longname'))
+                        <textarea id="longname" name="longname" rows="4"
+                            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-300 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">{{ old('longname') }}</textarea>
                     @else
-                        <textarea id="nama_long" name="nama_long" rows="4"
-                            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-300 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">{{ $item->nama_long }}</textarea>
+                        <textarea id="longname" name="longname" rows="4"
+                            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-300 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">{{ $item->longname }}</textarea>
                     @endif
-                    {{-- <input type="text" id="nama_long" name="nama_long" class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"> --}}
+                    {{-- <input type="text" id="longname" name="longname" class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"> --}}
                 </div>
             </div>
 

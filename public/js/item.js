@@ -111,6 +111,12 @@ function formatDecimal(params) {
 function generateNama() {
     let tipe_perhiasan = document.getElementById("tipe_perhiasan").value;
     let jenis_perhiasan = document.getElementById("jenis_perhiasan").value;
+    let deskripsi = "";
+    let deskripsi_value = document.getElementById("deskripsi").value;
+    if (deskripsi_value.trim()) {
+        deskripsi += ` (${deskripsi_value})`;
+    }
+
     let warna_emas = document.getElementById("warna_emas").value;
     if (warna_emas === "kuning") {
         warna_emas = "";
@@ -197,11 +203,11 @@ function generateNama() {
     }
     // END - METODE PENAMAAN MAINAN
 
-    let nama_short = `${tipe_perhiasan} ${jenis_perhiasan}${warna_emas} ${kadar}% ${berat}gr`;
-    let nama_long = `${tipe_perhiasan} ${jenis_perhiasan}${warna_emas} ${kadar}% ${berat}gr${cap}${ukuran}${range_usia}${merk}${plat}${kondisi}${codename_mata}${codename_mainan}`;
-    // nama_long = nama_long.split("  ").join(" ");
-    document.getElementById("nama_short").value = nama_short;
-    document.getElementById("nama_long").value = nama_long;
+    let shortname = `${tipe_perhiasan} ${jenis_perhiasan}${deskripsi}${warna_emas} ${kadar}% ${berat}gr`;
+    let longname = `${tipe_perhiasan} ${jenis_perhiasan}${deskripsi}${warna_emas} ${kadar}% ${berat}gr${cap}${ukuran}${range_usia}${merk}${plat}${kondisi}${codename_mata}${codename_mainan}`;
+    // longname = longname.split("  ").join(" ");
+    document.getElementById("shortname").value = shortname;
+    document.getElementById("longname").value = longname;
 }
 
 function removeElement(id) {

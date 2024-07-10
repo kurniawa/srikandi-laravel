@@ -181,7 +181,7 @@
                 </div>
                 <div class="col-span-9 flex justify-between">
                     <div>
-                        <div class="font-bold text-slate-500">{{ $surat_pembelian_item->nama_short }}</div>
+                        <div class="font-bold text-slate-500">{{ $surat_pembelian_item->shortname }}</div>
                         <div class="font-bold text-slate-600 text-xs">Rp {{ my_decimal_format($surat_pembelian_item->harga_g) }} / g</div>
                         <div class="font-bold text-slate-500">Rp {{ my_decimal_format($surat_pembelian_item->harga_t) }}</div>
                         <input type="hidden" name="harga_t[]" value="{{ (string)((float)$surat_pembelian_item->harga_t / 100) }}" class="binder_harga_t">

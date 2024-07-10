@@ -161,7 +161,7 @@
                         </div>
                         <div class="col-span-9 flex justify-between">
                             <div>
-                                <div class="font-bold text-slate-500">{{ $cart_item->item->nama_short }}</div>
+                                <div class="font-bold text-slate-500">{{ $cart_item->item->shortname }}</div>
                                 <div class="font-bold text-slate-600 text-xs">Rp
                                     {{ number_format((string) ((float) $cart_item->item->harga_g / 100), 2, ',', '.') }} /
                                     g

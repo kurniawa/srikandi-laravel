@@ -60,7 +60,7 @@
                         </div>
                         <div class="col-span-9">
                             <a href="{{ route('items.show', [$cart_item->item->id, 'carts.index']) }}"
-                                class="font-bold text-indigo-500">{{ $cart_item->item->nama_short }}</a>
+                                class="font-bold text-indigo-500">{{ $cart_item->item->shortname }}</a>
                             <div class="font-bold text-slate-600 text-xs">Rp
                                 {{ number_format((string) ((float) $cart_item->item->harga_g / 100), 2, ',', '.') }} / g
                             </div>

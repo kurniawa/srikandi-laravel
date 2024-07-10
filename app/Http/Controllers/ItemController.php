@@ -104,8 +104,8 @@ class ItemController extends Controller
         $request->validate([
             'tipe_barang' => 'required',
             'harga_t' => 'required|numeric',
-            'nama_short' => 'required',
-            'nama_long' => 'required',
+            'shortname' => 'required',
+            'longname' => 'required',
         ]);
         $harga_t = (float)$post['harga_t'] * 100;
 
@@ -128,8 +128,8 @@ class ItemController extends Controller
                 'berat' => 'required|numeric',
                 'harga_g' => 'required|numeric',
                 'ongkos_g' => 'required|numeric',
-                'nama_short' => 'required',
-                'nama_long' => 'required',
+                'shortname' => 'required',
+                'longname' => 'required',
                 'kondisi' => 'nullable',
                 'cap' => 'nullable',
                 'range_usia' => 'nullable',
@@ -199,8 +199,8 @@ class ItemController extends Controller
             'harga_g' => $harga_g,
             'ongkos_g' => $ongkos_g,
             'harga_t' => $harga_t,
-            'nama_short' => $post['nama_short'],
-            'nama_long' => $post['nama_long'],
+            'shortname' => $post['shortname'],
+            'longname' => $post['longname'],
             'kondisi' => $post['kondisi'],
             'cap' => $post['cap'],
             'range_usia' => $post['range_usia'],
@@ -218,9 +218,12 @@ class ItemController extends Controller
         ];
 
         // CEK APAKAH ADA ITEM YANG SAMA
-        $item_exists = Item::where('nama_long', $post['nama_long'])->get();
+        $item_exists = Item::where('longname', $post['longname'])->get();
         if (count($item_exists)) {
             $data = [
+                'menus' => Menu::get(),
+                'profile_menus' => Menu::get_profile_menus(Auth::user()),
+                'cart' => Cart::where('user_id', Auth::user()->id)->first(),
                 'similiar_items' => $item_exists,
                 'candidate_new_item' => $candidate_new_item
             ];
@@ -431,8 +434,8 @@ class ItemController extends Controller
         $request->validate([
             'tipe_barang' => 'required',
             'harga_t' => 'required|numeric',
-            'nama_short' => 'required',
-            'nama_long' => 'required',
+            'shortname' => 'required',
+            'longname' => 'required',
         ]);
         $harga_t = (float)$post['harga_t'] * 100;
 
@@ -453,8 +456,8 @@ class ItemController extends Controller
                 'kadar' => 'required|numeric',
                 'berat' => 'required|numeric',
                 'harga_g' => 'required|numeric',
-                'nama_short' => 'required',
-                'nama_long' => 'required',
+                'shortname' => 'required',
+                'longname' => 'required',
                 'kondisi' => 'nullable',
                 'cap' => 'nullable',
                 'range_usia' => 'nullable',
@@ -514,8 +517,8 @@ class ItemController extends Controller
             'berat' => $berat,
             'harga_g' => $harga_g,
             'harga_t' => $harga_t,
-            'nama_short' => $post['nama_short'],
-            'nama_long' => $post['nama_long'],
+            'shortname' => $post['shortname'],
+            'longname' => $post['longname'],
             'kondisi' => $post['kondisi'],
             'cap' => $post['cap'],
             'range_usia' => $post['range_usia'],
