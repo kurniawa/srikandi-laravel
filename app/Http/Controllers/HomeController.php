@@ -37,14 +37,31 @@ class HomeController extends Controller
             $items = Item::select('id', 'shortname', 'longname', 'harga_g', 'ongkos_g', 'harga_t')->limit(100)->get();
         }
 
+        
         $all_items = Item::select('id', 'shortname', 'longname', 'harga_g', 'ongkos_g', 'harga_t')->get();
+        $all_items_x_photos = collect();
+        foreach ($all_items as $item) {
+            $photo_path = null;
+            if (count($item->photos)) {
+                $photo_path = $item->photos[0]->path;
+            }
+            $all_items_x_photos->push([
+                'id' => $item->id,
+                'shortname' => $item->shortname,
+                'longname' => $item->longname,
+                'harga_g' => $item->harga_g,
+                'ongkos_g' => $item->ongkos_g,
+                'harga_t' => $item->harga_t,
+                'photo_path' => $photo_path,
+            ]);
+        }
 
         $data = [
             'menus' => Menu::get(),
             'profile_menus' => Menu::get_profile_menus($user),
             'cart' => $cart,
             'items' => $items,
-            'all_items' => $all_items,
+            'all_items_x_photos' => $all_items_x_photos,
         ];
         // dump($items[0]);
         // dd($items[0]->item_photos);
