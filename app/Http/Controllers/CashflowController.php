@@ -8,6 +8,7 @@ use App\Models\Cart;
 use App\Models\Cashflow;
 use App\Models\Menu;
 use App\Models\Saldo;
+use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -126,7 +127,7 @@ class CashflowController extends Controller
             'backRoute' => 'home',
             'backRouteParams' => null,
         ];
-        // dd('stop');
+        dd($data);
         return view('cashflows.index', $data);
     }
 
@@ -140,6 +141,7 @@ class CashflowController extends Controller
 
         $acuan_pembukuans = AcuanPembukuan::all();
         // dd($acuan_pembukuans);
+        $wallets_non_tunai = Wallet::where('kategori', 'non-tunai')->get();
         $data = [
             // 'goback' => 'home',
             // 'user_role' => $user_role,
@@ -152,6 +154,7 @@ class CashflowController extends Controller
             'cart' => $cart,
             'tipe' => $tipe_transaksi,
             'acuan_pembukuans' => $acuan_pembukuans,
+            'wallets_non_tunai' => $wallets_non_tunai,
         ];
         // dd($data);
         return view('cashflows.transaksi', $data);
@@ -161,6 +164,44 @@ class CashflowController extends Controller
     function store_transaction(Request $request)
     {
         $post = $request->post();
-        dd($post);
+        // dd($post);
+        $request->validate([
+            'tipe_transaksi' => 'required',
+            'kategori' => 'required',
+            'total_tagihan' => 'required|numeric',
+            'total_bayar' => 'required|numeric',
+            'sisa_bayar' => 'required|numeric',
+        ]);
+        $success_ = '';
+        $user = Auth::user();
+        $time_key = time();
+        $kode_accounting = "$user->id.$time_key";
+        $total_bayar = Cashflow::create_cashflow($user->id, $time_key, $kode_accounting, null, $post);
+
+        $kategori_2 = null;
+        if (isset($post['kategori_2'])) {
+            if ($post['kategori_2']) {
+                $kategori_2 = $post['kategori_2'];
+            }
+        }
+
+        Accounting::create([
+            'kode_accounting' => $kode_accounting,
+            'surat_pembelian_id' => null,
+            'surat_pembelian_item_id' => null,
+            'nama_barang' => null,
+            'user_id' => $user->id,
+            'tipe' => $post['tipe_transaksi'],
+            'kategori' => $post['kategori'],
+            'kategori_2' => $kategori_2,
+            'deskripsi' => $post['deskripsi'],
+            'jumlah' => $total_bayar,
+        ]);
+
+        $success_ .= "Transaksi baru telah dibuat!";
+        $feedback = [
+            'success_' => $success_
+        ];
+        return redirect()->route('cashflow.index')->with($feedback);
     }
 }

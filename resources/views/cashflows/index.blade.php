@@ -95,37 +95,37 @@
                     {{-- <th class="text-sm text-yellow-500">{{ my_decimal_format($col_saldos[$key]['saldo_awal']) }}</th>
                     <th class="text-sm text-indigo-500">{{ my_decimal_format($col_saldos[$key]['saldo_akhir']) }}</th> --}}
                 </tr>
-                @foreach ($col_accounting['accountings'] as $accounting)
+                @foreach ($col_accounting as $accounting)
                     <tr class="border-t text-xs font-bold text-slate-500">
                         <td colspan="3" class="py-1">
-                            <div class="text-center">{{ $accounting->user->username }} -
-                                {{ $accounting->surat_pembelian->pelanggan_nama }} -
-                                @if ($accounting->surat_pembelian_id)
-                                    <a href="{{ route('surat_pembelian.show', $accounting->surat_pembelian_id) }}"
-                                        class="text-sky-400 font-bold">{{ $accounting->surat_pembelian->nomor_surat }}</a>
+                            <div class="text-center">{{ $accounting['accountings']->user->username }} -
+                                {{ $accounting['accountings']->surat_pembelian->pelanggan_nama ? $accounting['accountings']->surat_pembelian->pelanggan_nama : ''}} -
+                                @if ($accounting['accountings']->surat_pembelian_id)
+                                    <a href="{{ route('surat_pembelian.show', $accounting['accountings']->surat_pembelian_id) }}"
+                                        class="text-sky-400 font-bold">{{ $accounting['accountings']->surat_pembelian->nomor_surat }}</a>
                                     <span> -</span>
                                 @endif
-                                @if ($accounting->kategori_2)
-                                    {{ $accounting->kategori_2 }}
+                                @if ($accounting['accountings']->kategori_2)
+                                    {{ $accounting['accountings']->kategori_2 }}
                                 @else
-                                    {{ $accounting->kategori }}
+                                    {{ $accounting['accountings']->kategori }}
                                 @endif
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        @if ($accounting->tipe === 'pemasukan')
+                        @if ($accounting['accountings']->tipe === 'pemasukan')
                             <td></td>
                             <td></td>
                             <td class="py-1">
                                 <div class="text-center text-emerald-300 font-bold">
-                                    {{ my_decimal_format($accounting->jumlah) }}</div>
+                                    {{ my_decimal_format($accounting['accountings']->jumlah) }}</div>
                             </td>
                         @else
                             <td></td>
                             <td>
                                 <div class="text-center text-rose-300 font-bold">
-                                    {{ my_decimal_format($accounting->jumlah) }}
+                                    {{ my_decimal_format($accounting['accountings']->jumlah) }}
                                 </div>
                             </td>
                             <td></td>

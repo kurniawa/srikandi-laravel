@@ -202,7 +202,7 @@
                 <div class="text-xl font-bold text-red-600">Rp <span
                         id="harga_total_formatted">{{ number_format((string) ((float) $harga_total / 100), 2, ',', '.') }}</span>
                 </div>
-                <input type="hidden" name="harga_total" id="harga_total"
+                <input type="hidden" name="harga_total" id="harga_total_real"
                     value="{{ (string) ((float) $harga_total / 100) }}">
             </div>
             <input type="hidden" name="pelanggan_nama" id="pelanggan_nama_di_dalam_form"
@@ -267,16 +267,16 @@
                 <div class="">
                     <span id="label-sisa-bayar" class="font-bold text-orange-500">Sisa Bayar</span>
                     <div class="font-bold text-lg"><span>Rp </span><span
-                            id="sisa-bayar">{{ number_format((string) ((float) $harga_total / 100), 2, ',', '.') }}</span>
+                            id="sisa_bayar_formatted">{{ number_format((string) ((float) $harga_total / 100), 2, ',', '.') }}</span>
                     </div>
                 </div>
                 <div class="ml-2">
                     <span class="font-bold text-emerald-500">Total Bayar</span>
-                    <div class="font-bold text-lg"><span>Rp </span><span id="total-bayar">0</span></div>
+                    <div class="font-bold text-lg"><span>Rp </span><span id="total_bayar_formatted">0</span></div>
                 </div>
             </div>
-            <input type="hidden" id="ipt-total-bayar" name="total_bayar" value="0" readonly>
-            <input type="hidden" id="ipt-sisa-bayar" name="sisa_bayar"
+            <input type="hidden" id="total_bayar_real" name="total_bayar" value="0" readonly>
+            <input type="hidden" id="sisa_bayar_real" name="sisa_bayar"
                 value="{{ (string) ((float) $harga_total / 100) }}" readonly>
 
             {{-- END PEMBAYARAN --}}
@@ -317,41 +317,6 @@
             cariDataPelangganF(users);
         }
 
-        function hitungTotalBayar() {
-            let arr_jumlah_bayar = document.querySelectorAll('.jumlah-bayar');
-            let total_bayar = 0;
-            arr_jumlah_bayar.forEach(jumlah_bayar => {
-                // console.log(jumlah_bayar.value);
-                if (jumlah_bayar.value !== '') {
-                    total_bayar = total_bayar + parseFloat(jumlah_bayar.value);
-                }
-            });
-            // console.log(total_bayar);
-            let sisa_bayar_real_value = (parseFloat(total_tagihan / 100)) - total_bayar;
-            let sisa_bayar = sisa_bayar_real_value;
-            if (sisa_bayar_real_value < 0) {
-                document.getElementById('label-sisa-bayar').textContent = "KEMBALI";
-                sisa_bayar = -sisa_bayar_real_value;
-            } else {
-                document.getElementById('label-sisa-bayar').textContent = "Sisa Bayar";
-
-            }
-
-            // console.log(total_tagihan);
-            // console.log(total_tagihan / 100);
-            // console.log(parseFloat(total_tagihan / 100));
-            // console.log(total_bayar);
-            // console.log(sisa_bayar);
-
-            // console.log('pangkasDesimal')
-            // console.log(pangkasDesimal(sisa_bayar));
-
-            document.getElementById('total-bayar').textContent = formatNumberX(preformatDotToComa(pangkasDesimal(
-                total_bayar)));
-            document.getElementById('sisa-bayar').textContent = formatNumberX(preformatDotToComa(pangkasDesimal(
-                sisa_bayar)));
-            document.getElementById('ipt-total-bayar').value = pangkasDesimal(total_bayar).toString();
-            document.getElementById('ipt-sisa-bayar').value = pangkasDesimal(sisa_bayar_real_value).toString();
-        }
+        
     </script>
 @endsection

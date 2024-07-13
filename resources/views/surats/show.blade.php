@@ -195,7 +195,7 @@
         <div class="flex justify-end mt-2 gap-3">
             <span class="text-xl font-bold text-red-600">Total:</span>
             <div class="text-xl font-bold text-red-600">Rp <span id="harga_total_formatted">{{ my_decimal_format($surat_pembelian->harga_total) }}</span></div>
-            <input type="hidden" name="harga_total" id="harga_total" value="{{ (string)((float)$surat_pembelian->harga_total / 100) }}">
+            <input type="hidden" name="harga_total" id="harga_total_real" value="{{ (string)((float)$surat_pembelian->harga_total / 100) }}">
         </div>
         <input type="hidden" name="pelanggan_nama" id="pelanggan_nama_di_dalam_form" value="{{ $surat_pembelian->pelanggan_id ? $surat_pembelian->pelanggan_nama : '' }}">
         <input type="hidden" name="pelanggan_username" id="pelanggan_username_di_dalam_form" value="{{ $surat_pembelian->pelanggan_id ? $surat_pembelian->pelanggan_username : '' }}">
@@ -224,19 +224,19 @@
             <div class="">
                 @if ((float)$surat_pembelian->sisa_bayar < 0)
                 <span id="label-sisa-bayar" class="font-bold text-orange-500">Kembali</span>
-                <div class="font-bold text-lg"><span>Rp </span><span id="sisa-bayar">{{ my_decimal_format((float)$surat_pembelian->sisa_bayar * -1) }}</span></div>
+                <div class="font-bold text-lg"><span>Rp </span><span id="sisa_bayar_formatted">{{ my_decimal_format((float)$surat_pembelian->sisa_bayar * -1) }}</span></div>
                 @else
                 <span id="label-sisa-bayar" class="font-bold text-orange-500">Sisa Bayar</span>
-                <div class="font-bold text-lg"><span>Rp </span><span id="sisa-bayar">{{ my_decimal_format((float)$surat_pembelian->sisa_bayar ) }}</span></div>
+                <div class="font-bold text-lg"><span>Rp </span><span id="sisa_bayar_formatted">{{ my_decimal_format((float)$surat_pembelian->sisa_bayar ) }}</span></div>
                 @endif
             </div>
             <div class="ml-2">
                 <span class="font-bold text-emerald-500">Total Bayar</span>
-                <div class="font-bold text-lg"><span>Rp </span><span id="total-bayar">{{ my_decimal_format((float)$surat_pembelian->total_bayar ) }}</span></div>
+                <div class="font-bold text-lg"><span>Rp </span><span id="total_bayar_formatted">{{ my_decimal_format((float)$surat_pembelian->total_bayar ) }}</span></div>
             </div>
         </div>
-        <input type="hidden" id="ipt-total-bayar" name="total_bayar" value="{{ (string)((float)$surat_pembelian->total_bayar / 100) }}" readonly>
-        <input type="hidden" id="ipt-sisa-bayar" name="sisa_bayar" value="{{ (string)((float)$surat_pembelian->sisa_bayar / 100) }}" readonly>
+        <input type="hidden" id="total_bayar_real" name="total_bayar" value="{{ (string)((float)$surat_pembelian->total_bayar / 100) }}" readonly>
+        <input type="hidden" id="sisa_bayar_real" name="sisa_bayar" value="{{ (string)((float)$surat_pembelian->sisa_bayar / 100) }}" readonly>
 
         {{-- END PEMBAYARAN --}}
         {{-- <div class="relative flex justify-center mt-9 z-10">

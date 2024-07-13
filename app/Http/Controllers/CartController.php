@@ -278,18 +278,7 @@ class CartController extends Controller
         // END - CREATE SURAT_PEMBELIAN_ITEM
 
         // // CASHFLOW
-        $jumlah_tunai = null;
-        $jumlah_non_tunai = null;
-        $tipe_instansis = null;
-        $nama_instansis = null;
-        if (isset($post['jumlah_tunai'])) {
-            $jumlah_tunai = $post['jumlah_tunai'];
-        }
-        if (isset($post['jumlah_non_tunai'])) {
-            $jumlah_non_tunai = $post['jumlah_non_tunai'];
-            $tipe_instansis = $post['tipe_instansi'];
-            $nama_instansis = $post['nama_instansi'];
-        }
+        
         // dump($post);
         // $jumlah = ((float)$jumlah_tunai + (float)$sisa_bayar) * 100;
         // dump($jumlah_tunai);
@@ -297,7 +286,7 @@ class CartController extends Controller
         // dump($sisa_bayar);
         // dump((float)$sisa_bayar);
         // dd($jumlah);
-        $total_bayar_2 = Cashflow::create_cashflow($user->id, $time_key, $kode_accounting, $pembelian_new->id, 'pemasukan', $jumlah_tunai, $sisa_bayar, $jumlah_non_tunai, $tipe_instansis, $nama_instansis);
+        $total_bayar_2 = Cashflow::create_cashflow($user->id, $time_key, $kode_accounting, $pembelian_new->id, 'pemasukan', $post);
         // $jumlah = 0;
         // $jumlah_terima_total = 0;
         // if (isset($post['jumlah_tunai'])) {

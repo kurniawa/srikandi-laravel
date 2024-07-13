@@ -26,9 +26,31 @@ class Cashflow extends Model
         return $accounting;
     }
 
-    static function create_cashflow($user_id, $time_key, $kode_accounting, $pembelian_id, $tipe_transaksi, $jumlah_tunai, $sisa_bayar, $jumlah_non_tunai, $tipe_instansis, $nama_instansis)
+    static function create_cashflow($user_id, $time_key, $kode_accounting, $pembelian_id, $post)
     {
         // CASHFLOW
+        $total_tagihan = 0; // harga_total sinonim dnegan total_tagihan
+        if (isset($post['harga_total'])) {
+            $total_tagihan = (float)$post['harga_total'];
+        } elseif (isset($post['total_tagihan'])) {
+            $total_tagihan = (float)$post['total_tagihan'];
+        }
+        $total_bayar = (float)$post['total_bayar'];
+        $sisa_bayar = (float)$post['sisa_bayar'];
+
+        $jumlah_tunai = null;
+        $jumlah_non_tunai = null;
+        $tipe_instansis = null;
+        $nama_instansis = null;
+        if (isset($post['jumlah_tunai'])) {
+            $jumlah_tunai = $post['jumlah_tunai'];
+        }
+        if (isset($post['jumlah_non_tunai'])) {
+            $jumlah_non_tunai = $post['jumlah_non_tunai'];
+            $tipe_instansis = $post['tipe_instansi'];
+            $nama_instansis = $post['nama_instansi'];
+        }
+
         $jumlah = 0;
         $jumlah_terima_total = 0;
         if ($jumlah_tunai) {
@@ -43,9 +65,9 @@ class Cashflow extends Model
             if ($cashflow_sebelum) {
                 $saldo_akhir = (int)$cashflow_sebelum->saldo;
             }
-            if ($tipe_transaksi == 'pemasukan') {
+            if ($post['tipe_transaksi'] == 'pemasukan') {
                 $saldo_akhir += $jumlah;
-            } elseif ($tipe_transaksi == 'pengeluaran') {
+            } elseif ($post['tipe_transaksi'] == 'pengeluaran') {
                 $saldo_akhir -= $jumlah;
             }
             $cashflow = Cashflow::create([
@@ -55,7 +77,7 @@ class Cashflow extends Model
                 'surat_pembelian_id' => $pembelian_id,
                 // 'surat_pembelian_item_id' => $surat_pembelian_item->id,
                 // 'nama_transaksi' => $nama_transaksi,
-                'tipe' => $tipe_transaksi,
+                'tipe' => $post['tipe_transaksi'],
                 'kategori_wallet' => $wallet->kategori,
                 'tipe_wallet' => $wallet->tipe,
                 'nama_wallet' => $wallet->nama,
@@ -82,9 +104,9 @@ class Cashflow extends Model
                     if ($cashflow_sebelum) {
                         $saldo_akhir = (int)$cashflow_sebelum->saldo;
                     }
-                    if ($tipe_transaksi == 'pemasukan') {
+                    if ($post['tipe_transaksi'] == 'pemasukan') {
                         $saldo_akhir += $jumlah;
-                    } elseif ($tipe_transaksi == 'pengeluaran') {
+                    } elseif ($post['tipe_transaksi'] == 'pengeluaran') {
                         $saldo_akhir -= $jumlah;
                     }
                     $cashflow = Cashflow::create([
@@ -93,7 +115,7 @@ class Cashflow extends Model
                         'kode_accounting' => $kode_accounting,
                         'surat_pembelian_id' => $pembelian_id,
                         // 'nama_transaksi' => $nama_transaksi,
-                        'tipe' => $tipe_transaksi,
+                        'tipe' => $post['tipe_transaksi'],
                         'kategori_wallet' => $wallet->kategori,
                         'tipe_wallet' => $wallet->tipe,
                         'nama_wallet' => $wallet->nama,

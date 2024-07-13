@@ -113,7 +113,7 @@
                     <div class="text-xl font-bold text-red-600">Rp <span
                             id="harga_total_formatted">{{ number_format((string) ((float) $cart->harga_total / 100), 2, ',', '.') }}</span>
                     </div>
-                    <input type="hidden" name="harga_total" id="harga_total"
+                    <input type="hidden" name="harga_total" id="harga_total_real"
                         value="{{ (string) ((float) $cart->harga_total / 100) }}">
                 </div>
                 <div class="flex justify-center mt-9">

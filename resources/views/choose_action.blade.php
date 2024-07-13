@@ -6,7 +6,7 @@
 
     <div class="flex">
         <div class="bg-white shadow drop-shadow p-2 rounded">
-            <h3 class="text-xl font-bold text-slate-500">Pilih Opsi</h3>
+            <h3 class="text-xl font-bold text-slate-500">Pilih Transaksi</h3>
         </div>
     </div>
 
@@ -22,7 +22,6 @@
         </div>
 
     </div>
-
     {{-- <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button> --}}
 </main>
 @endsection

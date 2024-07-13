@@ -612,19 +612,19 @@
                     <div class="">
                         <span id="label-sisa-bayar" class="font-bold text-orange-500">Sisa Bayar</span>
                         <div class="font-bold text-lg"><span>Rp </span><span
-                                id="sisa-bayar">{{ old('sisa_bayar_formatted') ? old('sisa_bayar_formatted') : 0 }}</span>
+                                id="sisa_bayar_formatted">{{ old('sisa_bayar_real') ? old('sisa_bayar_real') : 0 }}</span>
                         </div>
                     </div>
                     <div class="ml-2">
                         <span class="font-bold text-emerald-500">Total Bayar</span>
                         <div class="font-bold text-lg"><span>Rp </span><span
-                                id="total-bayar">{{ old('total_bayar_formatted') ? old('total_bayar_formatted') : 0 }}</span>
+                                id="total_bayar_formatted">{{ old('total_bayar_formatted') ? old('total_bayar_formatted') : 0 }}</span>
                         </div>
                     </div>
                 </div>
-                <input type="hidden" id="ipt-total-bayar" name="total_bayar"
+                <input type="hidden" id="total_bayar_real" name="total_bayar"
                     value="{{ old('total_bayar') ? old('total_bayar') : 0 }}" readonly>
-                <input type="hidden" id="ipt-sisa-bayar" name="sisa_bayar"
+                <input type="hidden" id="sisa_bayar_real" name="sisa_bayar"
                     value="{{ old('sisa_bayar') ? old('sisa_bayar') : 0 }}" readonly>
 
                 {{-- END PEMBAYARAN --}}

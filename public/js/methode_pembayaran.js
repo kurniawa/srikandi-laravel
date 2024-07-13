@@ -54,3 +54,44 @@ function toggleNonTunai(checkbox_non_tunai) {
         $div_non_tunai.hide(300);
     }
 }
+
+function hitungTotalBayar() {
+    let arr_jumlah_bayar = document.querySelectorAll(".jumlah-bayar");
+    let total_bayar = 0;
+    arr_jumlah_bayar.forEach((jumlah_bayar) => {
+        // console.log(jumlah_bayar.value);
+        if (jumlah_bayar.value !== "") {
+            total_bayar = total_bayar + parseFloat(jumlah_bayar.value);
+        }
+    });
+    // console.log(total_bayar);
+    const total_tagihan = document.getElementById("total_tagihan_real").value;
+    let sisa_bayar_real_value = parseFloat(total_tagihan) - total_bayar;
+    let sisa_bayar = sisa_bayar_real_value;
+    if (sisa_bayar_real_value < 0) {
+        document.getElementById("label-sisa-bayar").textContent = "KEMBALI";
+        sisa_bayar = -sisa_bayar_real_value;
+    } else {
+        document.getElementById("label-sisa-bayar").textContent = "Sisa Bayar";
+    }
+
+    // console.log(total_tagihan);
+    // console.log(total_tagihan / 100);
+    // console.log(parseFloat(total_tagihan / 100));
+    // console.log(total_bayar);
+    // console.log(sisa_bayar);
+
+    // console.log('pangkasDesimal')
+    // console.log(pangkasDesimal(sisa_bayar));
+
+    document.getElementById("total_bayar_formatted").textContent =
+        formatNumberX(preformatDotToComa(pangkasDesimal(total_bayar)));
+    document.getElementById("sisa_bayar_formatted").textContent = formatNumberX(
+        preformatDotToComa(pangkasDesimal(sisa_bayar))
+    );
+    document.getElementById("total_bayar_real").value =
+        pangkasDesimal(total_bayar).toString();
+    document.getElementById("sisa_bayar_real").value = pangkasDesimal(
+        sisa_bayar_real_value
+    ).toString();
+}
