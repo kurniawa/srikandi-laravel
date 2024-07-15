@@ -59,7 +59,7 @@
 
     // console.log(window.location.href);
     const window_main_url = window.location.protocol + '//' + window.location.host + window.location.pathname;
-    console.log(window_main_url);
+    // console.log(window_main_url);
     function searchItem(input, result_id) {
         if (input.value.trim()) {
             const filtered = all_items_x_photos.filter(function (item) {

@@ -4,8 +4,11 @@
         <x-errors-any></x-errors-any>
         <x-validation-feedback></x-validation-feedback>
         <div class="flex">
-            <div class="bg-white shadow drop-shadow p-1 rounded">
-                <h1 class="font-bold text-slate-500">Accounting / Cash Flow</h1>
+            <div class="bg-white shadow drop-shadow p-1 rounded flex gap-1 text-slate-500">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 7.756a4.5 4.5 0 1 0 0 8.488M7.5 10.5h5.25m-5.25 3h5.25M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                <h1 class="font-bold">Accounting / Cash Flow</h1>
             </div>
         </div>
         <div class="flex justify-end">
@@ -95,37 +98,41 @@
                     {{-- <th class="text-sm text-yellow-500">{{ my_decimal_format($col_saldos[$key]['saldo_awal']) }}</th>
                     <th class="text-sm text-indigo-500">{{ my_decimal_format($col_saldos[$key]['saldo_akhir']) }}</th> --}}
                 </tr>
-                @foreach ($col_accounting as $accounting)
+                @foreach ($col_accounting['accountings'] as $accounting)
                     <tr class="border-t text-xs font-bold text-slate-500">
                         <td colspan="3" class="py-1">
-                            <div class="text-center">{{ $accounting['accountings']->user->username }} -
-                                {{ $accounting['accountings']->surat_pembelian->pelanggan_nama ? $accounting['accountings']->surat_pembelian->pelanggan_nama : ''}} -
-                                @if ($accounting['accountings']->surat_pembelian_id)
-                                    <a href="{{ route('surat_pembelian.show', $accounting['accountings']->surat_pembelian_id) }}"
-                                        class="text-sky-400 font-bold">{{ $accounting['accountings']->surat_pembelian->nomor_surat }}</a>
-                                    <span> -</span>
-                                @endif
-                                @if ($accounting['accountings']->kategori_2)
-                                    {{ $accounting['accountings']->kategori_2 }}
+                            @if ($accounting->user)
+                                @if ($accounting->surat_pembelian)
+                                <div class="text-center">{{ $accounting->user->username }} - {{ $accounting->surat_pembelian->pelanggan_nama ? $accounting->surat_pembelian->pelanggan_nama : ''}} -
                                 @else
-                                    {{ $accounting['accountings']->kategori }}
+                                <div class="text-center">{{ $accounting->user->username }} -
+                                @endif
+                                @if ($accounting->surat_pembelian_id)
+                                    <a href="{{ route('surat_pembelian.show', $accounting->surat_pembelian_id) }}" class="text-sky-400 font-bold">{{ $accounting->surat_pembelian->nomor_surat }}</a>
+                                    <span>-</span>
+                                @endif
+                                @if ($accounting->kategori_2)
+                                    {{ $accounting->kategori_2 }}
+                                @else
+                                    {{ $accounting->kategori }}
                                 @endif
                             </div>
+                            @endif
                         </td>
                     </tr>
                     <tr>
-                        @if ($accounting['accountings']->tipe === 'pemasukan')
+                        @if ($accounting->tipe === 'pemasukan')
                             <td></td>
                             <td></td>
                             <td class="py-1">
                                 <div class="text-center text-emerald-300 font-bold">
-                                    {{ my_decimal_format($accounting['accountings']->jumlah) }}</div>
+                                    {{ my_decimal_format($accounting->jumlah) }}</div>
                             </td>
                         @else
                             <td></td>
                             <td>
                                 <div class="text-center text-rose-300 font-bold">
-                                    {{ my_decimal_format($accounting['accountings']->jumlah) }}
+                                    {{ my_decimal_format($accounting->jumlah) }}
                                 </div>
                             </td>
                             <td></td>

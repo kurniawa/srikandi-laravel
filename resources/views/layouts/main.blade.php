@@ -58,7 +58,7 @@
                         <div class="">
                             <div class="ml-10 flex items-baseline space-x-4">
                                 <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                                @foreach ($menus as $menu)
+                                {{-- @foreach ($menus as $menu)
                                     @if (isset($parent_route))
                                         @if ($parent_route === $menu['route'])
                                             <a href="{{ route($menu['route']) }}"
@@ -77,6 +77,13 @@
                                         @endif
                                     @endif
                                 @endforeach
+                                @if ($user)
+                                <a href="{{ route('users.profile', $user->id) }}" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium">Profile</a>
+                                @endif
+                                <a href="{{ route('users.index') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Daftar User</a>
+                                <a href="{{ route('pelanggans.index') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Daftar Pelanggan</a>
+                                <a href="{{ route('surat_pembelian.index') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Surat Pembelian</a>
+                                 --}}
                                 {{-- <a href="#" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Dashboard</a>
                     <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Projects</a>
                     <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Calendar</a>
@@ -178,7 +185,7 @@
                                     role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button"
                                     tabindex="-1">
                                     <!-- Active: "bg-gray-100", Not Active: "" -->
-                                    @foreach ($profile_menus as $profile_menu)
+                                    {{-- @foreach ($profile_menus as $profile_menu)
                                         @if ($profile_menu['route'] === 'logout')
                                             <form action="{{ route($profile_menu['route']) }}" method="post"
                                                 class="loading-spinner block">
@@ -205,7 +212,26 @@
                                                     role="menuitem" tabindex="-1">{{ $profile_menu['name'] }}</a>
                                             @endif
                                         @endif
-                                    @endforeach
+                                    @endforeach --}}
+                                    <a href="{{ route('users.profile', $user->id) }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Profile</a>
+                                    <a href="{{ route('users.index') }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Daftar User</a>
+                                    <a href="{{ route('pelanggans.index') }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Daftar Pelanggan</a>
+                                    <a href="{{ route('surat_pembelian.index') }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Surat Pembelian</a>
+                                    <a href="{{ route('cashflow.index') }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Cash Flow</a>
+                                    @if ($user->clearance_level >= 6)
+                                    <a href="{{ route('artisans.index') }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Artisan Commands</a>
+                                    @endif
+                                    <a href="{{ route('attributes.index') }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Attribute Setting</a>
+                                    <form action="{{ route('logout') }}" method="POST" class="loading-spinner block">
+                                        @csrf
+                                        <button type="submit" class="py-2 text-sm text-left pl-4 text-gray-600 hover:bg-gray-200 w-full flex">
+                                            <span>Log Out</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 ml-2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                                            </svg>
+                                        </button>
+                                    </form>
+
                                     {{-- <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a>
                       <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1" id="user-menu-item-2">Sign out</a> --}}
                                 </div>
@@ -242,10 +268,10 @@
             <div class="hidden" id="mobile-menu">
                 <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
                     <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                    @foreach ($menus as $menu)
+                    {{-- @foreach ($menus as $menu)
                         <a href="#"
                             class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">{{ $menu['name'] }}</a>
-                    @endforeach
+                    @endforeach --}}
                     {{-- <a href="#" class="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium" aria-current="page">Dashboard</a>
               <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Team</a>
               <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Projects</a>

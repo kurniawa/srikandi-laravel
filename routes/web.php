@@ -1,17 +1,25 @@
 <?php
 
 use App\Http\Controllers\ArtisanController;
+use App\Http\Controllers\AttributeController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CapController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CashflowController;
+use App\Http\Controllers\HargaPasaranController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\MainanController;
+use App\Http\Controllers\MerkController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\SuratPembelianController;
+use App\Http\Controllers\TipePerhiasanController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
+use App\Models\Cart;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -137,6 +145,65 @@ Route::controller(CashflowController::class)->group(function () {
     Route::get('/cashflow/transaksi/{tipe_transaksi}', 'transaksi')->name('cashflow.transaksi')->middleware('level3');
     Route::post('/cashflow/store_transaction', 'store_transaction')->name('cashflow.store_transaction')->middleware('level3');
 });
+
+// ATTRIBUTES
+Route::get('/attributes/index', function () { 
+    $user = Auth::user();
+    $cart = null;
+    if ($user) {
+        $cart = Cart::where('user_id', $user->id)->first();
+    }
+    $data = [
+        'user' => $user,
+        'cart' => $cart
+    ];
+    return view('attributes.index', $data);
+})->name('attributes.index');
+// HARGA PASARAN
+Route::controller(HargaPasaranController::class)->group(function(){
+    Route::get('/attributes/harga_pasaran/index','index')->name('attributes.harga_pasaran.index')->middleware('level3');
+    Route::get('/attributes/harga_pasaran/create','create')->name('attributes.harga_pasaran.create')->middleware('level3');
+    Route::post('/attributes/harga_pasaran/store','store')->name('attributes.harga_pasaran.store')->middleware('level3');
+    Route::get('/attributes/harga_pasaran/edit','edit')->name('attributes.harga_pasaran.edit')->middleware('level3');
+    Route::post('/attributes/harga_pasaran/update','update')->name('attributes.harga_pasaran.update')->middleware('level3');
+});
+
+// TIPE PERHIASAN
+Route::controller(TipePerhiasanController::class)->group(function(){
+    Route::get('/attributes/tipe_perhiasans/index','index')->name('attributes.tipe_perhiasans.index')->middleware('level3');
+    Route::get('/attributes/tipe_perhiasans/create','create')->name('attributes.tipe_perhiasans.create')->middleware('level3');
+    Route::post('/attributes/tipe_perhiasans/store','store')->name('attributes.tipe_perhiasans.store')->middleware('level3');
+    Route::get('/attributes/tipe_perhiasans/edit','edit')->name('attributes.tipe_perhiasans.edit')->middleware('level3');
+    Route::post('/attributes/tipe_perhiasans/update','update')->name('attributes.tipe_perhiasans.update')->middleware('level3');
+});
+
+// MERK
+Route::controller(MerkController::class)->group(function(){
+    Route::get('/attributes/merks/index','index')->name('attributes.merks.index')->middleware('level3');
+    Route::get('/attributes/merks/create','create')->name('attributes.merks.create')->middleware('level3');
+    Route::post('/attributes/merks/store','store')->name('attributes.merks.store')->middleware('level3');
+    Route::get('/attributes/merks/edit','edit')->name('attributes.merks.edit')->middleware('level3');
+    Route::post('/attributes/merks/update','update')->name('attributes.merks.update')->middleware('level3');
+});
+
+// MAINAN
+Route::controller(MainanController::class)->group(function(){
+    Route::get('/attributes/mainans/index','index')->name('attributes.mainans.index')->middleware('level3');
+    Route::get('/attributes/mainans/create','create')->name('attributes.mainans.create')->middleware('level3');
+    Route::post('/attributes/mainans/store','store')->name('attributes.mainans.store')->middleware('level3');
+    Route::get('/attributes/mainans/edit','edit')->name('attributes.mainans.edit')->middleware('level3');
+    Route::post('/attributes/mainans/update','update')->name('attributes.mainans.update')->middleware('level3');
+});
+
+// CAP
+Route::controller(CapController::class)->group(function(){
+    Route::get('/attributes/caps/index','index')->name('attributes.caps.index')->middleware('level3');
+    Route::get('/attributes/caps/create','create')->name('attributes.caps.create')->middleware('level3');
+    Route::post('/attributes/caps/store','store')->name('attributes.caps.store')->middleware('level3');
+    Route::get('/attributes/caps/edit','edit')->name('attributes.caps.edit')->middleware('level3');
+    Route::post('/attributes/caps/update','update')->name('attributes.caps.update')->middleware('level3');
+});
+// END - ATTRIBUTES
 
 Route::controller(ArtisanController::class)->group(function () {
     Route::get('/artisans', 'index')->name('artisans.index')->middleware('auth');

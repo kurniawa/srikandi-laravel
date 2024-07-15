@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tipe_perhiasans', function (Blueprint $table) {
+        Schema::create('merks', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
             $table->string('photo_path')->nullable();
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tipe_perhiasans');
+        Schema::dropIfExists('merks');
     }
 };

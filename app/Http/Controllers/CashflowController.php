@@ -127,7 +127,7 @@ class CashflowController extends Controller
             'backRoute' => 'home',
             'backRouteParams' => null,
         ];
-        dd($data);
+        // dd($data);
         return view('cashflows.index', $data);
     }
 
