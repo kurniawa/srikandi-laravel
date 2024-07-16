@@ -57,8 +57,9 @@ class HomeController extends Controller
         }
 
         $data = [
-            'menus' => Menu::get(),
-            'profile_menus' => Menu::get_profile_menus($user),
+            // 'menus' => Menu::get(),
+            // 'profile_menus' => Menu::get_profile_menus($user),
+            'user' => $user,
             'cart' => $cart,
             'items' => $items,
             'all_items_x_photos' => $all_items_x_photos,

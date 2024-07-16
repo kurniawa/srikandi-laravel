@@ -19,7 +19,7 @@ class HargaPasaranController extends Controller
         // dd($kategoris);
         $col_harga_pasarans = collect();
         foreach ($kategoris as $kategori) {
-            $harga_pasarans = HargaPasaran::where('kategori', $kategori->kategori)->limit(500)->get();
+            $harga_pasarans = HargaPasaran::where('kategori', $kategori->kategori)->limit(500)->orderByDesc('created_at')->get();
             $col_harga_pasarans->push($harga_pasarans);
         }
 

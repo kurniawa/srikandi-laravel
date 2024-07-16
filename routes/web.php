@@ -16,7 +16,6 @@ use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\SuratPembelianController;
 use App\Http\Controllers\TipePerhiasanController;
-use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use App\Models\Cart;
 use Illuminate\Support\Facades\Auth;
@@ -158,7 +157,7 @@ Route::get('/attributes/index', function () {
         'cart' => $cart
     ];
     return view('attributes.index', $data);
-})->name('attributes.index');
+})->name('attributes.index')->middleware('level3');
 // HARGA PASARAN
 Route::controller(HargaPasaranController::class)->group(function(){
     Route::get('/attributes/harga_pasaran/index','index')->name('attributes.harga_pasaran.index')->middleware('level3');

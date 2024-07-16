@@ -13,12 +13,12 @@
         </div>
     </div>
 
-    <div class="flex gap-2 border p-2 rounded mt-5">
-        <a href="{{ route('attributes.harga_pasaran.index') }}" class="loading-spinner bg-violet-300 font-bold text-white px-2 py-1 rounded">Harga Pasaran</a>
-        <a href="{{ route('attributes.mainans.index') }}" class="loading-spinner bg-violet-300 font-bold text-white px-2 py-1 rounded">Mainan</a>
-        <a href="{{ route('attributes.caps.index') }}" class="loading-spinner bg-violet-300 font-bold text-white px-2 py-1 rounded">Cap</a>
-        <a href="{{ route('attributes.tipe_perhiasans.index') }}" class="loading-spinner bg-violet-300 font-bold text-white px-2 py-1 rounded">Tipe Perhiasan</a>
-        <a href="{{ route('attributes.merks.index') }}" class="loading-spinner bg-violet-300 font-bold text-white px-2 py-1 rounded">Merk</a>
+    <div class="grid grid-cols-12 gap-2 border p-2 rounded mt-5">
+        <a href="{{ route('attributes.harga_pasaran.index') }}" class="loading-spinner col-span-4 flex justify-center items-center bg-violet-300 font-bold text-white px-2 py-1 rounded"><div class="text-center">Harga Pasaran</div></a>
+        <a href="{{ route('attributes.mainans.index') }}" class="loading-spinner col-span-4 flex justify-center items-center bg-violet-300 font-bold text-white px-2 py-1 rounded">Mainan</a>
+        <a href="{{ route('attributes.caps.index') }}" class="loading-spinner col-span-4 flex justify-center items-center bg-violet-300 font-bold text-white px-2 py-1 rounded">Cap</a>
+        <a href="{{ route('attributes.tipe_perhiasans.index') }}" class="loading-spinner col-span-4 flex justify-center items-center bg-violet-300 font-bold text-white px-2 py-1 rounded"><div class="text-center">Tipe Perhiasan</div></a>
+        <a href="{{ route('attributes.merks.index') }}" class="loading-spinner col-span-4 flex justify-center items-center bg-violet-300 font-bold text-white px-2 py-1 rounded">Merk</a>
     </div>
 
     {{-- <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button> --}}
