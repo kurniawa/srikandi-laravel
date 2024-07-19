@@ -89,6 +89,7 @@ class HomeController extends Controller
             // 'spk_menus' => Menu::get_spk_menus(),
             // 'user' => Auth::user(),
             'cart' => $cart,
+            'user' => $user,
         ];
         // dump($items[0]);
         // dd($items[0]->item_photos);

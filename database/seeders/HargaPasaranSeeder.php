@@ -14,8 +14,8 @@ class HargaPasaranSeeder extends Seeder
     public function run(): void
     {
         $harga_pasarans = [
-            ['kategori' => 'CT', 'kadar' => 9900, 'harga_beli' => 133500000, 'harga_buyback' => 129000000],
-            ['kategori' => 'LM', 'kadar' => 9900, 'harga_beli' => 133500000, 'harga_buyback' => 129000000],
+            ['kategori' => 'CT', 'kadar' => 9900, 'harga_beli' => 123250000, 'harga_buyback' => 119000000, 'created_at' => '2024-07-15 00:00:00'], // spread harga sekitar 3,4%
+            ['kategori' => 'LM', 'kadar' => 9999, 'harga_beli' => 133500000, 'harga_buyback' => 129000000, 'created_at' => '2024-07-15 00:00:00'],
         ];
 
         foreach ($harga_pasarans as $harga_pasaran) {
@@ -24,6 +24,7 @@ class HargaPasaranSeeder extends Seeder
                 'kadar' => $harga_pasaran['kadar'],
                 'harga_beli' => $harga_pasaran['harga_beli'],
                 'harga_buyback' => $harga_pasaran['harga_buyback'],
+                'created_at' => $harga_pasaran['created_at'],
             ]);
         }
     }

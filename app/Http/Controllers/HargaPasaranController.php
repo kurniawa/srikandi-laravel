@@ -31,4 +31,32 @@ class HargaPasaranController extends Controller
 
         return view('attributes.harga_pasaran_index', $data);
     }
+
+    function create() {
+        $user = Auth::user();
+        $cart = null;
+        if ($user) {
+            $cart = Cart::where('user_id', $user->id)->first();
+        }
+
+        $kategoris = ['LM', 'CT', '3750', '4200', '7000', '7500'];
+
+        $data = [
+            'user' => $user,
+            'cart' => $cart,
+            'kategoris' => $kategoris,
+        ];
+        return view('attributes.harga_pasaran_create', $data);
+    }
+
+    function store(Request $request) {
+        $post = $request->post();
+        dd($post);
+    }
+
+    function edit(HargaPasaran $harga_pasaran, Request $request) {
+        $post = $request->post();
+        dump($post);
+        dd($harga_pasaran);
+    }
 }

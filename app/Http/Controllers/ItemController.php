@@ -25,7 +25,11 @@ class ItemController extends Controller
     function pilih_tipe_barang()
     {
         // dd($from);
-        $cart = Cart::where('user_id', Auth::user()->id)->first();
+        $user = Auth::user();
+        $cart = null;
+        if ($user) {
+            $cart = Cart::where('user_id', $user->id)->first();
+        }
 
         $data = [
             // 'goback' => 'home',
@@ -41,6 +45,7 @@ class ItemController extends Controller
             'backRoute' => 'carts.index',
             'backRouteParams' => [Auth::user()->id],
             'cart' => $cart,
+            'user' => $user,
         ];
 
         return view('carts.pilih_tipe_barang', $data);
@@ -64,7 +69,11 @@ class ItemController extends Controller
         // dd($tipe_perhiasans);
         // dd($jenis_perhiasans);
 
-        $cart = Cart::where('user_id', Auth::user()->id)->first();
+        $user = Auth::user();
+        $cart = null;
+        if ($user) {
+            $cart = Cart::where('user_id', Auth::user()->id)->first();
+        }
 
         $data = [
             // 'goback' => 'home',
@@ -87,6 +96,7 @@ class ItemController extends Controller
             'matas' => $matas,
             'label_mainans' => $label_mainans,
             'cart' => $cart,
+            'user' => $user,
         ];
 
         // dd($caps);

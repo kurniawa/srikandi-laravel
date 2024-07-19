@@ -46,7 +46,7 @@ function toggle_light(
 
 function toggle_light_instant(
     // btn_id,
-    class_id,
+    class_id
     // classes_to_remove,
     // classes_to_add,
     // display_ref
@@ -141,7 +141,7 @@ function set_time_range(timerange) {
         to_day = 31;
         to_month = 12;
         to_year = from_year;
-    } else if (timerange === 'triwulan') {
+    } else if (timerange === "triwulan") {
         const date = new Date();
         const actual_month = date.getMonth() + 1;
         from_day = 1;
@@ -161,7 +161,7 @@ function set_time_range(timerange) {
             to_month = 12;
         }
         to_day = new Date(to_year, to_month, 0).getDate();
-    } else if (timerange === 'triwulan_lalu') {
+    } else if (timerange === "triwulan_lalu") {
         const date = new Date();
         const actual_month = date.getMonth() + 1;
         from_day = 1;
@@ -320,7 +320,7 @@ function formatNumber(ipt, hidden_id) {
     // console.log(num);
     let hidden_num;
     if (num.length === 2) {
-        if (num[1] !== '') {
+        if (num[1] !== "") {
             hidden_num = `${num[0]}.${num[1]}`;
         }
         // hidden_num = '';
@@ -355,7 +355,7 @@ function formatNumberX(string_value) {
     num = num.split(",");
     let float_number;
     if (num.length === 2) {
-        if (num[1] !== '') {
+        if (num[1] !== "") {
             float_number = `${num[0]}.${num[1]}`;
         }
     } else {
@@ -377,6 +377,33 @@ function formatNumberX(string_value) {
     return formatted_number;
 } // fungsi untuk return decimal number dalam bentuk string
 
+function formatNumberMurni(string_value) {
+    let num = string_value.split(".").join("");
+    num = num.split(",");
+    let float_number;
+    if (num.length === 2) {
+        if (num[1] !== "") {
+            float_number = `${num[0]}.${num[1]}`;
+        }
+    } else {
+        float_number = num[0];
+    }
+
+    let formatted_number = float_number;
+    if (!isNaN(float_number)) {
+        let real_number_formatted = parseFloat(num[0]).toLocaleString("id-ID", {
+            style: "decimal",
+        });
+        // console.log(real_number_formatted);
+        formatted_number = `${real_number_formatted}`;
+        if (num.length === 2) {
+            formatted_number = `${real_number_formatted},${num[1]}`;
+        }
+    }
+
+    return formatted_number;
+} // fungsi untuk return decimal number dalam bentuk string
+
 function preformatDotToComa(float_value) {
     return float_value.toString().split(".").join(",");
 }
@@ -390,7 +417,7 @@ function pangkasDesimal(str_value) {
     if (get_decimal.toString().length > 4) {
         get_decimal = get_decimal.toFixed(2);
     }
-    let get_real_number = Math.trunc(float_value) * 100 / 100;
+    let get_real_number = (Math.trunc(float_value) * 100) / 100;
     // console.log(get_real_number);
     // console.log(get_real_number + get_decimal);
     if (get_decimal === 0) {
@@ -411,7 +438,7 @@ function formatNumber2(formatted_id, hidden_id) {
     num = num.split(",");
     let hidden_num;
     if (num.length === 2) {
-        if (num[1] !== '') {
+        if (num[1] !== "") {
             hidden_num = `${num[0]}.${num[1]}`;
         }
     } else {
