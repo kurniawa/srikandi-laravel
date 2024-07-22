@@ -73,32 +73,36 @@
             <div class="col-span-2 flex justify-center"><span>kategori</span></div>
             <div class="col-span-5 flex justify-center"><span>harga beli</span></div>
             <div class="col-span-5 flex justify-center"><span>harga buyback</span></div>
-            @foreach ($kategoris as $kategori)
-                @if ($kategori == 'CT')
-                <div class="col-span-2 flex items-center justify-center"><span>{{ $kategori }}(99)</span></div>
+            @foreach ($kadars as $kadar)
+                @if ($kadar->kategori == 'CT')
+                <div class="col-span-2 flex items-center justify-center"><span>{{ $kadar->kategori }}(99)</span></div>
                 @else
-                <div class="col-span-2 flex items-center justify-center"><span>{{ $kategori }}</span></div>
+                <div class="col-span-2 flex items-center justify-center"><span>{{ $kadar->kategori }}</span></div>
                 @endif
 
-                @if ($kategori == 'CT')
+                @if ($kadar->kategori == 'CT')
                 <div class="col-span-5">
-                    <input type="text" name="harga_beli-formatted[]" class="w-full rounded" onchange="formatNumber(this, 'harga_beli-{{ $kategori }}'); generateHargaPasaran()">
-                    <input type="hidden" name="harga_beli[]" id="harga_beli-{{ $kategori }}">
+                    <input type="text" name="harga_beli-formatted[]" class="w-full rounded" onchange="formatNumber(this, 'harga_beli-{{ $kadar->kategori }}'); generateHargaPasaran()">
+                    <input type="hidden" name="harga_beli[]" id="harga_beli-{{ $kadar->kategori }}">
                 </div>
                 @else
                 <div class="col-span-5">
-                    <input type="text" name="harga_beli-formatted[]" id="harga_beli-{{ $kategori }}-formatted" class="w-full rounded" onchange="formatNumber(this, 'harga_beli-{{ $kategori }}')">
-                    <input type="hidden" name="harga_beli[]" id="harga_beli-{{ $kategori }}">
+                    <input type="text" name="harga_beli-formatted[]" id="harga_beli-{{ $kadar->kategori }}-formatted" class="w-full rounded" onchange="formatNumber(this, 'harga_beli-{{ $kadar->kategori }}')">
+                    <input type="hidden" name="harga_beli[]" id="harga_beli-{{ $kadar->kategori }}">
                 </div>
                 @endif
 
                 <div class="col-span-5">
-                    <input type="text" name="harga_buyback-formatted[]" id="harga_buyback-{{ $kategori }}-formatted" class="w-full rounded" onchange="formatNumber(this, 'harga_buyback-{{ $kategori }}')">
-                    <input type="hidden" name="harga_buyback[]" id="harga_buyback-{{ $kategori }}">
+                    <input type="text" name="harga_buyback-formatted[]" id="harga_buyback-{{ $kadar->kategori }}-formatted" class="w-full rounded" onchange="formatNumber(this, 'harga_buyback-{{ $kadar->kategori }}')">
+                    <input type="hidden" name="harga_buyback[]" id="harga_buyback-{{ $kadar->kategori }}">
                 </div>
 
-                <input type="hidden" name="kategori[]" value="{{ $kategori }}">
+                <input type="hidden" name="kategori[]" id="kategori-{{ $kadar->kategori }}" value="{{ $kadar->kategori }}">
+                <input type="hidden" name="kadar[]" id="kadar-{{ $kadar->kadar }}" value="{{ $kadar->kadar }}">
             @endforeach
+        </div>
+        <div class="border-2 border-yellow-300 rounded-lg p-2 text-xs mt-2">
+            <p>Harga merupakan harga per gram dari berat bersih, tanpa mata atau pernak-pernik lainnya.</p>
         </div>
         <div class="mt-3 flex justify-center">
             <button type="submit" class="p-2 rounded-lg bg-emerald-300 text-white font-bold">Konfirmasi</button>
@@ -107,29 +111,30 @@
 </main>
 
 <script>
-    const kategoris = {!! json_encode($kategoris, JSON_HEX_TAG) !!};
+    const kadars = {!! json_encode($kadars, JSON_HEX_TAG) !!};
 
+    console.log(kadars);
     function generateHargaPasaran() {
         const harga_ct = document.getElementById('harga_beli-CT').value;
-        // console.log(harga_ct);
-        kategoris.forEach(kategori => {
-            if (kategori !== 'LM' && kategori !== 'CT') {
-                // console.log(kategori);
-                const harga_buyback_this = parseFloat(harga_ct) * ((parseFloat(kategori) / 100 - 10) / 100);
-                const harga_beli_this = parseFloat(harga_ct) * ((parseFloat(kategori) / 100 + 10) / 100) + 100000;
+        console.log(harga_ct);
+        kadars.forEach(kadar => {
+            if (kadar.kategori !== 'LM' && kadar.kategori !== 'CT') {
+                // console.log(kadar.kategori);
+                const harga_buyback_this = parseFloat(harga_ct) * ((parseFloat(kadar.kategori) / 100 - 10) / 100);
+                const harga_beli_this = parseFloat(harga_ct) * ((parseFloat(kadar.kategori) / 100 + 10) / 100) + 100000;
                 // console.log(harga_buyback_this);
-                document.getElementById(`harga_buyback-${kategori}`).value = harga_buyback_this;
-                // console.log(document.getElementById(`harga_buyback-${kategori}-formatted`));
-                document.getElementById(`harga_buyback-${kategori}-formatted`).value = formatNumberMurni(harga_buyback_this.toString());
+                document.getElementById(`harga_buyback-${kadar.kategori}`).value = harga_buyback_this;
+                // console.log(document.getElementById(`harga_buyback-${kadar.kategori}-formatted`));
+                document.getElementById(`harga_buyback-${kadar.kategori}-formatted`).value = formatNumberMurni(harga_buyback_this.toString());
 
-                document.getElementById(`harga_beli-${kategori}`).value = harga_beli_this;
-                document.getElementById(`harga_beli-${kategori}-formatted`).value = formatNumberMurni(harga_beli_this.toString());
+                document.getElementById(`harga_beli-${kadar.kategori}`).value = harga_beli_this;
+                document.getElementById(`harga_beli-${kadar.kategori}-formatted`).value = formatNumberMurni(harga_beli_this.toString());
             }
 
-            if (kategori == 'CT') {
+            if (kadar.kategori == 'CT') {
                 const harga_buyback_this = parseFloat(harga_ct) * 0.966;
-                document.getElementById(`harga_buyback-${kategori}`).value = harga_buyback_this;
-                document.getElementById(`harga_buyback-${kategori}-formatted`).value = formatNumberMurni(harga_buyback_this.toString());
+                document.getElementById(`harga_buyback-${kadar.kategori}`).value = harga_buyback_this;
+                document.getElementById(`harga_buyback-${kadar.kategori}-formatted`).value = formatNumberMurni(harga_buyback_this.toString());
             }
         });
     }

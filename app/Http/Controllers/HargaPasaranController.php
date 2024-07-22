@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\HargaPasaran;
+use App\Models\Kadar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,11 +16,11 @@ class HargaPasaranController extends Controller
         if ($user) {
             $cart = Cart::where('user_id', $user->id)->first();
         }
-        $kategoris = HargaPasaran::select('kategori')->groupBy('kategori')->get();
+        $kadars = Kadar::all();
         // dd($kategoris);
         $col_harga_pasarans = collect();
-        foreach ($kategoris as $kategori) {
-            $harga_pasarans = HargaPasaran::where('kategori', $kategori->kategori)->limit(500)->orderByDesc('created_at')->get();
+        foreach ($kadars as $kadar) {
+            $harga_pasarans = HargaPasaran::where('kategori', $kadar->kategori)->limit(500)->orderByDesc('created_at')->get();
             $col_harga_pasarans->push($harga_pasarans);
         }
 
@@ -39,19 +40,54 @@ class HargaPasaranController extends Controller
             $cart = Cart::where('user_id', $user->id)->first();
         }
 
-        $kategoris = ['LM', 'CT', '3750', '4200', '7000', '7500'];
+        // $kategoris = ['LM', 'CT', '3750', '4200', '7000', '7500'];
+        $kadars = Kadar::all();
 
         $data = [
             'user' => $user,
             'cart' => $cart,
-            'kategoris' => $kategoris,
+            'kadars' => $kadars,
         ];
         return view('attributes.harga_pasaran_create', $data);
     }
 
     function store(Request $request) {
         $post = $request->post();
-        dd($post);
+        // dd($post);
+        // VALIDASI KALAU ADA HARGA CT, MAKA HARUS ADA HARGA LAINNYA
+        for ($i=0; $i < count($post['harga_beli']); $i++) { 
+            if ($post['harga_beli'][$i]) {
+                if (!$post['harga_buyback'][$i]) {
+                    $request->validate(['error'=>'required'],['error.required'=>'-data belum lengkap-']);
+                }
+            }
+            if ($i >= 1) {
+                if ($post['harga_beli'][1]) {
+                    if (!$post['harga_beli'][$i] || !$post['harga_buyback'][$i]) {
+                        $request->validate(['error'=>'required'],['error.required'=>'-data belum lengkap-']);
+                    }
+                }
+            }
+        }
+        // END - VALIDASI
+        $success_ = '';
+        for ($i=0; $i < count($post['harga_beli']); $i++) { 
+            if ($post['harga_beli'][$i]) {
+                HargaPasaran::create([
+                    "kategori" => $post['kategori'][$i],
+                    "kadar" => $post['kadar'][$i],
+                    "harga_beli" => (string)((int)$post['harga_beli'][$i] * 100),
+                    "harga_buyback" => (string)((int)$post['harga_buyback'][$i] * 100),
+                ]);
+            }
+        }
+        $success_ .= 'New HargaPasaran added';
+
+        $feedback = [
+            'success_' => $success_
+        ];
+
+        return redirect()->route('attributes.harga_pasaran.index')->with($feedback);
     }
 
     function edit(HargaPasaran $harga_pasaran, Request $request) {

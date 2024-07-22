@@ -14,13 +14,14 @@ class MerkSeeder extends Seeder
     public function run(): void
     {
         $merks = [
-            ['nama' => 'Antam'],
-            ['nama' => 'UBS'],
+            ['nama' => 'Antam', 'codename'=>'m.Antam'],
+            ['nama' => 'UBS', 'codename'=>'m.UBS'],
         ];
 
         foreach ($merks as $merk) {
             Merk::create([
-                'nama' => $merk['nama']
+                'nama' => $merk['nama'],
+                'codename' => $merk['codename']
             ]);
         }
     }

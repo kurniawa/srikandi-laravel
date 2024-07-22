@@ -163,8 +163,9 @@ Route::controller(HargaPasaranController::class)->group(function(){
     Route::get('/attributes/harga_pasaran/index','index')->name('attributes.harga_pasaran.index')->middleware('level3');
     Route::get('/attributes/harga_pasaran/create','create')->name('attributes.harga_pasaran.create')->middleware('level3');
     Route::post('/attributes/harga_pasaran/store','store')->name('attributes.harga_pasaran.store')->middleware('level3');
-    Route::get('/attributes/harga_pasaran/edit','edit')->name('attributes.harga_pasaran.edit')->middleware('level3');
-    Route::post('/attributes/harga_pasaran/update','update')->name('attributes.harga_pasaran.update')->middleware('level3');
+    Route::get('/attributes/harga_pasaran/{harga_pasaran}/edit','edit')->name('attributes.harga_pasaran.edit')->middleware('level3');
+    Route::post('/attributes/harga_pasaran/{harga_pasaran}/update','update')->name('attributes.harga_pasaran.update')->middleware('level3');
+    Route::post('/attributes/harga_pasaran/{harga_pasaran}/destroy','destroy')->name('attributes.harga_pasaran.destroy')->middleware('level5');
 });
 
 // TIPE PERHIASAN
@@ -172,8 +173,9 @@ Route::controller(TipePerhiasanController::class)->group(function(){
     Route::get('/attributes/tipe_perhiasans/index','index')->name('attributes.tipe_perhiasans.index')->middleware('level3');
     Route::get('/attributes/tipe_perhiasans/create','create')->name('attributes.tipe_perhiasans.create')->middleware('level3');
     Route::post('/attributes/tipe_perhiasans/store','store')->name('attributes.tipe_perhiasans.store')->middleware('level3');
-    Route::get('/attributes/tipe_perhiasans/edit','edit')->name('attributes.tipe_perhiasans.edit')->middleware('level3');
-    Route::post('/attributes/tipe_perhiasans/update','update')->name('attributes.tipe_perhiasans.update')->middleware('level3');
+    Route::get('/attributes/tipe_perhiasans/{tipe_perhiasan}/edit','edit')->name('attributes.tipe_perhiasans.edit')->middleware('level3');
+    Route::post('/attributes/tipe_perhiasans/{tipe_perhiasan}/update','update')->name('attributes.tipe_perhiasans.update')->middleware('level3');
+    Route::post('/attributes/tipe_perhiasans/{tipe_perhiasan}/destroy','destroy')->name('attributes.tipe_perhiasans.destroy')->middleware('level5');
 });
 
 // MERK
@@ -181,8 +183,9 @@ Route::controller(MerkController::class)->group(function(){
     Route::get('/attributes/merks/index','index')->name('attributes.merks.index')->middleware('level3');
     Route::get('/attributes/merks/create','create')->name('attributes.merks.create')->middleware('level3');
     Route::post('/attributes/merks/store','store')->name('attributes.merks.store')->middleware('level3');
-    Route::get('/attributes/merks/edit','edit')->name('attributes.merks.edit')->middleware('level3');
-    Route::post('/attributes/merks/update','update')->name('attributes.merks.update')->middleware('level3');
+    Route::get('/attributes/merks/{merk}/edit','edit')->name('attributes.merks.edit')->middleware('level3');
+    Route::post('/attributes/merks/{merk}/update','update')->name('attributes.merks.update')->middleware('level3');
+    Route::post('/attributes/merks/{merk}/destroy','destroy')->name('attributes.merks.destroy')->middleware('level5');
 });
 
 // MAINAN
@@ -190,8 +193,9 @@ Route::controller(MainanController::class)->group(function(){
     Route::get('/attributes/mainans/index','index')->name('attributes.mainans.index')->middleware('level3');
     Route::get('/attributes/mainans/create','create')->name('attributes.mainans.create')->middleware('level3');
     Route::post('/attributes/mainans/store','store')->name('attributes.mainans.store')->middleware('level3');
-    Route::get('/attributes/mainans/edit','edit')->name('attributes.mainans.edit')->middleware('level3');
-    Route::post('/attributes/mainans/update','update')->name('attributes.mainans.update')->middleware('level3');
+    Route::get('/attributes/mainans/{mainan}/edit','edit')->name('attributes.mainans.edit')->middleware('level3');
+    Route::post('/attributes/mainans/{mainan}/update','update')->name('attributes.mainans.update')->middleware('level3');
+    Route::post('/attributes/mainans/{mainan}/destroy','destroy')->name('attributes.mainans.destroy')->middleware('level5');
 });
 
 // CAP
@@ -199,8 +203,9 @@ Route::controller(CapController::class)->group(function(){
     Route::get('/attributes/caps/index','index')->name('attributes.caps.index')->middleware('level3');
     Route::get('/attributes/caps/create','create')->name('attributes.caps.create')->middleware('level3');
     Route::post('/attributes/caps/store','store')->name('attributes.caps.store')->middleware('level3');
-    Route::get('/attributes/caps/edit','edit')->name('attributes.caps.edit')->middleware('level3');
-    Route::post('/attributes/caps/update','update')->name('attributes.caps.update')->middleware('level3');
+    Route::get('/attributes/caps/{cap}/edit','edit')->name('attributes.caps.edit')->middleware('level3');
+    Route::post('/attributes/caps/{cap}/update','update')->name('attributes.caps.update')->middleware('level3');
+    Route::post('/attributes/caps/{cap}/destroy','destroy')->name('attributes.caps.destroy')->middleware('level5');
 });
 // END - ATTRIBUTES
 
