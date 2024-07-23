@@ -7,16 +7,15 @@
         <div class="bg-white shadow drop-shadow rounded p-2 flex gap-1 text-slate-400 items-center">
             <h1 class="text-xl font-bold">Cap</h1>
         </div>
-        <a href="{{ route('attributes.caps.create') }}">
-            <button class="bg-emerald-400 p-1 rounded text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                </svg>
-            </button>
-        </a>
+        <button id="btn-toggle-new-cap" class="border-2 border-emerald-300 rounded-lg text-emerald-300" onclick="toggle_light(this.id, 'div-new-cap', [], ['bg-emerald-200'], 'block')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+        </button>
     </div>
 
-    <div class="mt-2 border rounded p-1">
+    {{-- NEW CAP --}}
+    <div id="div-new-cap" class="hidden mt-2 border rounded p-1">
         <form action="{{ route('attributes.caps.store') }}" method="POST">
             @csrf
             <div class="grid grid-cols-2 gap-1">
@@ -34,6 +33,7 @@
             </div>
         </form>
     </div>
+    {{-- END - NEW CAP --}}
 
     <div class="border-2 border-orange-300 rounded p-1 mt-5">
         <div class="text-center mt-2">

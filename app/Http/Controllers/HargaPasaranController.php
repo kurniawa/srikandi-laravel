@@ -90,9 +90,21 @@ class HargaPasaranController extends Controller
         return redirect()->route('attributes.harga_pasaran.index')->with($feedback);
     }
 
-    function edit(HargaPasaran $harga_pasaran, Request $request) {
-        $post = $request->post();
-        dump($post);
+    function edit(HargaPasaran $harga_pasaran) {
         dd($harga_pasaran);
+
+        $user = Auth::user();
+        $cart = null;
+        if ($user) {
+            $cart = Cart::where('user_id', $user->id)->first();
+        }
+
+        $data = [
+            'user' => $user,
+            'cart' => $cart,
+            'harga_pasaran' => $harga_pasaran,
+        ];
+
+        return view('attributes.harga_pasaran_edit', $data);
     }
 }

@@ -7,16 +7,14 @@
         <div class="bg-white shadow drop-shadow rounded p-2 flex gap-1 text-slate-400 items-center">
             <h1 class="text-xl font-bold">Mainan</h1>
         </div>
-        <a href="{{ route('attributes.mainans.create') }}">
-            <button class="bg-emerald-400 p-1 rounded text-white">
+            <button id="btn-toggle-new-mainan" class="border-2 border-emerald-300 rounded-lg text-emerald-300" onclick="toggle_light(this.id, 'div-new-mainan', [], ['bg-emerald-200'], 'block')">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
             </button>
-        </a>
     </div>
 
-    <div class="mt-2 border rounded p-1">
+    <div id="div-new-mainan" class="hidden mt-2 border-2 border-emerald-300 rounded p-1">
         <form action="{{ route('attributes.mainans.store') }}" method="POST">
             @csrf
             <div class="grid grid-cols-2 gap-1">

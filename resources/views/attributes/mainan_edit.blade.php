@@ -22,7 +22,7 @@
             </div>
             <div class="flex justify-center mt-2">
                 <div class="rounded p-2 bg-orange-300 text-white font-bold">
-                    <button type="submit">Konfirmasi</button>
+                    <button type="submit">Konfirmasi Edit</button>
                 </div>
             </div>
         </form>

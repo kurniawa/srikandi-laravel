@@ -10,6 +10,7 @@ use App\Http\Controllers\CashflowController;
 use App\Http\Controllers\HargaPasaranController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\JenisPerhiasanController;
 use App\Http\Controllers\MainanController;
 use App\Http\Controllers\MerkController;
 use App\Http\Controllers\PelangganController;
@@ -176,6 +177,16 @@ Route::controller(TipePerhiasanController::class)->group(function(){
     Route::get('/attributes/tipe_perhiasans/{tipe_perhiasan}/edit','edit')->name('attributes.tipe_perhiasans.edit')->middleware('level3');
     Route::post('/attributes/tipe_perhiasans/{tipe_perhiasan}/update','update')->name('attributes.tipe_perhiasans.update')->middleware('level3');
     Route::post('/attributes/tipe_perhiasans/{tipe_perhiasan}/destroy','destroy')->name('attributes.tipe_perhiasans.destroy')->middleware('level5');
+});
+
+// JENIS PERHIASAN
+Route::controller(JenisPerhiasanController::class)->group(function(){
+    Route::get('/attributes/jenis_perhiasans/index','index')->name('attributes.jenis_perhiasans.index')->middleware('level3');
+    Route::get('/attributes/jenis_perhiasans/create','create')->name('attributes.jenis_perhiasans.create')->middleware('level3');
+    Route::post('/attributes/jenis_perhiasans/store','store')->name('attributes.jenis_perhiasans.store')->middleware('level3');
+    Route::get('/attributes/jenis_perhiasans/{jenis_perhiasan}/edit','edit')->name('attributes.jenis_perhiasans.edit')->middleware('level3');
+    Route::post('/attributes/jenis_perhiasans/{jenis_perhiasan}/update','update')->name('attributes.jenis_perhiasans.update')->middleware('level3');
+    Route::post('/attributes/jenis_perhiasans/{jenis_perhiasan}/destroy','destroy')->name('attributes.jenis_perhiasans.destroy')->middleware('level5');
 });
 
 // MERK

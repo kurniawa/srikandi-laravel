@@ -39,25 +39,28 @@ class TipePerhiasanController extends Controller
 
     function store(Request $request) {
         $post = $request->post();
-        // dd($post);
-        $request->validate(['nama'=>'required']);
+        // dump($post);
+        $request->validate([
+            'tipe_perhiasan_id'=>'required|numeric',
+            'jenis_perhiasan'=>'required',
+        ]);
 
         $success_ = "";
-        $post['codename'] = "c." . $post['nama'];
-        if ($post['codename']) {
-            $post['codename'] = $post['codename'];
-        }
+        
 
         // VALIDASI NAMA ATAU CODENAME YANG SAMA
-        $exist_tipe_perhiasan = TipePerhiasan::where('nama', $post['nama'])->orWhere('codename', $post['codename'])->first();
+        $exist_tipe_perhiasan = JenisPerhiasan::where('tipe_perhiasan_id', $post['tipe_perhiasan_id'])->Where('nama', $post['jenis_perhiasan'])->first();
+        // dd($exist_tipe_perhiasan);
         if ($exist_tipe_perhiasan) {
-            $request->validate(['error'=>'required'],['error.required'=>'tipe_perhiasan sudah ada']);
+            $request->validate(['error'=>'required'],['error.required'=>'jenis_perhiasan sudah ada']);
         }
         // END - VALIDASI EXIST
 
-        TipePerhiasan::create([
-            'nama' => $post['nama'],
-            'codename' => $post['codename'],
+        $tipe_perhiasan = TipePerhiasan::find($post['tipe_perhiasan_id']);
+        JenisPerhiasan::create([
+            'tipe_perhiasan_id' => $post['tipe_perhiasan_id'],
+            'tipe_perhiasan' => $tipe_perhiasan->nama,
+            'nama' => $post['jenis_perhiasan'],
         ]);
 
         $success_ .= 'New tipe_perhiasan created';
