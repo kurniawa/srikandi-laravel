@@ -10,7 +10,7 @@
         </div>
     </div>
 
-    <form action="{{ route('attributes.harga_pasaran.store') }}" method="POST" class="mt-5 border rounded p-2 text-slate-500">
+    <form action="{{ route('attributes.harga_pasaran.update', $harga_pasaran) }}" method="POST" class="mt-5 border rounded p-2 text-slate-500">
         @csrf
         <div class="flex gap-1 mt-5 items-center">
             <h3 class="font-bold text-slate-500">Tanggal</h3>
@@ -25,7 +25,7 @@
                     @endfor
                 @else
                     @for ($i = 1; $i < 32; $i++)
-                        @if ($i == date('d'))
+                        @if ($i == date('d', strtotime($harga_pasaran->created_at)))
                             <option value="{{ $i }}" selected>{{ $i }}</option>
                         @else
                             <option value="{{ $i }}">{{ $i }}</option>
@@ -47,7 +47,7 @@
                     @endfor
                 @else
                     @for ($i = 1; $i < 13; $i++)
-                        @if ($i == date('m'))
+                        @if ($i == date('m', strtotime($harga_pasaran->created_at)))
                             <option value="{{ $i }}" selected>{{ $i }}</option>
                         @else
                             <option value="{{ $i }}">{{ $i }}</option>
@@ -62,7 +62,7 @@
                 </svg>
             </div>
             <input type="text" name="tahun" class="border rounded p-1 w-1/3"
-                value="{{ old('tahun') ? old('tahun') : date('Y') }}">
+                value="{{ old('tahun') ? old('tahun') : date('Y', strtotime($harga_pasaran->created_at)) }}">
             {{-- kalau nanti ada fungsi pengubahan tanggal surat, maka ini boleh dihapus --}}
             {{-- <input type="hidden" name="hari" value="{{ date('d') }}" readonly>
             <input type="hidden" name="bulan" value="{{ date('m') }}" readonly> --}}
@@ -81,19 +81,19 @@
 
                 @if ($harga_pasaran->kategori == 'CT')
                 <div class="col-span-5">
-                    <input type="text" name="harga_beli-formatted" class="w-full rounded" onchange="formatNumber(this, 'harga_beli-{{ $harga_pasaran->kategori }}'); generateHargaPasaran()">
-                    <input type="hidden" name="harga_beli" id="harga_beli-{{ $harga_pasaran->kategori }}">
+                    <input type="text" name="harga_beli-formatted" value="{{ casual_decimal_format($harga_pasaran->harga_beli) }}" class="w-full rounded" onchange="formatNumber(this, 'harga_beli-{{ $harga_pasaran->kategori }}'); generateHargaPasaran()">
+                    <input type="hidden" name="harga_beli" value="{{ $harga_pasaran->harga_beli / 100 }}" id="harga_beli-{{ $harga_pasaran->kategori }}">
                 </div>
                 @else
                 <div class="col-span-5">
-                    <input type="text" name="harga_beli-formatted" id="harga_beli-{{ $harga_pasaran->kategori }}-formatted" class="w-full rounded" onchange="formatNumber(this, 'harga_beli-{{ $harga_pasaran->kategori }}')">
-                    <input type="hidden" name="harga_beli" id="harga_beli-{{ $harga_pasaran->kategori }}">
+                    <input type="text" name="harga_beli-formatted" value="{{ casual_decimal_format($harga_pasaran->harga_beli) }}" id="harga_beli-{{ $harga_pasaran->kategori }}-formatted" class="w-full rounded" onchange="formatNumber(this, 'harga_beli-{{ $harga_pasaran->kategori }}')">
+                    <input type="hidden" name="harga_beli" value="{{ $harga_pasaran->harga_beli / 100 }}" id="harga_beli-{{ $harga_pasaran->kategori }}">
                 </div>
                 @endif
 
                 <div class="col-span-5">
-                    <input type="text" name="harga_buyback-formatted" id="harga_buyback-{{ $harga_pasaran->kategori }}-formatted" class="w-full rounded" onchange="formatNumber(this, 'harga_buyback-{{ $harga_pasaran->kategori }}')">
-                    <input type="hidden" name="harga_buyback" id="harga_buyback-{{ $harga_pasaran->kategori }}">
+                    <input type="text" name="harga_buyback-formatted" value="{{ casual_decimal_format($harga_pasaran->harga_buyback) }}" id="harga_buyback-{{ $harga_pasaran->kategori }}-formatted" class="w-full rounded" onchange="formatNumber(this, 'harga_buyback-{{ $harga_pasaran->kategori }}')">
+                    <input type="hidden" name="harga_buyback" value="{{ $harga_pasaran->harga_buyback / 100 }}" id="harga_buyback-{{ $harga_pasaran->kategori }}">
                 </div>
 
                 <input type="hidden" name="kategori" id="kategori-{{ $harga_pasaran->kategori }}" value="{{ $harga_pasaran->kategori }}">

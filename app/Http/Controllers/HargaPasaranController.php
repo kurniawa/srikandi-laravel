@@ -76,8 +76,8 @@ class HargaPasaranController extends Controller
                 HargaPasaran::create([
                     "kategori" => $post['kategori'][$i],
                     "kadar" => $post['kadar'][$i],
-                    "harga_beli" => (string)((int)$post['harga_beli'][$i] * 100),
-                    "harga_buyback" => (string)((int)$post['harga_buyback'][$i] * 100),
+                    "harga_beli" => (string)((float)$post['harga_beli'][$i] * 100),
+                    "harga_buyback" => (string)((float)$post['harga_buyback'][$i] * 100),
                 ]);
             }
         }
@@ -91,7 +91,7 @@ class HargaPasaranController extends Controller
     }
 
     function edit(HargaPasaran $harga_pasaran) {
-        dd($harga_pasaran);
+        // dd($harga_pasaran);
 
         $user = Auth::user();
         $cart = null;
@@ -106,5 +106,32 @@ class HargaPasaranController extends Controller
         ];
 
         return view('attributes.harga_pasaran_edit', $data);
+    }
+
+    function update(HargaPasaran $harga_pasaran, Request $request) {
+        $post = $request->post();
+        // dump($post);
+        // dump($harga_pasaran);
+        $request->validate([
+            'harga_beli' => 'required|numeric',
+            'harga_buyback' => 'required|numeric',
+            'kategori' => 'required',
+            'kadar' => 'required',
+        ]);
+
+        $success_ = '';
+        // dd((string)((float)$post['harga_beli'] * 100));
+        $harga_pasaran->update([
+            'harga_beli' => (string)((float)$post['harga_beli'] * 100),
+            'harga_buyback' => (string)((float)$post['harga_buyback'] * 100),
+        ]);
+
+        $success_ .= 'HargaPasaran diupdate';
+
+        $feedback = [
+            'success_' => $success_
+        ];
+
+        return redirect()->route('attributes.harga_pasaran.index')->with($feedback);
     }
 }
