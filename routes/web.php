@@ -144,6 +144,9 @@ Route::controller(CashflowController::class)->group(function () {
     Route::get('/cashflow/index', 'index')->name('cashflow.index')->middleware('level5');
     Route::get('/cashflow/transaksi/{tipe_transaksi}', 'transaksi')->name('cashflow.transaksi')->middleware('level3');
     Route::post('/cashflow/store_transaction', 'store_transaction')->name('cashflow.store_transaction')->middleware('level3');
+    Route::post('/cashflow/store_and_buyback', 'store_and_buyback')->name('cashflow.store_and_buyback')->middleware('level3');
+    Route::get('/cashflow/{item}/show_item_and_buyback', 'show_item_and_buyback')->name('cashflow.show_item_and_buyback')->middleware('auth');
+    Route::post('/cashflow/{item}/show_item_and_buyback_store', 'show_item_and_buyback_store')->name('cashflow.show_item_and_buyback_store')->middleware('auth');
 });
 
 // ATTRIBUTES

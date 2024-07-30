@@ -14,7 +14,10 @@ return new class extends Migration
         Schema::create('kadars', function (Blueprint $table) {
             $table->id();
             $table->string('kategori', 20);
+            $table->string('tipe', 20);
             $table->smallInteger('kadar');
+            $table->smallInteger('poin_susut')->nullable();
+            $table->smallInteger('poin_tambah')->nullable();
         });
     }
 

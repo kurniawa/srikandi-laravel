@@ -21,8 +21,11 @@
                 <select name="kategori" id="kategori" onchange="getCategories2(this.value)" class="p-2 rounded-lg"></select>
             </div>
         </div>
+        <div id="div-buyback-perhiasan" class="mt-3 hidden">
+            <x-section-buyback-perhiasan :data=$data></x-section-buyback-perhiasan>
+        </div>
         <div id="div-category-2" class="mt-3"></div>
-        <div class="mt-3">
+        <div id="div-total-tagihan" class="mt-3">
             <label for="harga" class="font-bold">Harga</label>
             <div>
                 <input type="text" name="total_tagihan_formatted" id="total_tagihan_formatted" onchange="formatNumber(this, 'total_tagihan_real'); hitungSisaBayar()" class="rounded-lg">
@@ -30,9 +33,9 @@
             </div>
         </div>
         <div class="mt-2">
-            <label for="deskripsi" class="font-bold">Deskripsi (.opt)</label>
+            <label for="keterangan_transaksi" class="font-bold">Keterangan Lain (.opt)</label>
             <div>
-                <input type="text" name="deskripsi" id="deskripsi" class="rounded-lg border-slate-400 w-full">
+                <input type="text" name="keterangan_transaksi" id="keterangan_transaksi" class="rounded-lg border-slate-400 w-full">
             </div>
         </div>
         <x-metode-pembayaran :walletsnontunai=$wallets_non_tunai :tipe=$tipe></x-metode-pembayaran>
@@ -73,7 +76,20 @@
     }
 
     function getCategories2(category) {
-        console.log(category);
+        // console.log(category);
+        if (category == "Buyback Perhiasan") {
+            $("#div-buyback-perhiasan").show(300);
+            $("#div-total-tagihan").hide(300);
+            const div_category_2 = document.getElementById('div-category-2');
+            // console.log(div_category_2.innerHTML);
+            if (div_category_2.innerHTML) {
+                div_category_2.innerHTML = "";
+            }
+            return true;
+        } else {
+            $("#div-buyback-perhiasan").hide(300);
+            $("#div-total-tagihan").show(300);
+        }
         const filtered_acuans_2 = filtered_acuans.filter((o) => o.kategori == category);
         // console.log(filtered_acuans_2);
         const categories_2 = new Array();
@@ -98,7 +114,13 @@
     }
 
     function hitungSisaBayar() {
-        const harga_total = document.getElementById("total_tagihan_real").value;
+        let harga_total = document.getElementById("total_tagihan_real").value;
+        const kategori = document.getElementById('kategori').value;
+        console.log(kategori);
+        if (kategori == "Buyback Perhiasan") {
+            harga_total = document.getElementById("harga_t").value;
+        }
+        console.log(harga_total);
         const total_bayar = document.getElementById("total_bayar_real").value;
         const sisa_bayar = (parseFloat(harga_total) - parseFloat(total_bayar));
         document.getElementById('sisa_bayar_real').value = (pangkasDesimal(sisa_bayar) * 100).toString();

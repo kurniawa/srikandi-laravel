@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Cap;
 use App\Models\Cart;
-use App\Models\CartItem;
 use App\Models\Item;
 use App\Models\ItemMainan;
 use App\Models\ItemMata;
@@ -107,186 +106,27 @@ class ItemController extends Controller
     // function store($from, Request $request) {
     function store(Request $request)
     {
+        $candidate_new_item = Item::validasi_item($request);
+
         $post = $request->post();
-        // dump($from);
-        // dd($post);
-
-        $request->validate([
-            'tipe_barang' => 'required',
-            'harga_t' => 'required|numeric',
-            'shortname' => 'required',
-            'longname' => 'required',
-        ]);
-        $harga_t = (float)$post['harga_t'] * 100;
-
-        $tipe_perhiasan = null;
-        $jenis_perhiasan = null;
-        $warna_emas = null;
-        $kadar = null;
-        $berat = null;
-        $harga_g = null;
-        $ongkos_g = null;
-        // $edisi = null;
-        // $nampan = null;
-        if ($post['tipe_barang'] === 'perhiasan') {
-            $request->validate([
-                'tipe_perhiasan' => 'required',
-                'jenis_perhiasan' => 'required',
-                'warna_emas' => 'required',
-                'plat' => 'nullable|numeric',
-                'kadar' => 'required|numeric',
-                'berat' => 'required|numeric',
-                'harga_g' => 'required|numeric',
-                'ongkos_g' => 'required|numeric',
-                'shortname' => 'required',
-                'longname' => 'required',
-                'kondisi' => 'nullable',
-                'cap' => 'nullable',
-                'range_usia' => 'nullable',
-                'ukuran' => 'nullable|numeric',
-                'merk' => 'nullable',
-                'plat' => 'nullable|numeric',
-                'edisi' => 'nullable',
-                'nampan' => 'nullable',
-                'deskripsi' => 'nullable',
-                'keterangan' => 'nullable',
-                'status' => 'nullable',
-            ]);
-            $tipe_perhiasan = $post['tipe_perhiasan'];
-            $jenis_perhiasan = $post['jenis_perhiasan'];
-            // CEK relasi tipe_perhiasan dengan jenis_perhiasan
-            $exist_jenis_perhiasan = JenisPerhiasan::where('tipe_perhiasan', $tipe_perhiasan)->where('nama', $jenis_perhiasan)->first();
-            if (!$exist_jenis_perhiasan) {
-                $get_tipe_perhiasan = TipePerhiasan::where('nama', $tipe_perhiasan)->first();
-                JenisPerhiasan::create([
-                    'tipe_perhiasan_id' => $get_tipe_perhiasan->id,
-                    'tipe_perhiasan' => $tipe_perhiasan,
-                    'nama' => $jenis_perhiasan,
-                ]);
-            }
-            // END - CEK relasi tipe_perhiasan dengan jenis_perhiasan
-            $warna_emas = $post['warna_emas'];
-            $kadar = (float)$post['kadar'] * 100;
-            $berat = (float)$post['berat'] * 100;
-            $ongkos_g = (float)$post['ongkos_g'] * 100;
-            $harga_g = (float)$post['harga_g'] * 100;
-            $harga_t = (float)$post['berat'] * (float)$post['harga_g'] * 100;
-        }
-
-        // VALIDASI MATA
-        if (isset($post['checkbox_mata'])) {
-            if ($post['checkbox_mata'] == 'on') {
-                foreach ($post['warna_mata'] as $key_warna_mata => $warna_mata) {
-                    if ($warna_mata) {
-                        if ($post['jumlah_mata'][$key_warna_mata] == 0 || $post['jumlah_mata'][$key_warna_mata] === null) {
-                            $request->validate(['error' => 'required'], ['error.required' => '-jumlah_mata tidak sesuai-']);
-                        }
-                    }
-                }
-            }
-        }
-
-        // VALIDASI MAINAN
-        if (isset($post['checkbox_mainan'])) {
-            if ($post['checkbox_mainan'] == 'on') {
-                foreach ($post['tipe_mainan'] as $key_tipe_mainan => $tipe_mainan) {
-                    if ($tipe_mainan) {
-                        if ($post['jumlah_mainan'][$key_tipe_mainan] === null || $post['jumlah_mainan'][$key_tipe_mainan] == 0) {
-                            $request->validate(['error' => 'required'], ['error.required' => '-jumlah_mainan tidak sesuai-']);
-                        }
-                    }
-                }
-            }
-        }
-
-        $candidate_new_item = [
-            'tipe_barang' => $post['tipe_barang'],
-            'tipe_perhiasan' => $tipe_perhiasan,
-            'jenis_perhiasan' => $jenis_perhiasan,
-            'warna_emas' => $warna_emas,
-            'kadar' => $kadar,
-            'berat' => $berat,
-            'harga_g' => $harga_g,
-            'ongkos_g' => $ongkos_g,
-            'harga_t' => $harga_t,
-            'shortname' => $post['shortname'],
-            'longname' => $post['longname'],
-            'kondisi' => $post['kondisi'],
-            'cap' => $post['cap'],
-            'range_usia' => $post['range_usia'],
-            'ukuran' => $post['ukuran'],
-            'merk' => $post['merk'],
-            'plat' => $post['plat'],
-            // 'edisi',
-            // 'nampan',
-            'stock' => 1,
-            // 'kode_item',
-            // 'barcode',
-            'deskripsi' => $post['deskripsi'],
-            'keterangan' => $post['keterangan'],
-            // 'status',
-        ];
 
         // CEK APAKAH ADA ITEM YANG SAMA
-        $item_exists = Item::where('longname', $post['longname'])->get();
-        if (count($item_exists)) {
-            $data = [
-                'menus' => Menu::get(),
-                'profile_menus' => Menu::get_profile_menus(Auth::user()),
-                'cart' => Cart::where('user_id', Auth::user()->id)->first(),
-                'similiar_items' => $item_exists,
-                'candidate_new_item' => $candidate_new_item
-            ];
-
+        list($item_exist, $data) = Item::check_item_exist($candidate_new_item, $post);
+        // dd($item_exist);
+        if (count($item_exist)) {
+            dump($data);
+            $data['route1'] = 'items.store';
+            $data['route2'] = 'items.show';
+            // dd($data);
             return view('items.found_similiar_items', $data);
         }
         // END - CEK ITEM YANG SAMA
 
         $item_new = Item::create($candidate_new_item);
 
-        // MATA
-        if (isset($post['checkbox_mata'])) {
-            if ($post['checkbox_mata'] == 'on') {
-                foreach ($post['warna_mata'] as $key_warna_mata => $warna_mata) {
-                    if ($warna_mata) {
-                        $mata = Mata::where('warna', $warna_mata)->where('level_warna', $post['level_warna'][$key_warna_mata])->where('opacity', $post['opacity'][$key_warna_mata])->first();
-                        if (!$mata) {
-                            $mata = Mata::create([
-                                'warna' => $warna_mata,
-                                'level_warna' => $post['level_warna'][$key_warna_mata],
-                                'opacity' => $post['opacity'][$key_warna_mata],
-                            ]);
-                        }
-                        ItemMata::create([
-                            'item_id' => $item_new->id,
-                            'mata_id' => $mata->id,
-                            'jumlah_mata' => $post['jumlah_mata'][$key_warna_mata],
-                        ]);
-                    }
-                }
-            }
-        }
-
-        // MAINAN
-        if (isset($post['checkbox_mainan'])) {
-            if ($post['checkbox_mainan'] == 'on') {
-                foreach ($post['tipe_mainan'] as $key_tipe_mainan => $tipe_mainan) {
-                    if ($tipe_mainan) {
-                        $mainan = Mainan::where('nama', $tipe_mainan)->first();
-                        if (!$mainan) {
-                            $mainan = Mainan::create([
-                                'nama' => $tipe_mainan,
-                            ]);
-                        }
-                        ItemMainan::create([
-                            'item_id' => $item_new->id,
-                            'mainan_id' => $mainan->id,
-                            'jumlah_mainan' => $post['jumlah_mainan'][$key_tipe_mainan]
-                        ]);
-                    }
-                }
-            }
-        }
+        // STORE itemMata dan itemMainan
+        Item::store_itemMata_dan_itemMainan($post, $item_new);
+        // END - STORE itemMata dan itemMainan
 
         $success_ = '-item baru telah diinput-';
 
@@ -318,7 +158,10 @@ class ItemController extends Controller
         $user = Auth::user();
         // dump($item->item_matas);
         // dd($item->item_matas[0]->mata);
-        $cart = Cart::where('user_id', $user->id)->first();
+        $cart = null;
+        if ($user) {
+            $cart = Cart::where('user_id', $user->id)->first();
+        }
         // dd($item->user->id);
         // $related_user = null;
 

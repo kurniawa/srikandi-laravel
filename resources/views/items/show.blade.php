@@ -283,26 +283,39 @@
         @else
         <h3 class="font-bold">Buyer / sold to: - belum ada -</h3>
         @endif --}}
+        @if (isset($buyback_mode))
+        <div class="mt-12">
+            <form action="{{ route('cashflow.show_item_and_buyback_store', $item->id) }}" method="POST" class="mt-2">
+                @csrf
+                <button type="submit"
+                    class="loading-spinner mt-2 p-4 bg-emerald-300 rounded w-full text-white flex items-center justify-center gap-1 font-bold">
+                    <span>Konfirmasi Buyback</span>
+                </button>
+            </form>
 
-            <div class="mt-12">
-                <form action="{{ route('carts.insert_to_cart', [$item->id, $user->id]) }}" method="POST"
-                    class="mt-2">
-                    @csrf
-                    @if ((int) $item->stock >= 1)
-                        <button type="submit"
-                            class="loading-spinner mt-2 p-4 bg-emerald-300 rounded w-full text-white flex items-center justify-center gap-1 font-bold">
-                            <span>+ Keranjang</span>
-                        </button>
-                    @else
-                        <button type="button"
-                            class="mt-2 py-2 bg-slate-300 rounded w-full text-white flex items-center justify-center gap-1 font-bold"
-                            disabled>
-                            <span>Stok habis</span>
-                        </button>
-                    @endif
-                </form>
+        </div>
+        @else
+        <div class="mt-12">
+            <form action="{{ route('carts.insert_to_cart', [$item->id, $user->id]) }}" method="POST"
+                class="mt-2">
+                @csrf
+                @if ((int) $item->stock >= 1)
+                    <button type="submit"
+                        class="loading-spinner mt-2 p-4 bg-emerald-300 rounded w-full text-white flex items-center justify-center gap-1 font-bold">
+                        <span>+ Keranjang</span>
+                    </button>
+                @else
+                    <button type="button"
+                        class="mt-2 py-2 bg-slate-300 rounded w-full text-white flex items-center justify-center gap-1 font-bold"
+                        disabled>
+                        <span>Stok habis</span>
+                    </button>
+                @endif
+            </form>
 
-            </div>
+        </div>
+        @endif
+            @if (!isset($buyback_mode))
             <div class="flex justify-center mt-2">
                 <form action="{{ route('items.delete', $item->id) }}" method="POST"
                     onsubmit="if(confirm('Anda yakin ingin menghapus barang ini?')){showLoadingSpinner();return true;} else {hideLoadingSpinner();return false;}">
@@ -317,6 +330,7 @@
                     </button>
                 </form>
             </div>
+            @endif
         </div>
     </main>
 

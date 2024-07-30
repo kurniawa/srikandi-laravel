@@ -4,7 +4,7 @@
         <x-errors-any></x-errors-any>
         <x-validation-feedback></x-validation-feedback>
         <div class="mt-1">
-            <form action="{{ route('items.store') }}" method="POST">
+            <form action="{{ route($route1) }}" method="POST">
                 @csrf
                 <input type="hidden" name="tipe_barang" value="{{ $candidate_new_item['tipe_barang'] }}">
                 <input type="hidden" name="tipe_perhiasan" value="{{ $candidate_new_item['tipe_perhiasan'] }}">
@@ -40,7 +40,7 @@
         </div>
         <div class="gap-2 mt-2">
             @foreach ($similiar_items as $key => $item)
-                <a href="{{ route('items.show', $item->id) }}">
+                <a href="{{ route($route2, $item->id) }}">
                     <div class="loading-spinner p-2 bg-white rounded shadow drop-shadow grid grid-cols-12 gap-2">
                         <div class="col-span-4">
                             @if (count($item->item_photos))

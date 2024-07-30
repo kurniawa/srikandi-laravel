@@ -6,6 +6,7 @@ use App\Models\Accounting;
 use App\Models\AcuanPembukuan;
 use App\Models\Cart;
 use App\Models\Cashflow;
+use App\Models\Item;
 use App\Models\Menu;
 use App\Models\Saldo;
 use App\Models\Wallet;
@@ -155,6 +156,8 @@ class CashflowController extends Controller
             'tipe' => $tipe_transaksi,
             'acuan_pembukuans' => $acuan_pembukuans,
             'wallets_non_tunai' => $wallets_non_tunai,
+            'user' => $user,
+            'data' => Item::get_data_for_create_item('perhiasan'),
         ];
         // dd($data);
         return view('cashflows.transaksi', $data);
@@ -164,7 +167,22 @@ class CashflowController extends Controller
     function store_transaction(Request $request)
     {
         $post = $request->post();
-        // dd($post);
+        dd($post);
+        if ($post['kategori'] == "Buyback Perhiasan") {
+            $candidate_new_item = Item::validasi_item($request);
+            // Strategi:
+            // 1. Bikin item baru. Kalau ada similiar items, maka pilih dari similiar items atau tetap dengan item yang sudah diinput.
+            // 2. Create Surat Pembelian baru
+            // 3. Langsung proses buyback surat tersebut
+            list($item_exist, $data) = Item::check_item_exist($candidate_new_item, $post);
+            if ($item_exist) {
+                $data[] = [
+                    'route1' => 'cashflow.store_and_buyback',
+                    'route2' => 'items.show_and_buyback'
+                ];
+                return view('items.found_similiar_items', $data);
+            }
+        }
         $request->validate([
             'tipe_transaksi' => 'required',
             'kategori' => 'required',
@@ -203,5 +221,37 @@ class CashflowController extends Controller
             'success_' => $success_
         ];
         return redirect()->route('cashflow.index')->with($feedback);
+    }
+
+    function store_and_buyback(Request $request) {
+        $post = $request->post();
+        dd($post);
+        $candidate_new_item = Item::validasi_item($request);
+        $item_new = Item::create($candidate_new_item);
+        Item::store_itemMata_dan_itemMainan($post, $item_new);
+    }
+
+    function show_item_and_buyback(Item $item) {
+        $user = Auth::user();
+        $cart = null;
+        if ($user) {
+            $cart = Cart::where('user_id', $user->id)->first();
+        }
+
+        $data = [
+            'menus' => Menu::get(),
+            'route_now' => 'items.show',
+            'profile_menus' => Menu::get_profile_menus(Auth::user()),
+            'item' => $item,
+            'cart' => $cart,
+            'user' => $user,
+            'run_buyback_sequence' => 'yes',
+        ];
+        // dd($data);
+        return view('items.show', $data);
+    }
+
+    function show_item_and_buyback_store(Item $item) {
+        
     }
 }
