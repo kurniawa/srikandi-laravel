@@ -116,11 +116,10 @@
     function hitungSisaBayar() {
         let harga_total = document.getElementById("total_tagihan_real").value;
         const kategori = document.getElementById('kategori').value;
-        console.log(kategori);
+        // console.log(kategori);
         if (kategori == "Buyback Perhiasan") {
             harga_total = document.getElementById("harga_t").value;
         }
-        console.log(harga_total);
         const total_bayar = document.getElementById("total_bayar_real").value;
         const sisa_bayar = (parseFloat(harga_total) - parseFloat(total_bayar));
         document.getElementById('sisa_bayar_real').value = (pangkasDesimal(sisa_bayar) * 100).toString();

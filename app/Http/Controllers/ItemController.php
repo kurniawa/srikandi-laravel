@@ -114,7 +114,7 @@ class ItemController extends Controller
         list($item_exist, $data) = Item::check_item_exist($candidate_new_item, $post);
         // dd($item_exist);
         if (count($item_exist)) {
-            dump($data);
+            // dump($data);
             $data['route1'] = 'items.store';
             $data['route2'] = 'items.show';
             // dd($data);

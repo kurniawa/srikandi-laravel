@@ -175,11 +175,18 @@ class CashflowController extends Controller
             // 2. Create Surat Pembelian baru
             // 3. Langsung proses buyback surat tersebut
             list($item_exist, $data) = Item::check_item_exist($candidate_new_item, $post);
-            if ($item_exist) {
-                $data[] = [
-                    'route1' => 'cashflow.store_and_buyback',
-                    'route2' => 'items.show_and_buyback'
-                ];
+            // if (count($item_exist)) {
+            //     // dump($data);
+            //     $data['route1'] = 'items.store';
+            //     $data['route2'] = 'items.show';
+            //     // dd($data);
+            //     return view('items.found_similiar_items', $data);
+            // }
+            if (count($item_exist)) {
+                // dump($data);
+                $data['route1'] = 'cashflow.store_and_buyback';
+                $data['route2'] = 'items.show_and_buyback';
+                // dd($data);
                 return view('items.found_similiar_items', $data);
             }
         }

@@ -65,7 +65,13 @@ function hitungTotalBayar() {
         }
     });
     // console.log(total_bayar);
-    const total_tagihan = document.getElementById("total_tagihan_real").value;
+    let total_tagihan = document.getElementById("total_tagihan_real").value;
+    const kategori = document.getElementById("kategori").value;
+    if (kategori == "Buyback Perhiasan") {
+        total_tagihan = document.getElementById("harga_t").value;
+    }
+    // console.log("methode_pembayaran");
+    // console.log(kategori);
     let sisa_bayar_real_value = parseFloat(total_tagihan) - total_bayar;
     let sisa_bayar = sisa_bayar_real_value;
     if (sisa_bayar_real_value < 0) {
