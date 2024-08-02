@@ -26,8 +26,8 @@ class TipePerhiasanSeeder extends Seeder
 
         $jenis_perhiasans = [
             // ANTING
-            ['nama' => 'Desy', 'tipe_perhiasan' => 'Anting', 'tipe_perhiasan_id' => '1', 'codename' => ''],
-            ['nama' => 'Desy Polos', 'tipe_perhiasan' => 'Anting', 'tipe_perhiasan_id' => '1', 'codename' => ''],
+            ['nama' => 'Desi', 'tipe_perhiasan' => 'Anting', 'tipe_perhiasan_id' => '1', 'codename' => ''],
+            ['nama' => 'Desi Polos', 'tipe_perhiasan' => 'Anting', 'tipe_perhiasan_id' => '1', 'codename' => ''],
             ['nama' => 'Gipsy', 'tipe_perhiasan' => 'Anting', 'tipe_perhiasan_id' => '1', 'codename' => ''],
             ['nama' => 'Jepit', 'tipe_perhiasan' => 'Anting', 'tipe_perhiasan_id' => '1', 'codename' => ''],
             ['nama' => 'Kait', 'tipe_perhiasan' => 'Anting', 'tipe_perhiasan_id' => '1', 'codename' => ''],
@@ -36,7 +36,7 @@ class TipePerhiasanSeeder extends Seeder
             ['nama' => 'Tusuk Sate', 'tipe_perhiasan' => 'Anting', 'tipe_perhiasan_id' => '1', 'codename' => ''],
             // GIWANG
             ['nama' => 'Mata Burung', 'tipe_perhiasan' => 'Giwang', 'tipe_perhiasan_id' => '2', 'codename' => ''],
-            ['nama' => 'Mata Desy', 'tipe_perhiasan' => 'Giwang', 'tipe_perhiasan_id' => '2', 'codename' => ''],
+            ['nama' => 'Mata Desi', 'tipe_perhiasan' => 'Giwang', 'tipe_perhiasan_id' => '2', 'codename' => ''],
             ['nama' => 'Pentol', 'tipe_perhiasan' => 'Giwang', 'tipe_perhiasan_id' => '2', 'codename' => ''],
             ['nama' => 'Pentol Polos', 'tipe_perhiasan' => 'Giwang', 'tipe_perhiasan_id' => '2', 'codename' => ''],
             ['nama' => 'Kembang', 'tipe_perhiasan' => 'Giwang', 'tipe_perhiasan_id' => '2', 'codename' => ''],
@@ -116,7 +116,7 @@ class TipePerhiasanSeeder extends Seeder
             ['nama' => 'Tambang Variasi', 'tipe_perhiasan' => 'Kalung', 'tipe_perhiasan_id' => '6', 'codename' => ''],
             // LIONTIN
             ['nama' => 'Chanel', 'tipe_perhiasan' => 'Liontin', 'tipe_perhiasan_id' => '7', 'codename' => ''],
-            ['nama' => 'Desy', 'tipe_perhiasan' => 'Liontin', 'tipe_perhiasan_id' => '7', 'codename' => ''],
+            ['nama' => 'Desi', 'tipe_perhiasan' => 'Liontin', 'tipe_perhiasan_id' => '7', 'codename' => ''],
             ['nama' => 'Louis Vuitton', 'tipe_perhiasan' => 'Liontin', 'tipe_perhiasan_id' => '7', 'codename' => ''],
             ['nama' => 'Gucci', 'tipe_perhiasan' => 'Liontin', 'tipe_perhiasan_id' => '7', 'codename' => ''],
             ['nama' => 'Salib', 'tipe_perhiasan' => 'Liontin', 'tipe_perhiasan_id' => '7', 'codename' => ''],

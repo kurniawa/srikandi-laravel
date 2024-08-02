@@ -151,7 +151,7 @@ class ItemController extends Controller
         // }
     }
 
-    function show(Item $item)
+    function show(Item $item, Request $request)
     {
         // dd($item);
         // $item_photos = ItemPhoto::where('item_id', $item->id)->orderBy('photo_index')->get();
@@ -173,6 +173,23 @@ class ItemController extends Controller
 
         // $peminat_items = PeminatItem::where('item_id', $item->id)->orderBy('created_at')->get();
 
+        $get = $request->query();
+        $buyback_mode = null;
+        $harga_g = null;
+        $ongkos_g = null;
+        $harga_t = null;
+        if (isset($get['buyback_mode'])) {
+            $buyback_mode = $get['buyback_mode'];
+        }
+        if (isset($get['harga_g'])) {
+            $harga_g = $get['harga_g'];
+        }
+        if (isset($get['ongkos_g'])) {
+            $ongkos_g = $get['ongkos_g'];
+        }
+        if (isset($get['harga_t'])) {
+            $harga_t = $get['harga_t'];
+        }
 
         $data = [
             'menus' => Menu::get(),
@@ -188,7 +205,10 @@ class ItemController extends Controller
             'cart' => $cart,
             'user' => $user,
             // 'related_user' => $related_user,
-            // 'peminat_items' => $peminat_items,
+            'buyback_mode' => $buyback_mode,
+            'harga_g' => $harga_g,
+            'ongkos_g' => $ongkos_g,
+            'harga_t' => $harga_t,
         ];
         // dd($data);
         return view('items.show', $data);

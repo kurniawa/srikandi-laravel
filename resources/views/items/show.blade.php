@@ -163,17 +163,47 @@
                             <tr>
                                 <td>ongkos/g</td>
                                 <td>:</td>
+                                @if (isset($ongkos_g))
+                                <td class="text-xs font-bold">
+                                    <div class="flex items-center gap-1">
+                                        <span>{{ number_format((int) $item->ongkos_g / 100, 2, ',', '.') }}</span>
+                                        <span>--></span>
+                                        <span>{{ number_format($ongkos_g, 2, ',', '.') }}</span>
+                                    </div>
+                                </td>
+                                @else
                                 <td>{{ number_format((int) $item->ongkos_g / 100, 2, ',', '.') }}</td>
+                                @endif
                             </tr>
                             <tr>
                                 <td>harga/g</td>
                                 <td>:</td>
+                                @if (isset($harga_g))
+                                <td class="text-xs font-bold">
+                                    <div class="flex items-center gap-1">
+                                        <span>{{ number_format((int) $item->harga_g / 100, 2, ',', '.') }}</span>
+                                        <span>--></span>
+                                        <span>{{ number_format($harga_g, 2, ',', '.') }}</span>
+                                    </div>
+                                </td>
+                                @else
                                 <td>{{ number_format((int) $item->harga_g / 100, 2, ',', '.') }}</td>
+                                @endif
                             </tr>
                             <tr>
                                 <td>harga t</td>
                                 <td>:</td>
+                                @if (isset($harga_t))
+                                <td class="text-xs font-bold">
+                                    <div class="flex items-center gap-1">
+                                        <span>{{ number_format((int) $item->harga_t / 100, 2, ',', '.') }}</span>
+                                        <span>--></span>
+                                        <span>{{ number_format($harga_t, 2, ',', '.') }}</span>
+                                    </div>
+                                </td>
+                                @else
                                 <td>{{ number_format((int) $item->harga_t / 100, 2, ',', '.') }}</td>
+                                @endif
                             </tr>
                             <tr>
                                 <td>merk</td>
@@ -283,16 +313,19 @@
         @else
         <h3 class="font-bold">Buyer / sold to: - belum ada -</h3>
         @endif --}}
-        @if (isset($buyback_mode))
+        @if (isset($buyback_mode) && $buyback_mode == 'yes')
         <div class="mt-12">
-            <form action="{{ route('cashflow.show_item_and_buyback_store', $item->id) }}" method="POST" class="mt-2">
+            <form action="{{ route('cashflow.store_and_buyback') }}" method="POST" class="mt-2">
                 @csrf
+                <input type="hidden" name="harga_g" value="{{ $harga_g }}">
+                <input type="hidden" name="ongkos_g" value="{{ $ongkos_g }}">
+                <input type="hidden" name="harga_t" value="{{ $harga_t }}">
+                <input type="hidden" name="item_id" value="{{ $item->id }}">
                 <button type="submit"
                     class="loading-spinner mt-2 p-4 bg-emerald-300 rounded w-full text-white flex items-center justify-center gap-1 font-bold">
                     <span>Konfirmasi Buyback</span>
                 </button>
             </form>
-
         </div>
         @else
         <div class="mt-12">
@@ -312,7 +345,6 @@
                     </button>
                 @endif
             </form>
-
         </div>
         @endif
             @if (!isset($buyback_mode))

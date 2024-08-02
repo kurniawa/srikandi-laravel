@@ -183,13 +183,14 @@ class CashflowController extends Controller
             //     return view('items.found_similiar_items', $data);
             // }
             if (count($item_exist)) {
-                // dump($data);
+                // dump($item_exist);
                 $data['route1'] = 'cashflow.store_and_buyback';
-                $data['route2'] = 'items.show_and_buyback';
+                $data['route2'] = 'items.show';
                 // dd($data);
                 return view('items.found_similiar_items', $data);
             }
         }
+        // dd($post['kategori']);
         $request->validate([
             'tipe_transaksi' => 'required',
             'kategori' => 'required',
@@ -238,27 +239,27 @@ class CashflowController extends Controller
         Item::store_itemMata_dan_itemMainan($post, $item_new);
     }
 
-    function show_item_and_buyback(Item $item) {
-        $user = Auth::user();
-        $cart = null;
-        if ($user) {
-            $cart = Cart::where('user_id', $user->id)->first();
-        }
+    // function show_item_and_buyback(Item $item) {
+    //     $user = Auth::user();
+    //     $cart = null;
+    //     if ($user) {
+    //         $cart = Cart::where('user_id', $user->id)->first();
+    //     }
 
-        $data = [
-            'menus' => Menu::get(),
-            'route_now' => 'items.show',
-            'profile_menus' => Menu::get_profile_menus(Auth::user()),
-            'item' => $item,
-            'cart' => $cart,
-            'user' => $user,
-            'run_buyback_sequence' => 'yes',
-        ];
-        // dd($data);
-        return view('items.show', $data);
-    }
+    //     $data = [
+    //         'menus' => Menu::get(),
+    //         'route_now' => 'items.show',
+    //         'profile_menus' => Menu::get_profile_menus(Auth::user()),
+    //         'item' => $item,
+    //         'cart' => $cart,
+    //         'user' => $user,
+    //         'run_buyback_sequence' => 'yes',
+    //     ];
+    //     // dd($data);
+    //     return view('items.show', $data);
+    // }
 
-    function show_item_and_buyback_store(Item $item) {
+    // function show_item_and_buyback_store(Item $item) {
         
-    }
+    // }
 }

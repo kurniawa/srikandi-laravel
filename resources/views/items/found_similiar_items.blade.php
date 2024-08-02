@@ -5,6 +5,21 @@
         <x-validation-feedback></x-validation-feedback>
         <div class="mt-1">
             <form action="{{ route($route1) }}" method="POST">
+                <div class="p-2 bg-white rounded shadow drop-shadow grid grid-cols-12 gap-2">
+                    <div class="col-span-8">
+                        <div class="text-slate-400">
+                            @if ($candidate_new_item['longname'])
+                                <div class="text-xs font-bold">{{ $candidate_new_item['longname'] }}</div>
+                            @else
+                                <span class="font-bold text-xs text-slate-500">{{ $candidate_new_item['shortname'] }}</span>
+                            @endif
+                        </div>
+                        <div class="font-bold text-slate-600 text-xs">Rp {{ my_decimal_format($candidate_new_item['harga_g']) }}</div>
+                        <div class="font-bold text-slate-600 text-xs">Rp {{ my_decimal_format($candidate_new_item['ongkos_g']) }}</div>
+                        <div class="font-bold text-slate-600">Rp {{ my_decimal_format($candidate_new_item['harga_t']) }}</div>
+                    </div>
+                    {{-- <div class="text-slate-500">By: {{ $candidate_new_item['']user->username }}</div> --}}
+                </div>
                 @csrf
                 <input type="hidden" name="tipe_barang" value="{{ $candidate_new_item['tipe_barang'] }}">
                 <input type="hidden" name="tipe_perhiasan" value="{{ $candidate_new_item['tipe_perhiasan'] }}">
@@ -27,8 +42,14 @@
                 <input type="hidden" name="keterangan" value="{{ $candidate_new_item['keterangan'] }}">
                 {{-- <input type="hidden" name="stock" value="{{ $candidate_new_item['stock'] }}"> --}}
 
-                <div class="text-center">
-                    <button type="submit" class="bg-emerald-300 p-4 text-white font-bold rounded">Lanjutkan Penginputan New Item</button>
+                <div class="text-center mt-5">
+                    @if ($buyback_mode)
+                        @if ($buyback_mode == 'yes')
+                            <button type="submit" class="bg-emerald-300 p-4 text-white font-bold rounded">Tetap Buyback dengan Data diatas</button>
+                        @endif
+                    @else
+                        <button type="submit" class="bg-emerald-300 p-4 text-white font-bold rounded">Tetap Tambah Baru dengan Data diatas</button>
+                    @endif
                 </div>
             </form>
         </div>
@@ -40,8 +61,8 @@
         </div>
         <div class="gap-2 mt-2">
             @foreach ($similiar_items as $key => $item)
-                <a href="{{ route($route2, $item->id) }}">
-                    <div class="loading-spinner p-2 bg-white rounded shadow drop-shadow grid grid-cols-12 gap-2">
+                <form action="{{ route($route2, $item->id) }}" method="GET">
+                    <div class="p-2 bg-white rounded shadow drop-shadow grid grid-cols-12 gap-2">
                         <div class="col-span-4">
                             @if (count($item->item_photos))
                                 <img src="{{ asset('storage/' . $item->item_photos[0]->photo->path) }}" alt="item_photo"
@@ -64,14 +85,33 @@
                                     <span class="font-bold text-xs text-slate-500">{{ $item->shortname }}</span>
                                 @endif
                             </div>
-                            <div class="font-bold text-slate-600 text-xs">Rp {{ my_decimal_format($item->harga_g) }}</div>
-                            <div class="font-bold text-slate-600 text-xs">Rp {{ my_decimal_format($item->ongkos_g) }}</div>
-                            <div class="font-bold text-slate-600">Rp {{ my_decimal_format($item->harga_t) }}</div>
+                            <div class="flex gap-2">
+                                <div class="border-2 p-2 rounded border-indigo-300">
+                                    <div class="font-bold mb-2 text-slate-500">Harga 1:</div>
+                                    <div class="font-bold text-slate-600 text-xs">Rp {{ my_decimal_format($item->harga_g) }}</div>
+                                    <div class="font-bold text-slate-600 text-xs">Rp {{ my_decimal_format($item->ongkos_g) }}</div>
+                                    <div class="font-bold text-slate-600">Rp {{ my_decimal_format($item->harga_t) }}</div>
+                                </div>
+                                <div class="border-2 p-2 rounded border-orange-300">
+                                    <div class="font-bold mb-2 text-slate-500">Harga 2:</div>
+                                    <div class="font-bold text-slate-600 text-xs">Rp {{ my_decimal_format($candidate_new_item['harga_g']) }}</div>
+                                    <div class="font-bold text-slate-600 text-xs">Rp {{ my_decimal_format($candidate_new_item['ongkos_g']) }}</div>
+                                    <div class="font-bold text-slate-600">Rp {{ my_decimal_format($candidate_new_item['harga_t']) }}</div>
+                                    <input type="hidden" name="harga_g" value="{{ (float)$candidate_new_item['harga_g'] / 100 }}">
+                                    <input type="hidden" name="ongkos_g" value="{{ (float)$candidate_new_item['ongkos_g'] / 100 }}">
+                                    <input type="hidden" name="harga_t" value="{{ (float)$candidate_new_item['harga_t'] / 100 }}">
+                                    <input type="hidden" name="buyback_mode" value="yes">
+                                </div>
+                            </div>
+
+                            <div class="flex justify-end mt-2">
+                                <button type="submit" class="bg-emerald-300 text-white py-2 px-5 rounded">Pilih</button>
+                            </div>
                         </div>
                         {{-- <div class="text-slate-500">By: {{ $item->user->username }}</div> --}}
 
                     </div>
-                </a>
+                </form>
             @endforeach
         </div>
         {{-- <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button> --}}

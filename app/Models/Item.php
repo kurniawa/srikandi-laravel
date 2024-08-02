@@ -90,7 +90,7 @@ class Item extends Model
                 'kadar' => 'required|numeric',
                 'berat' => 'required|numeric',
                 'harga_g' => 'required|numeric',
-                'ongkos_g' => 'required|numeric',
+                'ongkos_g' => 'nullable|numeric',
                 'shortname' => 'required',
                 'longname' => 'required',
                 'kondisi' => 'nullable',
@@ -102,9 +102,13 @@ class Item extends Model
                 'edisi' => 'nullable',
                 'nampan' => 'nullable',
                 'deskripsi' => 'nullable',
-                'keterangan' => 'nullable',
+                // 'keterangan' => 'nullable',
                 'status' => 'nullable',
             ]);
+            $keterangan = null;
+            if (isset($post['keterangan'])) {
+                $keterangan = $post['keterangan'];
+            }
             $tipe_perhiasan = $post['tipe_perhiasan'];
             $jenis_perhiasan = $post['jenis_perhiasan'];
             // CEK relasi tipe_perhiasan dengan jenis_perhiasan
@@ -176,7 +180,7 @@ class Item extends Model
             // 'kode_item',
             // 'barcode',
             'deskripsi' => $post['deskripsi'],
-            'keterangan' => $post['keterangan'],
+            'keterangan' => $keterangan,
             // 'status',
         ];
 
@@ -223,16 +227,30 @@ class Item extends Model
             }
             // END - DATA MAINAN
 
+            $buyback_mode = null;
+            if (isset($post['kategori'])) {
+                if ($post['kategori'] == 'Buyback Perhiasan') {
+                    $buyback_mode = 'yes';
+                }
+            }
+
+            $user = Auth::user();
+            $cart = null;
+            if ($user) {
+                $cart = Cart::where('user_id', Auth::user()->id)->first();
+            }
             $data = [
                 'menus' => Menu::get(),
-                'profile_menus' => Menu::get_profile_menus(Auth::user()),
-                'cart' => Cart::where('user_id', Auth::user()->id)->first(),
+                'profile_menus' => Menu::get_profile_menus($user),
+                'cart' => $cart,
+                'user' => $user,
                 'similiar_items' => $item_exists,
                 'candidate_new_item' => $candidate_new_item,
                 'checkbox_mata' => $checkbox_mata,
                 'warna_mata' => $warna_mata,
                 'checkbox_mainan' => $checkbox_mainan,
                 'tipe_mainan' => $tipe_mainan,
+                'buyback_mode' => $buyback_mode,
             ];
             
             // return view('items.buyback_found_similiar_items', $data);
