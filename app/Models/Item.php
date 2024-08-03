@@ -161,11 +161,11 @@ class Item extends Model
             'tipe_perhiasan' => $tipe_perhiasan,
             'jenis_perhiasan' => $jenis_perhiasan,
             'warna_emas' => $warna_emas,
-            'kadar' => $kadar,
-            'berat' => $berat,
-            'harga_g' => $harga_g,
-            'ongkos_g' => $ongkos_g,
-            'harga_t' => $harga_t,
+            'kadar' => (string)$kadar,
+            'berat' => (string)$berat,
+            'harga_g' => (string)$harga_g,
+            'ongkos_g' => (string)$ongkos_g,
+            'harga_t' => (string)$harga_t,
             'shortname' => $post['shortname'],
             'longname' => $post['longname'],
             'kondisi' => $post['kondisi'],
@@ -176,7 +176,7 @@ class Item extends Model
             'plat' => $post['plat'],
             // 'edisi',
             // 'nampan',
-            'stock' => 1,
+            'stock' => "1",
             // 'kode_item',
             // 'barcode',
             'deskripsi' => $post['deskripsi'],
@@ -203,7 +203,7 @@ class Item extends Model
     // }
 
     static function check_item_exist($candidate_new_item, $post) {
-        $item_exists = Item::where('longname', $post['longname'])->get();
+        $item_exists = Item::where('longname', 'like',"%$post[longname]%")->get();
         // dump($item_exists);
         $data = null;
         if (count($item_exists)) {
@@ -250,6 +250,7 @@ class Item extends Model
                 'warna_mata' => $warna_mata,
                 'checkbox_mainan' => $checkbox_mainan,
                 'tipe_mainan' => $tipe_mainan,
+                'kategori' => $post['kategori'],
                 'buyback_mode' => $buyback_mode,
             ];
             

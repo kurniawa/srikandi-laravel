@@ -167,30 +167,43 @@ class CashflowController extends Controller
     function store_transaction(Request $request)
     {
         $post = $request->post();
-        dd($post);
+        dump($post);
+        Cashflow::validasi_metode_pembayaran($request);
         if ($post['kategori'] == "Buyback Perhiasan") {
             $candidate_new_item = Item::validasi_item($request);
-            // Strategi:
-            // 1. Bikin item baru. Kalau ada similiar items, maka pilih dari similiar items atau tetap dengan item yang sudah diinput.
-            // 2. Create Surat Pembelian baru
-            // 3. Langsung proses buyback surat tersebut
-            list($item_exist, $data) = Item::check_item_exist($candidate_new_item, $post);
-            // if (count($item_exist)) {
-            //     // dump($data);
-            //     $data['route1'] = 'items.store';
-            //     $data['route2'] = 'items.show';
-            //     // dd($data);
-            //     return view('items.found_similiar_items', $data);
-            // }
-            if (count($item_exist)) {
-                // dump($item_exist);
-                $data['route1'] = 'cashflow.store_and_buyback';
-                $data['route2'] = 'items.show';
-                // dd($data);
-                return view('items.found_similiar_items', $data);
+            $item = collect();
+            if (isset($post['tetap_buyback'])) {
+                dd($candidate_new_item);
+                $item = Item::create($candidate_new_item);
+            } else {
+                $candidate_new_item = Item::validasi_item($request);
+                // Strategi:
+                // 1. Bikin item baru. Kalau ada similiar items, maka pilih dari similiar items atau tetap dengan item yang sudah diinput.
+                // 2. Create Surat Pembelian baru
+                // 3. Langsung proses buyback surat tersebut
+                list($item_exist, $data) = Item::check_item_exist($candidate_new_item, $post);
+                // if (count($item_exist)) {
+                //     // dump($data);
+                //     $data['route1'] = 'items.store';
+                //     $data['route2'] = 'items.show';
+                //     // dd($data);
+                //     return view('items.found_similiar_items', $data);
+                // }
+                if (count($item_exist)) {
+                    // dump($item_exist);
+                    $data = Cashflow::add_data_metode_pembayaran($request, $data);
+                    $data['route1'] = 'cashflow.store_transaction';
+                    $data['route2'] = 'items.show';
+                    // dd($data);
+                    return view('items.found_similiar_items', $data);
+                } else {
+                    $item = Item::create($candidate_new_item);
+                }
             }
+            // PEMBUATAN SURAT PEMBELIAN
+            
         }
-        // dd($post['kategori']);
+        
         $request->validate([
             'tipe_transaksi' => 'required',
             'kategori' => 'required',
@@ -231,13 +244,13 @@ class CashflowController extends Controller
         return redirect()->route('cashflow.index')->with($feedback);
     }
 
-    function store_and_buyback(Request $request) {
-        $post = $request->post();
-        dd($post);
-        $candidate_new_item = Item::validasi_item($request);
-        $item_new = Item::create($candidate_new_item);
-        Item::store_itemMata_dan_itemMainan($post, $item_new);
-    }
+    // function store_and_buyback_perhiasan(Request $request) {
+    //     $post = $request->post();
+    //     dd($post);
+    //     $candidate_new_item = Item::validasi_item($request);
+    //     $item_new = Item::create($candidate_new_item);
+    //     Item::store_itemMata_dan_itemMainan($post, $item_new);
+    // }
 
     // function show_item_and_buyback(Item $item) {
     //     $user = Auth::user();

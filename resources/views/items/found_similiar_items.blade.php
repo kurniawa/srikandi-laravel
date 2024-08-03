@@ -5,18 +5,17 @@
         <x-validation-feedback></x-validation-feedback>
         <div class="mt-1">
             <form action="{{ route($route1) }}" method="POST">
-                <div class="p-2 bg-white rounded shadow drop-shadow grid grid-cols-12 gap-2">
-                    <div class="col-span-8">
+                <div class="border-2 border-emerald-300 p-2 bg-white rounded shadow drop-shadow">
+                    <div>
                         <div class="text-slate-400">
-                            @if ($candidate_new_item['longname'])
-                                <div class="text-xs font-bold">{{ $candidate_new_item['longname'] }}</div>
-                            @else
-                                <span class="font-bold text-xs text-slate-500">{{ $candidate_new_item['shortname'] }}</span>
-                            @endif
+                            <div class="font-bold text-xs">S: {{ $candidate_new_item['shortname'] }}</div>
+                            <div class="font-bold text-xs">L: {{ $candidate_new_item['longname'] }}</div>
                         </div>
-                        <div class="font-bold text-slate-600 text-xs">Rp {{ my_decimal_format($candidate_new_item['harga_g']) }}</div>
-                        <div class="font-bold text-slate-600 text-xs">Rp {{ my_decimal_format($candidate_new_item['ongkos_g']) }}</div>
-                        <div class="font-bold text-slate-600">Rp {{ my_decimal_format($candidate_new_item['harga_t']) }}</div>
+                        <table class="font-bold text-slate-500 text-xs">
+                            <tr><td>Harga/g</td><td>:</td><td><span>Rp {{ my_decimal_format($candidate_new_item['harga_g']) }}</span></td></tr>
+                            <tr><td>Ongkos/g</td><td>:</td><td><span>Rp {{ my_decimal_format($candidate_new_item['ongkos_g']) }}</span></td></tr>
+                            <tr><td>Harga T.</td><td>:</td><td><span>Rp {{ my_decimal_format($candidate_new_item['harga_t']) }}</span></td></tr>
+                        </table>
                     </div>
                     {{-- <div class="text-slate-500">By: {{ $candidate_new_item['']user->username }}</div> --}}
                 </div>
@@ -42,10 +41,30 @@
                 <input type="hidden" name="keterangan" value="{{ $candidate_new_item['keterangan'] }}">
                 {{-- <input type="hidden" name="stock" value="{{ $candidate_new_item['stock'] }}"> --}}
 
+                {{-- DATA METODE PEMBAYARAN --}}
+                @if ($buyback_mode)
+                    @if (isset($jumlah_tunai))
+                        <input type="hidden" name="jumlah_tunai" value="{{ $jumlah_tunai }}">
+                    @endif
+
+                    @if (isset($jumlah_non_tunai))
+                        @for ($i = 0; $i < count($jumlah_non_tunai); $i++)
+                            <input type="hidden" name="jumlah_non_tunai[]" value="{{ $jumlah_non_tunai[$i] }}">
+                            <input type="hidden" name="nama_instansi[]" value="{{ $nama_instansi[$i] }}">
+                            <input type="hidden" name="tipe_instansi[]" value="{{ $tipe_instansi[$i] }}">
+                        @endfor
+                    @endif
+
+                    <input type="hidden" name="total_bayar" value="{{ $total_bayar }}">
+                    <input type="hidden" name="sisa_bayar" value="{{ $sisa_bayar }}">
+                @endif
+                {{-- END - DATA METODE PEMBAYARAN --}}
+
                 <div class="text-center mt-5">
                     @if ($buyback_mode)
                         @if ($buyback_mode == 'yes')
-                            <button type="submit" class="bg-emerald-300 p-4 text-white font-bold rounded">Tetap Buyback dengan Data diatas</button>
+                            <input type="hidden" name="kategori" value="Buyback Perhiasan">
+                            <button type="submit" name="tetap_buyback" value="yes" class="bg-emerald-300 p-4 text-white font-bold rounded">Tetap Buyback dengan Data diatas</button>
                         @endif
                     @else
                         <button type="submit" class="bg-emerald-300 p-4 text-white font-bold rounded">Tetap Tambah Baru dengan Data diatas</button>
@@ -53,61 +72,102 @@
                 </div>
             </form>
         </div>
-        <div class="mt-1 flex">
+        <div class="mt-5 flex">
             <div class="shadow drop-shadow p-2 rounded">
                 Pilihan Item Yang Sama:
             </div>
-
         </div>
-        <div class="gap-2 mt-2">
+        <div>
             @foreach ($similiar_items as $key => $item)
-                <form action="{{ route($route2, $item->id) }}" method="GET">
-                    <div class="p-2 bg-white rounded shadow drop-shadow grid grid-cols-12 gap-2">
-                        <div class="col-span-4">
-                            @if (count($item->item_photos))
-                                <img src="{{ asset('storage/' . $item->item_photos[0]->photo->path) }}" alt="item_photo"
-                                    class="w-full">
-                            @else
-                                <div class="bg-indigo-100 text-indigo-400">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke-width="1.5" stroke="currentColor" class="w-full">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-                                    </svg>
-                                </div>
-                            @endif
+                <div class="flex mt-3">
+                    <div class="bg-white shadow drop-shadow size-6 font-bold text-slate-400 flex justify-center items-center">
+                        <span>{{ $key+1 }}.</span>
+                    </div>
+                </div>
+                <form action="{{ route($route2, $item->id) }}" method="GET" class="mt-2">
+                    <div class="border-2 border-pink-300 p-2 bg-white rounded shadow drop-shadow">
+                        <div class="text-slate-400">
+                            <div class="font-bold text-xs">S: {{ $item->shortname }}</div>
+                            <div class="font-bold text-xs">L: {{ $item->longname }}</div>
                         </div>
-                        <div class="col-span-8">
-                            <div class="text-slate-400">
-                                @if ($item->longname)
-                                    <div class="text-xs font-bold">{{ $item->longname }}</div>
+
+                        <div class="grid grid-cols-12 gap-2 items-center">
+                            <div class="col-span-4">
+                                @if (count($item->item_photos))
+                                    <img src="{{ asset('storage/' . $item->item_photos[0]->photo->path) }}" alt="item_photo" class="w-full">
                                 @else
-                                    <span class="font-bold text-xs text-slate-500">{{ $item->shortname }}</span>
+                                    <div class="bg-indigo-100 text-indigo-400">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="w-full">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                        </svg>
+                                    </div>
                                 @endif
                             </div>
-                            <div class="flex gap-2">
+
+                            <div class="col-span-4">
                                 <div class="border-2 p-2 rounded border-indigo-300">
                                     <div class="font-bold mb-2 text-slate-500">Harga 1:</div>
-                                    <div class="font-bold text-slate-600 text-xs">Rp {{ my_decimal_format($item->harga_g) }}</div>
-                                    <div class="font-bold text-slate-600 text-xs">Rp {{ my_decimal_format($item->ongkos_g) }}</div>
-                                    <div class="font-bold text-slate-600">Rp {{ my_decimal_format($item->harga_t) }}</div>
+                                    <div class="font-bold text-slate-600 text-xs">{{ my_decimal_format($item->harga_g) }} /g</div>
+                                    <div class="font-bold text-slate-600 text-xs">{{ my_decimal_format($item->ongkos_g) }} /g</div>
+                                    <div class="font-bold text-slate-600 text-xs">{{ my_decimal_format($item->harga_t) }}</div>
                                 </div>
+                            </div>
+
+                            <div class="col-span-4">
                                 <div class="border-2 p-2 rounded border-orange-300">
                                     <div class="font-bold mb-2 text-slate-500">Harga 2:</div>
-                                    <div class="font-bold text-slate-600 text-xs">Rp {{ my_decimal_format($candidate_new_item['harga_g']) }}</div>
-                                    <div class="font-bold text-slate-600 text-xs">Rp {{ my_decimal_format($candidate_new_item['ongkos_g']) }}</div>
-                                    <div class="font-bold text-slate-600">Rp {{ my_decimal_format($candidate_new_item['harga_t']) }}</div>
+                                    <div class="font-bold text-slate-600 text-xs">{{ my_decimal_format($candidate_new_item['harga_g']) }} /g</div>
+                                    <div class="font-bold text-slate-600 text-xs">{{ my_decimal_format($candidate_new_item['ongkos_g']) }} /g</div>
+                                    <div class="font-bold text-slate-600 text-xs">{{ my_decimal_format($candidate_new_item['harga_t']) }}</div>
                                     <input type="hidden" name="harga_g" value="{{ (float)$candidate_new_item['harga_g'] / 100 }}">
                                     <input type="hidden" name="ongkos_g" value="{{ (float)$candidate_new_item['ongkos_g'] / 100 }}">
                                     <input type="hidden" name="harga_t" value="{{ (float)$candidate_new_item['harga_t'] / 100 }}">
                                     <input type="hidden" name="buyback_mode" value="yes">
                                 </div>
                             </div>
-
-                            <div class="flex justify-end mt-2">
-                                <button type="submit" class="bg-emerald-300 text-white py-2 px-5 rounded">Pilih</button>
-                            </div>
                         </div>
+
+                        {{-- DATA METODE PEMBAYARAN --}}
+                        @if ($buyback_mode)
+                            @if (isset($jumlah_tunai))
+                                <input type="hidden" name="jumlah_tunai" value="{{ $jumlah_tunai }}">
+                            @endif
+
+                            @if (isset($jumlah_non_tunai))
+                                @for ($i = 0; $i < count($jumlah_non_tunai); $i++)
+                                    <input type="hidden" name="jumlah_non_tunai[]" value="{{ $jumlah_non_tunai[$i] }}">
+                                    <input type="hidden" name="nama_instansi[]" value="{{ $nama_instansi[$i] }}">
+                                    <input type="hidden" name="tipe_instansi[]" value="{{ $tipe_instansi[$i] }}">
+                                @endfor
+                            @endif
+
+                            <input type="hidden" name="total_bayar" value="{{ $total_bayar }}">
+                            <input type="hidden" name="sisa_bayar" value="{{ $sisa_bayar }}">
+                        @endif
+                        {{-- END - DATA METODE PEMBAYARAN --}}
+
+                        @if ($buyback_mode)
+                            <div class="flex justify-center gap-2 mt-2">
+                                <button type="submit" name="submit" class="bg-pink-300 text-white py-2 px-5 rounded" value="pilih_dan_update_harga">Pilih & Update Harga</button>
+                                <button type="submit" name="submit" class="bg-emerald-300 text-white py-2 px-5 rounded" value="pilih">Pilih</button>
+                            </div>
+                        @else
+                            <div class="flex justify-center mt-2">
+                                <div>
+                                    <div class="text-center">
+                                        <button type="submit" name="submit" class="bg-pink-300 text-white py-2 px-5 rounded" value="add_to_cart_and_price_update">+ Keranjang & Update Harga</button>
+                                    </div>
+                                    <div class="text-center mt-2">
+                                        <button type="submit" name="submit" class="bg-emerald-300 text-white py-2 px-5 rounded" value="add_to_cart">+ Keranjang</button>
+                                    </div>
+                                    <div class="text-center mt-2">
+                                        <button type="submit" name="submit" class="bg-yellow-300 text-slate-500 py-2 px-5 rounded" value="add_to_cart">Lihat Detail</button>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                         {{-- <div class="text-slate-500">By: {{ $item->user->username }}</div> --}}
 
                     </div>

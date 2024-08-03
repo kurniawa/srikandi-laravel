@@ -114,6 +114,7 @@ class CartController extends Controller
     function proses_checkout(Cart $cart, Request $request)
     {
         $post = $request->post();
+        Cashflow::validasi_metode_pembayaran($request);
         // dump($cart);
         // dd($post);
 

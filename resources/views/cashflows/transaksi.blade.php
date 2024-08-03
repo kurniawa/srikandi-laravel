@@ -40,7 +40,7 @@
         </div>
         <x-metode-pembayaran :walletsnontunai=$wallets_non_tunai :tipe=$tipe></x-metode-pembayaran>
         <div class="mt-3 flex justify-center">
-            <button type="submit" class="p-2 rounded-lg bg-emerald-300 text-white font-bold">Konfirmasi</button>
+            <button type="submit" class="loading-spinner p-2 rounded-lg bg-emerald-300 text-white font-bold">Konfirmasi</button>
         </div>
     </form>
 

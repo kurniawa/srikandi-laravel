@@ -315,7 +315,7 @@
         @endif --}}
         @if (isset($buyback_mode) && $buyback_mode == 'yes')
         <div class="mt-12">
-            <form action="{{ route('cashflow.store_and_buyback') }}" method="POST" class="mt-2">
+            <form action="{{ route('cashflow.store_transaction') }}" method="POST" class="mt-2">
                 @csrf
                 <input type="hidden" name="harga_g" value="{{ $harga_g }}">
                 <input type="hidden" name="ongkos_g" value="{{ $ongkos_g }}">

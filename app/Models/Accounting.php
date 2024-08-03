@@ -12,6 +12,9 @@ class Accounting extends Model
 
     static function simple_time_key($time_key)
     {
+        // time() dibagi dengan penjumlahan dari angka-angka pada tanggal
+        // tujuannya supaya tidak terlalu panjang angka yang tercantum pada nomor surat
+        
         $day = (int)date("d", $time_key);
         $month = (int)date("m", $time_key);
         $year = (int)date("Y", $time_key);

@@ -26,6 +26,78 @@ class Cashflow extends Model
         return $accounting;
     }
 
+    static function validasi_metode_pembayaran($request) {
+        $post = $request->post();
+        if (!isset($post['jumlah_tunai']) && !isset($post['jumlah_non_tunai'])) {
+            $request->validate(['error'=>'required'],['error.required'=>'post jumlah_tunai or jumlah_non_tunai not exist']);
+        }
+        $jumlah_tunai = 0;
+        if (isset($post['jumlah_tunai'])) {
+            if ($post['jumlah_tunai']) {
+                $jumlah_tunai += (float)$post['jumlah_tunai'];
+            }
+        }
+        $jumlah_non_tunai = 0;
+        if (isset($post['jumlah_non_tunai'])) {
+            $request->validate([
+                'jumlah_non_tunai' => 'array',
+                'jumlah_non_tunai.*' => 'nullable|numeric',
+                'nama_instansi' => 'array',
+                'tipe_instansi' => 'array',
+            ]);
+            for ($i=0; $i < count($post['jumlah_non_tunai']); $i++) { 
+                $jumlah_non_tunai += (float)$post['jumlah_non_tunai'][$i];
+            }
+        }
+
+        $jumlah_pembayaran = $jumlah_tunai + $jumlah_non_tunai;
+        $total_tagihan = "";
+        if ($post['kategori'] == "Buyback Perhiasan") {
+            if (!isset($post['harga_t']) || $post['harga_t'] == null) {
+                $request->validate(['error'=>'required'],['error.required'=>'Buyback Perhiasan harus ada harga_t']);
+            }
+            $total_tagihan = $post['harga_t'];
+        } else {
+            if (!isset($post['total_tagihan']) || $post['total_tagihan'] == null) {
+                $request->validate(['error'=>'required'],['error.required'=>'Harus ada total_tagihan']);
+            }
+            $total_tagihan = $post['total_tagihan'];
+        }
+
+        // dump("harga_t atau total_tagihan");
+        // dump($total_tagihan);
+        // dump((float)$total_tagihan);
+        // dump("jumlah_pembayaran");
+        // dd($jumlah_pembayaran);
+        if ($jumlah_pembayaran !== (float)$total_tagihan) {
+            dump("post[harga_total]");
+            dump($total_tagihan);
+            dump((float)$total_tagihan);
+            dump("jumlah_pembayaran");
+            dd($jumlah_pembayaran);
+        }
+
+        return true;
+    }
+
+    static function add_data_metode_pembayaran($request, $data) {
+        $post = $request->post();
+        if (isset($post['jumlah_tunai'])) {
+            $data['jumlah_tunai'] = $post['jumlah_tunai'];
+        }
+
+        if (isset($post['jumlah_non_tunai'])) {
+            $data['jumlah_non_tunai'] = $post['jumlah_non_tunai'];
+            $data['nama_instansi'] = $post['nama_instansi'];
+            $data['tipe_instansi'] = $post['tipe_instansi'];
+        }
+
+        $data['total_bayar'] = $post['total_bayar'];
+        $data['sisa_bayar'] = $post['sisa_bayar'];
+
+        return $data;
+    }
+
     static function create_cashflow($user_id, $time_key, $kode_accounting, $pembelian_id, $post)
     {
         // CASHFLOW
