@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class SuratPembelian extends Model
 {
@@ -81,5 +82,105 @@ class SuratPembelian extends Model
 
     function pelanggan() {
         return $this->hasOne(User::class, 'id', 'pelanggan_id');
+    }
+
+    static function create_sp($request, $item, $time_key, $kode_accounting) {
+        $post = $request->post();
+
+        $user = Auth::user();
+        $cart = null;
+        if ($user) {
+            $cart = Cart::where('user_id', $user->id)->first();
+        }
+
+        $hari = date("d", strtotime($time_key));
+        if (isset($post['hari'])) {
+            $hari = $post['hari'];
+        }
+        $bulan = date("m", $time_key);
+        if (isset($post['bulan'])) {
+            $bulan = $post['bulan'];
+        }
+        $tahun = date("Y", $time_key);
+        if (isset($post['tahun'])) {
+            $tahun = $post['tahun'];
+        }
+        $pelanggan_id = null;
+        $pelanggan_nama = null;
+        $pelanggan_username = null;
+        $pelanggan_nik = null;
+
+        // PEMBAYARAN
+        $harga_total = 0;
+        if (isset($post['harga_total'])) {
+            $harga_total = (float)$post['harga_total'];
+        } elseif (isset($post['harga_t'])) {
+            $harga_total = (float)$post['harga_t'];
+        }
+        $total_bayar = $post['total_bayar'];
+        $sisa_bayar = $post['sisa_bayar'];
+
+        $status_bayar = 'lunas';
+        if ((float)$post['sisa_bayar'] > 0.0) {
+            $status_bayar = 'belum-lunas';
+        }
+        // END - PEMBAYARAN
+
+        // PHOTO PATH
+        $photo_path = null;
+        if ($cart->photo_path) {
+            if (Storage::exists($cart->photo_path)) {
+                $exploded_filenamepath = explode("/", $cart->photo_path);
+                $name_index = count($exploded_filenamepath) - 1;
+                $filename = $exploded_filenamepath[$name_index];
+                $photo_path = "surat_pembelians/photos/$filename";
+                Storage::move($cart->photo_path, $photo_path);
+            }
+        }
+        // END - PHOTO PATH
+
+        $jumlah_item = 1;
+        if (isset($post['cart_item_ids'])) {
+            $jumlah_item = count($post['cart_item_ids']);
+        }
+
+        $surat_pembelian = SuratPembelian::create([
+            'tanggal_surat' => date('Y-m-d', strtotime("$hari-$bulan-$tahun")) . 'T' . date('H:i:s', $time_key),
+            'nomor_surat' => uniqid(),
+            'time_key' => $time_key,
+            'user_id' => Auth::user()->id,
+            'username' => Auth::user()->username,
+            'pelanggan_id' => $pelanggan_id,
+            'pelanggan_nama' => $pelanggan_nama,
+            'pelanggan_username' => $pelanggan_username,
+            'pelanggan_nik' => $pelanggan_nik,
+            'keterangan' => $cart->keterangan,
+            'harga_total' => (string)($harga_total * 100),
+            'total_bayar' => (string)($total_bayar * 100),
+            'sisa_bayar' => (string)($sisa_bayar * 100),
+            'status_bayar' => $status_bayar,
+            'photo_path' => $photo_path,
+        ]);
+
+        $simple_time_key = Accounting::simple_time_key($time_key);
+        $nomor_surat = self::generate_nomor_surat($surat_pembelian->id, $pelanggan_id, $jumlah_item, $simple_time_key);
+
+        $surat_pembelian->nomor_surat = $nomor_surat;
+        $surat_pembelian->save();
+
+        if (isset($post['cart_item_ids'])) {
+            foreach ($post['cart_item_ids'] as $cart_item_id) {
+                SuratPembelianItem::create_surat_pembelian_item($surat_pembelian, $cart_item_id, $kode_accounting);
+            }
+        } elseif (isset($post['kategori']) && $post['kategori'] == "Buyback Perhiasan") {
+            SuratPembelianItem::buyback_create_spi($surat_pembelian, $item, $time_key);
+            $surat_pembelian->tanggal_buyback = $surat_pembelian->created_at;
+            $surat_pembelian->status_buyback = 'all';
+        }
+
+    }
+
+    static function buyback_sp($surat_pembelian) {
+        $surat_pembelian->update([]);
     }
 }

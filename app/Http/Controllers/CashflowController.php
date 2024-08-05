@@ -9,6 +9,7 @@ use App\Models\Cashflow;
 use App\Models\Item;
 use App\Models\Menu;
 use App\Models\Saldo;
+use App\Models\SuratPembelian;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -117,7 +118,7 @@ class CashflowController extends Controller
             'profile_menus' => Menu::get_profile_menus(Auth::user()),
             'parent_route' => 'home',
             // 'spk_menus' => Menu::get_spk_menus(),
-            // 'user' => Auth::user(),
+            'user' => $user,
             'cart' => $cart,
             'col_cashflows' => $col_cashflows,
             'col_saldos' => $col_saldos,
@@ -167,13 +168,27 @@ class CashflowController extends Controller
     function store_transaction(Request $request)
     {
         $post = $request->post();
-        dump($post);
+        // dump($post);
         Cashflow::validasi_metode_pembayaran($request);
+        
+        
+        $request->validate([
+            'tipe_transaksi' => 'required',
+            'kategori' => 'required',
+            'total_tagihan' => 'required|numeric',
+            'total_bayar' => 'required|numeric',
+            'sisa_bayar' => 'required|numeric',
+        ]);
+        
+        $user = Auth::user();
+        $time_key = time();
+        $kode_accounting = "$user->id.$time_key";
+
         if ($post['kategori'] == "Buyback Perhiasan") {
             $candidate_new_item = Item::validasi_item($request);
             $item = collect();
             if (isset($post['tetap_buyback'])) {
-                dd($candidate_new_item);
+                // dd($candidate_new_item);
                 $item = Item::create($candidate_new_item);
             } else {
                 $candidate_new_item = Item::validasi_item($request);
@@ -201,20 +216,10 @@ class CashflowController extends Controller
                 }
             }
             // PEMBUATAN SURAT PEMBELIAN
-            
+            SuratPembelian::create_sp($request, $item, $time_key, $kode_accounting);
+            // END - PEMBUATAN SURAT PEMBELIAN
         }
-        
-        $request->validate([
-            'tipe_transaksi' => 'required',
-            'kategori' => 'required',
-            'total_tagihan' => 'required|numeric',
-            'total_bayar' => 'required|numeric',
-            'sisa_bayar' => 'required|numeric',
-        ]);
         $success_ = '';
-        $user = Auth::user();
-        $time_key = time();
-        $kode_accounting = "$user->id.$time_key";
         $total_bayar = Cashflow::create_cashflow($user->id, $time_key, $kode_accounting, null, $post);
 
         $kategori_2 = null;

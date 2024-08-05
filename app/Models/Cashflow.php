@@ -101,13 +101,13 @@ class Cashflow extends Model
     static function create_cashflow($user_id, $time_key, $kode_accounting, $pembelian_id, $post)
     {
         // CASHFLOW
-        $total_tagihan = 0; // harga_total sinonim dnegan total_tagihan
-        if (isset($post['harga_total'])) {
-            $total_tagihan = (float)$post['harga_total'];
-        } elseif (isset($post['total_tagihan'])) {
-            $total_tagihan = (float)$post['total_tagihan'];
-        }
-        $total_bayar = (float)$post['total_bayar'];
+        // $total_tagihan = 0; // harga_total sinonim dnegan total_tagihan
+        // if (isset($post['harga_total'])) {
+        //     $total_tagihan = (float)$post['harga_total'];
+        // } elseif (isset($post['total_tagihan'])) {
+        //     $total_tagihan = (float)$post['total_tagihan'];
+        // }
+        // $total_bayar = (float)$post['total_bayar'];
         $sisa_bayar = (float)$post['sisa_bayar'];
 
         $jumlah_tunai = null;

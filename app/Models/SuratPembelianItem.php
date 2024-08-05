@@ -158,4 +158,123 @@ class SuratPembelianItem extends Model
     {
         return $this->hasOne(Item::class, "id", "item_id");
     }
+
+    static function penetapan_data_bb($item) {
+        $data_bb = [
+            "kondisi_bb" => null,
+            "berat_susut" => null,
+            "berat_bb" => null,
+            "potongan_susut" => null,
+            "potongan_ongkos" => null,
+            "potongan_tambahan" => null,
+            "persentase_potongan_tambahan" => null,
+            "total_potongan" => null,
+            "total_bb" => null,
+            "status_bb" => null,
+            "keterangan_lain" => null,
+        ];
+        if ($item->tipe_barang === 'perhiasan') {
+            $data_bb["kondisi_bb"] = 'sama';
+            $data_bb["berat_susut"] = 'tidak';
+            $data_bb["berat_bb"] = $item->berat;
+            $data_bb["potongan_susut"] = 0;
+            $data_bb["potongan_ongkos"] = ((float)$item->ongkos_g * (float)$item->berat) / 100;
+            $data_bb["potongan_tambahan"] = 0;
+            $data_bb["persentase_potongan_tambahan"] = 0;
+            $data_bb["total_potongan"] = $data_bb["potongan_ongkos"];
+            $data_bb["total_bb"] = (float)$item->harga_t - $data_bb["potongan_ongkos"];
+            $data_bb["status_bb"] = 'ada';
+        } elseif ($item->tipe_barang === 'LM') {
+            $data_bb["kondisi_bb"] = 'sama';
+            $data_bb["status_bb"] = 'ada';
+        }
+
+        return $data_bb;
+    }
+
+    static function buyback_penetapan_data_bb($item) {
+        $data_bb = [
+            "kondisi_bb" => null,
+            "berat_susut" => null,
+            "berat_bb" => null,
+            "potongan_susut" => null,
+            "potongan_ongkos" => null,
+            "potongan_tambahan" => null,
+            "persentase_potongan_tambahan" => null,
+            "total_potongan" => null,
+            "total_bb" => null,
+            "status_bb" => null,
+            "keterangan_lain" => null,
+        ];
+        return $data_bb;
+    }
+
+    static function buyback_photo_path($item, $time_key) {
+        $photo_path = null;
+        $user = Auth::user();
+        $time = $time_key;
+        if (count($item->item_photos)) {
+            if (Storage::exists($item->item_photos[0]->photo->path)) {
+                $exploded_path = explode(".", $item->item_photos[0]->photo->path);
+                $file_extension = $exploded_path[count($exploded_path) - 1];
+                $filename = "$user->id-$time.$file_extension";
+                $photo_path = "surat_pembelian_items/photos/$filename";
+                while (Storage::exists($photo_path)) {
+                    $time++;
+                    $filename = "$user->id-$time.$file_extension";
+                    $photo_path = "surat_pembelian_items/photos/$filename";
+                }
+                Storage::copy($item->item_photos[0]->photo->path, $photo_path);
+            }
+        }
+
+        return $photo_path;
+    }
+
+    static function buyback_create_spi($surat_pembelian, $item, $time_key) {
+        $data_bb = self::buyback_penetapan_data_bb($item);
+        $photo_path = self::buyback_photo_path($item, $time_key);
+        $keterangan_lain = null;
+        SuratPembelianItem::create([
+            'surat_pembelian_id' => $surat_pembelian->id,
+            'item_id' => $item->id,
+            'tipe_barang' => $item->tipe_barang,
+            'tipe_perhiasan' => $item->tipe_perhiasan,
+            'jenis_perhiasan' => $item->jenis_perhiasan,
+            'warna_emas' => $item->warna_emas,
+            'kadar' => $item->kadar,
+            'berat' => $item->berat,
+            'ongkos_g' => $item->ongkos_g,
+            'harga_g' => $item->harga_g,
+            'harga_t' => $item->harga_t,
+            'shortname' => $item->shortname,
+            'longname' => $item->longname,
+            'kondisi' => $item->kondisi,
+            'cap' => $item->cap,
+            'range_usia' => $item->range_usia,
+            'ukuran' => $item->ukuran,
+            'merk' => $item->merk,
+            'plat' => $item->plat,
+            'edisi' => $item->edisi,
+            'nampan' => $item->nampan,
+            'kode_item' => $item->kode_item,
+            'barcode' => $item->barcode,
+            'deskripsi' => $item->deskripsi,
+            'keterangan' => $item->keterangan,
+            'photo_path' => $photo_path,
+            'jumlah' => $item->jumlah,
+            // Data penjualan udah diisi juga sebagian, selama item memang bisa BB
+            'status_bb' => $data_bb["status_bb"],
+            'kondisi_bb' => $data_bb["kondisi_bb"],
+            'berat_susut' => $data_bb["berat_susut"],
+            'berat_bb' => $data_bb["berat_bb"],
+            'potongan_susut' => $data_bb["potongan_susut"],
+            'potongan_ongkos' => $data_bb["potongan_ongkos"],
+            'potongan_tambahan' => $data_bb["potongan_tambahan"],
+            'persentase_potongan_tambahan' => $data_bb["persentase_potongan_tambahan"],
+            'total_potongan' => $data_bb["total_potongan"],
+            'total_bb' => $data_bb["total_bb"],
+            'keterangan_lain' => $keterangan_lain,
+        ]);
+    }
 }
