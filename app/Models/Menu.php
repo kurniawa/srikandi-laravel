@@ -46,24 +46,20 @@ class Menu extends Model
         $menus = collect();
         if (isset($user)) {
             if ($user !== null) {
-                if ($user->clearance_level == 6) {
+                if ($user->clearance_level >= 3) {
                     $menus->push(
                         ['name' => 'Profile', 'route' => 'users.show', 'params' => $user->id],
+                        ['name' => 'Rincian Transaksi', 'route' => 'transactions.rincian_transaksi', 'params' => $user->id],
                         ['name' => 'Daftar User', 'route' => 'users.index'],
                         ['name' => 'Daftar Pelanggan', 'route' => 'pelanggans.index'],
                         ['name' => 'Surat Pembelian', 'route' => 'surat_pembelian.index'],
                         ['name' => 'Cash Flow', 'route' => 'cashflow.index'],
-                        ['name' => 'Artisan Commands', 'route' => 'artisans.index'],
                         ['name' => 'Log Out', 'route' => 'logout'],
                     );
-                } elseif ($user->clearance_level >= 3) {
+                }
+                if ($user->clearance_level == 6) {
                     $menus->push(
-                        ['name' => 'Profile', 'route' => 'users.show', 'params' => $user->id],
-                        ['name' => 'Daftar User', 'route' => 'users.index'],
-                        ['name' => 'Daftar Pelanggan', 'route' => 'pelanggans.index'],
-                        ['name' => 'Surat Pembelian', 'route' => 'surat_pembelian.index'],
-                        ['name' => 'Cash Flow', 'route' => 'cashflow.index'],
-                        ['name' => 'Log Out', 'route' => 'logout'],
+                        ['name' => 'Artisan Commands', 'route' => 'artisans.index'],
                     );
                 }
             }

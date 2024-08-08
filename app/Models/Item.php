@@ -105,7 +105,7 @@ class Item extends Model
                 // 'keterangan' => 'nullable',
                 'status' => 'nullable',
             ]);
-            $keterangan = null;
+            $keterangan = "";
             if (isset($post['keterangan'])) {
                 $keterangan = $post['keterangan'];
             }
@@ -156,6 +156,38 @@ class Item extends Model
             }
         }
 
+        // ATTRIBUTE YANG KEMUNGKINAN VALUE NULL DIUBAH MENJADI EMPTY STRING
+        $deskripsi = "";
+        if ($post['deskripsi']) {
+            $deskripsi = $post['deskripsi'];
+        }
+
+        $range_usia = "";
+        if ($post['range_usia']) {
+            $range_usia = $post['range_usia'];
+        }
+
+        $cap = "";
+        if ($post['cap']) {
+            $cap = $post['cap'];
+        }
+
+        $ukuran = "";
+        if ($post['ukuran']) {
+            $ukuran = $post['ukuran'];
+        }
+
+        $merk = "";
+        if ($post['merk']) {
+            $merk = $post['merk'];
+        }
+
+        $plat = "";
+        if ($post['plat']) {
+            $plat = $post['plat'];
+        }
+        // END - ATTRIBUTE YANG KEMUNGKINAN VALUE NULL DIUBAH MENJADI EMPTY STRING
+
         $item_data = [
             'tipe_barang' => $post['tipe_barang'],
             'tipe_perhiasan' => $tipe_perhiasan,
@@ -169,17 +201,17 @@ class Item extends Model
             'shortname' => $post['shortname'],
             'longname' => $post['longname'],
             'kondisi' => $post['kondisi'],
-            'cap' => $post['cap'],
-            'range_usia' => $post['range_usia'],
-            'ukuran' => $post['ukuran'],
-            'merk' => $post['merk'],
-            'plat' => $post['plat'],
+            'cap' => $cap,
+            'range_usia' => $range_usia,
+            'ukuran' => $ukuran,
+            'merk' => $merk,
+            'plat' => $plat,
             // 'edisi',
             // 'nampan',
             'stock' => "1",
             // 'kode_item',
             // 'barcode',
-            'deskripsi' => $post['deskripsi'],
+            'deskripsi' => $deskripsi,
             'keterangan' => $keterangan,
             // 'status',
         ];
@@ -203,7 +235,7 @@ class Item extends Model
     // }
 
     static function check_item_exist($candidate_new_item, $post) {
-        $item_exists = Item::where('longname', 'like',"%$post[longname]%")->get();
+        $item_exists = Item::where('longname', 'like',"%$post[longname]%")->get()->toArray();
         // dump($item_exists);
         $data = null;
         if (count($item_exists)) {
@@ -228,22 +260,26 @@ class Item extends Model
             // END - DATA MAINAN
 
             $buyback_mode = null;
+            $tipe_transaksi = "pemasukan";
             if (isset($post['kategori'])) {
                 if ($post['kategori'] == 'Buyback Perhiasan') {
                     $buyback_mode = 'yes';
+                    $tipe_transaksi = 'pengeluaran';
                 }
             }
 
-            $user = Auth::user();
-            $cart = null;
-            if ($user) {
-                $cart = Cart::where('user_id', Auth::user()->id)->first();
+            // get ItemPhotos secara manual, karena $item_exist bukan collection
+            for ($i=0; $i < count($item_exists); $i++) { 
+                $item_photo_utama = ItemPhoto::where('item_id', $item_exists[$i]['id'])->orderBy('index')->first()->toArray();
+                $photo_path_utama = "";
+                if ($item_photo_utama) {
+                    $photo_path_utama = Photo::find($item_photo_utama['photo_id'])->toArray();
+                }
+                $item_exists[$i]['photo_path'] = $photo_path_utama['path'];
             }
+            // END - get ItemPhotos secara manual, karena $item_exist bukan collection
+
             $data = [
-                'menus' => Menu::get(),
-                'profile_menus' => Menu::get_profile_menus($user),
-                'cart' => $cart,
-                'user' => $user,
                 'similiar_items' => $item_exists,
                 'candidate_new_item' => $candidate_new_item,
                 'checkbox_mata' => $checkbox_mata,
@@ -252,6 +288,7 @@ class Item extends Model
                 'tipe_mainan' => $tipe_mainan,
                 'kategori' => $post['kategori'],
                 'buyback_mode' => $buyback_mode,
+                'tipe_transaksi' => $tipe_transaksi,
             ];
             
             // return view('items.buyback_found_similiar_items', $data);

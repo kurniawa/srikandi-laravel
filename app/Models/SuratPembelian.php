@@ -128,7 +128,9 @@ class SuratPembelian extends Model
 
         // PHOTO PATH
         $photo_path = null;
-        if ($cart->photo_path) {
+        if (isset($post['kategori']) && $post['kategori'] == "Buyback Perhiasan") {
+            
+        } elseif ($cart->photo_path) {
             if (Storage::exists($cart->photo_path)) {
                 $exploded_filenamepath = explode("/", $cart->photo_path);
                 $name_index = count($exploded_filenamepath) - 1;
@@ -139,9 +141,11 @@ class SuratPembelian extends Model
         }
         // END - PHOTO PATH
 
-        $jumlah_item = 1;
-        if (isset($post['cart_item_ids'])) {
-            $jumlah_item = count($post['cart_item_ids']);
+        $keterangan = null;
+        if (isset($post['keterangan'])) {
+            $keterangan = $post['keterangan'];
+        } elseif ($cart && $cart->keterangan) {
+            $keterangan = $cart->keterangan;
         }
 
         $surat_pembelian = SuratPembelian::create([
@@ -154,7 +158,7 @@ class SuratPembelian extends Model
             'pelanggan_nama' => $pelanggan_nama,
             'pelanggan_username' => $pelanggan_username,
             'pelanggan_nik' => $pelanggan_nik,
-            'keterangan' => $cart->keterangan,
+            'keterangan' => $keterangan,
             'harga_total' => (string)($harga_total * 100),
             'total_bayar' => (string)($total_bayar * 100),
             'sisa_bayar' => (string)($sisa_bayar * 100),
@@ -162,11 +166,17 @@ class SuratPembelian extends Model
             'photo_path' => $photo_path,
         ]);
 
+        // GENERATE NOMOR_SURAT
+        $jumlah_item = 1;
+        if (isset($post['cart_item_ids'])) {
+            $jumlah_item = count($post['cart_item_ids']);
+        }
         $simple_time_key = Accounting::simple_time_key($time_key);
         $nomor_surat = self::generate_nomor_surat($surat_pembelian->id, $pelanggan_id, $jumlah_item, $simple_time_key);
 
         $surat_pembelian->nomor_surat = $nomor_surat;
         $surat_pembelian->save();
+        // END - GENERATE NOMOR_SURAT
 
         if (isset($post['cart_item_ids'])) {
             foreach ($post['cart_item_ids'] as $cart_item_id) {
@@ -176,8 +186,10 @@ class SuratPembelian extends Model
             SuratPembelianItem::buyback_create_spi($surat_pembelian, $item, $time_key);
             $surat_pembelian->tanggal_buyback = $surat_pembelian->created_at;
             $surat_pembelian->status_buyback = 'all';
+            $surat_pembelian->total_buyback = $surat_pembelian->harga_total;
+            $surat_pembelian->save();
         }
-
+        return $surat_pembelian;
     }
 
     static function buyback_sp($surat_pembelian) {

@@ -17,6 +17,7 @@ use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\SuratPembelianController;
 use App\Http\Controllers\TipePerhiasanController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use App\Models\Cart;
 use Illuminate\Support\Facades\Auth;
@@ -144,7 +145,13 @@ Route::controller(CashflowController::class)->group(function () {
     Route::get('/cashflow/index', 'index')->name('cashflow.index')->middleware('level5');
     Route::get('/cashflow/transaksi/{tipe_transaksi}', 'transaksi')->name('cashflow.transaksi')->middleware('level3');
     Route::post('/cashflow/store_transaction', 'store_transaction')->name('cashflow.store_transaction')->middleware('level3');
+    Route::get('/cashflow/found_similiar_items', 'found_similiar_items')->name('cashflow.found_similiar_items')->middleware('level3');
     // Route::post('/cashflow/store_and_buyback_perhiasan', 'store_and_buyback_perhiasan')->name('cashflow.store_and_buyback_perhiasan')->middleware('level3');
+});
+
+Route::controller(TransactionController::class)->group(function () {
+    Route::get('/transactions/found_similiar_items', 'found_similiar_items')->name('transactions.found_similiar_items')->middleware('level3');
+    Route::get('/transactions/{user}/rincian_transaksi', 'rincian_transaksi')->name('transactions.rincian_transaksi')->middleware('level3');
 });
 
 // ATTRIBUTES

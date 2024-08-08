@@ -215,6 +215,7 @@
                                     @endforeach --}}
                                     @auth
                                     <a href="{{ route('users.profile', $user->id) }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Profile</a>
+                                    <a href="{{ route('transactions.rincian_transaksi', $user->id) }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Rincian Transaksi</a>
                                     @endauth
                                     <a href="{{ route('users.index') }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Daftar User</a>
                                     <a href="{{ route('pelanggans.index') }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Daftar Pelanggan</a>

@@ -45,6 +45,8 @@ class KadarSeeder extends Seeder
             ['kategori' => '5000', 'tipe'=>'perhiasan', 'kadar' => 5000, 'poin_susut' => 10, 'poin_tambah' => 10],
             ['kategori' => '4200', 'tipe'=>'perhiasan', 'kadar' => 4200, 'poin_susut' => 10, 'poin_tambah' => 10],
             ['kategori' => '3750', 'tipe'=>'perhiasan', 'kadar' => 3750, 'poin_susut' => 10, 'poin_tambah' => 10],
+            ['kategori' => '3500', 'tipe'=>'perhiasan', 'kadar' => 3500, 'poin_susut' => 10, 'poin_tambah' => 10],
+            ['kategori' => '3000', 'tipe'=>'perhiasan', 'kadar' => 3000, 'poin_susut' => 10, 'poin_tambah' => 10],
         ];
 
         foreach ($kadars as $kadar) {

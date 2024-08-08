@@ -34,11 +34,6 @@ class CashflowController extends Controller
         $col_total = collect();
 
         for ($i = $get_day; $i >= 1; $i--) {
-            $from = "$get_year-$get_month-$i";
-            $until = "$get_year-$get_month-$i 23:59:59";
-
-
-            $cashflows = Cashflow::whereBetween('created_at', [$from, $until])->orderByDesc("created_at")->get();
             $day = $i;
             $month = $get_month;
 
@@ -49,6 +44,15 @@ class CashflowController extends Controller
             if (strlen((string)$month) < 2) {
                 $month = "0$month";
             }
+
+            $from = "$get_year-$month-$day";
+            $until = "$get_year-$month-$day 23:59:59";
+
+            // dump($from);
+            // dump($until);
+
+            $cashflows = Cashflow::whereBetween('created_at', [$from, $until])->orderByDesc("created_at")->get();
+            // dump($cashflows);
             $col_cashflows->push([
                 "hari" => $day,
                 "bulan" => $month,
@@ -129,6 +133,7 @@ class CashflowController extends Controller
             'backRoute' => 'home',
             'backRouteParams' => null,
         ];
+        // dump(Cashflow::whereBetween('created_at', ["2024-8-8", "2024-8-8 23:59:59"])->orderByDesc("created_at")->get());
         // dd($data);
         return view('cashflows.index', $data);
     }
@@ -175,14 +180,20 @@ class CashflowController extends Controller
         $request->validate([
             'tipe_transaksi' => 'required',
             'kategori' => 'required',
-            'total_tagihan' => 'required|numeric',
             'total_bayar' => 'required|numeric',
             'sisa_bayar' => 'required|numeric',
         ]);
+
+        if (isset($post['kategori']) && $post["kategori"] == "Buyback Perhiasan") {
+            $request->validate(["harga_g" => "required|numeric"]);
+        } else {
+            $request->validate(["total_tagihan" => "required|numeric"]);
+        }
         
         $user = Auth::user();
         $time_key = time();
         $kode_accounting = "$user->id.$time_key";
+        $surat_pembelian = null;
 
         if ($post['kategori'] == "Buyback Perhiasan") {
             $candidate_new_item = Item::validasi_item($request);
@@ -210,17 +221,23 @@ class CashflowController extends Controller
                     $data['route1'] = 'cashflow.store_transaction';
                     $data['route2'] = 'items.show';
                     // dd($data);
-                    return view('items.found_similiar_items', $data);
+                    return redirect()->route('transactions.found_similiar_items', $data);
+                    // return view('items.found_similiar_items', $data);
                 } else {
                     $item = Item::create($candidate_new_item);
                 }
             }
             // PEMBUATAN SURAT PEMBELIAN
-            SuratPembelian::create_sp($request, $item, $time_key, $kode_accounting);
+            $surat_pembelian = SuratPembelian::create_sp($request, $item, $time_key, $kode_accounting);
             // END - PEMBUATAN SURAT PEMBELIAN
         }
+
         $success_ = '';
-        $total_bayar = Cashflow::create_cashflow($user->id, $time_key, $kode_accounting, null, $post);
+        $surat_pembelian_id = null;
+        if ($surat_pembelian) {
+            $surat_pembelian_id = $surat_pembelian->id;
+        }
+        $total_bayar = Cashflow::create_cashflow($user->id, $time_key, $kode_accounting, $surat_pembelian_id, $post);
 
         $kategori_2 = null;
         if (isset($post['kategori_2'])) {

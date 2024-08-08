@@ -203,7 +203,7 @@ class SuratPembelianItem extends Model
             "persentase_potongan_tambahan" => null,
             "total_potongan" => null,
             "total_bb" => null,
-            "status_bb" => null,
+            "status_bb" => "buyback",
             "keterangan_lain" => null,
         ];
         return $data_bb;
@@ -235,6 +235,10 @@ class SuratPembelianItem extends Model
         $data_bb = self::buyback_penetapan_data_bb($item);
         $photo_path = self::buyback_photo_path($item, $time_key);
         $keterangan_lain = null;
+        $jumlah = 1;
+        if (isset($item->jumlah)) {
+            $jumlah = $item->jumlah;
+        }
         SuratPembelianItem::create([
             'surat_pembelian_id' => $surat_pembelian->id,
             'item_id' => $item->id,
@@ -262,7 +266,7 @@ class SuratPembelianItem extends Model
             'deskripsi' => $item->deskripsi,
             'keterangan' => $item->keterangan,
             'photo_path' => $photo_path,
-            'jumlah' => $item->jumlah,
+            'jumlah' => $jumlah,
             // Data penjualan udah diisi juga sebagian, selama item memang bisa BB
             'status_bb' => $data_bb["status_bb"],
             'kondisi_bb' => $data_bb["kondisi_bb"],

@@ -20,6 +20,9 @@
                     {{-- <div class="text-slate-500">By: {{ $candidate_new_item['']user->username }}</div> --}}
                 </div>
                 @csrf
+                @if (isset($tipe_transaksi))
+                    <input type="hidden" name="tipe_transaksi" value="{{ $tipe_transaksi }}">
+                @endif
                 <input type="hidden" name="tipe_barang" value="{{ $candidate_new_item['tipe_barang'] }}">
                 <input type="hidden" name="tipe_perhiasan" value="{{ $candidate_new_item['tipe_perhiasan'] }}">
                 <input type="hidden" name="jenis_perhiasan" value="{{ $candidate_new_item['jenis_perhiasan'] }}">
@@ -84,17 +87,17 @@
                         <span>{{ $key+1 }}.</span>
                     </div>
                 </div>
-                <form action="{{ route($route2, $item->id) }}" method="GET" class="mt-2">
+                <form action="{{ route($route2, $item['id']) }}" method="GET" class="mt-2">
                     <div class="border-2 border-pink-300 p-2 bg-white rounded shadow drop-shadow">
                         <div class="text-slate-400">
-                            <div class="font-bold text-xs">S: {{ $item->shortname }}</div>
-                            <div class="font-bold text-xs">L: {{ $item->longname }}</div>
+                            <div class="font-bold text-xs">S: {{ $item['shortname'] }}</div>
+                            <div class="font-bold text-xs">L: {{ $item['longname'] }}</div>
                         </div>
 
                         <div class="grid grid-cols-12 gap-2 items-center">
                             <div class="col-span-4">
-                                @if (count($item->item_photos))
-                                    <img src="{{ asset('storage/' . $item->item_photos[0]->photo->path) }}" alt="item_photo" class="w-full">
+                                @if ($item['photo_path'])
+                                    <img src="{{ asset('storage/' . $item['photo_path']) }}" alt="item_photo" class="w-full">
                                 @else
                                     <div class="bg-indigo-100 text-indigo-400">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -109,9 +112,9 @@
                             <div class="col-span-4">
                                 <div class="border-2 p-2 rounded border-indigo-300">
                                     <div class="font-bold mb-2 text-slate-500">Harga 1:</div>
-                                    <div class="font-bold text-slate-600 text-xs">{{ my_decimal_format($item->harga_g) }} /g</div>
-                                    <div class="font-bold text-slate-600 text-xs">{{ my_decimal_format($item->ongkos_g) }} /g</div>
-                                    <div class="font-bold text-slate-600 text-xs">{{ my_decimal_format($item->harga_t) }}</div>
+                                    <div class="font-bold text-slate-600 text-xs">{{ my_decimal_format($item['harga_g']) }} /g</div>
+                                    <div class="font-bold text-slate-600 text-xs">{{ my_decimal_format($item['ongkos_g']) }} /g</div>
+                                    <div class="font-bold text-slate-600 text-xs">{{ my_decimal_format($item['harga_t']) }}</div>
                                 </div>
                             </div>
 
@@ -168,7 +171,7 @@
                                 </div>
                             </div>
                         @endif
-                        {{-- <div class="text-slate-500">By: {{ $item->user->username }}</div> --}}
+                        {{-- <div class="text-slate-500">By: {{ $item['user']->username }}</div> --}}
 
                     </div>
                 </form>
