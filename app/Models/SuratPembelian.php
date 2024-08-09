@@ -178,18 +178,19 @@ class SuratPembelian extends Model
         $surat_pembelian->save();
         // END - GENERATE NOMOR_SURAT
 
+        $surat_pembelian_item = null;
         if (isset($post['cart_item_ids'])) {
             foreach ($post['cart_item_ids'] as $cart_item_id) {
-                SuratPembelianItem::create_surat_pembelian_item($surat_pembelian, $cart_item_id, $kode_accounting);
+                $surat_pembelian_item = SuratPembelianItem::create_surat_pembelian_item($surat_pembelian, $cart_item_id, $kode_accounting);
             }
         } elseif (isset($post['kategori']) && $post['kategori'] == "Buyback Perhiasan") {
-            SuratPembelianItem::buyback_create_spi($surat_pembelian, $item, $time_key);
+            $surat_pembelian_item = SuratPembelianItem::buyback_create_spi($surat_pembelian, $item, $time_key);
             $surat_pembelian->tanggal_buyback = $surat_pembelian->created_at;
             $surat_pembelian->status_buyback = 'all';
             $surat_pembelian->total_buyback = $surat_pembelian->harga_total;
             $surat_pembelian->save();
         }
-        return $surat_pembelian;
+        return array($surat_pembelian, $surat_pembelian_item);
     }
 
     static function buyback_sp($surat_pembelian) {

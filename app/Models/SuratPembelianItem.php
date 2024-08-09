@@ -152,6 +152,8 @@ class SuratPembelianItem extends Model
         // END - ACCOUNTING
 
         $cart_item->delete();
+
+        return $surat_pembelian_item;
     }
 
     function item()
@@ -239,7 +241,7 @@ class SuratPembelianItem extends Model
         if (isset($item->jumlah)) {
             $jumlah = $item->jumlah;
         }
-        SuratPembelianItem::create([
+        $surat_pembelian_item = SuratPembelianItem::create([
             'surat_pembelian_id' => $surat_pembelian->id,
             'item_id' => $item->id,
             'tipe_barang' => $item->tipe_barang,
@@ -280,5 +282,7 @@ class SuratPembelianItem extends Model
             'total_bb' => $data_bb["total_bb"],
             'keterangan_lain' => $keterangan_lain,
         ]);
+
+        return $surat_pembelian_item;
     }
 }

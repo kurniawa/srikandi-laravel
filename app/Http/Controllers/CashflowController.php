@@ -193,7 +193,15 @@ class CashflowController extends Controller
         $user = Auth::user();
         $time_key = time();
         $kode_accounting = "$user->id.$time_key";
+        // SEBAGIAN DATA DIPERSIAPKAN UNTUK INPUT KE DB
         $surat_pembelian = null;
+        $surat_pembelian_id = null;
+        $surat_pembelian_item = null;
+        $surat_pembelian_item_id = null;
+        $kadar = null;
+        $berat = null;
+        $nama_barang = null;
+        // END - SEBAGIAN DATA DIPERSIAPKAN UNTUK INPUT KE DB
 
         if ($post['kategori'] == "Buyback Perhiasan") {
             $candidate_new_item = Item::validasi_item($request);
@@ -228,15 +236,25 @@ class CashflowController extends Controller
                 }
             }
             // PEMBUATAN SURAT PEMBELIAN
-            $surat_pembelian = SuratPembelian::create_sp($request, $item, $time_key, $kode_accounting);
+            list($surat_pembelian, $surat_pembelian_item) = SuratPembelian::create_sp($request, $item, $time_key, $kode_accounting);
+            $nama_barang = $surat_pembelian_item->longname;
             // END - PEMBUATAN SURAT PEMBELIAN
         }
 
         $success_ = '';
-        $surat_pembelian_id = null;
         if ($surat_pembelian) {
             $surat_pembelian_id = $surat_pembelian->id;
         }
+
+        if ($surat_pembelian_item) {
+            $surat_pembelian_item_id = $surat_pembelian_item->id;
+            $kadar = $surat_pembelian_item->kadar;
+            $berat = $surat_pembelian_item->berat;
+        }
+
+        // dump($surat_pembelian, $surat_pembelian_item);
+        // dd($surat_pembelian_id, $surat_pembelian_item_id);
+
         $total_bayar = Cashflow::create_cashflow($user->id, $time_key, $kode_accounting, $surat_pembelian_id, $post);
 
         $kategori_2 = null;
@@ -246,11 +264,13 @@ class CashflowController extends Controller
             }
         }
 
-        Accounting::create([
+        $accounting = Accounting::create([
             'kode_accounting' => $kode_accounting,
-            'surat_pembelian_id' => null,
-            'surat_pembelian_item_id' => null,
-            'nama_barang' => null,
+            'surat_pembelian_id' => $surat_pembelian_id,
+            'surat_pembelian_item_id' => $surat_pembelian_item_id,
+            'nama_barang' => $nama_barang,
+            'kadar' => $kadar,
+            'berat' => $berat,
             'user_id' => $user->id,
             'tipe' => $post['tipe_transaksi'],
             'kategori' => $post['kategori'],
@@ -258,6 +278,8 @@ class CashflowController extends Controller
             'deskripsi' => $post['deskripsi'],
             'jumlah' => $total_bayar,
         ]);
+
+        // dd($accounting);
 
         $success_ .= "Transaksi baru telah dibuat!";
         $feedback = [

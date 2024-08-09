@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignId('surat_pembelian_id')->nullable()->constrained()->onDelete('cascade')->onUpdate('cascade'); // identifikasi surat atau item yang terkait
             $table->foreignId('surat_pembelian_item_id')->nullable()->constrained()->onDelete('cascade')->onUpdate('cascade'); // identifikasi surat atau item yang terkait
             $table->string('nama_barang')->nullable(); // identifikasi nama barang dan untuk mempermudah sorting, apabila diperlukan
+            $table->string('kadar')->nullable(); // untuk mempermudah sorting, apabila diperlukan
+            $table->string('berat')->nullable(); // untuk mempermudah sorting, apabila diperlukan
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null')->onUpdate('cascade');
             $table->foreignId('supplier_id')->nullable()->constrained()->onDelete('set null');
             $table->string('supplier_name')->nullable();
