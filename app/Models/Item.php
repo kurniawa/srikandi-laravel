@@ -342,4 +342,31 @@ class Item extends Model
             }
         }
     }
+
+    static function empty_string_become_null($candidate_new_item) {
+        if ($candidate_new_item['deskripsi'] == '') {
+            $candidate_new_item['deskripsi'] = null;
+        }
+        if ($candidate_new_item['range_usia'] == '') {
+            $candidate_new_item['range_usia'] = null;
+        }
+        if ($candidate_new_item['cap'] == '') {
+            $candidate_new_item['cap'] = null;
+        }
+        if ($candidate_new_item['ukuran'] == '') {
+            $candidate_new_item['ukuran'] = null;
+        }
+        if ($candidate_new_item['merk'] == '') {
+            $candidate_new_item['merk'] = null;
+        }
+        if ($candidate_new_item['plat'] == '') {
+            $candidate_new_item['plat'] = null;
+        }
+        if ($candidate_new_item['keterangan'] == '') {
+            $candidate_new_item['keterangan'] = null;
+        }
+
+        return $candidate_new_item;
+
+    }
 }

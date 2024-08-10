@@ -25,6 +25,22 @@
     <x-filter-tanggal></x-filter-tanggal>
     {{-- END - FILTER --}}
 
+    <div>
+        @foreach ($bb_accountings as $bb_accounting)
+            <div>{{ $bb_accounting["tanggal"] }}</div>
+            <div class="grid grid-cols-12 items-center">
+                @foreach ($bb_accounting["gol_kadars"] as $gol_kadar)
+                    <div class="col-span-3">{{ $gol_kadar }}</div>
+                    <div class="col-span-5">
+                        @foreach ($bb_accounting['accountings'][$gol_kadar] as $accounting)
+                            <div>{{ $accounting['nama_barang'] }}</div>
+                        @endforeach
+                    </div>
+                @endforeach
+            </div>
+        @endforeach
+    </div>
+
 </main>
 @endsection
 

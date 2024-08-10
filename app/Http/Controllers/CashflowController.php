@@ -232,6 +232,7 @@ class CashflowController extends Controller
                     return redirect()->route('transactions.found_similiar_items', $data);
                     // return view('items.found_similiar_items', $data);
                 } else {
+                    $candidate_new_item = Item::empty_string_become_null($candidate_new_item);
                     $item = Item::create($candidate_new_item);
                 }
             }

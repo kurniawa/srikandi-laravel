@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Accounting;
 use App\Models\Cart;
+use App\Models\Cashflow;
 use App\Models\Kadar;
 use App\Models\Menu;
 use App\Models\SuratPembelian;
@@ -47,8 +48,6 @@ class TransactionController extends Controller
         // dump($get);
         // dd($user);
 
-        $col_buybacks = collect();
-        $golongan_kadar = Kadar::select("kategori")->where('tipe', 'perhiasan')->get();
         // dump($golongan_kadar);
         $bb_accountings = array();
         $bb_perhiasans = array();
@@ -120,9 +119,41 @@ class TransactionController extends Controller
             // dump($from_str);
             // dd($to_str);
             $bb_accountings_this = Accounting::whereBetween("created_at", [$from_str, $to_str])->where('user_id', $user->id)->where('kategori', 'Buyback Perhiasan')->orderBy("kadar")->get();
+            $bb_accountings_this_groupByKadar = $bb_accountings_this->groupBy('kadar');
+            // dump($bb_accountings_this->groupBy("kadar"));
+            // dump($bb_accountings_this->groupBy("kadar")->keys());
+            $bb_accountings_array = array();
+            $gol_kadars = $bb_accountings_this_groupByKadar->keys()->toArray();
+            $total_berats = array();
+            $total_hargas = array();
+            foreach ($gol_kadars as $gol_kadar) {
+                $total_berat = 0;
+                $total_harga = 0;
+                foreach ($bb_accountings_this_groupByKadar[$gol_kadar] as $accounting) {
+                    $total_berat += (int)$accounting->berat;
+                    $total_harga += (int)$accounting->jumlah;
+                }
+                $bb_accountings_array[$gol_kadar] = $bb_accountings_this_groupByKadar[$gol_kadar]->toArray();
+                $total_berats[] = $total_berat;
+                $total_hargas[] = $total_harga;
+            }
+
+            $bb_accountings[] = [
+                "tanggal" => $from,
+                "accountings" => $bb_accountings_array,
+                "gol_kadars" => $gol_kadars,
+                "total_berats" => $total_berats,
+                "total_hargas" => $total_hargas,
+            ];
+            // dump($bb_accountings_this);
             foreach ($bb_accountings_this as $bb_accounting) {
+                $surat_pembelian = SuratPembelian::find($bb_accounting->surat_pembelian_id)->toArray();
                 $surat_pembelian_item = SuratPembelianItem::find($bb_accounting->surat_pembelian_item_id)->toArray();
                 $bb_perhiasans[]=$surat_pembelian_item;
+                // dump($surat_pembelian);
+                // dump($surat_pembelian_item);
+                $cashflow = Cashflow::where("kode_accounting", $bb_accounting->kode_accounting)->first();
+                // dd($cashflow);
             }
     
             $buy_accountings_this = Accounting::whereBetween("created_at", [$from_str, $to_str])->where('user_id', $user->id)->where('kategori_2', 'Penjualan Perhiasan')->orderBy("kadar")->get();
@@ -135,8 +166,8 @@ class TransactionController extends Controller
         }
 
         // dd($bb_perhiasans);
-        dump(strtotime($from));
-        dd(strtotime($until));
+        // dump(strtotime($from));
+        // dd(strtotime($until));
 
         $data = [
             'menus' => Menu::get(),
@@ -149,6 +180,8 @@ class TransactionController extends Controller
             'buy_perhiasans' => $buy_perhiasans,
             'tanggal' => $tanggal,
         ];
+
+        dd($bb_accountings);
 
         return view('transactions.rincian', $data);
     }

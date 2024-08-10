@@ -281,6 +281,7 @@ class SuratPembelianItem extends Model
             'total_potongan' => $data_bb["total_potongan"],
             'total_bb' => $data_bb["total_bb"],
             'keterangan_lain' => $keterangan_lain,
+            'tanggal_buyback' => date("Y-m-d H:i:s", $time_key),
         ]);
 
         return $surat_pembelian_item;
