@@ -3,20 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Accounting;
-use App\Models\Cap;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Cashflow;
 use App\Models\Item;
-use App\Models\JenisPerhiasan;
-use App\Models\Mainan;
-use App\Models\Mata;
 use App\Models\Menu;
-use App\Models\Saldo;
 use App\Models\SuratPembelian;
 use App\Models\SuratPembelianItem;
-use App\Models\SuratPembelianPhoto;
-use App\Models\TipePerhiasan;
 use App\Models\User;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
@@ -29,17 +22,17 @@ class CartController extends Controller
     {
         $cart = Cart::where('user_id', $user->id)->first();
 
-
         $data = [
             // 'goback' => 'home',
             // 'user_role' => $user_role,
             'menus' => Menu::get(),
-            'route_now' => 'home',
+            // 'route_now' => 'home',
             'profile_menus' => Menu::get_profile_menus(Auth::user()),
-            'parent_route' => 'home',
+            // 'parent_route' => 'home',
             // 'spk_menus' => Menu::get_spk_menus(),
             // 'user' => Auth::user(),
             'cart' => $cart,
+            'user' => $user,
             'back' => true,
             'backRoute' => 'home',
             'backRouteParams' => null,

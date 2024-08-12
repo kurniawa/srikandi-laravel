@@ -534,12 +534,15 @@ class SuratPembelianController extends Controller
                 Accounting::create([
                     'kode_accounting' => $kode_accounting,
                     'surat_pembelian_id' => $surat_pembelian->id,
-                    'surat_pembelian_item_id' => $surat_pembelian_item->shortname,
-                    'nama_barang' => $surat_pembelian_item->id,
+                    'surat_pembelian_item_id' => $surat_pembelian_item->id,
+                    'nama_barang' => $surat_pembelian_item->longname,
+                    'kadar' => $surat_pembelian_item->kadar,
+                    'berat' => $surat_pembelian_item->berat,
                     'user_id' => $user->id,
                     'tipe' => 'pengeluaran',
                     'kategori' => 'Buyback Perhiasan',
-                    // 'kategori_2' => $kategori_2,
+                    'kategori_2' => null,
+                    'deskripsi' => null,
                     'jumlah' => (string)$harga_buyback,
                 ]);
                 $success_ .= "-Accounting created-";

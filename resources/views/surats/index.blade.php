@@ -48,8 +48,10 @@
                                                 <div class="rounded text-white border-2 bg-yellow-400 border-yellow-500">
                                         @endif
                             @endif
-                            <div class="text-center"><span
-                                    class="whitespace-nowrap text-xs font-bold">{{ date('d-m', strtotime($surat_pembelian->tanggal_surat)) }}</span>
+                            <div class="text-center">
+                                <span class="whitespace-nowrap text-xs font-bold">
+                                    {{ date('d-m', strtotime($surat_pembelian->tanggal_surat)) }}
+                                </span>
                             </div>
                             <div class="text-center text-xs font-bold">
                                 {{ date('Y', strtotime($surat_pembelian->tanggal_surat)) }}</div>

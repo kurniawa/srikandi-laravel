@@ -29,7 +29,7 @@ class HargaPasaranController extends Controller
             'cart' => $cart,
             'col_harga_pasarans' => $col_harga_pasarans,
         ];
-
+        // dd($col_harga_pasarans);
         return view('attributes.harga_pasaran_index', $data);
     }
 

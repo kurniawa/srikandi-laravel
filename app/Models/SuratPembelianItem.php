@@ -142,11 +142,14 @@ class SuratPembelianItem extends Model
             'kode_accounting' => $kode_accounting,
             'surat_pembelian_id' => $surat_pembelian->id,
             'surat_pembelian_item_id' => $surat_pembelian_item->id,
-            'nama_barang' => $surat_pembelian_item->shortname,
+            'nama_barang' => $surat_pembelian_item->longname,
+            'kadar' => $surat_pembelian_item->kadar,
+            'berat' => $surat_pembelian_item->berat,
             'user_id' => $user->id,
             'tipe' => 'pemasukan',
             'kategori' => 'Penjualan Barang',
             'kategori_2' => $kategori_2,
+            'deskripsi' => null,
             'jumlah' => $surat_pembelian_item->harga_t,
         ]);
         // END - ACCOUNTING

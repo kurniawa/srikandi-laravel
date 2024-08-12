@@ -126,12 +126,14 @@ class TransactionController extends Controller
             $gol_kadars = $bb_accountings_this_groupByKadar->keys()->toArray();
             $total_berats = array();
             $total_hargas = array();
+            $grand_total = 0;
             foreach ($gol_kadars as $gol_kadar) {
                 $total_berat = 0;
                 $total_harga = 0;
                 foreach ($bb_accountings_this_groupByKadar[$gol_kadar] as $accounting) {
                     $total_berat += (int)$accounting->berat;
                     $total_harga += (int)$accounting->jumlah;
+                    $grand_total += (int)$accounting->jumlah;
                 }
                 $bb_accountings_array[$gol_kadar] = $bb_accountings_this_groupByKadar[$gol_kadar]->toArray();
                 $total_berats[] = $total_berat;
@@ -139,28 +141,46 @@ class TransactionController extends Controller
             }
 
             $bb_accountings[] = [
-                "tanggal" => $from,
+                "tanggal" => $from_str,
                 "accountings" => $bb_accountings_array,
                 "gol_kadars" => $gol_kadars,
                 "total_berats" => $total_berats,
                 "total_hargas" => $total_hargas,
+                "grand_total" => $grand_total,
             ];
             // dump($bb_accountings_this);
-            foreach ($bb_accountings_this as $bb_accounting) {
-                $surat_pembelian = SuratPembelian::find($bb_accounting->surat_pembelian_id)->toArray();
-                $surat_pembelian_item = SuratPembelianItem::find($bb_accounting->surat_pembelian_item_id)->toArray();
-                $bb_perhiasans[]=$surat_pembelian_item;
-                // dump($surat_pembelian);
-                // dump($surat_pembelian_item);
-                $cashflow = Cashflow::where("kode_accounting", $bb_accounting->kode_accounting)->first();
-                // dd($cashflow);
-            }
-    
+            
             $buy_accountings_this = Accounting::whereBetween("created_at", [$from_str, $to_str])->where('user_id', $user->id)->where('kategori_2', 'Penjualan Perhiasan')->orderBy("kadar")->get();
-            foreach ($buy_accountings_this as $buy_accounting) {
-                $surat_pembelian_item = SuratPembelianItem::find($buy_accounting->surat_pembelian_item_id)->toArray();
-                $buy_perhiasans[]=$surat_pembelian_item;
+            $buy_accountings_this_groupByKadar = $buy_accountings_this->groupBy('kadar');
+            // dump($buy_accountings_this->groupBy("kadar"));
+            // dump($buy_accountings_this->groupBy("kadar")->keys());
+            $bb_accountings_array = array();
+            $gol_kadars = $buy_accountings_this_groupByKadar->keys()->toArray();
+            $total_berats = array();
+            $total_hargas = array();
+            $grand_total = 0;
+            foreach ($gol_kadars as $gol_kadar) {
+                $total_berat = 0;
+                $total_harga = 0;
+                foreach ($buy_accountings_this_groupByKadar[$gol_kadar] as $accounting) {
+                    $total_berat += (int)$accounting->berat;
+                    $total_harga += (int)$accounting->jumlah;
+                    $grand_total += (int)$accounting->jumlah;
+                }
+                $bb_accountings_array[$gol_kadar] = $buy_accountings_this_groupByKadar[$gol_kadar]->toArray();
+                $total_berats[] = $total_berat;
+                $total_hargas[] = $total_harga;
             }
+
+            $bb_accountings[] = [
+                "tanggal" => $from_str,
+                "accountings" => $bb_accountings_array,
+                "gol_kadars" => $gol_kadars,
+                "total_berats" => $total_berats,
+                "total_hargas" => $total_hargas,
+                "grand_total" => $grand_total,
+            ];
+
             $from_time_temp += 86400;
             $to_time_temp += 86400;
         }
@@ -175,13 +195,14 @@ class TransactionController extends Controller
             'cart' => $cart,
             'user' => $user,
             'bb_accountings' => $bb_accountings,
-            'bb_perhiasans' => $bb_perhiasans,
+            // 'bb_perhiasans' => $bb_perhiasans,
             'buy_accountings' => $buy_accountings,
-            'buy_perhiasans' => $buy_perhiasans,
+            // 'buy_perhiasans' => $buy_perhiasans,
             'tanggal' => $tanggal,
         ];
-
-        dd($bb_accountings);
+        // dd(strtotime("2024-07-25 08:08:08"));
+        // dd($bb_accountings);
+        dd($buy_accountings);
 
         return view('transactions.rincian', $data);
     }

@@ -14,8 +14,8 @@ class HargaPasaranSeeder extends Seeder
     public function run(): void
     {
         $harga_pasarans = [
-            ['kategori' => '24 ct 99%', 'kadar' => 9900, 'harga_beli' => 123250000, 'harga_buyback' => 119000000, 'created_at' => '2024-07-15 00:00:00'], // spread harga sekitar 3,4%
-            ['kategori' => 'LM Antam Certi (2024)', 'kadar' => 9999, 'harga_beli' => 133500000, 'harga_buyback' => 129000000, 'created_at' => '2024-07-15 00:00:00'],
+            ['kategori' => '24 ct 99%', 'kadar' => "9900", 'harga_beli' => "123250000", 'harga_buyback' => "119000000", 'created_at' => '2024-07-15 00:00:00'], // spread harga sekitar 3,4%
+            ['kategori' => 'LM Antam Certi (2024)', 'kadar' => "9999", 'harga_beli' => "133500000", 'harga_buyback' => "129000000", 'created_at' => '2024-07-15 00:00:00'],
         ];
 
         foreach ($harga_pasarans as $harga_pasaran) {
