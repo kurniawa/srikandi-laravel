@@ -74,7 +74,7 @@
                 </div>
             </div>
         </div>
-        <table class="w-full mt-5 text-slate-500">
+        <table class="w-full mt-5 text-slate-500 text-sm">
             @foreach ($pelanggans as $key => $pelanggan)
                 <tr class="border-t">
                     <td class="py-2">
@@ -88,8 +88,7 @@
                     </td>
                     <td class="py-2">
                         <div class="flex justify-end">
-                            <a href="{{ route('pelanggans.show', $pelanggan->id) }}"
-                                class="bg-orange-300 text-white rounded px-2">Detail</a>
+                            <a href="{{ route('pelanggans.show', $pelanggan->id) }}" class="bg-orange-300 text-white rounded px-2 text-base">Detail</a>
                         </div>
                     </td>
                 </tr>

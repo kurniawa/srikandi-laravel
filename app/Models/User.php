@@ -122,4 +122,13 @@ class User extends Authenticatable
             }
         }
     }
+
+    static function delete_user_validation($request, $user)
+    {
+        // Yang berhak mengubah data user adalah user admin
+        $auth_user = Auth::user();
+        if ($auth_user->clearance_level <= $user->clearance_level) {
+            $request->validate(['error' => 'required'], ['error.required' => '-You are not authorized-']);
+        }
+    }
 }

@@ -28,9 +28,9 @@ return new class extends Migration
             $table->bigInteger('harga_total');
             $table->bigInteger('total_bayar');
             $table->bigInteger('sisa_bayar');
+            $table->string('status_bayar', 20); // ['lunas','belum-lunas']
             $table->string('status_buyback', 20)->nullable(); // nullable untuk barang yang bukan perhiasan -> [null,'all','sebagian']
             $table->bigInteger('total_buyback')->nullable();
-            $table->string('status_bayar', 20); // ['lunas','belum-lunas']
             // $table->enum('status_terima_bb',['lunas','belum-lunas'])->nullable();
             $table->timestamp('tanggal_buyback')->nullable(); // tanggal kapan terjual semua
             $table->foreignId('updated_by')->nullable()->constrained('users','id')->onDelete('set null');

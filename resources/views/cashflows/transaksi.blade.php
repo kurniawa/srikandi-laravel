@@ -102,7 +102,7 @@
         const div_category_2 = document.getElementById('div-category-2');
         if (categories_2.length) {
             // console.log('ada kategori 2');
-            let html_select_category_2 = '<label class="font-bold">Kategori-2</label><div><select class="p-2 rounded-lg"><option value="">-</option>';
+            let html_select_category_2 = '<label class="font-bold">Kategori-2</label><div><select name="kategori_2" class="p-2 rounded-lg"><option value="">-</option>';
             categories_2.forEach(category => {
                 html_select_category_2 += `<option value="${category}">${category}</option>`
             });

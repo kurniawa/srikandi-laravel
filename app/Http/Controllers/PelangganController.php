@@ -62,7 +62,10 @@ class PelangganController extends Controller
     function pelanggans_create()
     {
         $user = Auth::user();
-        $cart = Cart::where('user_id', $user->id)->first();
+        $cart = null;
+        if ($user) {
+            $cart = Cart::where('user_id', $user->id)->first();
+        }
         $pelanggans = User::where('clearance_level', 1)->orderBy('nama')->get();
 
         $data = [
@@ -220,7 +223,10 @@ class PelangganController extends Controller
     function edit(User $pelanggan)
     {
         $user = Auth::user();
-        $cart = Cart::where('user_id', $user->id)->first();
+        $cart = null;
+        if ($user) {
+            $cart = Cart::where('user_id', $user->id)->first();
+        }
         $data = [
             'menus' => Menu::get(),
             'route_now' => 'pelanggans.show',
@@ -276,17 +282,20 @@ class PelangganController extends Controller
     {
         // dd($pelanggan);
         $user = Auth::user();
-        $cart = Cart::where('user_id', $user->id)->first();
+        $cart = null;
+        if ($user) {
+            $cart = Cart::where('user_id', $user->id)->first();
+        }
 
         $data = [
             'menus' => Menu::get(),
-            'route_now' => 'pelanggans.edit_profile_picture',
+            // 'route_now' => 'pelanggans.edit_profile_picture',
             'profile_menus' => Menu::get_profile_menus($user),
-            'parent_route' => 'home',
+            // 'parent_route' => 'home',
             // 'spk_menus' => Menu::get_spk_menus(),
-            'back' => true,
-            'backRoute' => 'pelanggans.show',
-            'backRouteParams' => [$pelanggan->id],
+            // 'back' => true,
+            // 'backRoute' => 'pelanggans.show',
+            // 'backRouteParams' => [$pelanggan->id],
             'cart' => $cart,
             'user' => $user,
             'pelanggan' => $pelanggan,
@@ -400,9 +409,10 @@ class PelangganController extends Controller
         return back()->with($feedback);
     }
 
-    function delete(User $pelanggan)
+    function delete(User $pelanggan, Request $request)
     {
         // dd($pelanggan);
+        User::delete_user_validation($request, $pelanggan);
         $dangers_ = "";
         if ($pelanggan->profile_picture_path) {
             if (Storage::exists($pelanggan->profile_picture_path)) {
@@ -431,7 +441,10 @@ class PelangganController extends Controller
     function change_password(User $pelanggan)
     {
         $user = Auth::user();
-        $cart = Cart::where('user_id', $user->id)->first();
+        $cart = null;
+        if ($user) {
+            $cart = Cart::where('user_id', $user->id)->first();
+        }
         $data = [
             'menus' => Menu::get(),
             'route_now' => 'pelanggans.show',

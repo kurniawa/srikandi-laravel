@@ -5,11 +5,11 @@
         <x-validation-feedback></x-validation-feedback>
 
         <div>
-            @if ($user->profile_picture_path)
+            @if ($user_this->profile_picture_path)
                 <div class="w-full">
-                    <img src="{{ asset('storage/' . $user->profile_picture_path) }}" alt="item_photo" class="w-full">
+                    <img src="{{ asset('storage/' . $user_this->profile_picture_path) }}" alt="item_photo" class="w-full">
                 </div>
-                <form action="{{ route('users.delete_profile_picture', $user->id) }}" method="POST"
+                <form action="{{ route('users.delete_profile_picture', $user_this->id) }}" method="POST"
                     onsubmit="return confirm('Anda yakin ingin hapus foto user ini?')" class="mt-3">
                     @csrf
                     <div class="flex justify-center">
@@ -24,7 +24,7 @@
                     </div>
                 </form>
             @else
-                <form method="POST" action="{{ route('users.update_profile_picture', $user->id) }}" class="mb-1"
+                <form method="POST" action="{{ route('users.update_profile_picture', $user_this->id) }}" class="mb-1"
                     enctype="multipart/form-data">
                     @csrf
                     {{-- PROFILE PICTURE --}}

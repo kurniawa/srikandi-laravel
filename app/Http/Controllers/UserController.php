@@ -57,7 +57,9 @@ class UserController extends Controller
 
         $request->validate([
             "nama" => "required|string",
+            "username" => "nullable|string",
             "nik" => "nullable|numeric",
+            "nomor_wa" => "nullable|numeric",
             "email" => "nullable|email",
         ]);
 
@@ -115,12 +117,28 @@ class UserController extends Controller
         if (isset($post["gender"])) {
             $gender = $post["gender"];
         }
+
+        $nik = null;
+        if (isset($post["nik"])) {
+            $nik = $post["nik"];
+        }
+
+        $nomor_wa = null;
+        if (isset($post["nomor_wa"])) {
+            $nomor_wa = $post["nomor_wa"];
+        }
+        $role = "Admin";
+        $clearance_level = 3;
+
         $user = Auth::user();
         $user = User::create([
             "nama" => $post["nama"],
             "username" => $username,
+            "nik" => $nik,
+            "nomor_wa" => $nomor_wa,
             "password" => $password,
-            "nik" => $post["nik"],
+            "role" => $role,
+            "clearance_level" => $clearance_level,
             "gender" => $gender,
             "profile_picture_path" => $profile_picture_path,
             "id_photo_path" => $id_photo_path,
@@ -150,9 +168,13 @@ class UserController extends Controller
         return redirect()->route('users.show', $user->id)->with($feedback);
     }
 
-    function show(User $user)
+    function show(User $user_this)
     {
-        $cart = Cart::where('user_id', $user->id)->first();
+        $user = Auth::user();
+        $cart = null;
+        if ($user) {
+            $cart = Cart::where('user_id', $user->id)->first();
+        }
         list($surat_pembelians, $arr_surat_pembelian_items) = User::histori_pembelian($user);
         // dd($user->kontaks);
         // dd($user->alamats);
@@ -161,28 +183,33 @@ class UserController extends Controller
             'profile_menus' => Menu::get_profile_menus($user),
             'cart' => $cart,
             'user' => $user,
+            'user_this' => $user_this,
             'surat_pembelians' => $surat_pembelians,
             'arr_surat_pembelian_items' => $arr_surat_pembelian_items,
         ];
-
+        // dd($user_this);
         return view('users.show', $data);
     }
 
-    function edit(User $user)
+    function edit(User $user_this)
     {
-        $auth_user = Auth::user();
-        $cart = Cart::where('user_id', $auth_user->id)->first();
+        $user = Auth::user();
+        $cart = null;
+        if ($user) {
+            $cart = Cart::where('user_id', $user->id)->first();
+        }
         $data = [
             'menus' => Menu::get(),
             'profile_menus' => Menu::get_profile_menus($user),
             'cart' => $cart,
             'user' => $user,
+            'user_this' => $user_this,
         ];
 
         return view('users.edit', $data);
     }
 
-    function update(User $user, Request $request)
+    function update(User $user_this, Request $request)
     {
         $post = $request->post();
         // dump($user);
@@ -193,7 +220,7 @@ class UserController extends Controller
             "email" => "nullable|email",
         ]);
 
-        User::edit_user_validation($request, $user);
+        User::edit_user_validation($request, $user_this);
 
         $success_ = "";
 
@@ -202,7 +229,7 @@ class UserController extends Controller
             $gender = $post['gender'];
         }
 
-        $user->update([
+        $user_this->update([
             "nama" => $post["nama"],
             // "username" => $post['username'], // Username tidak boleh sembarang diganti
             "nik" => $post["nik"],
@@ -212,32 +239,36 @@ class UserController extends Controller
 
         $success_ .= '-data user diupdate-';
 
-        UserAlamat::update_alamat($post, $user);
-        UserKontak::update_kontak($post, $user);
+        UserAlamat::update_alamat($post, $user_this);
+        UserKontak::update_kontak($post, $user_this);
 
         $feedback = [
             'success_' => $success_
         ];
-        return redirect()->route('users.show', $user->id)->with($feedback);
+        return redirect()->route('users.show', $user_this->id)->with($feedback);
     }
 
-    function edit_profile_picture(User $user)
+    function edit_profile_picture(User $user_this)
     {
         // dd($user);
-        $auth_user = Auth::user();
-        $cart = Cart::where('user_id', $auth_user->id)->first();
+        $user = Auth::user();
+        $cart = null;
+        if ($user) {
+            $cart = Cart::where('user_id', $user->id)->first();
+        }
 
         $data = [
             'menus' => Menu::get(),
             'profile_menus' => Menu::get_profile_menus($user),
             'cart' => $cart,
             'user' => $user,
+            'user_this' => $user_this,
         ];
 
         return view('users.edit_profile_picture', $data);
     }
 
-    function update_profile_picture(User $user, Request $request)
+    function update_profile_picture(User $user_this, Request $request)
     {
         // $post = $request->post();
         $file_photo = $request->file('photo');
@@ -253,13 +284,13 @@ class UserController extends Controller
         $success_ = "";
 
         $time = time();
-        $file_name = $user->id . "-" . $time . "." . $file_photo->extension();
+        $file_name = $user_this->id . "-" . $time . "." . $file_photo->extension();
         $file_photo->storeAs('users/profile_pictures', $file_name);
 
-        $user->profile_picture_path = "users/profile_pictures/$file_name";
-        $user->save();
+        $user_this->profile_picture_path = "users/profile_pictures/$file_name";
+        $user_this->save();
 
-        $success_ .= "-user->profile_picture_path $user->profile_picture_path created-";
+        $success_ .= "-user->profile_picture_path $user_this->profile_picture_path created-";
 
         $feedback = [
             "success_" => $success_
@@ -268,16 +299,16 @@ class UserController extends Controller
         return back()->with($feedback);
     }
 
-    function delete_profile_picture(User $user)
+    function delete_profile_picture(User $user_this)
     {
         $warnings_ = "";
-        if (Storage::exists($user->profile_picture_path)) {
-            Storage::delete($user->profile_picture_path);
+        if (Storage::exists($user_this->profile_picture_path)) {
+            Storage::delete($user_this->profile_picture_path);
         }
         $warnings_ .= "-File Profile Picture dihapus-";
 
-        $user->profile_picture_path = null;
-        $user->save();
+        $user_this->profile_picture_path = null;
+        $user_this->save();
 
         $warnings_ .= "-Data user diupdate-";
 
@@ -288,7 +319,7 @@ class UserController extends Controller
         return back()->with($feedback);
     }
 
-    function update_id_photo(User $user, Request $request)
+    function update_id_photo(User $user_this, Request $request)
     {
         // $post = $request->post();
         $file_photo = $request->file('photo');
@@ -304,13 +335,13 @@ class UserController extends Controller
         $success_ = "";
 
         $time = time();
-        $file_name = $user->id . "-" . $time . "." . $file_photo->extension();
+        $file_name = $user_this->id . "-" . $time . "." . $file_photo->extension();
         $file_photo->storeAs('users/id_photos', $file_name);
 
-        $user->id_photo_path = "users/id_photos/$file_name";
-        $user->save();
+        $user_this->id_photo_path = "users/id_photos/$file_name";
+        $user_this->save();
 
-        $success_ .= "-user->id_photo_path $user->id_photo_path created-";
+        $success_ .= "-user->id_photo_path $user_this->id_photo_path created-";
 
         $feedback = [
             "success_" => $success_
@@ -319,16 +350,16 @@ class UserController extends Controller
         return back()->with($feedback);
     }
 
-    function delete_id_photo(User $user)
+    function delete_id_photo(User $user_this)
     {
         $warnings_ = "";
-        if (Storage::exists($user->id_photo_path)) {
-            Storage::delete($user->id_photo_path);
+        if (Storage::exists($user_this->id_photo_path)) {
+            Storage::delete($user_this->id_photo_path);
         }
         $warnings_ .= "-File ID Photo dihapus-";
 
-        $user->id_photo_path = null;
-        $user->save();
+        $user_this->id_photo_path = null;
+        $user_this->save();
 
         $warnings_ .= "-Data user diupdate-";
 
@@ -339,25 +370,27 @@ class UserController extends Controller
         return back()->with($feedback);
     }
 
-    function delete(User $user)
+    function delete(User $user_this, Request $request)
     {
-        // dd($user);
+        // dd($user_this);
+        User::delete_user_validation($request, $user_this);
+
         $dangers_ = "";
-        if ($user->profile_picture_path) {
-            if (Storage::exists($user->profile_picture_path)) {
-                Storage::delete($user->profile_picture_path);
+        if ($user_this->profile_picture_path) {
+            if (Storage::exists($user_this->profile_picture_path)) {
+                Storage::delete($user_this->profile_picture_path);
             }
             $dangers_ .= "-ProfilePicture dihapus-";
         }
 
-        if ($user->id_photo_path) {
-            if (Storage::exists($user->id_photo_path)) {
-                Storage::delete($user->id_photo_path);
+        if ($user_this->id_photo_path) {
+            if (Storage::exists($user_this->id_photo_path)) {
+                Storage::delete($user_this->id_photo_path);
             }
             $dangers_ .= "-ID-Photo dihapus-";
         }
 
-        $user->delete();
+        $user_this->delete();
         $dangers_ .= "-Data user dihapus-";
 
         $feedback = [
@@ -367,24 +400,29 @@ class UserController extends Controller
         return redirect()->route("users.index")->with($feedback);
     }
 
-    function change_password(User $user)
+    function change_password(User $user_this)
     {
-        $cart = Cart::where('user_id', $user->id)->first();
+        $user = Auth::user();
+        $cart = null;
+        if ($user) {
+            $cart = Cart::where('user_id', $user->id)->first();
+        }
         $data = [
             'menus' => Menu::get(),
             'profile_menus' => Menu::get_profile_menus($user),
             'cart' => $cart,
             'user' => $user,
+            'user_this' => $user_this,
         ];
 
         return view('users.change_password', $data);
     }
 
-    function update_password(User $user, Request $request)
+    function update_password(User $user_this, Request $request)
     {
         // $post = $request->post();
         // dump($post);
-        // dd($user);
+        // dd($user_this);
         # Validation
         $request->validate([
             'old_password' => 'required',
@@ -393,16 +431,16 @@ class UserController extends Controller
 
 
         #Match The Old Password
-        // dump($user);
-        // dump($user->password);
-        // dd(Hash::check($request->old_password, $user->password));
-        if (!Hash::check($request->old_password, $user->password)) {
+        // dump($user_this);
+        // dump($user_this->password);
+        // dd(Hash::check($request->old_password, $user_this->password));
+        if (!Hash::check($request->old_password, $user_this->password)) {
             return back()->with("errors_", "Old Password Doesn't match!");
         }
 
 
         #Update the new Password
-        User::whereId($user->id)->update([
+        User::whereId($user_this->id)->update([
             'password' => Hash::make($request->new_password)
         ]);
 

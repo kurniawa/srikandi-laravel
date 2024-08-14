@@ -77,19 +77,19 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/users/index', 'index')->name('users.index')->middleware('level3');
     Route::get('/users/create', 'users_create')->name('users.create')->middleware('level5');
     Route::post('/users/store', 'users_store')->name('users.store')->middleware('level5');
-    Route::get('/users/{user}/show', 'show')->name('users.show')->middleware('level3');
-    Route::get('/users/{user}/profile', 'profile')->name('users.profile')->middleware('level3');
-    Route::get('/users/{user}/edit', 'edit')->name('users.edit')->middleware('level3');
-    Route::post('/users/{user}/update', 'update')->name('users.update')->middleware('level3');
-    Route::get('/users/{user}/edit_profile_picture', 'edit_profile_picture')->name('users.edit_profile_picture')->middleware('level3');
-    Route::post('/users/{user}/update_profile_picture', 'update_profile_picture')->name('users.update_profile_picture')->middleware('level3');
-    Route::post('/users/{user}/update_id_photo', 'update_id_photo')->name('users.update_id_photo')->middleware('level3');
-    Route::post('/users/{user}/delete_profile_picture', 'delete_profile_picture')->name('users.delete_profile_picture')->middleware('level3');
-    Route::post('/users/{user}/delete_id_photo', 'delete_id_photo')->name('users.delete_id_photo')->middleware('level3');
-    Route::post('/users/{user}/delete', 'delete')->name('users.delete')->middleware('level3');
-    Route::get('/users/{user}/list_of_items', 'list_of_items')->name('users.list_of_items')->middleware('level3');
-    Route::get('/users/{user}/change_password', 'change_password')->name('users.change_password')->middleware('level3');
-    Route::post('/users/{user}/update_password', 'update_password')->name('users.update_password')->middleware('level3');
+    Route::get('/users/{user_this}/show', 'show')->name('users.show')->middleware('level3');
+    // Route::get('/users/{user}/profile', 'profile')->name('users.profile')->middleware('level3');
+    Route::get('/users/{user_this}/edit', 'edit')->name('users.edit')->middleware('level3');
+    Route::post('/users/{user_this}/update', 'update')->name('users.update')->middleware('level3');
+    Route::get('/users/{user_this}/edit_profile_picture', 'edit_profile_picture')->name('users.edit_profile_picture')->middleware('level3');
+    Route::post('/users/{user_this}/update_profile_picture', 'update_profile_picture')->name('users.update_profile_picture')->middleware('level3');
+    Route::post('/users/{user_this}/update_id_photo', 'update_id_photo')->name('users.update_id_photo')->middleware('level3');
+    Route::post('/users/{user_this}/delete_profile_picture', 'delete_profile_picture')->name('users.delete_profile_picture')->middleware('level3');
+    Route::post('/users/{user_this}/delete_id_photo', 'delete_id_photo')->name('users.delete_id_photo')->middleware('level3');
+    Route::post('/users/{user_this}/delete', 'delete')->name('users.delete')->middleware('level3');
+    Route::get('/users/{user_this}/list_of_items', 'list_of_items')->name('users.list_of_items')->middleware('level3');
+    Route::get('/users/{user_this}/change_password', 'change_password')->name('users.change_password')->middleware('level3');
+    Route::post('/users/{user_this}/update_password', 'update_password')->name('users.update_password')->middleware('level3');
 });
 
 Route::controller(ItemController::class)->group(function () {

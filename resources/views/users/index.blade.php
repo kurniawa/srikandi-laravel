@@ -9,11 +9,11 @@
                 <h1 class="text-xl font-bold text-slate-500">Daftar User</h1>
             </div>
             <div>
-                <a href="{{ route('users.create', $user->id) }}"
+                <a href="{{ route('users.create') }}"
                     class="bg-emerald-300 text-white font-bold rounded-lg px-2 py-1">+ NEW</a>
             </div>
         </div>
-        <table class="w-full mt-5 text-slate-500">
+        <table class="w-full mt-5 text-slate-500 text-sm">
             @foreach ($users as $key => $user)
                 <tr class="border-t">
                     <td class="py-2">
@@ -27,8 +27,7 @@
                     </td>
                     <td class="py-2">
                         <div class="flex justify-end">
-                            <a href="{{ route('users.show', $user->id) }}"
-                                class="bg-yellow-400 text-white rounded px-2">Detail</a>
+                            <a href="{{ route('users.show', $user->id) }}" class="bg-yellow-400 text-white rounded px-2 text-base">Detail</a>
                         </div>
                     </td>
                 </tr>

@@ -18,13 +18,13 @@
             </div>
         </div>
 
-        @if ($user->profile_picture_path)
+        @if ($user_this->profile_picture_path)
             <div class="flex justify-center mt-5">
                 <div class="bg-slate-50 shadow drop-shadow text-slate-400 w-3/4 rounded-full overflow-hidden">
-                    <img src="{{ asset('storage/' . $user->profile_picture_path) }}" alt="">
+                    <img src="{{ asset('storage/' . $user_this->profile_picture_path) }}" alt="">
                 </div>
             </div>
-            <form action="{{ route('users.delete_profile_picture', $user->id) }}" method="POST"
+            <form action="{{ route('users.delete_profile_picture', $user_this->id) }}" method="POST"
                 onsubmit="return confirm('Yakin ingin hapus Profile Picture ini?')" class="mt-2">
                 @csrf
                 <div class="flex justify-center">
@@ -42,7 +42,7 @@
                     </svg>
                 </div>
             </div>
-            <form method="POST" action="{{ route('users.update_profile_picture', $user->id) }}" class="mb-1"
+            <form method="POST" action="{{ route('users.update_profile_picture', $user_this->id) }}" class="mb-1"
                 enctype="multipart/form-data">
                 @csrf
                 {{-- PROFILE PICTURE --}}
@@ -93,7 +93,7 @@
             </form>
         @endif
         {{-- <div class="flex justify-end">
-        <a href="{{ route("users.edit_profile_picture", [$user->id]) }}" class="text-slate-400" >
+        <a href="{{ route("users.edit_profile_picture", [$user_this->id]) }}" class="text-slate-400" >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
             </svg>
@@ -103,18 +103,18 @@
         <div class="mx-2">
             <div class="mt-5">
                 <label class="text-slate-500">Nama :</label>
-                <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">{{ $user->nama }}</div>
+                <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">{{ $user_this->nama }}</div>
             </div>
 
             <div class="mt-3">
                 <label class="text-slate-500">Username :</label>
-                <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">{{ $user->username }}</div>
+                <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">{{ $user_this->username }}</div>
             </div>
 
             <div class="mt-3">
                 <label class="text-slate-500">Gender :</label>
-                @if ($user->gender)
-                    <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">{{ $user->gender }}</div>
+                @if ($user_this->gender)
+                    <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">{{ $user_this->gender }}</div>
                 @else
                     <span>-</span>
                 @endif
@@ -122,8 +122,8 @@
 
             <div class="mt-3">
                 <label class="text-slate-500">NIK / Nomor ID :</label>
-                @if ($user->nik)
-                    <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">{{ $user->nik }}</div>
+                @if ($user_this->nik)
+                    <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">{{ $user_this->nik }}</div>
                 @else
                     <span>-</span>
                 @endif
@@ -131,9 +131,9 @@
 
             <div class="mt-3">
                 <label class="text-slate-500">No. WA :</label>
-                @if (count($user->kontaks))
+                @if (count($user_this->kontaks))
                     <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">
-                        {{ $user->kontaks[0]->nomor }}
+                        {{ $user_this->kontaks[0]->nomor }}
                     </div>
                 @else
                     <span>-</span>
@@ -142,8 +142,8 @@
 
             <div class="mt-3">
                 <label class="text-slate-500">Email :</label>
-                @if ($user->email)
-                    <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">{{ $user->email }}</div>
+                @if ($user_this->email)
+                    <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">{{ $user_this->email }}</div>
                 @else
                     <span>-</span>
                 @endif
@@ -151,27 +151,27 @@
 
             <div class="mt-3">
                 <label class="text-slate-500">Alamat :</label>
-                @if (count($user->alamats))
+                @if (count($user_this->alamats))
                     <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">
-                        <div>{{ $user->alamats[0]->alamat_baris_1 }}</div>
-                        <div>{{ $user->alamats[0]->alamat_baris_2 }}</div>
-                        <div>{{ $user->alamats[0]->alamat_baris_3 }}</div>
+                        <div>{{ $user_this->alamats[0]->alamat_baris_1 }}</div>
+                        <div>{{ $user_this->alamats[0]->alamat_baris_2 }}</div>
+                        <div>{{ $user_this->alamats[0]->alamat_baris_3 }}</div>
                     </div>
                     <div class="grid grid-cols-2 gap-2 mt-3">
                         <div>
                             <label class="text-slate-500">Provinsi :</label>
-                            @if ($user->alamats[0]->provinsi)
+                            @if ($user_this->alamats[0]->provinsi)
                                 <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">
-                                    {{ $user->alamats[0]->provinsi }}</div>
+                                    {{ $user_this->alamats[0]->provinsi }}</div>
                             @else
                                 <span>-</span>
                             @endif
                         </div>
                         <div>
                             <label class="text-slate-500">Kota :</label>
-                            @if ($user->alamats[0]->kota)
+                            @if ($user_this->alamats[0]->kota)
                                 <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">
-                                    {{ $user->alamats[0]->kota }}
+                                    {{ $user_this->alamats[0]->kota }}
                                 </div>
                             @else
                                 <span>-</span>
@@ -179,9 +179,9 @@
                         </div>
                         <div>
                             <label class="text-slate-500">Kode POS :</label>
-                            @if ($user->alamats[0]->kodepos)
+                            @if ($user_this->alamats[0]->kodepos)
                                 <div class="border border-slate-300 rounded p-2 font-bold text-slate-400">
-                                    {{ $user->alamats[0]->kodepos }}</div>
+                                    {{ $user_this->alamats[0]->kodepos }}</div>
                             @else
                                 <span>-</span>
                             @endif
@@ -194,7 +194,7 @@
         </div>
 
         <div class="flex justify-center mt-5">
-            <a href="{{ route('users.edit', $user->id) }}"
+            <a href="{{ route('users.edit', $user_this->id) }}"
                 class="loading-spinner bg-slate-300 text-white p-2 rounded-lg font-bold flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                     stroke="currentColor" class="size-6">
@@ -205,7 +205,7 @@
             </a>
         </div>
         <div class="flex justify-center mt-2">
-            <a href="{{ route('users.change_password', $user->id) }}"
+            <a href="{{ route('users.change_password', $user_this->id) }}"
                 class="loading-spinner bg-indigo-300 text-white p-2 rounded-lg font-bold flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                     stroke="currentColor" class="size-5">
@@ -215,7 +215,7 @@
                 <span>Change Password</span>
             </a>
         </div>
-        <form action="{{ route('users.delete', $user->id) }}" method="POST" class="mt-2"
+        <form action="{{ route('users.delete', $user_this->id) }}" method="POST" class="mt-2"
             onsubmit="return confirm('Yakin ingin hapus user ini?')">
             @csrf
             <div class="flex justify-center">
@@ -230,13 +230,13 @@
             </div>
         </form>
 
-        @if ($user->id_photo_path)
+        @if ($user_this->id_photo_path)
             <div class="flex justify-center mt-5">
                 <div class="border-2 text-slate-400 w-4/5 p-2 rounded-lg">
-                    <img src="{{ asset('storage/' . $user->id_photo_path) }}" alt="">
+                    <img src="{{ asset('storage/' . $user_this->id_photo_path) }}" alt="">
                 </div>
             </div>
-            <form action="{{ route('users.delete_id_photo', $user->id) }}" method="POST"
+            <form action="{{ route('users.delete_id_photo', $user_this->id) }}" method="POST"
                 onsubmit="return confirm('Yakin ingin hapus ID Photo ini?')" class="mt-2">
                 @csrf
                 <div class="flex justify-center">
@@ -254,7 +254,7 @@
                 </div>
             </div>
             {{-- ID PICTURE / PHOTO --}}
-            <form method="POST" action="{{ route('users.update_id_photo', $user->id) }}" class="mb-1"
+            <form method="POST" action="{{ route('users.update_id_photo', $user_this->id) }}" class="mb-1"
                 enctype="multipart/form-data">
                 @csrf
                 <div id="div-preview-id-photo" class="mt-3 hidden">

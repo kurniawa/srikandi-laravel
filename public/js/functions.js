@@ -117,7 +117,7 @@ function set_time_range(timerange) {
         from_day = 1;
         from_month = date.getMonth();
         from_year = date.getFullYear();
-        to_month = date.getMonth() + 1;
+        to_month = date.getMonth();
         to_year = date.getFullYear();
         to_day = new Date(to_year, to_month, 0).getDate();
         if (from_month === 0) {

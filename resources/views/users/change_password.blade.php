@@ -18,7 +18,7 @@
             </div>
         </div>
 
-        <form method="POST" action="{{ route('users.update_password', $user->id) }}"
+        <form method="POST" action="{{ route('users.update_password', $user_this->id) }}"
             class="p-5 border rounded bg-white shadow drop-shadow mt-2">
             @csrf
             <div class="">
@@ -51,7 +51,7 @@
                     Password</button>
             </div>
             <div class="mt-3 text-center">
-                <a href="{{ route('users.show', $user->id) }}"
+                <a href="{{ route('users.show', $user_this->id) }}"
                     class="loading-spinner bg-rose-300 rounded text-white font-bold px-3 py-2 hover:bg-rose-400 disabled:opacity-25">Cancel</a>
             </div>
         </form>

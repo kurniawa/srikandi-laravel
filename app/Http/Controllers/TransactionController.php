@@ -50,10 +50,8 @@ class TransactionController extends Controller
 
         // dump($golongan_kadar);
         $bb_accountings = array();
-        $bb_perhiasans = array();
 
         $buy_accountings = array();
-        $buy_perhiasans = array();
 
         $tanggal = null;
         $from_day = date("d");
@@ -140,21 +138,23 @@ class TransactionController extends Controller
                 $total_hargas[] = $total_harga;
             }
 
-            $bb_accountings[] = [
-                "tanggal" => $from_str,
-                "accountings" => $bb_accountings_array,
-                "gol_kadars" => $gol_kadars,
-                "total_berats" => $total_berats,
-                "total_hargas" => $total_hargas,
-                "grand_total" => $grand_total,
-            ];
+            if (count($bb_accountings_array)) {
+                $bb_accountings[] = [
+                    "tanggal" => $from_str,
+                    "accountings" => $bb_accountings_array,
+                    "gol_kadars" => $gol_kadars,
+                    "total_berats" => $total_berats,
+                    "total_hargas" => $total_hargas,
+                    "grand_total" => $grand_total,
+                ];
+            }
             // dump($bb_accountings_this);
             
             $buy_accountings_this = Accounting::whereBetween("created_at", [$from_str, $to_str])->where('user_id', $user->id)->where('kategori_2', 'Penjualan Perhiasan')->orderBy("kadar")->get();
             $buy_accountings_this_groupByKadar = $buy_accountings_this->groupBy('kadar');
             // dump($buy_accountings_this->groupBy("kadar"));
             // dump($buy_accountings_this->groupBy("kadar")->keys());
-            $bb_accountings_array = array();
+            $buy_accountings_array = array();
             $gol_kadars = $buy_accountings_this_groupByKadar->keys()->toArray();
             $total_berats = array();
             $total_hargas = array();
@@ -167,19 +167,20 @@ class TransactionController extends Controller
                     $total_harga += (int)$accounting->jumlah;
                     $grand_total += (int)$accounting->jumlah;
                 }
-                $bb_accountings_array[$gol_kadar] = $buy_accountings_this_groupByKadar[$gol_kadar]->toArray();
+                $buy_accountings_array[$gol_kadar] = $buy_accountings_this_groupByKadar[$gol_kadar]->toArray();
                 $total_berats[] = $total_berat;
                 $total_hargas[] = $total_harga;
             }
-
-            $bb_accountings[] = [
-                "tanggal" => $from_str,
-                "accountings" => $bb_accountings_array,
-                "gol_kadars" => $gol_kadars,
-                "total_berats" => $total_berats,
-                "total_hargas" => $total_hargas,
-                "grand_total" => $grand_total,
-            ];
+            if (count($buy_accountings_array)) {
+                $buy_accountings[] = [
+                    "tanggal" => $from_str,
+                    "accountings" => $buy_accountings_array,
+                    "gol_kadars" => $gol_kadars,
+                    "total_berats" => $total_berats,
+                    "total_hargas" => $total_hargas,
+                    "grand_total" => $grand_total,
+                ];
+            }
 
             $from_time_temp += 86400;
             $to_time_temp += 86400;
@@ -201,8 +202,8 @@ class TransactionController extends Controller
             'tanggal' => $tanggal,
         ];
         // dd(strtotime("2024-07-25 08:08:08"));
-        // dd($bb_accountings);
-        dd($buy_accountings);
+        // dump($bb_accountings);
+        // dd($buy_accountings);
 
         return view('transactions.rincian', $data);
     }
