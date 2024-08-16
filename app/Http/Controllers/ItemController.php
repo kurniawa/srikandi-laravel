@@ -174,12 +174,31 @@ class ItemController extends Controller
         // $peminat_items = PeminatItem::where('item_id', $item->id)->orderBy('created_at')->get();
 
         $get = $request->query();
+        // dd($get);
         $buyback_mode = null;
+        $kategori = null;
+        $tipe_transaksi = null;
+        $keterangan_transaksi = null;
         $harga_g = null;
         $ongkos_g = null;
         $harga_t = null;
+        $total_bayar = null;
+        $sisa_bayar = null;
+        $jumlah_tunai = null;
+        $jumlah_non_tunai = array();
+        $nama_instansi = array();
+        $tipe_instansi = array();
         if (isset($get['buyback_mode'])) {
             $buyback_mode = $get['buyback_mode'];
+        }
+        if (isset($get['kategori'])) {
+            $kategori = $get['kategori'];
+        }
+        if (isset($get['tipe_transaksi'])) {
+            $tipe_transaksi = $get['tipe_transaksi'];
+        }
+        if (isset($get['keterangan_transaksi'])) {
+            $keterangan_transaksi = $get['keterangan_transaksi'];
         }
         if (isset($get['harga_g'])) {
             $harga_g = $get['harga_g'];
@@ -189,6 +208,24 @@ class ItemController extends Controller
         }
         if (isset($get['harga_t'])) {
             $harga_t = $get['harga_t'];
+        }
+        if (isset($get['total_bayar'])) {
+            $total_bayar = $get['total_bayar'];
+        }
+        if (isset($get['sisa_bayar'])) {
+            $sisa_bayar = $get['sisa_bayar'];
+        }
+        if (isset($get['jumlah_tunai'])) {
+            $jumlah_tunai = $get['jumlah_tunai'];
+        }
+        if (isset($get['jumlah_non_tunai'])) {
+            $jumlah_non_tunai = $get['jumlah_non_tunai'];
+        }
+        if (isset($get['tipe_instansi'])) {
+            $tipe_instansi = $get['tipe_instansi'];
+        }
+        if (isset($get['nama_instansi'])) {
+            $nama_instansi = $get['nama_instansi'];
         }
 
         $data = [
@@ -206,9 +243,18 @@ class ItemController extends Controller
             'user' => $user,
             // 'related_user' => $related_user,
             'buyback_mode' => $buyback_mode,
+            'kategori' => $kategori,
             'harga_g' => $harga_g,
             'ongkos_g' => $ongkos_g,
             'harga_t' => $harga_t,
+            'total_bayar' => $total_bayar,
+            'sisa_bayar' => $sisa_bayar,
+            'jumlah_tunai' => $jumlah_tunai,
+            'jumlah_non_tunai' => $jumlah_non_tunai,
+            'nama_instansi' => $nama_instansi,
+            'tipe_instansi' => $tipe_instansi,
+            'tipe_transaksi' => $tipe_transaksi,
+            'keterangan_transaksi' => $keterangan_transaksi,
         ];
         // dd($data);
         return view('items.show', $data);

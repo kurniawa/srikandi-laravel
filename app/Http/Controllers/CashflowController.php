@@ -8,7 +8,6 @@ use App\Models\Cart;
 use App\Models\Cashflow;
 use App\Models\Item;
 use App\Models\Menu;
-use App\Models\Saldo;
 use App\Models\SuratPembelian;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
@@ -104,14 +103,8 @@ class CashflowController extends Controller
         }
 
         // SALDO PADA WALLET
-        $wallets = Saldo::select('nama_wallet')->groupBy('nama_wallet')->get();
+        $wallets = Wallet::all();
         // dd($wallets);
-        $saldos = collect();
-        foreach ($wallets as $wallet) {
-            $saldo = Saldo::where('nama_wallet', $wallet->nama_wallet)->latest()->first();
-            $saldos->push($saldo);
-        }
-        // $saldos = Saldo::all();
         // END - SALDO PADA WALLET
 
         $data = [
@@ -128,13 +121,14 @@ class CashflowController extends Controller
             'col_saldos' => $col_saldos,
             'col_accountings' => $col_accountings,
             'col_total' => $col_total,
-            'saldos' => $saldos,
+            'wallets' => $wallets,
             'back' => true,
             'backRoute' => 'home',
             'backRouteParams' => null,
         ];
         // dump(Cashflow::whereBetween('created_at', ["2024-8-8", "2024-8-8 23:59:59"])->orderByDesc("created_at")->get());
         // dd($data);
+        // dd($wallets);
         return view('cashflows.index', $data);
     }
 
@@ -173,9 +167,8 @@ class CashflowController extends Controller
     function store_transaction(Request $request)
     {
         $post = $request->post();
-        // dd($post);
+        dd($post);
         Cashflow::validasi_metode_pembayaran($request);
-        
         
         $request->validate([
             'tipe_transaksi' => 'required',
@@ -203,37 +196,59 @@ class CashflowController extends Controller
         $nama_barang = null;
         // END - SEBAGIAN DATA DIPERSIAPKAN UNTUK INPUT KE DB
 
+        $keterangan_transaksi = null;
+        if (isset($post['keterangan_transaksi'])) {
+            $keterangan_transaksi = $post['keterangan_transaksi'];
+        }
+
+        $create_new_item = true;
+        $item = collect();
         if ($post['kategori'] == "Buyback Perhiasan") {
-            $candidate_new_item = Item::validasi_item($request);
-            $item = collect();
-            if (isset($post['tetap_buyback'])) {
-                // dd($candidate_new_item);
-                $item = Item::create($candidate_new_item);
-            } else {
+            
+            if (isset($post['item_id'])) {
+                $create_new_item = false;
+                $item = Item::find($post['item_id']);
+                if ($post['submit'] == 'pilih_dan_update_harga') {
+                    $item->harga_g = (string)((int)$post['harga_g'] * 100);
+                    $item->ongkos_g = (string)((int)$post['ongkos_g'] * 100);
+                    $item->harga_t = (string)((int)$post['harga_t'] * 100);
+                    $item->save();
+                }
+            }
+
+            if ($create_new_item) {
                 $candidate_new_item = Item::validasi_item($request);
-                // Strategi:
-                // 1. Bikin item baru. Kalau ada similiar items, maka pilih dari similiar items atau tetap dengan item yang sudah diinput.
-                // 2. Create Surat Pembelian baru
-                // 3. Langsung proses buyback surat tersebut
-                list($item_exist, $data) = Item::check_item_exist($candidate_new_item, $post);
-                // if (count($item_exist)) {
-                //     // dump($data);
-                //     $data['route1'] = 'items.store';
-                //     $data['route2'] = 'items.show';
-                //     // dd($data);
-                //     return view('items.found_similiar_items', $data);
-                // }
-                if (count($item_exist)) {
-                    // dump($item_exist);
-                    $data = Cashflow::add_data_metode_pembayaran($request, $data);
-                    $data['route1'] = 'cashflow.store_transaction';
-                    $data['route2'] = 'items.show';
-                    // dd($data);
-                    return redirect()->route('transactions.found_similiar_items', $data);
-                    // return view('items.found_similiar_items', $data);
-                } else {
-                    $candidate_new_item = Item::empty_string_become_null($candidate_new_item);
+                if (isset($post['tetap_buyback'])) {
+                    // dd($candidate_new_item);
                     $item = Item::create($candidate_new_item);
+                } else {
+                    $candidate_new_item = Item::validasi_item($request);
+                    // Strategi:
+                    // 1. Bikin item baru. Kalau ada similiar items, maka pilih dari similiar items atau tetap dengan item yang sudah diinput.
+                    // 2. Create Surat Pembelian baru
+                    // 3. Langsung proses buyback surat tersebut
+                    list($item_exist, $data) = Item::check_item_exist($candidate_new_item, $post);
+                    // if (count($item_exist)) {
+                    //     // dump($data);
+                    //     $data['route1'] = 'items.store';
+                    //     $data['route2'] = 'items.show';
+                    //     // dd($data);
+                    //     return view('items.found_similiar_items', $data);
+                    // }
+                    if (count($item_exist)) {
+                        // dump($item_exist);
+                        $data = Cashflow::add_data_metode_pembayaran($request, $data);
+                        $data['tipe_transaksi'] = $post['tipe_transaksi'];
+                        $data['keterangan_transaksi'] = $keterangan_transaksi;
+                        $data['route1'] = 'cashflow.store_transaction';
+                        $data['route2'] = 'items.show';
+                        // dd($data);
+                        return redirect()->route('transactions.found_similiar_items', $data);
+                        // return view('items.found_similiar_items', $data);
+                    } else {
+                        $candidate_new_item = Item::empty_string_become_null($candidate_new_item);
+                        $item = Item::create($candidate_new_item);
+                    }
                 }
             }
             // PEMBUATAN SURAT PEMBELIAN
@@ -241,6 +256,9 @@ class CashflowController extends Controller
             $nama_barang = $surat_pembelian_item->longname;
             // END - PEMBUATAN SURAT PEMBELIAN
         }
+
+        
+        
 
         $success_ = '';
         if ($surat_pembelian) {
@@ -276,7 +294,7 @@ class CashflowController extends Controller
             'tipe' => $post['tipe_transaksi'],
             'kategori' => $post['kategori'],
             'kategori_2' => $kategori_2,
-            'deskripsi' => $post['deskripsi'],
+            'deskripsi' => $keterangan_transaksi,
             'jumlah' => $total_bayar,
         ]);
 

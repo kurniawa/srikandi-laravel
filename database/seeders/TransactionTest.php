@@ -7,6 +7,7 @@ use App\Models\Cashflow;
 use App\Models\SuratPembelian;
 use App\Models\SuratPembelianItem;
 use App\Models\User;
+use App\Models\Wallet;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -787,7 +788,7 @@ class TransactionTest extends Seeder
                 "tipe" => "pengeluaran",
                 "kategori_wallet" => "non-tunai",
                 "tipe_wallet" => "bank",
-                "nama_wallet" => "bca",
+                "nama_wallet" => "BCA",
                 "jumlah" => "100000000",
                 "saldo" => "0",
                 "keterangan" => null,
@@ -848,7 +849,7 @@ class TransactionTest extends Seeder
                 "tipe" => "pemasukan",
                 "kategori_wallet" => "non-tunai",
                 "tipe_wallet" => "bank",
-                "nama_wallet" => "bca",
+                "nama_wallet" => "BCA",
                 "jumlah" => "100000000",
                 "saldo" => "0",
                 "keterangan" => null,
@@ -877,6 +878,10 @@ class TransactionTest extends Seeder
             $cashflow = Cashflow::create($cashflows[$i]);
             $cashflow->saldo = $updated_saldo;
             $cashflow->save();
+            // dump($cashflow);
+            $wallet = Wallet::where('nama', $cashflow->nama_wallet)->first();
+            $wallet->saldo = $cashflow->saldo;
+            $wallet->save();
         }
     }
 }

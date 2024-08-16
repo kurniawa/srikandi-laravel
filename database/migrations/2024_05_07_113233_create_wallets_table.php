@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('kategori', 20); // tunai atau non-tunai
             $table->string('tipe', 20); // laci, bank atau ewallet
-            $table->string('nama', 20); // tunai, BCA atau GoPay
+            $table->string('nama', 20)->unique(); // tunai, BCA atau GoPay
+            $table->bigInteger('saldo')->nullable();
             $table->timestamps();
         });
     }

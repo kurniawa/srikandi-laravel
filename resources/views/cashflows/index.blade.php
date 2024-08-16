@@ -11,17 +11,7 @@
                 <h1 class="font-bold">Accounting / Cash Flow</h1>
             </div>
         </div>
-        <div class="flex justify-end">
-            <table class="text-slate-400 text-xs font-bold border">
-                @foreach ($saldos as $saldo)
-                    <tr>
-                        <td>{{ $saldo->nama_wallet }}</td>
-                        <td>:</td>
-                        <td>Rp {{ my_decimal_format($saldo->saldo_akhir) }}</td>
-                    </tr>
-                @endforeach
-            </table>
-        </div>
+        
         <table class="w-full mt-5">
             <tr class="text-slate-500">
                 <th></th>
@@ -36,8 +26,8 @@
                                 {{ $col_cashflow['hari'] }}-{{ $col_cashflow['bulan'] }}-{{ $col_cashflow['tahun'] }}</div>
                         </div>
                     </th>
-                    <th class="text-sm text-yellow-500">{{ my_decimal_format($col_saldos[$key]['saldo_awal']) }}</th>
-                    <th class="text-sm text-indigo-500">{{ my_decimal_format($col_saldos[$key]['saldo_akhir']) }}</th>
+                    <th class="text-sm text-yellow-500">{{ my_decimal_format($col_wallets[$key]['wallet_awal']) }}</th>
+                    <th class="text-sm text-indigo-500">{{ my_decimal_format($col_wallets[$key]['wallet_akhir']) }}</th>
                 </tr>
                 @foreach ($col_cashflow['cashflows'] as $cashflow)
             <tr class="border-t text-xs font-bold text-slate-500">
@@ -95,8 +85,8 @@
                     </th>
                     <th class="text-rose-400">{{ my_decimal_format($col_total[$key]['total_pengeluaran']) }}</th>
                     <th class="text-emerald-400">{{ my_decimal_format($col_total[$key]['total_pemasukan']) }}</th>
-                    {{-- <th class="text-sm text-yellow-500">{{ my_decimal_format($col_saldos[$key]['saldo_awal']) }}</th>
-                    <th class="text-sm text-indigo-500">{{ my_decimal_format($col_saldos[$key]['saldo_akhir']) }}</th> --}}
+                    {{-- <th class="text-sm text-yellow-500">{{ my_decimal_format($col_wallets[$key]['wallet_awal']) }}</th>
+                    <th class="text-sm text-indigo-500">{{ my_decimal_format($col_wallets[$key]['wallet_akhir']) }}</th> --}}
                 </tr>
                 @foreach ($col_accounting['accountings'] as $accounting)
                     <tr class="border-t text-xs font-bold text-slate-500">
@@ -142,5 +132,18 @@
             @endforeach
         </table>
         {{-- <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button> --}}
+        <div class="mt-5">
+            <table class="text-slate-400 font-bold border">
+                @foreach ($wallets as $wallet)
+                    @if ($wallet->saldo !== null)
+                        <tr>
+                            <td>{{ $wallet->nama }}</td>
+                            <td>:</td>
+                            <td>Rp {{ my_decimal_format($wallet->saldo) }}</td>
+                        </tr>
+                    @endif
+                @endforeach
+            </table>
+        </div>
     </main>
 @endsection

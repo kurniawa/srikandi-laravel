@@ -267,14 +267,14 @@ class SuratPembelianController extends Controller
             $cashflow_date = date("Y-m-d", strtotime($cashflow->created_at));
             $last_hour_of_date = date("Y-m-d H:i:s", strtotime("$cashflow_date 23:59:59"));
 
-            $saldo = Saldo::where('kategori_wallet', $cashflow->kategori_wallet)->where('tipe_wallet', $cashflow->tipe_wallet)->where('nama_wallet', $cashflow->nama_wallet)->whereBetween("created_at", [$cashflow_date, $last_hour_of_date])->latest()->first();
-            $jumlah_saldo = (int)$saldo->saldo_akhir;
+            $wallet = Wallet::where('kategori_wallet', $cashflow->kategori_wallet)->where('tipe_wallet', $cashflow->tipe_wallet)->where('nama_wallet', $cashflow->nama_wallet)->whereBetween("created_at", [$cashflow_date, $last_hour_of_date])->latest()->first();
+            $jumlah_saldo = (int)$wallet->saldo;
             if ($cashflow->tipe == 'pengeluaran') {
-                $saldo->saldo_akhir = (string)($jumlah_saldo + (int)$cashflow->jumlah);
-                $saldo->save();
+                $wallet->saldo = (string)($jumlah_saldo + (int)$cashflow->jumlah);
+                $wallet->save();
             } else if ($cashflow->tipe == 'pemasukan') {
-                $saldo->saldo_akhir = (string)($jumlah_saldo - (int)$cashflow->jumlah);
-                $saldo->save();
+                $wallet->saldo = (string)($jumlah_saldo - (int)$cashflow->jumlah);
+                $wallet->save();
             }
             $dangers_ .= "-Saldo diupdate-";
         }

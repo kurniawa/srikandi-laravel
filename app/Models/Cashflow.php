@@ -156,6 +156,9 @@ class Cashflow extends Model
                 'jumlah' => (string)$jumlah,
                 'saldo' => (string)$saldo_akhir,
             ]);
+            $wallet = Wallet::where('nama', $cashflow->nama_wallet)->first();
+            $wallet->saldo = (string)$saldo_akhir;
+            $wallet->save();
             // self::create_update_neraca($tipe_wallet, $nama_wallet, $jumlah);
 
             // CEK Saldo terkait
@@ -194,6 +197,10 @@ class Cashflow extends Model
                         'jumlah' => (string)$jumlah,
                         'saldo' => (string)$saldo_akhir,
                     ]);
+                    
+                    $wallet = Wallet::where('nama', $cashflow->nama_wallet)->first();
+                    $wallet->saldo = (string)$saldo_akhir;
+                    $wallet->save();
                     // self::create_update_neraca($tipe_wallet, $nama_wallet, $jumlah);
                     // Saldo::cek_saldo_wallet_sebelumnya_dan_create_apabila_belum_ada($time_key, $wallet, $jumlah);
                     $jumlah_terima_total += $jumlah;
