@@ -67,7 +67,11 @@
                     @if ($buyback_mode)
                         @if ($buyback_mode == 'yes')
                             <input type="hidden" name="kategori" value="Buyback Perhiasan">
+                            @if (isset($keterangan_transaksi))
                             <input type="hidden" name="keterangan_transaksi" value="{{ $keterangan_transaksi }}">
+                            @else
+                            <input type="hidden" name="keterangan_transaksi" value="">
+                            @endif
                             <button type="submit" name="tetap_buyback" value="yes" class="bg-emerald-300 p-4 text-white font-bold rounded">Tetap Buyback dengan Data diatas</button>
                         @endif
                     @else
@@ -156,7 +160,11 @@
                             <div class="flex justify-end gap-2 mt-2">
                                 {{-- <button type="submit" name="submit" class="bg-pink-300 text-white py-2 px-5 rounded" value="pilih_dan_update_harga">Pilih & Update Harga</button> --}}
                                 <input type="hidden" name="tipe_transaksi" value="{{ $tipe_transaksi }}">
+                                @if (isset($keterangan_transaksi))
                                 <input type="hidden" name="keterangan_transaksi" value="{{ $keterangan_transaksi }}">
+                                @else
+                                <input type="hidden" name="keterangan_transaksi" value="">
+                                @endif
                                 <input type="hidden" name="kategori" value="{{ $kategori }}">
                                 <button type="submit" name="submit" class="bg-orange-400 text-white py-2 px-5 rounded" value="pilih">Pilih</button>
                             </div>

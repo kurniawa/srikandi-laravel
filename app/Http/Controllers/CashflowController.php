@@ -167,7 +167,7 @@ class CashflowController extends Controller
     function store_transaction(Request $request)
     {
         $post = $request->post();
-        dd($post);
+        // dd($post);
         Cashflow::validasi_metode_pembayaran($request);
         
         $request->validate([
