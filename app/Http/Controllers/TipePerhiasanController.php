@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\Item;
 use App\Models\JenisPerhiasan;
 use App\Models\TipePerhiasan;
 use Illuminate\Http\Request;
@@ -32,6 +33,7 @@ class TipePerhiasanController extends Controller
             'cart' => $cart,
             'col_jenis_perhiasans' => $col_jenis_perhiasans,
             'tipe_perhiasans' => $tipe_perhiasans,
+            'all_items_x_photos' => Item::get_all_item_x_photos(),
         ];
 
         return view('attributes.tipe_perhiasan_index', $data);
@@ -84,6 +86,7 @@ class TipePerhiasanController extends Controller
             'user' => $user,
             'cart' => $cart,
             'cap' => $tipe_perhiasan,
+            'all_items_x_photos' => Item::get_all_item_x_photos(),
         ];
 
         return view('attributes.tipe_perhiasan_edit', $data);

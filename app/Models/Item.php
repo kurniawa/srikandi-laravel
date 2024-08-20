@@ -369,4 +369,26 @@ class Item extends Model
         return $candidate_new_item;
 
     }
+
+    static function get_all_item_x_photos() {
+        $all_items = Item::select('id', 'shortname', 'longname', 'harga_g', 'ongkos_g', 'harga_t')->get();
+        $all_items_x_photos = collect();
+        foreach ($all_items as $item) {
+            $photo_path = null;
+            if (count($item->photos)) {
+                $photo_path = $item->photos[0]->path;
+            }
+            $all_items_x_photos->push([
+                'id' => $item->id,
+                'shortname' => $item->shortname,
+                'longname' => $item->longname,
+                'harga_g' => $item->harga_g,
+                'ongkos_g' => $item->ongkos_g,
+                'harga_t' => $item->harga_t,
+                'photo_path' => $photo_path,
+            ]);
+        }
+
+        return $all_items_x_photos;
+    }
 }

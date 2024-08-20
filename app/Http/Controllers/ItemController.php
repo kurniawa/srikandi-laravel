@@ -45,6 +45,7 @@ class ItemController extends Controller
             'backRouteParams' => [Auth::user()->id],
             'cart' => $cart,
             'user' => $user,
+            'all_items_x_photos' => Item::get_all_item_x_photos(),
         ];
 
         return view('carts.pilih_tipe_barang', $data);
@@ -96,6 +97,7 @@ class ItemController extends Controller
             'label_mainans' => $label_mainans,
             'cart' => $cart,
             'user' => $user,
+            'all_items_x_photos' => Item::get_all_item_x_photos(),
         ];
 
         // dd($caps);
@@ -117,6 +119,7 @@ class ItemController extends Controller
             // dump($data);
             $data['route1'] = 'items.store';
             $data['route2'] = 'items.show';
+            $data['all_items_x_photos'] = Item::get_all_item_x_photos();
             // dd($data);
             return view('items.found_similiar_items', $data);
         }
@@ -255,6 +258,7 @@ class ItemController extends Controller
             'tipe_instansi' => $tipe_instansi,
             'tipe_transaksi' => $tipe_transaksi,
             'keterangan_transaksi' => $keterangan_transaksi,
+            'all_items_x_photos' => Item::get_all_item_x_photos(),
         ];
         // dd($data);
         return view('items.show', $data);
@@ -332,6 +336,7 @@ class ItemController extends Controller
             'mainans' => $mainans,
             // 'related_user' => $related_user,
             // 'peminat_items' => $peminat_items,
+            'all_items_x_photos' => Item::get_all_item_x_photos(),
         ];
         // if (count($item->matas)) {
         //     $test = ItemMata::where('item_id', $item->id)->get();
@@ -548,6 +553,7 @@ class ItemController extends Controller
             'user' => $user,
             // 'related_user' => $related_user,
             // 'peminat_items' => $peminat_items,
+            'all_items_x_photos' => Item::get_all_item_x_photos(),
         ];
 
         return view('items.add_photos', $data);

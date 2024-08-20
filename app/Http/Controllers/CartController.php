@@ -36,6 +36,7 @@ class CartController extends Controller
             'back' => true,
             'backRoute' => 'home',
             'backRouteParams' => null,
+            'all_items_x_photos' => Item::get_all_item_x_photos(),
         ];
         // dd($data);
         return view('carts.index', $data);
@@ -97,6 +98,7 @@ class CartController extends Controller
             'pelanggannama' => $pelanggannama,
             'pelangganusername' => $pelangganusername,
             'pelanggannik' => $pelanggannik,
+            'all_items_x_photos' => Item::get_all_item_x_photos(),
         ];
 
         // dd($pelangganid);

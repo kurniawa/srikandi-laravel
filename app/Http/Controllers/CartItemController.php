@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\Item;
 use App\Models\Menu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,6 +30,7 @@ class CartItemController extends Controller
             'cart_item' => $cart_item,
             // 'related_user' => $related_user,
             // 'peminat_items' => $peminat_items,
+            'all_items_x_photos' => Item::get_all_item_x_photos(),
         ];
 
         return view('carts.cart_item-add_photo', $data);

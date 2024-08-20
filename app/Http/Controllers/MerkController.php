@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\Item;
 use App\Models\Merk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,6 +23,7 @@ class MerkController extends Controller
             'user' => $user,
             'cart' => $cart,
             'merks' => $merks,
+            'all_items_x_photos' => Item::get_all_item_x_photos(),
         ];
 
         return view('attributes.merk_index', $data);
@@ -71,6 +73,7 @@ class MerkController extends Controller
             'user' => $user,
             'cart' => $cart,
             'merk' => $merk,
+            'all_items_x_photos' => Item::get_all_item_x_photos(),
         ];
 
         return view('attributes.merk_edit', $data);

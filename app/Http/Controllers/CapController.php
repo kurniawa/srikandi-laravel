@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cap;
 use App\Models\Cart;
+use App\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,6 +23,7 @@ class CapController extends Controller
             'user' => $user,
             'cart' => $cart,
             'caps' => $caps,
+            'all_items_x_photos' => Item::get_all_item_x_photos(),
         ];
 
         return view('attributes.cap_index', $data);
@@ -71,6 +73,7 @@ class CapController extends Controller
             'user' => $user,
             'cart' => $cart,
             'cap' => $cap,
+            'all_items_x_photos' => Item::get_all_item_x_photos(),
         ];
 
         return view('attributes.cap_edit', $data);

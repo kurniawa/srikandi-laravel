@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Accounting;
 use App\Models\Cart;
 use App\Models\Cashflow;
+use App\Models\Item;
 use App\Models\Kadar;
 use App\Models\Menu;
 use App\Models\SuratPembelian;
@@ -28,6 +29,7 @@ class TransactionController extends Controller
             'profile_menus' => Menu::get_profile_menus($user),
             'cart' => $cart,
             'user' => $user,
+            'all_items_x_photos' => Item::get_all_item_x_photos(),
         ];
 
         $data = array_merge($data, $get);
@@ -200,6 +202,7 @@ class TransactionController extends Controller
             'buy_accountings' => $buy_accountings,
             // 'buy_perhiasans' => $buy_perhiasans,
             'tanggal' => $tanggal,
+            'all_items_x_photos' => Item::get_all_item_x_photos(),
         ];
         // dd(strtotime("2024-07-25 08:08:08"));
         // dump($bb_accountings);

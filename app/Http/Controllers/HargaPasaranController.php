@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\HargaPasaran;
+use App\Models\Item;
 use App\Models\Kadar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,6 +29,7 @@ class HargaPasaranController extends Controller
             'user' => $user,
             'cart' => $cart,
             'col_harga_pasarans' => $col_harga_pasarans,
+            'all_items_x_photos' => Item::get_all_item_x_photos(),
         ];
         // dd($col_harga_pasarans);
         return view('attributes.harga_pasaran_index', $data);
@@ -47,6 +49,7 @@ class HargaPasaranController extends Controller
             'user' => $user,
             'cart' => $cart,
             'kadars' => $kadars,
+            'all_items_x_photos' => Item::get_all_item_x_photos(),
         ];
         return view('attributes.harga_pasaran_create', $data);
     }
@@ -103,6 +106,7 @@ class HargaPasaranController extends Controller
             'user' => $user,
             'cart' => $cart,
             'harga_pasaran' => $harga_pasaran,
+            'all_items_x_photos' => Item::get_all_item_x_photos(),
         ];
 
         return view('attributes.harga_pasaran_edit', $data);

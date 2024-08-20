@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\Item;
 use App\Models\Mainan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,6 +23,7 @@ class MainanController extends Controller
             'user' => $user,
             'cart' => $cart,
             'mainans' => $mainans,
+            'all_items_x_photos' => Item::get_all_item_x_photos(),
         ];
 
         return view('attributes.mainan_index', $data);
@@ -71,6 +73,7 @@ class MainanController extends Controller
             'user' => $user,
             'cart' => $cart,
             'mainan' => $mainan,
+            'all_items_x_photos' => Item::get_all_item_x_photos(),
         ];
 
         return view('attributes.mainan_edit', $data);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Accounting;
 use App\Models\Cart;
 use App\Models\Cashflow;
+use App\Models\Item;
 use App\Models\Menu;
 use App\Models\Photo;
 use App\Models\Saldo;
@@ -78,6 +79,7 @@ class SuratPembelianController extends Controller
             'user' => $user,
             'back' => true,
             'surat_pembelians' => $surat_pembelians,
+            'all_items_x_photos' => Item::get_all_item_x_photos(),
         ];
         // dd($data);
         return view('surats.index', $data);
@@ -136,6 +138,7 @@ class SuratPembelianController extends Controller
             'pelanggannama' => $pelanggannama,
             'pelangganusername' => $pelangganusername,
             'pelanggannik' => $pelanggannik,
+            'all_items_x_photos' => Item::get_all_item_x_photos(),
         ];
         // dd($data);
         return view('surats.show', $data);
@@ -243,6 +246,7 @@ class SuratPembelianController extends Controller
             'pelanggannama' => $pelanggannama,
             'pelangganusername' => $pelangganusername,
             'pelanggannik' => $pelanggannik,
+            'all_items_x_photos' => Item::get_all_item_x_photos(),
         ];
         // dd($data);
         return view('surats.print-out', $data);
@@ -369,6 +373,7 @@ class SuratPembelianController extends Controller
             'cart' => $cart,
             'surat_pembelian' => $surat_pembelian,
             'wallets_non_tunai' => $wallets_non_tunai,
+            'all_items_x_photos' => Item::get_all_item_x_photos(),
         ];
         // dd($data);
         return view('surats.buyback', $data);

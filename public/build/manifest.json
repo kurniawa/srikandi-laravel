@@ -1,0 +1,24 @@
+{
+  "resources/css/app.css": {
+    "file": "assets/app-Ba_O0lCA.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/fonts/almendra-display-v31-latin-regular.woff2": {
+    "file": "assets/almendra-display-v31-latin-regular-4bH1ihzk.woff2",
+    "src": "resources/fonts/almendra-display-v31-latin-regular.woff2"
+  },
+  "resources/fonts/fredericka-the-great-v21-latin-regular.woff2": {
+    "file": "assets/fredericka-the-great-v21-latin-regular-By-vzJE4.woff2",
+    "src": "resources/fonts/fredericka-the-great-v21-latin-regular.woff2"
+  },
+  "resources/fonts/playfair-display-v37-latin-regular.woff2": {
+    "file": "assets/playfair-display-v37-latin-regular-B74d1IHM.woff2",
+    "src": "resources/fonts/playfair-display-v37-latin-regular.woff2"
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-CifqVuM1.js",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  }
+}

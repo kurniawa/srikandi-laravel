@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\Item;
 use App\Models\Menu;
 use App\Models\User;
 use App\Models\UserAlamat;
@@ -54,6 +55,7 @@ class PelangganController extends Controller
             // 'cart_item' => $cart_item,
             // 'related_user' => $related_user,
             // 'peminat_items' => $peminat_items,
+            'all_items_x_photos' => Item::get_all_item_x_photos(),
         ];
 
         return view('pelanggans.index', $data);
@@ -83,6 +85,7 @@ class PelangganController extends Controller
             // 'cart_item' => $cart_item,
             // 'related_user' => $related_user,
             // 'peminat_items' => $peminat_items,
+            'all_items_x_photos' => Item::get_all_item_x_photos(),
         ];
 
         return view('pelanggans.create', $data);
@@ -215,6 +218,7 @@ class PelangganController extends Controller
             // 'cart_item' => $cart_item,
             // 'related_user' => $related_user,
             // 'peminat_items' => $peminat_items,
+            'all_items_x_photos' => Item::get_all_item_x_photos(),
         ];
 
         return view('pelanggans.show', $data);
@@ -234,6 +238,7 @@ class PelangganController extends Controller
             'cart' => $cart,
             'user' => $user,
             'pelanggan' => $pelanggan,
+            'all_items_x_photos' => Item::get_all_item_x_photos(),
         ];
 
         return view('pelanggans.edit', $data);
@@ -302,6 +307,7 @@ class PelangganController extends Controller
             // 'cart_item' => $cart_item,
             // 'related_user' => $related_user,
             // 'peminat_items' => $peminat_items,
+            'all_items_x_photos' => Item::get_all_item_x_photos(),
         ];
 
         return view('pelanggans.edit_profile_picture', $data);
@@ -452,6 +458,7 @@ class PelangganController extends Controller
             'cart' => $cart,
             'user' => $user,
             'pelanggan' => $pelanggan,
+            'all_items_x_photos' => Item::get_all_item_x_photos(),
         ];
 
         return view('pelanggans.change_password', $data);

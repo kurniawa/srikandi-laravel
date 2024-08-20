@@ -21,7 +21,7 @@
         }
     </style>
     <title>Srikandi</title>
-    {{-- @laravelPWA --}}
+    @laravelPWA
 
 </head>
 
@@ -44,238 +44,153 @@
         </div>
     </div>
     <div class="min-h-full">
-        <nav class="bg-emerald-100 no-print">
+        <nav class="bg-emerald-100 no-print py-2">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div class="flex h-16 items-center justify-between">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0">
-                            <a href="{{ route('home') }}">
-                                <img class="h-8 w-8"
-                                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                                    alt="Your Company">
-                            </a>
-                        </div>
-                        <div class="">
-                            <div class="ml-10 flex items-baseline space-x-4">
-                                <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                                {{-- @foreach ($menus as $menu)
-                                    @if (isset($parent_route))
-                                        @if ($parent_route === $menu['route'])
-                                            <a href="{{ route($menu['route']) }}"
-                                                class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium">{{ $menu['name'] }}</a>
-                                        @else
-                                            <a href="{{ route($menu['route']) }}"
-                                                class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">{{ $menu['name'] }}</a>
-                                        @endif
-                                    @else
-                                        @if ($route_now === $menu['route'])
-                                            <a href="{{ route($menu['route']) }}"
-                                                class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium">{{ $menu['name'] }}</a>
-                                        @else
-                                            <a href="{{ route($menu['route']) }}"
-                                                class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">{{ $menu['name'] }}</a>
-                                        @endif
-                                    @endif
-                                @endforeach
-                                @if ($user)
-                                <a href="{{ route('users.profile', $user->id) }}" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium">Profile</a>
-                                @endif
-                                <a href="{{ route('users.index') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Daftar User</a>
-                                <a href="{{ route('pelanggans.index') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Daftar Pelanggan</a>
-                                <a href="{{ route('surat_pembelian.index') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Surat Pembelian</a>
-                                 --}}
-                                {{-- <a href="#" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Dashboard</a>
-                    <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Projects</a>
-                    <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Calendar</a>
-                    <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Reports</a> --}}
-                            </div>
-                        </div>
+                <div class="flex items-center justify-between">
+                    <div class="w-9">
+                        <a href="{{ route('home') }}">
+                            <img src="{{ asset('images/icons/icon-96x96.png') }}" alt="" srcset="" class="size-8 rounded-full overflow-hidden">
+                        </a>
                     </div>
-                    <div class="">
-                        <div class="ml-4 flex items-center md:ml-6 gap-2">
-                            @auth
-                                <a href="{{ route('choose_action') }}"
-                                    class="loading-spinner w-7 h-7 rounded-full bg-emerald-300 flex justify-center items-center font-bold text-white text-2xl">+</a>
-                            @endauth
-                            <button type="button"
-                                class="rounded-full bg-rose-200 p-1 text-gray-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                                <span class="sr-only">View notifications</span>
-                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
-                                </svg>
-                            </button>
 
-                            @if (Auth::user())
-                                <a class="loading-spinner" href="{{ route('carts.index', Auth::user()->id) }}">
-                                    <div class="text-indigo-500 relative">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-                                        </svg>
-                                        @if ($cart)
-                                            <div
-                                                class="flex absolute left-3 -top-3 w-5 h-5 rounded-full bg-red-400 text-white justify-center items-center">
-                                                {{ count($cart->cart_items) }}</div>
-                                        @endif
-                                    </div>
-                                </a>
-                            @endif
+                    {{-- PENCARIAN ITEM --}}
+                    <div>
+                        <form action="{{ route('home') }}" method="GET">
+                            <div class="flex gap-2 items-center bg-white text-xs text-slate-400 rounded-lg border-slate-300 border-2 px-2">
+                                <div class="">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                                    </svg>
+                                </div>
+                                <div class="">
+                                    <input type="text" name="longname" id="longname" oninput="searchItem(this, 'search-result')" class="border-none w-full p-1" placeholder="nama barang/item...">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    {{-- END - PENCARIAN ITEM --}}
 
-                            <!-- Profile dropdown -->
-                            <div class="relative">
-                                <div>
-                                    @if (Auth::user())
-                                        @if (Auth::user()->profile_picture)
-                                            <button type="button"
-                                                class="flex max-w-xs items-center rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                                                id="user-menu-button" aria-expanded="false" aria-haspopup="true"
-                                                onclick="toggleMenu('profile-menu', 'menu-close-layer')">
-                                                <span class="sr-only">Open user menu</span>
-                                                <img class="h-8 w-8 rounded-full"
-                                                    src="{{ asset('storage/' . Auth::user()->profile_picture) }}"
-                                                    alt="Profile Picture">
-                                            </button>
-                                        @else
-                                            <button
-                                                class="text-white bg-indigo-300 rounded-full overflow-hidden w-8 h-8 flex justify-center items-center"
-                                                id="user-menu-button" aria-expanded="false" aria-haspopup="true"
-                                                onclick="toggleMenu('profile-menu', 'menu-close-layer')">
-                                                @if (Auth::user()->profile_picture_path)
-                                                    <img src="{{ asset('storage/' . Auth::user()->profile_picture_path) }}" alt="">
-                                                @else
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                        class="w-6 h-6">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                                                    </svg>
-                                                @endif
-                                            </button>
-                                        @endif
-                                    @else
-                                        <button
-                                            class="text-white bg-indigo-300 rounded-full w-8 h-8 flex justify-center items-center"
+                    <div class="flex gap-1 items-center">
+                        @auth
+                            <a href="{{ route('choose_action') }}" class="loading-spinner size-7 rounded-full bg-emerald-300 flex justify-center items-center font-bold text-white text-2xl">+</a>
+                        @endauth
+                        {{-- <button type="button"
+                            class="rounded-full bg-rose-200 p-1 text-gray-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                            <span class="sr-only">View notifications</span>
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+                            </svg>
+                        </button> --}}
+    
+                        @if (Auth::user())
+                            <a class="loading-spinner" href="{{ route('carts.index', Auth::user()->id) }}">
+                                <div class="text-indigo-500 relative">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                                    </svg>
+                                    @if ($cart)
+                                        <div
+                                            class="flex absolute left-3 -top-3 w-5 h-5 rounded-full bg-red-400 text-white justify-center items-center">
+                                            {{ count($cart->cart_items) }}</div>
+                                    @endif
+                                </div>
+                            </a>
+                        @endif
+    
+                        <!-- Profile dropdown -->
+                        <div class="relative">
+                            <div>
+                                @if (Auth::user())
+                                    @if (Auth::user()->profile_picture)
+                                        <button type="button"
+                                            class="flex max-w-xs items-center rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                                             id="user-menu-button" aria-expanded="false" aria-haspopup="true"
                                             onclick="toggleMenu('profile-menu', 'menu-close-layer')">
+                                            <span class="sr-only">Open user menu</span>
+                                            <img class="h-8 w-8 rounded-full"
+                                                src="{{ asset('storage/' . Auth::user()->profile_picture) }}"
+                                                alt="Profile Picture">
+                                        </button>
+                                    @else
+                                        <button
+                                            class="text-white bg-indigo-300 rounded-full overflow-hidden w-8 h-8 flex justify-center items-center"
+                                            id="user-menu-button" aria-expanded="false" aria-haspopup="true"
+                                            onclick="toggleMenu('profile-menu', 'menu-close-layer')">
+                                            @if (Auth::user()->profile_picture_path)
+                                                <img src="{{ asset('storage/' . Auth::user()->profile_picture_path) }}" alt="">
+                                            @else
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                     viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                                     class="w-6 h-6">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                                                 </svg>
-                                        </button>
-                                    @endif
-                                </div>
-
-                                <!--
-                      Dropdown menu, show/hide based on menu state.
-
-                      Entering: "transition ease-out duration-100"
-                        From: "transform opacity-0 scale-95"
-                        To: "transform opacity-100 scale-100"
-                      Leaving: "transition ease-in duration-75"
-                        From: "transform opacity-100 scale-100"
-                        To: "transform opacity-0 scale-95"
-                    -->
-                                <div id="profile-menu"
-                                    class="hidden absolute right-0 z-50 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                                    role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button"
-                                    tabindex="-1">
-                                    <!-- Active: "bg-gray-100", Not Active: "" -->
-                                    {{-- @foreach ($profile_menus as $profile_menu)
-                                        @if ($profile_menu['route'] === 'logout')
-                                            <form action="{{ route($profile_menu['route']) }}" method="post"
-                                                class="loading-spinner block">
-                                                @csrf
-                                                <button type="submit"
-                                                    class="py-2 text-sm text-left pl-4 text-gray-600 hover:bg-gray-200 w-full flex">
-                                                    <span>{{ $profile_menu['name'] }}</span>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                        class="w-5 h-5 ml-2">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
-                                                    </svg>
-                                                </button>
-                                            </form>
-                                        @else
-                                            @if (isset($profile_menu['params']))
-                                                <a href="{{ route($profile_menu['route'], $profile_menu['params']) }}"
-                                                    class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
-                                                    role="menuitem" tabindex="-1">{{ $profile_menu['name'] }}</a>
-                                            @else
-                                                <a href="{{ route($profile_menu['route']) }}"
-                                                    class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
-                                                    role="menuitem" tabindex="-1">{{ $profile_menu['name'] }}</a>
                                             @endif
-                                        @endif
-                                    @endforeach --}}
-                                    @auth
-                                    <a href="{{ route('users.show', $user->id) }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Profile</a>
-                                    <a href="{{ route('transactions.rincian_transaksi', $user->id) }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Rincian Transaksi</a>
-                                    @endauth
-                                    <a href="{{ route('users.index') }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Daftar User</a>
-                                    <a href="{{ route('pelanggans.index') }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Daftar Pelanggan</a>
-                                    <a href="{{ route('surat_pembelian.index') }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Surat Pembelian</a>
-                                    <a href="{{ route('cashflow.index') }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Cash Flow</a>
-                                    @if (!$user)
-                                    <a href="{{ route('login') }}" class="loading-spinner" role="menuitem" tabindex="-1">
-                                        <button class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 flex gap-2 items-center">
-                                            <span>Log In</span>
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
-                                            </svg>
                                         </button>
-                                    </a>
                                     @endif
-                                    @auth
-                                    @if ($user->clearance_level >= 6)
-                                    <a href="{{ route('artisans.index') }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Artisan Commands</a>
-                                    @endif
-                                    <a href="{{ route('attributes.index') }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Attribute Setting</a>
-                                    <form action="{{ route('logout') }}" method="POST" class="loading-spinner block">
-                                        @csrf
-                                        <button type="submit" class="py-2 text-sm text-left pl-4 text-gray-600 hover:bg-gray-200 w-full flex">
-                                            <span>Log Out</span>
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 ml-2">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                                @else
+                                    <button
+                                        class="text-white bg-indigo-300 rounded-full w-8 h-8 flex justify-center items-center"
+                                        id="user-menu-button" aria-expanded="false" aria-haspopup="true"
+                                        onclick="toggleMenu('profile-menu', 'menu-close-layer')">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                class="w-6 h-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                                             </svg>
-                                        </button>
-                                    </form>
-                                    @endauth
-
-                                    {{-- <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a>
-                      <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1" id="user-menu-item-2">Sign out</a> --}}
-                                </div>
+                                    </button>
+                                @endif
+                            </div>
+                            <div id="profile-menu"
+                                class="hidden absolute right-0 z-50 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button"
+                                tabindex="-1">
+                                
+                                @auth
+                                <a href="{{ route('users.show', $user->id) }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Profile</a>
+                                <a href="{{ route('transactions.rincian_transaksi', $user->id) }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Rincian Transaksi</a>
+                                @endauth
+                                <a href="{{ route('users.index') }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Daftar User</a>
+                                <a href="{{ route('pelanggans.index') }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Daftar Pelanggan</a>
+                                <a href="{{ route('surat_pembelian.index') }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Surat Pembelian</a>
+                                <a href="{{ route('cashflow.index') }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Cash Flow</a>
+                                @if (!$user)
+                                <a href="{{ route('login') }}" class="loading-spinner" role="menuitem" tabindex="-1">
+                                    <button class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 flex gap-2 items-center">
+                                        <span>Log In</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+                                        </svg>
+                                    </button>
+                                </a>
+                                @endif
+                                @auth
+                                @if ($user->clearance_level >= 6)
+                                <a href="{{ route('artisans.index') }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Artisan Commands</a>
+                                @endif
+                                <a href="{{ route('attributes.index') }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Attribute Setting</a>
+                                <form action="{{ route('logout') }}" method="POST" class="loading-spinner block">
+                                    @csrf
+                                    <button type="submit" class="py-2 text-sm text-left pl-4 text-gray-600 hover:bg-gray-200 w-full flex">
+                                        <span>Log Out</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 ml-2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                                        </svg>
+                                    </button>
+                                </form>
+                                @endauth
+    
                             </div>
                         </div>
                     </div>
-                    {{-- MOBILE MENU HAMBURGER --}}
-                    <div class="hidden -mr-2" onclick="$('#mobile-menu').toggle(150)">
-                        {{-- flex --}}
-                        <!-- Mobile menu button -->
-                        <button type="button"
-                            class="inline-flex items-center justify-center rounded-md bg-rose-200 p-2 text-gray-500 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                            aria-controls="mobile-menu" aria-expanded="false">
-                            <span class="sr-only">Open main menu</span>
-                            <!-- Menu open: "hidden", Menu closed: "block" -->
-                            <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                stroke="currentColor" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                            </svg>
-                            <!-- Menu open: "block", Menu closed: "hidden" -->
-                            <svg class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                stroke="currentColor" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </div>
-                    {{-- END - MOBILE MENU HAMBURGER --}}
                 </div>
+
             </div>
 
             <!-- Mobile menu, show/hide based on menu state. -->
@@ -346,6 +261,8 @@
             </div>
             {{-- END - MOBILE MENU --}}
         </nav>
+        <div id="search-result" class="relative w-full"></div>
+
         @yield('content')
 
         <div class="mt-16 mx-2 mb-16 p-2 rounded border-2 border-emerald-300 text-gray-400 no-print">
@@ -467,6 +384,54 @@
             showLoadingSpinner();
         })
     });
+
+    // Filter Pencarian Item
+    const all_items_x_photos = {!! json_encode($all_items_x_photos, JSON_HEX_TAG) !!};
+
+    // console.log(window.location.href);
+    // console.log(window.location.protocol);
+    // console.log(window.location.host);
+    // console.log(window.location.pathname);
+    const window_main_url = window.location.protocol + '//' + window.location.host + '/';
+    // console.log(window_main_url);
+    function searchItem(input, result_id) {
+        if (input.value.trim()) {
+            const filtered = all_items_x_photos.filter(function (item) {
+            if (item.longname.toLowerCase().includes(input.value.trim().toLowerCase()) && this.count < 10) {
+                this.count++;
+                return true;
+            }
+            return false;
+            }, {count:0});
+        // console.log(filtered);
+        let html_result = `<div class="absolute bg-white shadow drop-shadow p-1 text-xs font-bold z-10">`;
+        
+        filtered.forEach(item => {
+            html_photo = `<div class="col-span-3 bg-indigo-100 text-indigo-400">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                </svg>
+                </div>`;
+            if (item.photo_path) {
+                html_photo = `<div class="col-span-3">
+                    <img class="w-full" src="${window_main_url}storage/${item.photo_path}">
+                    </div>`;
+            }
+            html_result += `<a href="${window_main_url}items/${item.id}/show"><div class="loading-spinner border-b hover:cursor-pointer hover:bg-slate-100 grid grid-cols-12 gap-2 items-center">
+                ${html_photo}
+                <div class="col-span-9">${item.longname}</div>
+                </div></a>`;
+        });
+        html_result += '</div>';
+
+        document.getElementById(result_id).innerHTML = html_result;
+        } else {
+            document.getElementById(result_id).innerHTML = '';
+
+        }
+        
+    }
+    // END - Filter Pencarian Item
 </script>
 
 </html>
