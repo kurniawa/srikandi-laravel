@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\ArtisanController;
-use App\Http\Controllers\AttributeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CapController;
 use App\Http\Controllers\CartController;
@@ -48,9 +47,9 @@ Route::controller(HomeController::class)->group(function () {
 });
 
 Route::controller(AuthController::class)->group(function () {
-    Route::get('/login', 'login')->name('login');
-    Route::post('/login', 'authenticate')->name('authenticate');
-    Route::post('/logout', 'logout')->name('logout');
+    Route::get('/login', 'login')->name('login')->middleware('guest');
+    Route::post('/login', 'authenticate')->name('authenticate')->middleware('guest');
+    Route::post('/logout', 'logout')->name('logout')->middleware('auth');
     Route::get('/register', 'register')->name('register');
     Route::post('/register', 'register_new')->name('register_new');
 });

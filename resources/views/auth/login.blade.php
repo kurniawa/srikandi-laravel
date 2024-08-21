@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('layouts.login-layout')
 @section('content')
 <main class="p-2">
     <x-errors-any></x-errors-any>
@@ -32,7 +32,7 @@
     </div>
 </main>
 
-<script>
+{{-- <script>
     // const input_image_element_test = document.getElementById('input-photo-0');
     // console.log(input_image_element_test.value)
     function previewImage(image_file, div_preview_photo, preview_photo) {
@@ -52,6 +52,6 @@
         input_image_element.value = null;
         // console.log(input_image_element.value);
     }
-</script>
+</script> --}}
 @endsection
 
