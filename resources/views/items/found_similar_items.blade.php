@@ -34,7 +34,7 @@
                 <input type="hidden" name="ongkos_g" value="{{ (float)$candidate_new_item['ongkos_g'] / 100 }}">
                 <input type="hidden" name="harga_t" value="{{ (float)$candidate_new_item['harga_t'] / 100 }}">
                 <input type="hidden" name="shortname" value="{{ $candidate_new_item['shortname'] }}">
-                <input type="hidden" name="longname" value="{{ "$candidate_new_item[longname] " . "v" . count($similiar_items) + 1 }}">
+                <input type="hidden" name="longname" value="{{ "$candidate_new_item[longname] " . "v" . count($similar_items) + 1 }}">
                 <input type="hidden" name="kondisi" value="{{ $candidate_new_item['kondisi'] }}">
                 <input type="hidden" name="cap" value="{{ $candidate_new_item['cap'] }}">
                 <input type="hidden" name="range_usia" value="{{ $candidate_new_item['range_usia'] }}">
@@ -86,7 +86,7 @@
             </div>
         </div>
         <div>
-            @foreach ($similiar_items as $key => $item)
+            @foreach ($similar_items as $key => $item)
                 <div class="flex mt-3">
                     <div class="bg-white shadow drop-shadow size-6 font-bold text-slate-400 flex justify-center items-center">
                         <span>{{ $key+1 }}.</span>

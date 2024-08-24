@@ -31,6 +31,21 @@
             </div>
 
             <div class="p-2">
+                <div class="inline-block bg-white shadow drop-shadow p-1">
+                    <h2 class="text-slate-500 font-bold">Pilih Photo Dari Item Lain</h2>
+                </div>
+                <form action="">
+
+                </form>
+            </div>
+
+            <div class="p-2">
+                <div class="inline-block bg-white shadow drop-shadow p-1">
+                    <h2 class="text-slate-500 font-bold">Pilih Photo Baru</h2>
+                </div>
+            </div>
+
+            <div class="p-2">
                 @for ($i = 0; $i < 5; $i++)
                     @if ($item_photos[$i])
                         <div class="flex gap-2">
@@ -102,4 +117,9 @@
         {{-- <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button> --}}
     </main>
     <script src="{{ asset('js/item.js') }}"></script>
+    <script>
+        setTimeout(() => {
+            console.log(all_items_x_photos);
+        }, 1000);
+    </script>
 @endsection

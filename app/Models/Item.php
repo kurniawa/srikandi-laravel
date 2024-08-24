@@ -182,7 +182,7 @@ class Item extends Model
         if ($post['plat']) {
             $plat = $post['plat'];
         }
-        
+
         $keterangan = null;
         if (isset($post['keterangan'])) {
             $keterangan = $post['keterangan'];
@@ -227,11 +227,11 @@ class Item extends Model
     //             'menus' => Menu::get(),
     //             'profile_menus' => Menu::get_profile_menus(Auth::user()),
     //             'cart' => Cart::where('user_id', Auth::user()->id)->first(),
-    //             'similiar_items' => $item_exists,
+    //             'similar_items' => $item_exists,
     //             'candidate_new_item' => $candidate_new_item
     //         ];
 
-    //         return view('items.found_similiar_items', $data);
+    //         return view('items.found_similar_items', $data);
     //     }
     // }
 
@@ -281,7 +281,7 @@ class Item extends Model
             // END - get ItemPhotos secara manual, karena $item_exist bukan collection
 
             $data = [
-                'similiar_items' => $item_exists,
+                'similar_items' => $item_exists,
                 'candidate_new_item' => $candidate_new_item,
                 'checkbox_mata' => $checkbox_mata,
                 'warna_mata' => $warna_mata,
@@ -292,7 +292,7 @@ class Item extends Model
                 'tipe_transaksi' => $tipe_transaksi,
             ];
             
-            // return view('items.buyback_found_similiar_items', $data);
+            // return view('items.buyback_found_similar_items', $data);
         }
 
         return array($item_exists, $data);

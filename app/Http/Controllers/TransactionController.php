@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Auth;
 
 class TransactionController extends Controller
 {
-    function found_similiar_items(Request $request) {
+    function found_similar_items(Request $request) {
         $get = $request->query();
         $user = Auth::user();
         $cart = null;
@@ -36,7 +36,7 @@ class TransactionController extends Controller
         // dump($get);
         // dd($data);
 
-        return view("items.found_similiar_items", $data);
+        return view("items.found_similar_items", $data);
     }
 
     function rincian_transaksi(User $user, Request $request) {

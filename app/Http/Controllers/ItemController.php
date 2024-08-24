@@ -121,7 +121,7 @@ class ItemController extends Controller
             $data['route2'] = 'items.show';
             $data['all_items_x_photos'] = Item::get_all_item_x_photos();
             // dd($data);
-            return view('items.found_similiar_items', $data);
+            return view('items.found_similar_items', $data);
         }
         // END - CEK ITEM YANG SAMA
         // dd($candidate_new_item);
@@ -604,5 +604,9 @@ class ItemController extends Controller
         ];
 
         return back()->with($feedback);
+    }
+
+    function link_photo_from_similar_item(Item $item, Item $similar_item) {
+        
     }
 }

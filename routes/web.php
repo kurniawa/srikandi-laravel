@@ -102,6 +102,7 @@ Route::controller(ItemController::class)->group(function () {
     Route::post('/items/{item}/{item_photo}/{photo}/delete_photo', 'delete_photo')->name('items.delete_photo')->middleware('level3');
     Route::get('/items/{item}/add_photo', 'add_photo')->name('items.add_photo')->middleware('level3');
     Route::post('/items/{item}/update_stock', 'update_stock')->name('items.update_stock')->middleware('level3');
+    Route::get('/items/{item}/{similar_item}/link_photo_from_similar_item', 'link_photo_from_similar_item')->name('items.link_photo_from_similar_item')->middleware('level3');
     // Route::post('/items/{item}/mau','mau')->name('items.mau');
     // Route::post('/items/{item}/{peminat_item}/hapus_peminat','hapus_peminat')->name('items.hapus_peminat');
 });
@@ -144,12 +145,12 @@ Route::controller(CashflowController::class)->group(function () {
     Route::get('/cashflow/index', 'index')->name('cashflow.index')->middleware('level5');
     Route::get('/cashflow/transaksi/{tipe_transaksi}', 'transaksi')->name('cashflow.transaksi')->middleware('level3');
     Route::post('/cashflow/store_transaction', 'store_transaction')->name('cashflow.store_transaction')->middleware('level3');
-    Route::get('/cashflow/found_similiar_items', 'found_similiar_items')->name('cashflow.found_similiar_items')->middleware('level3');
+    Route::get('/cashflow/found_similar_items', 'found_similar_items')->name('cashflow.found_similar_items')->middleware('level3');
     // Route::post('/cashflow/store_and_buyback_perhiasan', 'store_and_buyback_perhiasan')->name('cashflow.store_and_buyback_perhiasan')->middleware('level3');
 });
 
 Route::controller(TransactionController::class)->group(function () {
-    Route::get('/transactions/found_similiar_items', 'found_similiar_items')->name('transactions.found_similiar_items')->middleware('level3');
+    Route::get('/transactions/found_similar_items', 'found_similar_items')->name('transactions.found_similar_items')->middleware('level3');
     Route::get('/transactions/{user}/rincian_transaksi', 'rincian_transaksi')->name('transactions.rincian_transaksi')->middleware('level3');
 });
 

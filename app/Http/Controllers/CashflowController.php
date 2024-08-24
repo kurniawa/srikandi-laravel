@@ -235,7 +235,7 @@ class CashflowController extends Controller
                     //     $data['route1'] = 'items.store';
                     //     $data['route2'] = 'items.show';
                     //     // dd($data);
-                    //     return view('items.found_similiar_items', $data);
+                    //     return view('items.found_similar_items', $data);
                     // }
                     if (count($item_exist)) {
                         // dump($item_exist);
@@ -245,8 +245,8 @@ class CashflowController extends Controller
                         $data['route1'] = 'cashflow.store_transaction';
                         $data['route2'] = 'items.show';
                         // dd($data);
-                        return redirect()->route('transactions.found_similiar_items', $data);
-                        // return view('items.found_similiar_items', $data);
+                        return redirect()->route('transactions.found_similar_items', $data);
+                        // return view('items.found_similar_items', $data);
                     } else {
                         $candidate_new_item = Item::empty_string_become_null($candidate_new_item);
                         $item = Item::create($candidate_new_item);
