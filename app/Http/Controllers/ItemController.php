@@ -124,7 +124,7 @@ class ItemController extends Controller
             return view('items.found_similiar_items', $data);
         }
         // END - CEK ITEM YANG SAMA
-        dd($candidate_new_item);
+        // dd($candidate_new_item);
         $item_new = Item::create($candidate_new_item);
 
         // STORE itemMata dan itemMainan
