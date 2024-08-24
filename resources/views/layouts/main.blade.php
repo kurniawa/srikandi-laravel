@@ -20,7 +20,7 @@
             font-feature-settings: normal;
         }
     </style>
-    <title>Srikandi</title>
+    <title>Srikandi.EP</title>
     @laravelPWA
 
 </head>

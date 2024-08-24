@@ -1,15 +1,16 @@
 <?php
 
 return [
-    'name' => 'NeengratEP',
+    'name' => 'SrikandiEP',
     'manifest' => [
         'name' => env('APP_NAME', 'Neengrat ERM+POS PWA'),
-        'short_name' => 'NeengratEP',
+        'short_name' => 'SrikandiEP',
         'start_url' => '/',
         'background_color' => '#ffffff',
         'theme_color' => '#000000',
         'display' => 'standalone',
-        'orientation'=> 'any',
+        // 'orientation'=> 'any',
+        'orientation'=> 'portrait',
         'status_bar'=> 'black',
         'icons' => [
             '72x72' => [

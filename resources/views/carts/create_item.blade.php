@@ -97,7 +97,7 @@
                     <div class="mb-5">
                         <label id="label_kadar_formatted" for="kadar_formatted"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">kadar(%)</label>
-                        <input type="text" id="kadar_formatted"
+                        <input type="text" inputmode="numeric" id="kadar_formatted"
                             value="{{ old('kadar_formatted') ? old('kadar_formatted') : '' }}"
                             onchange="formatNumber(this, 'kadar');generateNama()"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -106,7 +106,7 @@
                     <div class="mb-5">
                         <label id="label_berat_formatted" for="berat_formatted"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">berat</label>
-                        <input type="text" id="berat_formatted"
+                        <input type="text" inputmode="numeric" id="berat_formatted"
                             value="{{ old('berat_formatted') ? old('berat_formatted') : '' }}"
                             onchange="formatNumber(this, 'berat');hitungHargaGrOrT();generateNama();"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">

@@ -9,7 +9,7 @@
                 <h3 class="text-3xl font-bold text-indigo-500">Login</h3>
             </div>
             <div class="w-screen flex justify-center">
-                <form action="{{ route('login') }}" method="POST" class="border rounded p-2 mt-2 w-3/4">
+                <form action="{{ route('login') }}" method="POST" class="border rounded p-2 mt-2 w-3/4" onsubmit="showLoadingSpinner()">
                     @csrf
                     <div class="mt-5    ">
                         <label for="username" class="block font-medium leading-6 text-gray-900">Username</label>
