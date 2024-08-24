@@ -82,18 +82,18 @@
 
                 @if ($kadar->kategori == 'CT')
                 <div class="col-span-5">
-                    <input type="text" name="harga_beli-formatted[]" class="w-full rounded" onchange="formatNumber(this, 'harga_beli-{{ $kadar->kategori }}'); generateHargaPasaran()">
+                    <input type="text" inputmode="numeric" name="harga_beli-formatted[]" class="w-full rounded" onchange="formatNumber(this, 'harga_beli-{{ $kadar->kategori }}'); generateHargaPasaran()">
                     <input type="hidden" name="harga_beli[]" id="harga_beli-{{ $kadar->kategori }}">
                 </div>
                 @else
                 <div class="col-span-5">
-                    <input type="text" name="harga_beli-formatted[]" id="harga_beli-{{ $kadar->kategori }}-formatted" class="w-full rounded" onchange="formatNumber(this, 'harga_beli-{{ $kadar->kategori }}')">
+                    <input type="text" inputmode="numeric" name="harga_beli-formatted[]" id="harga_beli-{{ $kadar->kategori }}-formatted" class="w-full rounded" onchange="formatNumber(this, 'harga_beli-{{ $kadar->kategori }}')">
                     <input type="hidden" name="harga_beli[]" id="harga_beli-{{ $kadar->kategori }}">
                 </div>
                 @endif
 
                 <div class="col-span-5">
-                    <input type="text" name="harga_buyback-formatted[]" id="harga_buyback-{{ $kadar->kategori }}-formatted" class="w-full rounded" onchange="formatNumber(this, 'harga_buyback-{{ $kadar->kategori }}')">
+                    <input type="text" inputmode="numeric" name="harga_buyback-formatted[]" id="harga_buyback-{{ $kadar->kategori }}-formatted" class="w-full rounded" onchange="formatNumber(this, 'harga_buyback-{{ $kadar->kategori }}')">
                     <input type="hidden" name="harga_buyback[]" id="harga_buyback-{{ $kadar->kategori }}">
                 </div>
 

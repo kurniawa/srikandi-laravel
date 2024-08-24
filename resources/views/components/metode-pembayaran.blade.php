@@ -5,7 +5,7 @@
         <input type="checkbox" id="checkbox-tunai" name="tunai" value="yes" onclick="toggleTunai(this)">
         <label for="checkbox-tunai" class="ml-2">Tunai</label>
     </div>
-    <input type="text" id="jumlah_tunai" class="input ml-5 hidden" onchange="formatNumber(this, 'jumlah-tunai'); hitungTotalBayar()">
+    <input type="text" inputmode="numeric" id="jumlah_tunai" class="input ml-5 hidden" onchange="formatNumber(this, 'jumlah-tunai'); hitungTotalBayar()">
     <input type="hidden" name="jumlah_tunai" id="jumlah-tunai" class="jumlah-bayar">
     <div class="flex items-center mt-2">
         <input type="checkbox" id="checkbox-non-tunai" name="non_tunai" value="yes" onclick="toggleNonTunai(this)">

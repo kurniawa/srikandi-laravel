@@ -93,7 +93,7 @@
             </tr>
             <tr>
                 <td><label for="pelanggan_nik">NIK</label></td><td><span class="mx-2">:</span></td>
-                <td><input type="text" name="pelanggan_nik" id="pelanggan_nik" value="{{ $pelanggannik }}" class="border-0 p-0" readonly></td>
+                <td><input type="text" inputmode="numeric" name="pelanggan_nik" id="pelanggan_nik" value="{{ $pelanggannik }}" class="border-0 p-0" readonly></td>
             </tr>
         </table>
         @else
@@ -109,7 +109,7 @@
             </tr>
             <tr>
                 <td><label for="pelanggan_nik">NIK</label></td><td><span class="mx-2">:</span></td>
-                <td><input type="text" name="pelanggan_nik" id="pelanggan_nik" class="border rounded p-1 bg-slate-100" readonly></td>
+                <td><input type="text" inputmode="numeric" name="pelanggan_nik" id="pelanggan_nik" class="border rounded p-1 bg-slate-100" readonly></td>
             </tr>
         </table>
         @endif
@@ -131,7 +131,7 @@
             </tr>
             <tr>
                 <td><label for="cari_nik_pelanggan">NIK</label></td><td><span class="mx-2">:</span></td>
-                <td><input type="text" name="pelanggan_nik" id="cari_nik_pelanggan" class="border rounded p-1"></td>
+                <td><input type="text" inputmode="numeric" name="pelanggan_nik" id="cari_nik_pelanggan" class="border rounded p-1"></td>
             </tr>
             <tr>
                 <td colspan="3"><div id="feedback_cari_pelanggan" class="text-xs text-red-500"></div></td>
@@ -207,7 +207,7 @@
             <input type="checkbox" id="checkbox-tunai" name="tunai" value="yes" onclick="toggleTunai(this)">
             <label for="checkbox-tunai" class="ml-2">Tunai</label>
         </div>
-        <input type="text" id="jumlah_tunai" class="input ml-5 hidden" onchange="formatNumber(this, 'jumlah-tunai'); hitungTotalBayar()">
+        <input type="text" id="jumlah_tunai" inputmode="numeric" class="input ml-5 hidden" onchange="formatNumber(this, 'jumlah-tunai'); hitungTotalBayar()">
         <input type="hidden" name="jumlah_tunai" id="jumlah-tunai" class="jumlah-bayar">
         <div class="flex items-center mt-2">
             <input type="checkbox" id="checkbox-non-tunai" name="non_tunai" value="yes" onclick="toggleNonTunai(this)">

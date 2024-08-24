@@ -284,21 +284,21 @@
                             <td>:</td>
                             @if (old('berat_buyback'))
                                 <td>
-                                    <input type="text" id="berat_buyback_formatted" class="rounded p-1"
+                                    <input type="text" inputmode="numeric" id="berat_buyback_formatted" class="rounded p-1"
                                         value="{{ old('berat_buyback_formatted') }}">
                                     <input type="hidden" id="berat_buyback" name="berat_buyback[]"
                                         value="{{ old('berat_buyback') }}">
                                 </td>
                             @elseif ($surat_pembelian_item->berat_buyback)
                                 <td>
-                                    <input type="text" id="berat_buyback_formatted" class="rounded p-1"
+                                    <input type="text" inputmode="numeric" id="berat_buyback_formatted" class="rounded p-1"
                                         value="{{ casual_decimal_format($surat_pembelian_item->berat_buyback) }}">
                                     <input type="hidden" id="berat_buyback" name="berat_buyback[]"
                                         value="{{ (float) $surat_pembelian_item->berat_buyback / 100 }}">
                                 </td>
                             @else
                                 <td>
-                                    <input type="text" id="berat_buyback_formatted" class="rounded p-1"
+                                    <input type="text" inputmode="numeric" id="berat_buyback_formatted" class="rounded p-1"
                                         value="{{ casual_decimal_format($surat_pembelian_item->berat) }}">
                                     <input type="hidden" id="berat_buyback" name="berat_buyback[]"
                                         value="{{ $surat_pembelian_item->berat / 100 }}">
@@ -312,7 +312,7 @@
                             <td>:</td>
                             @if (old('potongan_ongkos'))
                                 <td>
-                                    <input type="text" id="potongan_ongkos_formatted-{{ $key }}"
+                                    <input type="text" inputmode="numeric" id="potongan_ongkos_formatted-{{ $key }}"
                                         class="rounded p-1"
                                         onchange="formatNumber(this, 'potongan_ongkos-{{ $key }}');hitungHargaBuyback({{ $key }})"
                                         value="{{ old('potongan_ongkos_formatted') }}">
@@ -321,7 +321,7 @@
                                 </td>
                             @elseif ($surat_pembelian_item->potongan_ongkos)
                                 <td>
-                                    <input type="text" id="potongan_ongkos_formatted-{{ $key }}"
+                                    <input type="text" inputmode="numeric" id="potongan_ongkos_formatted-{{ $key }}"
                                         class="rounded p-1"
                                         onchange="formatNumber(this, 'potongan_ongkos-{{ $key }}');hitungHargaBuyback({{ $key }})"
                                         value="{{ casual_decimal_format($surat_pembelian_item->potongan_ongkos) }}">
@@ -331,7 +331,7 @@
                                 </td>
                             @else
                                 <td>
-                                    <input type="text" id="potongan_ongkos_formatted-{{ $key }}"
+                                    <input type="text" inputmode="numeric" id="potongan_ongkos_formatted-{{ $key }}"
                                         class="rounded p-1"
                                         onchange="formatNumber(this, 'potongan_ongkos-{{ $key }}');hitungHargaBuyback({{ $key }})"
                                         value="{{ casual_decimal_format(((float) $surat_pembelian_item->ongkos_g * (float) $surat_pembelian_item->berat) / 100) }}">
@@ -348,7 +348,7 @@
                             <td>:</td>
                             @if (old('potongan_mata'))
                                 <td>
-                                    <input type="text" id="potongan_mata_formatted-{{ $key }}"
+                                    <input type="text" inputmode="numeric" id="potongan_mata_formatted-{{ $key }}"
                                         onchange="formatNumber(this, 'potongan_mata-{{ $key }}');hitungHargaBuyback({{ $key }})"
                                         class="rounded p-1" value="{{ old('potongan_mata_formatted') }}">
                                     <input type="hidden" name="potongan_mata[]" id="potongan_mata-{{ $key }}"
@@ -356,7 +356,7 @@
                                 </td>
                             @elseif ($surat_pembelian_item->potongan_mata)
                                 <td>
-                                    <input type="text" id="potongan_mata_formatted-{{ $key }}"
+                                    <input type="text" inputmode="numeric" id="potongan_mata_formatted-{{ $key }}"
                                         onchange="formatNumber(this, 'potongan_mata-{{ $key }}');hitungHargaBuyback({{ $key }})"
                                         class="rounded p-1"
                                         value="{{ casual_decimal_format($surat_pembelian_item->potongan_mata) }}">
@@ -365,7 +365,7 @@
                                 </td>
                             @else
                                 <td>
-                                    <input type="text" id="potongan_mata_formatted-{{ $key }}"
+                                    <input type="text" inputmode="numeric" id="potongan_mata_formatted-{{ $key }}"
                                         onchange="formatNumber(this, 'potongan_mata-{{ $key }}');hitungHargaBuyback({{ $key }})"
                                         class="rounded p-1">
                                     <input type="hidden" name="potongan_mata[]" id="potongan_mata-{{ $key }}">
@@ -379,7 +379,7 @@
                             <td>:</td>
                             @if (old('potongan_rusak'))
                                 <td>
-                                    <input type="text" id="potongan_rusak_formatted-{{ $key }}"
+                                    <input type="text" inputmode="numeric" id="potongan_rusak_formatted-{{ $key }}"
                                         onchange="formatNumber(this, 'potongan_rusak-{{ $key }}');hitungHargaBuyback({{ $key }})"
                                         class="rounded p-1" value="{{ old('potongan_rusak_formatted') }}">
                                     <input type="hidden" name="potongan_rusak[]"
@@ -387,7 +387,7 @@
                                 </td>
                             @elseif ($surat_pembelian_item->potongan_rusak)
                                 <td>
-                                    <input type="text" id="potongan_rusak_formatted-{{ $key }}"
+                                    <input type="text" inputmode="numeric" id="potongan_rusak_formatted-{{ $key }}"
                                         onchange="formatNumber(this, 'potongan_rusak-{{ $key }}');hitungHargaBuyback({{ $key }})"
                                         class="rounded p-1"
                                         value="{{ casual_decimal_format($surat_pembelian_item->potongan_rusak) }}">
@@ -397,7 +397,7 @@
                                 </td>
                             @else
                                 <td>
-                                    <input type="text" id="potongan_rusak_formatted-{{ $key }}"
+                                    <input type="text" inputmode="numeric" id="potongan_rusak_formatted-{{ $key }}"
                                         onchange="formatNumber(this, 'potongan_rusak-{{ $key }}');hitungHargaBuyback({{ $key }})"
                                         class="rounded p-1">
                                     <input type="hidden" name="potongan_rusak[]"
@@ -412,7 +412,7 @@
                             <td>:</td>
                             @if (old('potongan_susut'))
                                 <td>
-                                    <input type="text" id="potongan_susut_formatted-{{ $key }}"
+                                    <input type="text" inputmode="numeric" id="potongan_susut_formatted-{{ $key }}"
                                         class="rounded p-1"
                                         onchange="formatNumber(this, 'potongan_susut-{{ $key }}');hitungHargaBuyback({{ $key }})"
                                         value="{{ old('potongan_susut_formatted') }}">
@@ -421,7 +421,7 @@
                                 </td>
                             @elseif ($surat_pembelian_item->potongan_susut)
                                 <td>
-                                    <input type="text" id="potongan_susut_formatted-{{ $key }}"
+                                    <input type="text" inputmode="numeric" id="potongan_susut_formatted-{{ $key }}"
                                         onchange="formatNumber(this, 'potongan_susut-{{ $key }}');hitungHargaBuyback({{ $key }})"
                                         class="rounded p-1"
                                         value="{{ casual_decimal_format($surat_pembelian_item->potongan_susut) }}">
@@ -431,7 +431,7 @@
                                 </td>
                             @else
                                 <td>
-                                    <input type="text" id="potongan_susut_formatted-{{ $key }}"
+                                    <input type="text" inputmode="numeric" id="potongan_susut_formatted-{{ $key }}"
                                         onchange="formatNumber(this, 'potongan_susut-{{ $key }}');hitungHargaBuyback({{ $key }})"
                                         class="rounded p-1">
                                     <input type="hidden" name="potongan_susut[]"
@@ -446,7 +446,7 @@
                             <td>:</td>
                             @if (old('potongan_lain'))
                                 <td>
-                                    <input type="text" id="potongan_lain_formatted-{{ $key }}"
+                                    <input type="text" inputmode="numeric" id="potongan_lain_formatted-{{ $key }}"
                                         onchange="formatNumber(this, 'potongan_lain-{{ $key }}');hitungHargaBuyback({{ $key }})"
                                         class="rounded p-1" value="{{ old('potongan_lain_formatted') }}">
                                     <input type="hidden" name="potongan_lain[]" id="potongan_lain-{{ $key }}"
@@ -454,7 +454,7 @@
                                 </td>
                             @elseif ($surat_pembelian_item->potongan_lain)
                                 <td>
-                                    <input type="text" id="potongan_lain_formatted-{{ $key }}"
+                                    <input type="text" inputmode="numeric" id="potongan_lain_formatted-{{ $key }}"
                                         onchange="formatNumber(this, 'potongan_lain-{{ $key }}');hitungHargaBuyback({{ $key }})"
                                         class="rounded p-1"
                                         value="{{ casual_decimal_format($surat_pembelian_item->potongan_lain) }}">
@@ -463,7 +463,7 @@
                                 </td>
                             @else
                                 <td>
-                                    <input type="text" id="potongan_lain_formatted-{{ $key }}"
+                                    <input type="text" inputmode="numeric" id="potongan_lain_formatted-{{ $key }}"
                                         onchange="formatNumber(this, 'potongan_lain-{{ $key }}');hitungHargaBuyback({{ $key }})"
                                         class="rounded p-1">
                                     <input type="hidden" name="potongan_lain[]"
@@ -572,7 +572,7 @@
                         onclick="toggleTunai(this)">
                     <label for="checkbox-tunai" class="ml-2">Tunai</label>
                 </div>
-                <input type="text" id="jumlah_tunai" class="input ml-5 hidden"
+                <input type="text" inputmode="numeric" id="jumlah_tunai" class="input ml-5 hidden"
                     onchange="formatNumber(this, 'jumlah-tunai'); hitungTotalBayar()">
                 <input type="hidden" name="jumlah_tunai" id="jumlah-tunai" class="jumlah-bayar">
                 <div class="flex items-center mt-2">

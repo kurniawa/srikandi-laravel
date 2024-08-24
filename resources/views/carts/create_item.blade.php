@@ -115,7 +115,7 @@
                     <div class="mb-5">
                         <label id="label_harga_g_formatted" for="harga_g_formatted"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">harga/g</label>
-                        <input type="text" id="harga_g_formatted"
+                        <input type="text" inputmode="numeric" id="harga_g_formatted"
                             value="{{ old('harga_g_formatted') ? old('harga_g_formatted') : '' }}"
                             onchange="formatNumber(this, 'harga_g');hitungHargaT();"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -125,7 +125,7 @@
                     <div class="mb-5">
                         <label id="label_ongkos_g_formatted" for="ongkos_g_formatted"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ongkos/g</label>
-                        <input type="text" id="ongkos_g_formatted"
+                        <input type="text" inputmode="numeric" id="ongkos_g_formatted"
                             value="{{ old('ongkos_g_formatted') ? old('ongkos_g_formatted') : '' }}"
                             onchange="formatNumber(this, 'ongkos_g')"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -135,7 +135,7 @@
                     <div class="mb-5">
                         <label id="label_harga_t_formatted" for="harga_t_formatted"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">harga_t</label>
-                        <input type="text" id="harga_t_formatted"
+                        <input type="text" inputmode="numeric" id="harga_t_formatted"
                             value="{{ old('harga_t_formatted') ? old('harga_t_formatted') : '' }}"
                             onchange="formatNumber(this, 'harga_t');hitungHargaGr();"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">

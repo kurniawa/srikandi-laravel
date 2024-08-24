@@ -61,7 +61,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
                 </svg>
             </div>
-            <input type="text" name="tahun" class="border rounded p-1 w-1/3"
+            <input type="text" inputmode="numeric" name="tahun" class="border rounded p-1 w-1/3"
                 value="{{ old('tahun') ? old('tahun') : date('Y', strtotime($harga_pasaran->created_at)) }}">
             {{-- kalau nanti ada fungsi pengubahan tanggal surat, maka ini boleh dihapus --}}
             {{-- <input type="hidden" name="hari" value="{{ date('d') }}" readonly>
@@ -81,18 +81,18 @@
 
                 @if ($harga_pasaran->kategori == 'CT')
                 <div class="col-span-5">
-                    <input type="text" name="harga_beli-formatted" value="{{ casual_decimal_format($harga_pasaran->harga_beli) }}" class="w-full rounded" onchange="formatNumber(this, 'harga_beli-{{ $harga_pasaran->kategori }}'); generateHargaPasaran()">
+                    <input type="text" inputmode="numeric" name="harga_beli-formatted" value="{{ casual_decimal_format($harga_pasaran->harga_beli) }}" class="w-full rounded" onchange="formatNumber(this, 'harga_beli-{{ $harga_pasaran->kategori }}'); generateHargaPasaran()">
                     <input type="hidden" name="harga_beli" value="{{ $harga_pasaran->harga_beli / 100 }}" id="harga_beli-{{ $harga_pasaran->kategori }}">
                 </div>
                 @else
                 <div class="col-span-5">
-                    <input type="text" name="harga_beli-formatted" value="{{ casual_decimal_format($harga_pasaran->harga_beli) }}" id="harga_beli-{{ $harga_pasaran->kategori }}-formatted" class="w-full rounded" onchange="formatNumber(this, 'harga_beli-{{ $harga_pasaran->kategori }}')">
+                    <input type="text" inputmode="numeric" name="harga_beli-formatted" value="{{ casual_decimal_format($harga_pasaran->harga_beli) }}" id="harga_beli-{{ $harga_pasaran->kategori }}-formatted" class="w-full rounded" onchange="formatNumber(this, 'harga_beli-{{ $harga_pasaran->kategori }}')">
                     <input type="hidden" name="harga_beli" value="{{ $harga_pasaran->harga_beli / 100 }}" id="harga_beli-{{ $harga_pasaran->kategori }}">
                 </div>
                 @endif
 
                 <div class="col-span-5">
-                    <input type="text" name="harga_buyback-formatted" value="{{ casual_decimal_format($harga_pasaran->harga_buyback) }}" id="harga_buyback-{{ $harga_pasaran->kategori }}-formatted" class="w-full rounded" onchange="formatNumber(this, 'harga_buyback-{{ $harga_pasaran->kategori }}')">
+                    <input type="text" inputmode="numeric" name="harga_buyback-formatted" value="{{ casual_decimal_format($harga_pasaran->harga_buyback) }}" id="harga_buyback-{{ $harga_pasaran->kategori }}-formatted" class="w-full rounded" onchange="formatNumber(this, 'harga_buyback-{{ $harga_pasaran->kategori }}')">
                     <input type="hidden" name="harga_buyback" value="{{ $harga_pasaran->harga_buyback / 100 }}" id="harga_buyback-{{ $harga_pasaran->kategori }}">
                 </div>
 

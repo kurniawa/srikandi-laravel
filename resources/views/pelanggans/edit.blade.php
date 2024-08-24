@@ -93,7 +93,7 @@
             <div class="mt-3">
                 <label for="nik">NIK / Nomor ID :</label>
                 <div>
-                    <input name="nik" type="text" id="nik" class="rounded text-slate-600 w-full"
+                    <input name="nik" type="text" inputmode="numeric" id="nik" class="rounded text-slate-600 w-full"
                         value="{{ old('nik') ? old('nik') : $pelanggan->nik }}" />
                 </div>
             </div>
@@ -152,7 +152,7 @@
                         </div>
                         <div>
                             <label for="kodepos">Kode POS :</label>
-                            <input type="text" id="kodepos" name="kodepos" class="rounded text-slate-600 w-full"
+                            <input type="text" inputmode="numeric" id="kodepos" name="kodepos" class="rounded text-slate-600 w-full"
                                 value="{{ old('kodepos') ? old('kodepos') : $pelanggan->alamats[0]->kodepos }}" />
                         </div>
                     </div>
@@ -187,7 +187,7 @@
                         </div>
                         <div>
                             <label for="kodepos">Kode POS :</label>
-                            <input type="text" id="kodepos" name="kodepos" class="rounded text-slate-600 w-full"
+                            <input type="text" inputmode="numeric" id="kodepos" name="kodepos" class="rounded text-slate-600 w-full"
                                 value="{{ old('kodepos') ? old('kodepos') : '' }}" />
                         </div>
                     </div>

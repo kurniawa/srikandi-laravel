@@ -147,12 +147,12 @@
                         <label id="label_kadar_formatted" for="kadar_formatted"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">kadar(%)</label>
                         @if (old('kadar'))
-                            <input type="text" id="kadar_formatted" value="{{ old('kadar_formatted') }}"
+                            <input type="text" inputmode="numeric" id="kadar_formatted" value="{{ old('kadar_formatted') }}"
                                 onchange="formatNumber(this, 'kadar');generateNama()"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <input type="hidden" id="kadar" name="kadar" value="{{ old('kadar') }}">
                         @else
-                            <input type="text" id="kadar_formatted" value="{{ casual_decimal_format($item->kadar) }}"
+                            <input type="text" inputmode="numeric" id="kadar_formatted" value="{{ casual_decimal_format($item->kadar) }}"
                                 onchange="formatNumber(this, 'kadar');generateNama()"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <input type="hidden" id="kadar" name="kadar" value="{{ (float) $item->kadar / 100 }}">
@@ -162,12 +162,12 @@
                         <label id="label_berat_formatted" for="berat_formatted"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">berat</label>
                         @if (old('berat'))
-                            <input type="text" id="berat_formatted" value="{{ old('berat_formatted') }}"
+                            <input type="text" inputmode="numeric" id="berat_formatted" value="{{ old('berat_formatted') }}"
                                 onchange="formatNumber(this, 'berat');hitungHargaGrOrT();generateNama();"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <input type="hidden" id="berat" name="berat" value="{{ old('berat') }}">
                         @else
-                            <input type="text" id="berat_formatted" value="{{ casual_decimal_format($item->berat) }}"
+                            <input type="text" inputmode="numeric" id="berat_formatted" value="{{ casual_decimal_format($item->berat) }}"
                                 onchange="formatNumber(this, 'berat');hitungHargaGrOrT();generateNama();"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <input type="hidden" id="berat" name="berat"
@@ -178,12 +178,12 @@
                         <label id="label_harga_g_formatted" for="harga_g_formatted"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">harga_g</label>
                         @if (old('harga_g'))
-                            <input type="text" id="harga_g_formatted" value="{{ old('harga_g_formatted') }}"
+                            <input type="text" inputmode="numeric" id="harga_g_formatted" value="{{ old('harga_g_formatted') }}"
                                 onchange="formatNumber(this, 'harga_g');hitungHargaT();"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <input type="hidden" id="harga_g" name="harga_g" value="{{ old('harga_g') }}">
                         @else
-                            <input type="text" id="harga_g_formatted"
+                            <input type="text" inputmode="numeric" id="harga_g_formatted"
                                 value="{{ casual_decimal_format($item->harga_g) }}"
                                 onchange="formatNumber(this, 'harga_g');hitungHargaT();"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -195,12 +195,12 @@
                         <label id="label_ongkos_g_formatted" for="ongkos_g_formatted"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ongkos/g</label>
                         @if (old('ongkos_g'))
-                            <input type="text" id="ongkos_g_formatted" value="{{ old('ongkos_g_formatted') }}"
+                            <input type="text" inputmode="numeric" id="ongkos_g_formatted" value="{{ old('ongkos_g_formatted') }}"
                                 onchange="formatNumber(this, 'ongkos_g');hitungHargaT();"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <input type="hidden" id="ongkos_g" name="ongkos_g" value="{{ old('ongkos_g') }}">
                         @else
-                            <input type="text" id="ongkos_g_formatted"
+                            <input type="text" inputmode="numeric" id="ongkos_g_formatted"
                                 value="{{ casual_decimal_format($item->ongkos_g) }}"
                                 onchange="formatNumber(this, 'ongkos_g');hitungHargaT();"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -212,12 +212,12 @@
                         <label id="label_harga_t_formatted" for="harga_t_formatted"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">harga_t</label>
                         @if (old('harga_t'))
-                            <input type="text" id="harga_t_formatted" value="{{ old('harga_t_formatted') }}"
+                            <input type="text" inputmode="numeric" id="harga_t_formatted" value="{{ old('harga_t_formatted') }}"
                                 onchange="formatNumber(this, 'harga_t');hitungHargaGr();"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <input type="hidden" id="harga_t" name="harga_t" value="{{ old('harga_t') }}">
                         @else
-                            <input type="text" id="harga_t_formatted"
+                            <input type="text" inputmode="numeric" id="harga_t_formatted"
                                 value="{{ casual_decimal_format($item->harga_t) }}"
                                 onchange="formatNumber(this, 'harga_t');hitungHargaGr();"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -335,11 +335,11 @@
                             <label id="label_ukuran" for="ukuran"
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ukuran(mm.)</label>
                             @if (old('ukuran'))
-                                <input type="text" id="ukuran" name="ukuran" value="{{ old('ukuran') }}"
+                                <input type="text" inputmode="numeric" id="ukuran" name="ukuran" value="{{ old('ukuran') }}"
                                     onchange="generateNama()"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             @else
-                                <input type="text" id="ukuran" name="ukuran" value="{{ $item->ukuran }}"
+                                <input type="text" inputmode="numeric" id="ukuran" name="ukuran" value="{{ $item->ukuran }}"
                                     onchange="generateNama()"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             @endif
@@ -459,7 +459,7 @@
                                                 </select>
                                             </div>
                                             <div class="mb-1">
-                                                <input type="text" id="jumlah_mata" name="jumlah_mata[]"
+                                                <input type="text" inputmode="numeric" id="jumlah_mata" name="jumlah_mata[]"
                                                     value="{{ old("jumlah_mata.$key") ? old("jumlah_mata.$key") : $item_mata->jumlah_mata }}"
                                                     placeholder="jumlah_mata"
                                                     class="jumlah-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -529,7 +529,7 @@
                                             </select>
                                         </div>
                                         <div class="mb-1">
-                                            <input type="text" id="jumlah_mata" name="jumlah_mata[]"
+                                            <input type="text" inputmode="numeric" id="jumlah_mata" name="jumlah_mata[]"
                                                 value="{{ old('jumlah_mata.0') ? old('jumlah_mata.0') : '' }}"
                                                 placeholder="jumlah_mata"
                                                 class="jumlah-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -575,7 +575,7 @@
                                                     class="tipe-mainan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                             </div>
                                             <div class="mb-1">
-                                                <input type="text" id="jumlah_mainan-{{ $key }}"
+                                                <input type="text" inputmode="numeric" id="jumlah_mainan-{{ $key }}"
                                                     name="jumlah_mainan[]"
                                                     value="{{ old("jumlah_mainan.$key") ? old("jumlah_mainan.$key") : $item->item_mainans[$key]->jumlah_mainan }}"
                                                     placeholder="jumlah_mainan"
@@ -604,7 +604,7 @@
                                                 class="tipe-mainan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                         </div>
                                         <div class="mb-1">
-                                            <input type="text" id="jumlah_mainan-0" name="jumlah_mainan[]"
+                                            <input type="text" inputmode="numeric" id="jumlah_mainan-0" name="jumlah_mainan[]"
                                                 value="{{ old('jumlah_mainan.0') ? old('jumlah_mainan.0') : '' }}"
                                                 placeholder="jumlah_mainan"
                                                 class="jumlah-mainan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">

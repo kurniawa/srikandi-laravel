@@ -60,7 +60,7 @@
 
             <div class="mt-3">
                 <label for="nik">NIK / Nomor ID :</label>
-                <input name="nik" type="text" id="nik" placeholder="320101 . . ."
+                <input name="nik" type="text" inputmode="numeric" id="nik" placeholder="320101 . . ."
                     class="border border-slate-400 text-slate-700 shadow rounded w-full px-3 py-2 block placeholder:text-slate-400 focus:outline-none focus:border-none focus:ring-1 focus:ring-blue-500 invalid:text-pink-700 invalid:focus:ring-pink-700;"
                     value="{{ old('nik') ? old('nik') : '' }}" />
             </div>
@@ -106,7 +106,7 @@
                     </div>
                     <div>
                         <label for="kodepos">Kode POS :</label>
-                        <input type="text" id="kodepos" name="kodepos"
+                        <input type="text" inputmode="numeric" id="kodepos" name="kodepos"
                             class="border border-slate-400 text-slate-700 shadow rounded w-full px-3 py-2 block placeholder:text-slate-400 focus:outline-none focus:border-none focus:ring-1 focus:ring-blue-500 invalid:text-pink-700 invalid:focus:ring-pink-700;"
                             value="{{ old('kodepos') ? old('kodepos') : '' }}" />
                     </div>

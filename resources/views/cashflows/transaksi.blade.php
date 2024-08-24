@@ -28,7 +28,7 @@
         <div id="div-total-tagihan" class="mt-3">
             <label for="harga" class="font-bold">Harga</label>
             <div>
-                <input type="text" name="total_tagihan_formatted" id="total_tagihan_formatted" onchange="formatNumber(this, 'total_tagihan_real'); hitungSisaBayar()" class="rounded-lg">
+                <input type="text" inputmode="numeric" name="total_tagihan_formatted" id="total_tagihan_formatted" onchange="formatNumber(this, 'total_tagihan_real'); hitungSisaBayar()" class="rounded-lg">
                 <input type="hidden" name="total_tagihan" id="total_tagihan_real">
             </div>
         </div>

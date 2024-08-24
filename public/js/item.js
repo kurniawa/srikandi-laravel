@@ -49,7 +49,7 @@ function addMata__(index_mata, label_matas) {
                 </select>
             </div>
             <div class="mb-1">
-                <input type="text" id="jumlah_mata" name="jumlah_mata[]" placeholder="jumlah_mata" onchange="generateNama()" class="jumlah-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <input type="text" inputmode="numeric" id="jumlah_mata" name="jumlah_mata[]" placeholder="jumlah_mata" onchange="generateNama()" class="jumlah-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             </div>
         </div>
         <div class="flex justify-end mt-1">
@@ -80,7 +80,7 @@ function addMainan__(index_mainan, mainans) {
                 <input type="text" id="tipe_mainan-${index_mainan}" name="tipe_mainan[]" placeholder="tipe_mainan" onchange="generateNama()" class="tipe-mainan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             </div>
             <div class="mb-1">
-                <input type="text" id="jumlah_mainan-${index_mainan}" name="jumlah_mainan[]" placeholder="jumlah_mainan" onchange="generateNama()" class="jumlah-mainan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <input type="text" inputmode="numeric" id="jumlah_mainan-${index_mainan}" name="jumlah_mainan[]" placeholder="jumlah_mainan" onchange="generateNama()" class="jumlah-mainan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             </div>
         </div>
         <div class="flex justify-end mt-1">

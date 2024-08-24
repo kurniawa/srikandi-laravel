@@ -122,7 +122,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
                     </svg>
                 </div>
-                <input type="text" name="tahun" class="border rounded p-1 w-1/3"
+                <input type="text" inputmode="numeric" name="tahun" class="border rounded p-1 w-1/3"
                     value="{{ old('tahun') ? old('tahun') : date('Y') }}" readonly>
                 {{-- kalau nanti ada fungsi pengubahan tanggal surat, maka ini boleh dihapus --}}
                 <input type="hidden" name="hari" value="{{ date('d') }}" readonly>
@@ -218,7 +218,7 @@
                 <input type="checkbox" id="checkbox-tunai" name="tunai" value="yes" onclick="toggleTunai(this)">
                 <label for="checkbox-tunai" class="ml-2">Tunai</label>
             </div>
-            <input type="text" id="jumlah_tunai" class="input ml-5 hidden"
+            <input type="text" inputmode="numeric" id="jumlah_tunai" class="input ml-5 hidden"
                 onchange="formatNumber(this, 'jumlah-tunai'); hitungTotalBayar()">
             <input type="hidden" name="jumlah_tunai" id="jumlah-tunai" class="jumlah-bayar">
             <div class="flex items-center mt-2">

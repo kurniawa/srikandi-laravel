@@ -11,7 +11,7 @@
         </tr>
         <tr>
             <td><label for="pelanggan_nik">NIK</label></td><td><span class="mx-2">:</span></td>
-            <td><input type="text" name="pelanggan_nik" id="pelanggan_nik" value="{{ $pelanggannik }}" class="border-0 p-0" readonly></td>
+            <td><input type="text" inputmode="numeric" name="pelanggan_nik" id="pelanggan_nik" value="{{ $pelanggannik }}" class="border-0 p-0" readonly></td>
         </tr>
     </table>
     @else
@@ -27,7 +27,7 @@
         </tr>
         <tr>
             <td><label for="pelanggan_nik">NIK</label></td><td><span class="mx-2">:</span></td>
-            <td><input type="text" name="pelanggan_nik" id="pelanggan_nik" class="border rounded p-1 bg-slate-100" readonly></td>
+            <td><input type="text" inputmode="numeric" name="pelanggan_nik" id="pelanggan_nik" class="border rounded p-1 bg-slate-100" readonly></td>
         </tr>
     </table>
     @endif
@@ -50,7 +50,7 @@
         </tr>
         <tr>
             <td><label for="cari_nik_pelanggan">NIK</label></td><td><span class="mx-2">:</span></td>
-            <td><input type="text" name="pelanggan_nik" id="cari_nik_pelanggan" class="border rounded p-1"></td>
+            <td><input type="text" inputmode="numeric" name="pelanggan_nik" id="cari_nik_pelanggan" class="border rounded p-1"></td>
         </tr>
         <tr>
             <td colspan="3"><div id="feedback_cari_pelanggan" class="text-xs text-red-500"></div></td>
@@ -78,7 +78,7 @@
         </tr>
         <tr>
             <td><label for="cari_nik_pelanggan">NIK</label></td><td><span class="mx-2">:</span></td>
-            <td><input type="text" name="pelanggan_nik" id="cari_nik_pelanggan" class="border rounded p-1"></td>
+            <td><input type="text" inputmode="numeric" name="pelanggan_nik" id="cari_nik_pelanggan" class="border rounded p-1"></td>
         </tr>
         <tr>
             <td colspan="3"><div id="feedback_cari_pelanggan" class="text-xs text-red-500"></div></td>
