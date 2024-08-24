@@ -105,10 +105,6 @@ class Item extends Model
                 // 'keterangan' => 'nullable',
                 'status' => 'nullable',
             ]);
-            $keterangan = "";
-            if (isset($post['keterangan'])) {
-                $keterangan = $post['keterangan'];
-            }
             $tipe_perhiasan = $post['tipe_perhiasan'];
             $jenis_perhiasan = $post['jenis_perhiasan'];
             // CEK relasi tipe_perhiasan dengan jenis_perhiasan
@@ -157,34 +153,39 @@ class Item extends Model
         }
 
         // ATTRIBUTE YANG KEMUNGKINAN VALUE NULL DIUBAH MENJADI EMPTY STRING
-        $deskripsi = "";
+        $deskripsi = null;
         if ($post['deskripsi']) {
             $deskripsi = $post['deskripsi'];
         }
 
-        $range_usia = "";
+        $range_usia = null;
         if ($post['range_usia']) {
             $range_usia = $post['range_usia'];
         }
 
-        $cap = "";
+        $cap = null;
         if ($post['cap']) {
             $cap = $post['cap'];
         }
 
-        $ukuran = "";
+        $ukuran = null;
         if ($post['ukuran']) {
             $ukuran = $post['ukuran'];
         }
 
-        $merk = "";
+        $merk = null;
         if ($post['merk']) {
             $merk = $post['merk'];
         }
 
-        $plat = "";
+        $plat = null;
         if ($post['plat']) {
             $plat = $post['plat'];
+        }
+        
+        $keterangan = null;
+        if (isset($post['keterangan'])) {
+            $keterangan = $post['keterangan'];
         }
         // END - ATTRIBUTE YANG KEMUNGKINAN VALUE NULL DIUBAH MENJADI EMPTY STRING
 
