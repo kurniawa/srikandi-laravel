@@ -64,7 +64,7 @@
                                     </svg>
                                 </div>
                                 <div class="">
-                                    <input type="text" name="longname" id="longname" oninput="searchItem(this, 'search-result')" class="border-none w-full p-1" placeholder="nama barang/item...">
+                                    <input type="text" name="longname" id="search-longname" oninput="searchItem(this, 'search-result')" class="border-none w-full p-1" placeholder="nama barang/item...">
                                 </div>
                             </div>
                         </form>
