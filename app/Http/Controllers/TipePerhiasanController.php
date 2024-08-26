@@ -33,7 +33,7 @@ class TipePerhiasanController extends Controller
             'cart' => $cart,
             'col_jenis_perhiasans' => $col_jenis_perhiasans,
             'tipe_perhiasans' => $tipe_perhiasans,
-            'all_items_x_photos' => Item::get_all_item_x_photos(),
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
 
         return view('attributes.tipe_perhiasan_index', $data);
@@ -86,7 +86,7 @@ class TipePerhiasanController extends Controller
             'user' => $user,
             'cart' => $cart,
             'cap' => $tipe_perhiasan,
-            'all_items_x_photos' => Item::get_all_item_x_photos(),
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
 
         return view('attributes.tipe_perhiasan_edit', $data);

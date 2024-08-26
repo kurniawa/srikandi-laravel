@@ -48,22 +48,32 @@ class PhotoController extends Controller
             "success_" => $success_
         ];
 
-        return back()->with($feedback);
+        return redirect()->route('items.add_photo', $item->id)->with($feedback);
 
     }
 
     function delete_photo(Item $item, ItemPhoto $item_photo, Photo $photo) {
         // dump(Storage::exists($item_photo->photo_path));
-        // dd($item_photo);
+        // dump($item);
+        // dump($item_photo);
+        // dd($photo);
         $warnings_ = "";
-        if (Storage::exists($photo->path)) {
-            Storage::delete($photo->path);
+        // CEK APAKAH PHOTO DIGUNAKAN OLEH ITEM LAIN
+        $used_by_other_item = ItemPhoto::where('photo_id', $photo->id)->where('id', '!=', $item->id)->first();
+        // END - CEK APAKAH PHOTO DIGUNAKAN OLEH ITEM LAIN
+        if (!$used_by_other_item) {
+            if (Storage::exists($photo->path)) {
+                Storage::delete($photo->path);
+            }
+            $warnings_ .= "-File storage dihapus-";
+            $photo->delete();
+            // $item_photo->delete();
+            $warnings_ .= "-Foto & ItemPhoto dihapus-";
+        } else {
+            $item_photo->delete();
+            $warnings_ .= "-Foto digunakan pada item lain -> ItemPhoto dihapus-";
         }
-        $warnings_ .= "-File storage dihapus-";
 
-        $photo->delete();
-        // $item_photo->delete();
-        $warnings_ .= "-Photo & ItemPhoto dihapus-";
 
         $feedback = [
             "warnings_" => $warnings_,
@@ -169,6 +179,36 @@ class PhotoController extends Controller
         ];
 
         return back()->with($feedback);
+    }
+
+    function add_photo_from_sugestion(Item $item, Request $request) {
+        $post = $request->post();
+        // dump($post);
+        // dd($item);
+        $request->validate([
+            'photo_id' => 'required|numeric',
+            'photo_index' => 'required|numeric',
+        ]);
+        $success_ = '';
+        $continue = false;
+        // PENGECEKAN JUMLAH PHOTO DIBATASI HANYA LIMA
+        $item_photos = ItemPhoto::where('item_id', $item->id)->get();
+        if (count($item_photos) <= 5) {
+            $continue = true;
+        }
+        // END - PENGECEKAN JUMLAH PHOTO DIBATASI HANYA LIMA
+        if ($continue) {
+            ItemPhoto::create([
+                'item_id' => $item->id,
+                'photo_id' => $post['photo_id'],
+                'photo_index' => $post['photo_index']
+            ]);
+            $success_ .= '-ItemPhoto created-';
+            $feedback = [
+                'success_' => $success_
+            ];
+            return redirect()->route('items.add_photo', $item->id)->with($feedback);
+        }
     }
 
 }

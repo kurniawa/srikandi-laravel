@@ -371,13 +371,17 @@ class Item extends Model
 
     }
 
-    static function get_all_item_x_photos() {
+    static function get_all_item_x_photos($route, $item_id) {
         $all_items = Item::select('id', 'shortname', 'longname', 'harga_g', 'ongkos_g', 'harga_t')->get();
         $all_items_x_photos = collect();
         foreach ($all_items as $item) {
             $photo_path = null;
             if (count($item->photos)) {
                 $photo_path = $item->photos[0]->path;
+            }
+            $url_path = "items/$item->id/show";
+            if ($route && $route == 'items.link_photo_from_similar_item') {
+                $url_path = "items/$item_id/$item->id/link_photo_from_similar_item";
             }
             $all_items_x_photos->push([
                 'id' => $item->id,
@@ -387,9 +391,91 @@ class Item extends Model
                 'ongkos_g' => $item->ongkos_g,
                 'harga_t' => $item->harga_t,
                 'photo_path' => $photo_path,
+                'url_path' => $url_path,
             ]);
         }
 
         return $all_items_x_photos;
+    }
+
+    static function similar_items_x_photos($route, $item) {
+        $similar_items = Item::select('id', 'shortname', 'longname', 'harga_g', 'ongkos_g', 'harga_t')
+        ->where('tipe_barang', $item->tipe_barang)
+        ->where('tipe_perhiasan', $item->tipe_perhiasan)
+        ->where('jenis_perhiasan', $item->jenis_perhiasan)
+        ->where('id', '!=', $item->id)->get();
+
+        $similar_items_x_photos = collect();
+
+        foreach ($similar_items as $similar_item) {
+            $photo_path = null;
+            if (count($similar_item->photos)) {
+                $photo_path = $similar_item->photos[0]->path;
+            }
+            $url_path = "items/$similar_item->id/show";
+            if ($route && $route == 'items.link_photo_from_similar_item') {
+                $url_path = "items/$item->id/$similar_item->id/link_photo_from_similar_item";
+            }
+            $similar_items_x_photos->push([
+                'id' => $similar_item->id,
+                'shortname' => $similar_item->shortname,
+                'longname' => $similar_item->longname,
+                'harga_g' => $similar_item->harga_g,
+                'ongkos_g' => $similar_item->ongkos_g,
+                'harga_t' => $similar_item->harga_t,
+                'photo_path' => $photo_path,
+                'url_path' => $url_path,
+            ]);
+        }
+
+        return $similar_items_x_photos;
+    }
+
+    static function saran_photos($item) {
+        $similar_items = Item::select('id', 'shortname', 'longname', 'harga_g', 'ongkos_g', 'harga_t')
+        ->where('tipe_barang', $item->tipe_barang)
+        ->where('tipe_perhiasan', $item->tipe_perhiasan)
+        ->where('jenis_perhiasan', $item->jenis_perhiasan)
+        ->where('id', '!=', $item->id)->get();
+
+        $similar_items_x_photos = array();
+
+        foreach ($similar_items as $similar_item) {
+            $photos = $similar_item->photos;
+            if (count($photos)) {
+                foreach ($photos as $key => $photo) {
+                    $similar_items_x_photos[] = [
+                        'id' => $similar_item->id,
+                        'shortname' => $similar_item->shortname,
+                        'longname' => $similar_item->longname,
+                        'harga_g' => $similar_item->harga_g,
+                        'ongkos_g' => $similar_item->ongkos_g,
+                        'harga_t' => $similar_item->harga_t,
+                        'photo_id' => $photo->id,
+                        'photo_path' => $similar_item->photos[$key]->path,
+                    ];
+                }
+            }
+        }
+
+        $filtered_out_photo_id = array();
+        foreach ($similar_items_x_photos as $similar_item) {
+            // dump($similar_item);
+            if (count($filtered_out_photo_id)) {
+                $is_exist = false;
+                foreach ($filtered_out_photo_id as $check_filter) {
+                    if ($check_filter['photo_id'] == $similar_item['photo_id']) {
+                        $is_exist = true;
+                    }
+                }
+                if (!$is_exist) {
+                    $filtered_out_photo_id[] = $similar_item;
+                }
+            } else {
+                $filtered_out_photo_id[] = $similar_item;
+            }
+        }
+        
+        return $filtered_out_photo_id;
     }
 }

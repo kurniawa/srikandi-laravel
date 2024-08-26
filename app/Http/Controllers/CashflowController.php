@@ -125,7 +125,7 @@ class CashflowController extends Controller
             'back' => true,
             'backRoute' => 'home',
             'backRouteParams' => null,
-            'all_items_x_photos' => Item::get_all_item_x_photos(),
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
         // dump(Cashflow::whereBetween('created_at', ["2024-8-8", "2024-8-8 23:59:59"])->orderByDesc("created_at")->get());
         // dd($data);
@@ -159,7 +159,7 @@ class CashflowController extends Controller
             'wallets_non_tunai' => $wallets_non_tunai,
             'user' => $user,
             'data' => Item::get_data_for_create_item('perhiasan'),
-            'all_items_x_photos' => Item::get_all_item_x_photos(),
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
         // dd($data);
         return view('cashflows.transaksi', $data);

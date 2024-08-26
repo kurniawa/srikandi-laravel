@@ -101,6 +101,7 @@ Route::controller(ItemController::class)->group(function () {
     Route::post('/items/{item}/delete', 'delete')->name('items.delete')->middleware('level3');
     Route::post('/items/{item}/{item_photo}/{photo}/delete_photo', 'delete_photo')->name('items.delete_photo')->middleware('level3');
     Route::get('/items/{item}/add_photo', 'add_photo')->name('items.add_photo')->middleware('level3');
+    Route::get('/items/{item}/{index}/pilihan_photo', 'pilihan_photo')->name('items.pilihan_photo')->middleware('level3');
     Route::post('/items/{item}/update_stock', 'update_stock')->name('items.update_stock')->middleware('level3');
     Route::get('/items/{item}/{similar_item}/link_photo_from_similar_item', 'link_photo_from_similar_item')->name('items.link_photo_from_similar_item')->middleware('level3');
     // Route::post('/items/{item}/mau','mau')->name('items.mau');
@@ -110,6 +111,7 @@ Route::controller(ItemController::class)->group(function () {
 Route::controller(PhotoController::class)->group(function () {
     Route::post('/items/{item}/add_photo', 'add_photo')->name('items.add_photo')->middleware('level3');
     Route::post('/items/{item}/{item_photo}/{photo}/delete_photo', 'delete_photo')->name('items.delete_photo')->middleware('level3');
+    Route::post('/items/{item}/add_photo_from_sugestion', 'add_photo_from_sugestion')->name('items.add_photo_from_sugestion')->middleware('level3');
     Route::post('/photos/{cart_item}/add_cart_item_photo', 'add_cart_item_photo')->name('photos.add_cart_item_photo')->middleware('level3');
     Route::post('/photos/{cart_item}/delete_cart_item_photo', 'delete_cart_item_photo')->name('photos.delete_cart_item_photo')->middleware('level3');
     Route::post('/photos/{cart}/add_cart_photo', 'add_cart_photo')->name('photos.add_cart_photo')->middleware('level3');

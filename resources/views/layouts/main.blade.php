@@ -55,19 +55,17 @@
 
                     {{-- PENCARIAN ITEM --}}
                     <div>
-                        <form action="{{ route('home') }}" method="GET">
-                            <div class="flex gap-2 items-center bg-white text-xs text-slate-400 rounded-lg border-slate-300 border-2 px-2">
-                                <div class="">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                                    </svg>
-                                </div>
-                                <div class="">
-                                    <input type="text" name="longname" id="search-longname" oninput="searchItem(this, 'search-result')" class="border-none w-full p-1" placeholder="nama barang/item...">
-                                </div>
+                        <div class="flex gap-2 items-center bg-white text-xs text-slate-400 rounded-lg border-slate-300 border-2 px-2">
+                            <div class="">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                                </svg>
                             </div>
-                        </form>
+                            <div class="">
+                                <input type="text" name="longname" id="search-longname" oninput="searchItem(this, 'search-result')" class="border-none w-full p-1" placeholder="nama barang/item...">
+                            </div>
+                        </div>
                     </div>
                     {{-- END - PENCARIAN ITEM --}}
 
@@ -392,7 +390,11 @@
     // console.log(window.location.protocol);
     // console.log(window.location.host);
     // console.log(window.location.pathname);
-    const window_main_url = window.location.protocol + '//' + window.location.host + '/';
+    try {
+        const window_main_url = window.location.protocol + '//' + window.location.host + '/';
+    } catch (error) {
+        console.error(error);        
+    }
     // console.log(window_main_url);
     function searchItem(input, result_id) {
         if (input.value.trim()) {

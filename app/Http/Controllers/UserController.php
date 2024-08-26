@@ -27,7 +27,7 @@ class UserController extends Controller
             'cart' => $cart,
             'user' => $user,
             'users' => $users,
-            'all_items_x_photos' => Item::get_all_item_x_photos(),
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
 
         return view('users.index', $data);
@@ -45,7 +45,7 @@ class UserController extends Controller
             'cart' => $cart,
             'user' => $user,
             'users' => $users,
-            'all_items_x_photos' => Item::get_all_item_x_photos(),
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
 
         return view('users.create', $data);
@@ -189,7 +189,7 @@ class UserController extends Controller
             'user_this' => $user_this,
             'surat_pembelians' => $surat_pembelians,
             'arr_surat_pembelian_items' => $arr_surat_pembelian_items,
-            'all_items_x_photos' => Item::get_all_item_x_photos(),
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
         // dd($user_this);
         return view('users.show', $data);
@@ -208,7 +208,7 @@ class UserController extends Controller
             'cart' => $cart,
             'user' => $user,
             'user_this' => $user_this,
-            'all_items_x_photos' => Item::get_all_item_x_photos(),
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
 
         return view('users.edit', $data);
@@ -268,7 +268,7 @@ class UserController extends Controller
             'cart' => $cart,
             'user' => $user,
             'user_this' => $user_this,
-            'all_items_x_photos' => Item::get_all_item_x_photos(),
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
 
         return view('users.edit_profile_picture', $data);
@@ -419,7 +419,7 @@ class UserController extends Controller
             'cart' => $cart,
             'user' => $user,
             'user_this' => $user_this,
-            'all_items_x_photos' => Item::get_all_item_x_photos(),
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
 
         return view('users.change_password', $data);

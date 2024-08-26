@@ -23,7 +23,7 @@ class CapController extends Controller
             'user' => $user,
             'cart' => $cart,
             'caps' => $caps,
-            'all_items_x_photos' => Item::get_all_item_x_photos(),
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
 
         return view('attributes.cap_index', $data);
@@ -73,7 +73,7 @@ class CapController extends Controller
             'user' => $user,
             'cart' => $cart,
             'cap' => $cap,
-            'all_items_x_photos' => Item::get_all_item_x_photos(),
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
 
         return view('attributes.cap_edit', $data);

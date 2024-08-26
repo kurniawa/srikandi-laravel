@@ -30,18 +30,23 @@
                 </div>
             </div>
 
-            <div class="p-2">
+            {{-- <div class="p-2">
                 <div class="inline-block bg-white shadow drop-shadow p-1">
                     <h2 class="text-slate-500 font-bold">Pilih Photo Dari Item Lain</h2>
                 </div>
-                <form action="">
-
-                </form>
-            </div>
+                @if (count($similar_items_x_photos))
+                <div class="mt-2">
+                    <x-photo-sugestions :similaritemsxphotos="$similar_items_x_photos" resultid="div-search-result"></x-photo-sugestions>
+                </div>
+                @else
+                <div class="text-slate-500 text-sm italic">- Belum ada saran photo dari barang lain -</div>                    
+                @endif
+                <div id="result-similar-items" class="relative w-full"></div>
+            </div> --}}
 
             <div class="p-2">
                 <div class="inline-block bg-white shadow drop-shadow p-1">
-                    <h2 class="text-slate-500 font-bold">Pilih Photo Baru</h2>
+                    <h2 class="text-slate-500 font-bold">Pilih Photo</h2>
                 </div>
             </div>
 
@@ -67,7 +72,23 @@
                             </form>
                         </div>
                     @else
-                        <form method="POST" action="{{ route('items.add_photo', $item->id) }}" class="mb-1"
+                        <div>
+                            <a href="{{ route('items.pilihan_photo', [$item->id, $i]) }}">
+                                <label for="input-photo-{{ $i }}" class="inline-block hover:cursor-pointer"
+                                    id="label-input-photo-{{ $i }}">
+                                    <div class="text-white bg-sky-300 rounded p-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="2" stroke="currentColor" class="w-20 h-20">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" />
+                                        </svg>
+                                    </div>
+                                </label>
+                            </a>
+                        </div>
+                        {{-- <form method="POST" action="{{ route('items.add_photo', $item->id) }}" class="mb-1"
                             enctype="multipart/form-data">
                             @csrf
                             <label for="input-photo-{{ $i }}" class="inline-block hover:cursor-pointer"
@@ -103,7 +124,7 @@
                                         Tambah Foto</button>
                                 </div>
                             </div>
-                        </form>
+                        </form> --}}
                     @endif
                 @endfor
             </div>
@@ -116,10 +137,9 @@
 
         {{-- <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button> --}}
     </main>
-    <script src="{{ asset('js/item.js') }}"></script>
     <script>
-        setTimeout(() => {
-            console.log(all_items_x_photos);
-        }, 1000);
+        // setTimeout(() => {
+        //     console.log(similar_items_x_photos);
+        // }, 1000);
     </script>
 @endsection

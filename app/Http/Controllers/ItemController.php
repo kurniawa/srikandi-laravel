@@ -45,7 +45,7 @@ class ItemController extends Controller
             'backRouteParams' => [Auth::user()->id],
             'cart' => $cart,
             'user' => $user,
-            'all_items_x_photos' => Item::get_all_item_x_photos(),
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
 
         return view('carts.pilih_tipe_barang', $data);
@@ -97,7 +97,7 @@ class ItemController extends Controller
             'label_mainans' => $label_mainans,
             'cart' => $cart,
             'user' => $user,
-            'all_items_x_photos' => Item::get_all_item_x_photos(),
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
 
         // dd($caps);
@@ -119,7 +119,7 @@ class ItemController extends Controller
             // dump($data);
             $data['route1'] = 'items.store';
             $data['route2'] = 'items.show';
-            $data['all_items_x_photos'] = Item::get_all_item_x_photos();
+            $data['all_items_x_photos'] = Item::get_all_item_x_photos(null, null);
             // dd($data);
             return view('items.found_similar_items', $data);
         }
@@ -258,7 +258,7 @@ class ItemController extends Controller
             'tipe_instansi' => $tipe_instansi,
             'tipe_transaksi' => $tipe_transaksi,
             'keterangan_transaksi' => $keterangan_transaksi,
-            'all_items_x_photos' => Item::get_all_item_x_photos(),
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
         // dd($data);
         return view('items.show', $data);
@@ -336,7 +336,7 @@ class ItemController extends Controller
             'mainans' => $mainans,
             // 'related_user' => $related_user,
             // 'peminat_items' => $peminat_items,
-            'all_items_x_photos' => Item::get_all_item_x_photos(),
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
         // if (count($item->matas)) {
         //     $test = ItemMata::where('item_id', $item->id)->get();
@@ -553,7 +553,8 @@ class ItemController extends Controller
             'user' => $user,
             // 'related_user' => $related_user,
             // 'peminat_items' => $peminat_items,
-            'all_items_x_photos' => Item::get_all_item_x_photos(),
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
+            // 'similar_items_x_photos' => Item::similar_items_x_photos('items.link_photo_from_similar_item', $item),
         ];
 
         return view('items.add_photos', $data);
@@ -606,7 +607,27 @@ class ItemController extends Controller
         return back()->with($feedback);
     }
 
-    function link_photo_from_similar_item(Item $item, Item $similar_item) {
-        
+    function pilihan_photo(Item $item, $index) {
+        // dd($item);
+        $cart = null;
+        $user = Auth::user();
+        if ($user) {
+            $cart = Cart::where('user_id', $user->id)->first();
+        }
+
+        $saran_photos = Item::saran_photos($item);
+        // dd($saran_photos);
+        $data = [
+            'menus' => Menu::get(),
+            'profile_menus' => Menu::get_profile_menus(Auth::user()),
+            'item' => $item,
+            'cart' => $cart,
+            'user' => $user,
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
+            'saran_photos' => $saran_photos,
+            'index' => $index,
+        ];
+
+        return view('items.pilihan_photo', $data);
     }
 }

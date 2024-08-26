@@ -29,7 +29,7 @@ class TransactionController extends Controller
             'profile_menus' => Menu::get_profile_menus($user),
             'cart' => $cart,
             'user' => $user,
-            'all_items_x_photos' => Item::get_all_item_x_photos(),
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
 
         $data = array_merge($data, $get);
@@ -202,7 +202,7 @@ class TransactionController extends Controller
             'buy_accountings' => $buy_accountings,
             // 'buy_perhiasans' => $buy_perhiasans,
             'tanggal' => $tanggal,
-            'all_items_x_photos' => Item::get_all_item_x_photos(),
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
         // dd(strtotime("2024-07-25 08:08:08"));
         // dump($bb_accountings);

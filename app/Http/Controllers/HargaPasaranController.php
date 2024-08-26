@@ -29,7 +29,7 @@ class HargaPasaranController extends Controller
             'user' => $user,
             'cart' => $cart,
             'col_harga_pasarans' => $col_harga_pasarans,
-            'all_items_x_photos' => Item::get_all_item_x_photos(),
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
         // dd($col_harga_pasarans);
         return view('attributes.harga_pasaran_index', $data);
@@ -49,7 +49,7 @@ class HargaPasaranController extends Controller
             'user' => $user,
             'cart' => $cart,
             'kadars' => $kadars,
-            'all_items_x_photos' => Item::get_all_item_x_photos(),
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
         return view('attributes.harga_pasaran_create', $data);
     }
@@ -106,7 +106,7 @@ class HargaPasaranController extends Controller
             'user' => $user,
             'cart' => $cart,
             'harga_pasaran' => $harga_pasaran,
-            'all_items_x_photos' => Item::get_all_item_x_photos(),
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
 
         return view('attributes.harga_pasaran_edit', $data);

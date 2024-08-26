@@ -30,7 +30,7 @@ class CartItemController extends Controller
             'cart_item' => $cart_item,
             // 'related_user' => $related_user,
             // 'peminat_items' => $peminat_items,
-            'all_items_x_photos' => Item::get_all_item_x_photos(),
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
 
         return view('carts.cart_item-add_photo', $data);

@@ -55,7 +55,7 @@ class PelangganController extends Controller
             // 'cart_item' => $cart_item,
             // 'related_user' => $related_user,
             // 'peminat_items' => $peminat_items,
-            'all_items_x_photos' => Item::get_all_item_x_photos(),
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
 
         return view('pelanggans.index', $data);
@@ -85,7 +85,7 @@ class PelangganController extends Controller
             // 'cart_item' => $cart_item,
             // 'related_user' => $related_user,
             // 'peminat_items' => $peminat_items,
-            'all_items_x_photos' => Item::get_all_item_x_photos(),
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
 
         return view('pelanggans.create', $data);
@@ -218,7 +218,7 @@ class PelangganController extends Controller
             // 'cart_item' => $cart_item,
             // 'related_user' => $related_user,
             // 'peminat_items' => $peminat_items,
-            'all_items_x_photos' => Item::get_all_item_x_photos(),
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
 
         return view('pelanggans.show', $data);
@@ -238,7 +238,7 @@ class PelangganController extends Controller
             'cart' => $cart,
             'user' => $user,
             'pelanggan' => $pelanggan,
-            'all_items_x_photos' => Item::get_all_item_x_photos(),
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
 
         return view('pelanggans.edit', $data);
@@ -307,7 +307,7 @@ class PelangganController extends Controller
             // 'cart_item' => $cart_item,
             // 'related_user' => $related_user,
             // 'peminat_items' => $peminat_items,
-            'all_items_x_photos' => Item::get_all_item_x_photos(),
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
 
         return view('pelanggans.edit_profile_picture', $data);
@@ -458,7 +458,7 @@ class PelangganController extends Controller
             'cart' => $cart,
             'user' => $user,
             'pelanggan' => $pelanggan,
-            'all_items_x_photos' => Item::get_all_item_x_photos(),
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
 
         return view('pelanggans.change_password', $data);
