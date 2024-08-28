@@ -59,9 +59,13 @@ class PhotoController extends Controller
         // dd($photo);
         $warnings_ = "";
         // CEK APAKAH PHOTO DIGUNAKAN OLEH ITEM LAIN
-        $used_by_other_item = ItemPhoto::where('photo_id', $photo->id)->where('id', '!=', $item->id)->first();
+        $used_by_other_item = ItemPhoto::where('photo_id', $photo->id)->where('item_id', '!=', $item->id)->first();
         // END - CEK APAKAH PHOTO DIGUNAKAN OLEH ITEM LAIN
-        if (!$used_by_other_item) {
+        // dd($used_by_other_item);
+        if ($used_by_other_item) {
+            $item_photo->delete();
+            $warnings_ .= "-Foto digunakan pada item lain -> ItemPhoto dihapus-";
+        } else {
             if (Storage::exists($photo->path)) {
                 Storage::delete($photo->path);
             }
@@ -69,9 +73,6 @@ class PhotoController extends Controller
             $photo->delete();
             // $item_photo->delete();
             $warnings_ .= "-Foto & ItemPhoto dihapus-";
-        } else {
-            $item_photo->delete();
-            $warnings_ .= "-Foto digunakan pada item lain -> ItemPhoto dihapus-";
         }
 
 
