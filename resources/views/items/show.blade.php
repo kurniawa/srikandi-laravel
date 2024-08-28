@@ -4,11 +4,12 @@
         <x-errors-any></x-errors-any>
         <x-validation-feedback></x-validation-feedback>
 
-        @if (count($item->photos))
+        @if (count($photos_sorted))
             <div id="default-carousel" class="relative w-full" data-carousel="static">
                 <!-- Carousel wrapper -->
                 <div class="relative w-full aspect-square overflow-hidden">
-                    @foreach ($item->photos as $key => $photo)
+                    @foreach ($photos_sorted as $key => $photo)
+                        {{ $photo->id }}
                         <div class="hidden duration-700 ease-in-out" data-carousel-item>
                             <img src="{{ asset("storage/$photo->path") }}"
                                 class="absolute block w-full aspect-square -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
@@ -18,7 +19,7 @@
                 </div>
                 <!-- Slider indicators -->
                 <div class="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">
-                    @foreach ($item->photos as $key => $photo)
+                    @foreach ($photos_sorted as $key => $photo)
                         @if ($key === 0)
                             <button type="button" class="w-3 h-3 rounded-full" aria-current="true"
                                 aria-label="Slide {{ $key }}"

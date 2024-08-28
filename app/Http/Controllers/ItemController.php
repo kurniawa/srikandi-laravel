@@ -231,6 +231,7 @@ class ItemController extends Controller
             $nama_instansi = $get['nama_instansi'];
         }
 
+        $photos_sorted = Item::photos_sorted_by_index($item);
         $data = [
             'menus' => Menu::get(),
             'route_now' => 'items.show',
@@ -259,6 +260,7 @@ class ItemController extends Controller
             'tipe_transaksi' => $tipe_transaksi,
             'keterangan_transaksi' => $keterangan_transaksi,
             'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
+            'photos_sorted' => $photos_sorted,
         ];
         // dd($data);
         return view('items.show', $data);

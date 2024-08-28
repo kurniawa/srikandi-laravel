@@ -36,6 +36,16 @@ class Item extends Model
         return $this->belongsToMany(Photo::class, 'item_photos', 'item_id', 'photo_id');
     }
 
+    static function photos_sorted_by_index($item) {
+        $photos_sorted_by_id = collect();
+        foreach ($item->item_photos as $item_photo) {
+            $photo = Photo::find($item_photo->photo_id);
+            $photos_sorted_by_id->push($photo);
+        }
+        // return $this->belongsToMany(Photo::class, 'item_photos', 'item_id', 'photo_id');
+        return $photos_sorted_by_id;
+    }
+
     function item_photos()
     {
         return $this->hasMany(ItemPhoto::class)->orderBy('photo_index');
