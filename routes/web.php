@@ -141,6 +141,7 @@ Route::controller(SuratPembelianController::class)->group(function () {
     Route::post('/surat_pembelian/{surat_pembelian}/update_photo', 'update_photo')->name('surat_pembelian.update_photo')->middleware('level3');
     Route::get('/surat_pembelian/{surat_pembelian}/buyback', 'buyback')->name('surat_pembelian.buyback')->middleware('level3');
     Route::post('/surat_pembelian/{surat_pembelian}/proses_buyback', 'proses_buyback')->name('surat_pembelian.proses_buyback')->middleware('level3');
+    Route::post('/surat_pembelian/{surat_pembelian}/delete_customer', 'delete_customer')->name('surat_pembelian.delete_customer')->middleware('level3');
 });
 
 Route::controller(CashflowController::class)->group(function () {
@@ -164,8 +165,8 @@ Route::get('/attributes/index', function () {
         $cart = Cart::where('user_id', $user->id)->first();
     }
     $data = [
+        'cart' => $cart,
         'user' => $user,
-        'cart' => $cart
     ];
     return view('attributes.index', $data);
 })->name('attributes.index')->middleware('level3');

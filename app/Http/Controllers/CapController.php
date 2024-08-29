@@ -20,8 +20,8 @@ class CapController extends Controller
         $caps = Cap::all();
 
         $data = [
-            'user' => $user,
             'cart' => $cart,
+            'user' => $user,
             'caps' => $caps,
             'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
@@ -70,8 +70,8 @@ class CapController extends Controller
         }
 
         $data = [
-            'user' => $user,
             'cart' => $cart,
+            'user' => $user,
             'cap' => $cap,
             'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];

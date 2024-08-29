@@ -90,6 +90,7 @@ class CartController extends Controller
             // 'user' => Auth::user(),
             // 'from' => $from,
             'cart' => $cart,
+            'user' => $user,
             'cart_items' => $cart_items,
             'harga_total' => $harga_total,
             'users' => $users,
@@ -109,6 +110,7 @@ class CartController extends Controller
     function proses_checkout(Cart $cart, Request $request)
     {
         $post = $request->post();
+        // dd($post);
         Cashflow::validasi_metode_pembayaran($request);
         // dump($cart);
         // dd($post);
@@ -144,6 +146,7 @@ class CartController extends Controller
             'harga_total' => 'required|numeric',
             'total_bayar' => 'required|numeric',
             'sisa_bayar' => 'required|numeric',
+            'tipe_transaksi' => 'required',
         ]);
         // END - VALIDASI
 
@@ -282,7 +285,7 @@ class CartController extends Controller
         // dump($sisa_bayar);
         // dump((float)$sisa_bayar);
         // dd($jumlah);
-        $total_bayar_2 = Cashflow::create_cashflow($user->id, $time_key, $kode_accounting, $pembelian_new->id, 'pemasukan', $post);
+        $total_bayar_2 = Cashflow::create_cashflow($user->id, $time_key, $kode_accounting, $pembelian_new->id, $post);
         // $jumlah = 0;
         // $jumlah_terima_total = 0;
         // if (isset($post['jumlah_tunai'])) {
@@ -416,17 +419,7 @@ class CartController extends Controller
         // END: UPDATE cashflows
 
         // HAPUS CART
-        if (count($cart->cart_items) === 0) {
-            // Sebelum dihapus cari dulu apakah ada foto transaksi?
-            if ($cart->photo_path) {
-                if (Storage::exists($cart->photo_path)) {
-                    Storage::delete($cart->photo_path);
-                }
-                $success_ .= "-Foto Transaksi dihapus-";
-            }
-            $cart->delete();
-            $success_ .= '-Cart dihapus!-';
-        }
+        $success_ .= Cart::delete_cart_items($post['cart_item_ids'], $cart);
 
         $feedback = [
             'success_' => $success_,

@@ -61,4 +61,24 @@ class Cart extends Model
         }
         $cart->save();
     }
+
+    static function delete_cart_items($cart_item_ids, $cart) {
+        $success_ = '';
+        foreach ($cart_item_ids as $cart_item_id) {
+            $cart_item = CartItem::find($cart_item_id);
+            $cart_item->delete();
+        }
+        if (count($cart->cart_items) === 0) {
+            // Sebelum dihapus cari dulu apakah ada foto transaksi?
+            if ($cart->photo_path) {
+                if (Storage::exists($cart->photo_path)) {
+                    Storage::delete($cart->photo_path);
+                }
+                $success_ .= "-Foto Transaksi dihapus-";
+            }
+            $cart->delete();
+            $success_ .= '-Cart dihapus!-';
+        }
+        return $success_;
+    }
 }

@@ -20,8 +20,8 @@ class MerkController extends Controller
         $merks = Merk::all();
 
         $data = [
-            'user' => $user,
             'cart' => $cart,
+            'user' => $user,
             'merks' => $merks,
             'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
@@ -70,8 +70,8 @@ class MerkController extends Controller
         }
 
         $data = [
-            'user' => $user,
             'cart' => $cart,
+            'user' => $user,
             'merk' => $merk,
             'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];

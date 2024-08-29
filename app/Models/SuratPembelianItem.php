@@ -147,14 +147,14 @@ class SuratPembelianItem extends Model
             'berat' => $surat_pembelian_item->berat,
             'user_id' => $user->id,
             'tipe' => 'pemasukan',
-            'kategori' => 'Penjualan Barang',
+            'kategori' => 'Penjualan Produk',
             'kategori_2' => $kategori_2,
             'deskripsi' => null,
             'jumlah' => $surat_pembelian_item->harga_t,
         ]);
         // END - ACCOUNTING
 
-        $cart_item->delete();
+        // $cart_item->delete();
 
         return $surat_pembelian_item;
     }

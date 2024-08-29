@@ -29,8 +29,8 @@ class TipePerhiasanController extends Controller
         }
 
         $data = [
-            'user' => $user,
             'cart' => $cart,
+            'user' => $user,
             'col_jenis_perhiasans' => $col_jenis_perhiasans,
             'tipe_perhiasans' => $tipe_perhiasans,
             'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
@@ -83,8 +83,8 @@ class TipePerhiasanController extends Controller
         }
 
         $data = [
-            'user' => $user,
             'cart' => $cart,
+            'user' => $user,
             'cap' => $tipe_perhiasan,
             'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];

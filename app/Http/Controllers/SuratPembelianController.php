@@ -125,6 +125,7 @@ class SuratPembelianController extends Controller
             // 'spk_menus' => Menu::get_spk_menus(),
             // 'user' => Auth::user(),
             'cart' => $cart,
+            'user' => $user,
             'back' => true,
             'backRoute' => 'home',
             'backRouteParams' => null,
@@ -233,6 +234,7 @@ class SuratPembelianController extends Controller
             // 'spk_menus' => Menu::get_spk_menus(),
             // 'user' => Auth::user(),
             'cart' => $cart,
+            'user' => $user,
             'back' => true,
             'backRoute' => 'home',
             'backRouteParams' => null,
@@ -371,6 +373,7 @@ class SuratPembelianController extends Controller
             // 'spk_menus' => Menu::get_spk_menus(),
             // 'user' => Auth::user(),
             'cart' => $cart,
+            'user' => $user,
             'surat_pembelian' => $surat_pembelian,
             'wallets_non_tunai' => $wallets_non_tunai,
             'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
@@ -590,5 +593,19 @@ class SuratPembelianController extends Controller
 
         dump($post);
         dd("tidak ada yang opsi yang sesuai");
+    }
+
+    function delete_customer(SuratPembelian $surat_pembelian) {
+        $warnings_ = '';
+        $surat_pembelian->pelanggan_id = null;
+        $surat_pembelian->pelanggan_nama = null;
+        $surat_pembelian->pelanggan_username = null;
+        $surat_pembelian->pelanggan_nik = null;
+        $surat_pembelian->save();
+        $warnings_ .= '-Relasi dengan pelanggan dihapus-';
+        $feedback = [
+            'warnings_' => $warnings_
+        ];
+        return back()->with($feedback);
     }
 }

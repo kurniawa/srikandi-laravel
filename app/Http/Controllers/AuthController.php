@@ -26,8 +26,8 @@ class AuthController extends Controller
             'profile_menus' => Menu::get_profile_menus(Auth::user()),
             'parent_route' => 'home',
             // 'spk_menus' => Menu::get_spk_menus(),
-            'user' => $user,
             'cart' => $cart,
+            'user' => $user,
         ];
 
         return view('auth.login', $data);

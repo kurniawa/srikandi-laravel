@@ -48,16 +48,16 @@
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between">
                     <div class="w-9">
-                        <a href="{{ route('home') }}">
+                        <a href="{{ route('home') }}" class="loading-spinner">
                             <img src="{{ asset('images/icons/icon-96x96.png') }}" alt="" srcset="" class="size-8 rounded-full overflow-hidden">
                         </a>
                     </div>
 
                     {{-- PENCARIAN ITEM --}}
                     <div>
-                        <div class="flex gap-2 items-center bg-white text-xs text-slate-400 rounded-lg border-slate-300 border-2 px-2">
+                        <div class="flex gap-1 items-center bg-white text-xs text-slate-400 rounded-lg border-slate-300 border-2 pl-1">
                             <div class="">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-4">
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                                 </svg>
@@ -69,7 +69,7 @@
                     </div>
                     {{-- END - PENCARIAN ITEM --}}
 
-                    <div class="flex gap-1 items-center">
+                    <div class="flex gap-2 items-center">
                         @auth
                             <a href="{{ route('choose_action') }}" class="loading-spinner size-7 rounded-full bg-emerald-300 flex justify-center items-center font-bold text-white text-2xl">+</a>
                         @endauth
@@ -206,7 +206,7 @@
               <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Calendar</a>
               <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium">Reports</a> --}}
                 </div>
-                <div class="border-t border-gray-700 pb-3 pt-4">
+                {{-- <div class="border-t border-gray-700 pb-3 pt-4">
                     <div class="flex items-center px-5">
                         <div class="flex-shrink-0">
                             <img class="h-10 w-10 rounded-full"
@@ -255,7 +255,7 @@
                                 in</a>
                         @endif
                     </div>
-                </div>
+                </div> --}}
             </div>
             {{-- END - MOBILE MENU --}}
         </nav>

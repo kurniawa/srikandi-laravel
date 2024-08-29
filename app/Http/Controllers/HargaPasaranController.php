@@ -26,8 +26,8 @@ class HargaPasaranController extends Controller
         }
 
         $data = [
-            'user' => $user,
             'cart' => $cart,
+            'user' => $user,
             'col_harga_pasarans' => $col_harga_pasarans,
             'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
@@ -46,8 +46,8 @@ class HargaPasaranController extends Controller
         $kadars = Kadar::all();
 
         $data = [
-            'user' => $user,
             'cart' => $cart,
+            'user' => $user,
             'kadars' => $kadars,
             'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
@@ -103,8 +103,8 @@ class HargaPasaranController extends Controller
         }
 
         $data = [
-            'user' => $user,
             'cart' => $cart,
+            'user' => $user,
             'harga_pasaran' => $harga_pasaran,
             'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];

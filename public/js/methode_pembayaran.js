@@ -65,10 +65,15 @@ function hitungTotalBayar() {
         }
     });
     // console.log(total_bayar);
-    let total_tagihan = document.getElementById("total_tagihan_real").value;
+    let total_tagihan = 0;
+
     const kategori = document.getElementById("kategori").value;
     if (kategori == "Buyback Perhiasan") {
         total_tagihan = document.getElementById("harga_t").value;
+    } else if (kategori == "Penjualan Perhiasan") {
+        total_tagihan = document.getElementById("harga_total_real").value;
+    } else {
+        total_tagihan = document.getElementById("total_tagihan_real").value;
     }
     // console.log("methode_pembayaran");
     // console.log(kategori);

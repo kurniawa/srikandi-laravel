@@ -281,6 +281,8 @@
 
             {{-- END PEMBAYARAN --}}
             <div class="relative flex justify-center mt-9 z-10">
+                <input type="hidden" id="kategori" name="kategori" value="Penjualan Perhiasan">
+                <input type="hidden" id="tipe_transaksi" name="tipe_transaksi" value="pemasukan">
                 <button type="submit"
                     class="rounded-lg px-3 py-2 bg-emerald-400 text-white border-2 border-emerald-500 font-bold">PROSES
                     PEMBAYARAN</button>
@@ -310,7 +312,7 @@
 
     <script>
         const users = {!! json_encode($users, JSON_HEX_TAG) !!};
-        let total_tagihan = {!! json_encode($harga_total, JSON_HEX_TAG) !!}
+        // let harga_total = {!! json_encode($harga_total, JSON_HEX_TAG) !!}
         // console.log(users);
 
         function cariDataPelanggan() {

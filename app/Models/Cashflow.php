@@ -57,6 +57,11 @@ class Cashflow extends Model
                 $request->validate(['error'=>'required'],['error.required'=>'Buyback Perhiasan harus ada harga_t']);
             }
             $total_tagihan = $post['harga_t'];
+        } elseif ($post['kategori'] == "Penjualan Perhiasan") {
+            if (!isset($post['harga_total']) || $post['harga_total'] == null) {
+                $request->validate(['error'=>'required'],['error.required'=>'Harus ada harga_total']);
+            }
+            $total_tagihan = $post['harga_total'];
         } else {
             if (!isset($post['total_tagihan']) || $post['total_tagihan'] == null) {
                 $request->validate(['error'=>'required'],['error.required'=>'Harus ada total_tagihan']);
@@ -109,6 +114,13 @@ class Cashflow extends Model
         // }
         // $total_bayar = (float)$post['total_bayar'];
         $sisa_bayar = (float)$post['sisa_bayar'];
+        // $sisa_bayar = 0;
+        // try {
+        //     $sisa_bayar = (float)$post['sisa_bayar'];
+        // } catch (\Throwable $th) {
+        //     dump($sisa_bayar);
+        //     dump($post['sisa_bayar']);
+        // }
 
         $jumlah_tunai = null;
         $jumlah_non_tunai = null;
