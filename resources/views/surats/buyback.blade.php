@@ -139,7 +139,6 @@
                             <h5>Data Buyback / Jual Kembali / Tukar</h5>
                         </div>
                     </div>
-                    <input type="hidden" name="tipe_transaksi[]" value="pengeluaran">
                     <table class="mt-2">
                         <tr>
                             <td colspan="3">
@@ -634,6 +633,7 @@
             </div>
 
             <div class="flex justify-center mt-3">
+                <input type="hidden" name="tipe_transaksi" value="pengeluaran">
                 <button type="submit" name="konfirmasi_buyback"
                     class="bg-emerald-300 text-white font-bold p-2 rounded-lg border-2 border-emerald-400">Konfirmasi
                     Buyback</button>
@@ -818,12 +818,12 @@
             // console.log('pangkasDesimal')
             // console.log(pangkasDesimal(sisa_bayar));
 
-            document.getElementById('total-bayar').textContent = formatNumberX(preformatDotToComa(pangkasDesimal(
+            document.getElementById('total_bayar_formatted').textContent = formatNumberX(preformatDotToComa(pangkasDesimal(
                 total_bayar)));
-            document.getElementById('sisa-bayar').textContent = formatNumberX(preformatDotToComa(pangkasDesimal(
+            document.getElementById('sisa_bayar_formatted').textContent = formatNumberX(preformatDotToComa(pangkasDesimal(
                 sisa_bayar)));
-            document.getElementById('ipt-total-bayar').value = pangkasDesimal(total_bayar).toString();
-            document.getElementById('ipt-sisa-bayar').value = pangkasDesimal(sisa_bayar_real_value).toString();
+            document.getElementById('total_bayar_real').value = pangkasDesimal(total_bayar).toString();
+            document.getElementById('sisa_bayar_real').value = pangkasDesimal(sisa_bayar_real_value).toString();
         }
     </script>
 @endsection

@@ -387,12 +387,14 @@ class SuratPembelianController extends Controller
         $post = $request->post();
         $success_ = "";
         $errors_ = "";
+        // dd($post);
         // dump($surat_pembelian);
         // VALIDASI TOTAL BUYBACK DAN TOTAL BAYAR
         $request->validate([
             'total_buyback' => 'required|numeric',
             'total_bayar' => 'required|numeric',
             'sisa_bayar' => 'required|numeric',
+            'tipe_transaksi' => 'required',
         ]);
         $total_buyback = (float)$post['total_buyback'];
         $total_bayar = (float)$post['total_bayar'];
@@ -586,7 +588,7 @@ class SuratPembelianController extends Controller
                 $tipe_instansis = $post['tipe_instansi'];
                 $nama_instansis = $post['nama_instansi'];
             }
-            Cashflow::create_cashflow($user->id, $time_key, $kode_accounting, $surat_pembelian_item->surat_pembelian_id, $post['tipe_transaksi'][0], $jumlah_tunai, $sisa_bayar, $jumlah_non_tunai, $tipe_instansis, $nama_instansis);
+            Cashflow::create_cashflow($user->id, $time_key, $kode_accounting, $surat_pembelian_item->surat_pembelian_id, $post);
             $success_ .= "-Cashflow noted!-";
             return back()->with('success_', $success_);
         }

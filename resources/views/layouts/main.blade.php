@@ -44,7 +44,7 @@
         </div>
     </div>
     <div class="min-h-full">
-        <nav class="bg-emerald-100 no-print py-2">
+        <nav class="bg-gradient-to-br from-amber-500 to-amber-200 no-print py-2">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between">
                     <div class="w-9">
@@ -63,7 +63,7 @@
                                 </svg>
                             </div>
                             <div class="">
-                                <input type="text" name="longname" id="search-longname" oninput="searchItem(this, 'search-result')" class="border-none w-full p-1" placeholder="nama barang/item...">
+                                <input type="text" name="longname" id="search-longname" oninput="searchItem(this, 'search-result')" class="border-none w-full p-1 rounded" placeholder="nama barang/item...">
                             </div>
                         </div>
                     </div>
@@ -71,7 +71,7 @@
 
                     <div class="flex gap-2 items-center">
                         @auth
-                            <a href="{{ route('choose_action') }}" class="loading-spinner size-7 rounded-full bg-emerald-300 flex justify-center items-center font-bold text-white text-2xl">+</a>
+                            <a href="{{ route('choose_action') }}" class="loading-spinner size-7 rounded-full bg-amber-500 flex justify-center items-center font-bold text-white text-2xl">+</a>
                         @endauth
                         {{-- <button type="button"
                             class="rounded-full bg-rose-200 p-1 text-gray-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
@@ -85,7 +85,7 @@
     
                         @if (Auth::user())
                             <a class="loading-spinner" href="{{ route('carts.index', Auth::user()->id) }}">
-                                <div class="text-indigo-500 relative">
+                                <div class="text-amber-700 relative">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="2" stroke="currentColor" class="w-6 h-6">
                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -93,7 +93,7 @@
                                     </svg>
                                     @if ($cart)
                                         <div
-                                            class="flex absolute left-3 -top-3 w-5 h-5 rounded-full bg-red-400 text-white justify-center items-center">
+                                            class="flex absolute left-4 -top-2 size-4 rounded-full bg-red-400 text-white justify-center items-center text-xs">
                                             {{ count($cart->cart_items) }}</div>
                                     @endif
                                 </div>
@@ -116,7 +116,7 @@
                                         </button>
                                     @else
                                         <button
-                                            class="text-white bg-indigo-300 rounded-full overflow-hidden w-8 h-8 flex justify-center items-center"
+                                            class="text-white bg-amber-500 rounded-full overflow-hidden w-8 h-8 flex justify-center items-center"
                                             id="user-menu-button" aria-expanded="false" aria-haspopup="true"
                                             onclick="toggleMenu('profile-menu', 'menu-close-layer')">
                                             @if (Auth::user()->profile_picture_path)

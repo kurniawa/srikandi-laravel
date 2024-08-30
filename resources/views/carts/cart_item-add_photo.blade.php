@@ -31,23 +31,34 @@
                     </svg>
                 </div>
             </label>
-            <input id="input-photo" type="file" name="photo" ="previewImage(this.files[0], 'div-preview-photo', 'preview-photo', 'label-input-photo')" class="hidden">
+            <input id="input-photo" type="file" name="photo" onchange="previewImage(this.files[0], 'div-preview-photo', 'preview-photo', 'label-input-photo')" class="hidden">
             {{-- <input type="hidden" name="photo_index" value="{{ $key }}"> --}}
-            <div id="div-preview-photo" class="hidden">
-                <div class="flex justify-end">
-                    <button type="button" class="text-red-400" onclick="removeImage('input-photo', 'div-preview-photo', 'preview-photo', 'label-input-photo')">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-7 h-7">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                        </svg>
-                    </button>
+                <div id="div-preview-photo" class="hidden">
+                    <div class="flex justify-end">
+                        <button type="button" class="text-red-400"
+                            onclick="removeImage('input-photo', 'div-preview-photo', 'preview-photo', 'label-input-photo')">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="3" stroke="currentColor" class="w-7 h-7">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <img id="preview-photo"></img>
+                    <div class="flex justify-center mt-1">
+                        <button type="submit"
+                            class="loading-spinner bg-emerald-300 text-white border-2 border-emerald-400 font-bold rounded px-3 py-1 text-sm">+
+                            Tambah Foto</button>
+                    </div>
                 </div>
-                <img id="preview-photo"></img>
-                <div class="flex justify-center mt-1">
-                    <button type="submit" class="loading-spinner bg-emerald-300 text-white border-2 border-emerald-400 font-bold rounded px-3 py-1 text-sm">+ Tambah Photo</button>
-                </div>
+                
             </div>
         </form>
         @endif
+        <div class="flex justify-center mt-5">
+            <a href="{{ route('carts.index', $user->id) }}" class="bg-indigo-300 text-white font-bold rounded p-1">
+                Kembali
+            </a>
+        </div>
     </div>
     {{-- <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button> --}}
 </main>

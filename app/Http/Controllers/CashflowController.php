@@ -23,39 +23,65 @@ class CashflowController extends Controller
             $cart = Cart::where('user_id', $user->id)->first();
         }
 
-        $get_day = (int)date("d");
-        $get_month = (int)date("m");
-        $get_year = date("Y");
+        $get = $request->query();
+        $from_day = '1';
+        $from_month = date("m");
+        $from_year = date("Y");
+
+        $to_day = date("d");
+        $to_month = date("m");
+        $to_year = date("Y");
+
+        $from_day_copy = $from_day;
+        $from_month_copy = $from_month;
+        $from_year_copy = $from_year;
+
+        $to_day_copy = $to_day;
+        $to_month_copy = $to_month;
+        $to_year_copy = $to_year;
+
+        if (count($get)) {
+            dump($get);
+            $from_day = $get['from_day'];
+            $from_month = $get['from_month'];
+            $from_year = $get['from_year'];
+
+            $to_day = $get['to_day'];
+            $to_month = $get['to_month'];
+            $to_year = $get['to_year'];
+
+            $to_day_copy = (int)$to_day;
+            $to_month_copy = (int)$to_month;
+            $to_year_copy = (int)$to_year;
+        }
 
         $col_cashflows = collect();
         $col_saldos = collect();
         $col_accountings = collect();
         $col_total = collect();
 
-        for ($i = $get_day; $i >= 1; $i--) {
-            $day = $i;
-            $month = $get_month;
+        $grand_total_pemasukan = 0;
+        $grand_total_pengeluaran = 0;
 
-            if (strlen((string)$i) < 2) {
-                $day = "0$i";
-            }
+        $from = "$from_year-$from_month-$from_day";
+        $until = "$to_year-$to_month-$to_day 23:59:59";
+        $datediff = strtotime($until) - strtotime($from);
+        $date_count = (int)($datediff / (60 * 60 * 24)) + 1; // always round up
+        dump($date_count);
 
-            if (strlen((string)$month) < 2) {
-                $month = "0$month";
-            }
-
-            $from = "$get_year-$month-$day";
-            $until = "$get_year-$month-$day 23:59:59";
-
-            // dump($from);
-            // dump($until);
-
+        $last_date_is_reached = false;
+        $last_date_to_time = strtotime($until);
+        // dd($last_date_to_time);
+        while (!$last_date_is_reached) {
+            $from = "$to_year_copy-$to_month_copy-$to_day_copy";
+            $until = "$to_year_copy-$to_month_copy-$to_day_copy 23:59:59";
+            
             $cashflows = Cashflow::whereBetween('created_at', [$from, $until])->orderByDesc("created_at")->get();
-            // dump($cashflows);
+
             $col_cashflows->push([
-                "hari" => $day,
-                "bulan" => $month,
-                "tahun" => $get_year,
+                "hari" => $to_day_copy,
+                "bulan" => $to_month_copy,
+                "tahun" => $to_year_copy,
                 "cashflows" => $cashflows,
             ]);
             // Accounting
@@ -64,9 +90,9 @@ class CashflowController extends Controller
             //     dump($accountings);
             // }
             $col_accountings->push([
-                "hari" => $day,
-                "bulan" => $month,
-                "tahun" => $get_year,
+                "hari" => $to_day_copy,
+                "bulan" => $to_month_copy,
+                "tahun" => $to_year_copy,
                 "accountings" => $accountings,
             ]);
             $pemasukan = 0;
@@ -85,22 +111,21 @@ class CashflowController extends Controller
 
                 ]
             );
+            $grand_total_pemasukan += $pemasukan;
+            $grand_total_pengeluaran += $pengeluaran;
 
-            // SALDO
-            // $saldos = Saldo::whereBetween("created_at", [$from, $until])->get();
-            // $saldo_awal = 0;
-            // $saldo_akhir = 0;
-            // if (count($saldos)) {
-            //     foreach ($saldos as $saldo) {
-            //         $saldo_awal += $saldo->saldo_awal;
-            //         $saldo_akhir += $saldo->saldo_akhir;
-            //     }
-            // }
-            // $col_saldos->push([
-            //     'saldo_awal' => $saldo_awal,
-            //     'saldo_akhir' => $saldo_akhir,
-            // ]);
+            $from_as_time = strtotime($from);
+            $next_looping_time = $from_as_time - 86400;
+            if ($next_looping_time < $last_date_to_time) {
+                $last_date_is_reached = true;
+            } else {
+                $to_day_copy = (int)date('d', $next_looping_time);
+                $to_month_copy = (int)date('m', $next_looping_time);
+                $to_year_copy = (int)date('Y', $next_looping_time);
+            }
         }
+
+        
 
         // SALDO PADA WALLET
         $wallets = Wallet::all();
@@ -126,6 +151,8 @@ class CashflowController extends Controller
             'backRoute' => 'home',
             'backRouteParams' => null,
             'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
+            'grand_total_pemasukan' => $grand_total_pemasukan,
+            'grand_total_pengeluaran' => $grand_total_pengeluaran,
         ];
         // dump(Cashflow::whereBetween('created_at', ["2024-8-8", "2024-8-8 23:59:59"])->orderByDesc("created_at")->get());
         // dd($data);

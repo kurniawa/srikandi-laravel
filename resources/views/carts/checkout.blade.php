@@ -71,7 +71,7 @@
         <x-form-cari-data-pelanggan :pelangganid="$pelangganid" :pelanggannama="$pelanggannama" :pelangganusername="$pelangganusername" :pelanggannik="$pelanggannik"
             :route="null" :params="null"></x-form-cari-data-pelanggan>
 
-        <form action="{{ route('carts.proses_checkout', $cart->id) }}" method="POST">
+        <form action="{{ route('carts.proses_checkout', $cart->id) }}" method="POST" onsubmit="return confirm('Apakah semua data sudah benar?')">
             @csrf
             <div class="flex gap-1 mt-5 items-center">
                 <h3 class="text-lg font-bold text-slate-500">Tanggal Surat</h3>

@@ -185,7 +185,7 @@
 
             // console.log(harga_total);
             // console.log(preformatDotToComa(harga_total));
-            document.getElementById('harga_total').value = harga_total.toString();
+            document.getElementById('harga_total_real').value = harga_total.toString();
             document.getElementById('harga_total_formatted').textContent = formatNumberX(preformatDotToComa(harga_total));
         }
 

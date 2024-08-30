@@ -3,16 +3,25 @@
     <main class="p-2">
         <x-errors-any></x-errors-any>
         <x-validation-feedback></x-validation-feedback>
-        <div class="flex">
+        <div class="flex gap-1">
             <div class="bg-white shadow drop-shadow p-1 rounded flex gap-1 text-slate-500">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 7.756a4.5 4.5 0 1 0 0 8.488M7.5 10.5h5.25m-5.25 3h5.25M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
                 <h1 class="font-bold">Accounting / Cash Flow</h1>
             </div>
+            <x-filter-button></x-filter-button>
         </div>
+        {{-- FILTER --}}
+        <x-filter-tanggal></x-filter-tanggal>
+        {{-- END - FILTER --}}
         
         <table class="w-full mt-5">
+            <tr class="text-slate-500">
+                <th></th>
+                <th><span class="bg-rose-300 rounded font-bold text-white p-1">Rp {{ my_decimal_format($grand_total_pengeluaran) }}</span></th>
+                <th><span class="bg-emerald-300 rounded font-bold text-white p-1">Rp {{ my_decimal_format($grand_total_pemasukan) }}</span></th>
+            </tr>
             <tr class="text-slate-500">
                 <th></th>
                 <th>Pengeluaran</th>
@@ -75,21 +84,38 @@
             </tr>
             @endforeach --}}
             @foreach ($col_accountings as $key => $col_accounting)
-                <tr class="text-slate-400 font-bold">
-                    <th class="border-b">
+                @if ($key % 2 == 0)
+                <tr class="text-slate-400 font-bold bg-amber-100">
+                @else
+                <tr class="text-slate-400 font-bold bg-emerald-50">
+                @endif
+                    {{-- <th class="border-b">
                         <div class="text-left">
                             <div class="inline-block rounded-t-2xl bg-emerald-400 text-white text-xs p-1">
                                 {{ $col_accounting['hari'] }}-{{ $col_accounting['bulan'] }}-{{ $col_accounting['tahun'] }}
                             </div>
                         </div>
+                    </th> --}}
+                    <th class="border-b">
+                        <div class="flex">
+                            <div class="bg-emerald-400 text-white text-xs font-bold rounded p-1">
+                                <div>{{ $col_accounting['hari'] }}-{{ $col_accounting['bulan'] }}</div>
+                                <div>{{ $col_accounting['tahun'] }}</div>
+                            </div>
+                        </div>
                     </th>
-                    <th class="text-rose-400">{{ my_decimal_format($col_total[$key]['total_pengeluaran']) }}</th>
-                    <th class="text-emerald-400">{{ my_decimal_format($col_total[$key]['total_pemasukan']) }}</th>
+                    <th class="text-rose-400"><span class="border-2 border-rose-300 p-1 text-sm rounded-lg">{{ my_decimal_format($col_total[$key]['total_pengeluaran']) }}</span></th>
+                    <th class="text-emerald-400"><span class="border-2 border-emerald-300 p-1 text-sm rounded-lg">{{ my_decimal_format($col_total[$key]['total_pemasukan']) }}</span></th>
                     {{-- <th class="text-sm text-yellow-500">{{ my_decimal_format($col_wallets[$key]['wallet_awal']) }}</th>
                     <th class="text-sm text-indigo-500">{{ my_decimal_format($col_wallets[$key]['wallet_akhir']) }}</th> --}}
                 </tr>
                 @foreach ($col_accounting['accountings'] as $accounting)
-                    <tr class="border-t text-xs font-bold text-slate-500">
+                    @if ($key % 2 == 0)
+                    <tr class="border-t text-xs font-bold text-slate-500 bg-amber-100">
+                    @else
+                    <tr class="border-t text-xs font-bold text-slate-500 bg-emerald-50">
+                    @endif
+                    {{-- <tr class="border-t text-xs font-bold text-slate-500"> --}}
                         <td colspan="3" class="py-1">
                             @if ($accounting->user)
                                 @if ($accounting->surat_pembelian)
@@ -110,18 +136,22 @@
                             @endif
                         </td>
                     </tr>
-                    <tr>
+                    @if ($key % 2 == 0)
+                    <tr class="bg-amber-100">
+                    @else
+                    <tr class="bg-emerald-50">
+                    @endif
                         @if ($accounting->tipe === 'pemasukan')
                             <td></td>
                             <td></td>
                             <td class="py-1">
-                                <div class="text-center text-emerald-300 font-bold">
+                                <div class="text-center text-emerald-600 font-bold text-sm">
                                     {{ my_decimal_format($accounting->jumlah) }}</div>
                             </td>
                         @else
                             <td></td>
                             <td>
-                                <div class="text-center text-rose-300 font-bold">
+                                <div class="text-center text-rose-600 font-bold text-sm">
                                     {{ my_decimal_format($accounting->jumlah) }}
                                 </div>
                             </td>
@@ -132,18 +162,20 @@
             @endforeach
         </table>
         {{-- <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button> --}}
-        <div class="mt-5">
-            <table class="text-slate-400 font-bold border">
-                @foreach ($wallets as $wallet)
-                    @if ($wallet->saldo !== null)
-                        <tr>
-                            <td>{{ $wallet->nama }}</td>
-                            <td>:</td>
-                            <td>Rp {{ my_decimal_format($wallet->saldo) }}</td>
-                        </tr>
-                    @endif
-                @endforeach
-            </table>
+        <div class="flex">
+            <div class="mt-5 p-2 border rounded-lg">
+                <table class="text-slate-400 font-bold">
+                    @foreach ($wallets as $wallet)
+                        @if ($wallet->saldo !== null)
+                            <tr>
+                                <td>{{ $wallet->nama }}</td>
+                                <td>:</td>
+                                <td>Rp {{ my_decimal_format($wallet->saldo) }}</td>
+                            </tr>
+                        @endif
+                    @endforeach
+                </table>
+            </div>
         </div>
     </main>
 @endsection
