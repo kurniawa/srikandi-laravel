@@ -32,10 +32,6 @@ class CashflowController extends Controller
         $to_month = date("m");
         $to_year = date("Y");
 
-        $from_day_copy = $from_day;
-        $from_month_copy = $from_month;
-        $from_year_copy = $from_year;
-
         $to_day_copy = $to_day;
         $to_month_copy = $to_month;
         $to_year_copy = $to_year;
@@ -67,16 +63,25 @@ class CashflowController extends Controller
         $until = "$to_year-$to_month-$to_day 23:59:59";
         $datediff = strtotime($until) - strtotime($from);
         $date_count = (int)($datediff / (60 * 60 * 24)) + 1; // always round up
-        dump($date_count);
+        // dump($date_count);
 
         $last_date_is_reached = false;
-        $last_date_to_time = strtotime($until);
-        // dd($last_date_to_time);
+        $last_date_to_time = strtotime($from);
+        // dump($last_date_to_time); // last date is the earliest because we want a descending sorting
         while (!$last_date_is_reached) {
-            $from = "$to_year_copy-$to_month_copy-$to_day_copy";
-            $until = "$to_year_copy-$to_month_copy-$to_day_copy 23:59:59";
+            $day_2_digit = $to_day_copy;
+            if (strlen($to_day_copy) < 2) {
+                $day_2_digit = "0$to_day_copy";
+            }
+            $month_2_digit = $to_month_copy;
+            if (strlen($to_month_copy) < 2) {
+                $month_2_digit = "0$to_month_copy";
+            }
+            $from = "$to_year_copy-$month_2_digit-$day_2_digit";
+            $until = "$to_year_copy-$month_2_digit-$day_2_digit 23:59:59";
             
             $cashflows = Cashflow::whereBetween('created_at', [$from, $until])->orderByDesc("created_at")->get();
+            dump($from, $until);
 
             $col_cashflows->push([
                 "hari" => $to_day_copy,
