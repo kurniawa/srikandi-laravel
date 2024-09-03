@@ -46,7 +46,7 @@
     <div class="min-h-full">
         <nav class="bg-gradient-to-br from-amber-500 to-amber-200 no-print py-2">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div class="flex items-center justify-between">
+                <div class="flex gap-1 items-center justify-between">
                     <div class="w-9">
                         <a href="{{ route('home') }}" class="loading-spinner">
                             <img src="{{ asset('images/icons/icon-96x96.png') }}" alt="" srcset="" class="size-8 rounded-full overflow-hidden">
@@ -54,7 +54,7 @@
                     </div>
 
                     {{-- PENCARIAN ITEM --}}
-                    <div>
+                    <div class="flex-auto">
                         <div class="flex gap-1 items-center bg-white text-xs text-slate-400 rounded-lg border-slate-300 border-2 pl-1">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-4">
@@ -133,7 +133,7 @@
                                     @endif
                                 @else
                                     <button
-                                        class="text-white bg-indigo-300 rounded-full w-8 h-8 flex justify-center items-center"
+                                        class="text-amber-100 bg-amber-300 border-2 border-amber-100 rounded-full w-8 h-8 flex justify-center items-center"
                                         id="user-menu-button" aria-expanded="false" aria-haspopup="true"
                                         onclick="toggleMenu('profile-menu', 'menu-close-layer')">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"

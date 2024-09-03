@@ -254,9 +254,20 @@ class SuratPembelianController extends Controller
         return view('surats.print-out', $data);
     }
 
-    function delete(SuratPembelian $surat_pembelian)
+    function delete(SuratPembelian $surat_pembelian, Request $request)
     {
         // dd($surat_pembelian);
+        // Validasi apabila sudah ada item yang di buyback, maka tidak dapat di cancel
+        if ($surat_pembelian->status_buyback) {
+            $request->validate(['error'=>'required'],['error.required'=>'-surat_pembelian->status_buyback !== null-']);
+        } else {
+            foreach ($surat_pembelian->items as $surat_pembelian_item) {
+                if ($surat_pembelian_item->status_buyback) {
+                    $request->validate(['error'=>'required'],['error.required'=>'-surat_pembelian_item->status_buyback !== null-']);
+                }
+            }
+        }
+        // END - Validasi apabila sudah ada item yang di buyback, maka tidak dapat di cancel
         $dangers_ = "";
         foreach ($surat_pembelian->items as $surat_pembelian_item) {
             if ($surat_pembelian_item->photo_path) {
@@ -389,12 +400,16 @@ class SuratPembelianController extends Controller
         $errors_ = "";
         // dd($post);
         // dump($surat_pembelian);
+        if (isset($post['cancel_buyback'])) {
+            return redirect()->route('surat_pembelian.cancel_buyback', [$surat_pembelian->id, $post['cancel_buyback']]);
+        }
         // VALIDASI TOTAL BUYBACK DAN TOTAL BAYAR
         $request->validate([
             'total_buyback' => 'required|numeric',
             'total_bayar' => 'required|numeric',
             'sisa_bayar' => 'required|numeric',
             'tipe_transaksi' => 'required',
+            'index_to_process' => 'required|array',
         ]);
         $total_buyback = (float)$post['total_buyback'];
         $total_bayar = (float)$post['total_bayar'];
@@ -609,5 +624,36 @@ class SuratPembelianController extends Controller
             'warnings_' => $warnings_
         ];
         return back()->with($feedback);
+    }
+
+    function cancel_buyback(SuratPembelian $surat_pembelian, SuratPembelianItem $surat_pembelian_item) {
+        // dump($surat_pembelian);
+        // dd($surat_pembelian_item);
+        $user = Auth::user();
+        $cart = null;
+        if ($user) {
+            $cart = Cart::where('user_id', $user->id)->first();
+        }
+
+        $data = [
+            'menus' => Menu::get(),
+            'profile_menus' => Menu::get_profile_menus(Auth::user()),
+            'cart' => $cart,
+            'user' => $user,
+            'surat_pembelian' => $surat_pembelian,
+            'surat_pembelian_item' => $surat_pembelian_item,
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
+        ];
+
+        return view('surats.cancel_buyback', $data);
+    }
+
+    function proceed_cancel_buyback(SuratPembelian $surat_pembelian, SuratPembelianItem $surat_pembelian_item) {
+        dump($surat_pembelian);
+        dd($surat_pembelian_item);
+
+        
+
+        return redirect()->route('surat_pembelian.show', $surat_pembelian->id)->with($feedback);
     }
 }

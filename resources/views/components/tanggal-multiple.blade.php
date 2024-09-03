@@ -1,8 +1,8 @@
 <div class="flex gap-1 items-center mt-2 bg-slate-300 p-1">
     <select id="hari" class="border py-1 rounded" disabled>
-        @if (old('hari'))
+        @if (old("hari.$indextanggal"))
         @for ($i = 1; $i < 32; $i++)
-        <option value="{{ $i }}" {{ old('hari') == $i ? 'selected' : '' }}>{{ $i }}</option>
+        <option value="{{ $i }}" {{ old("hari.$indextanggal") == $i ? 'selected' : '' }}>{{ $i }}</option>
         @endfor
         @else
         @for ($i = 1; $i < 32; $i++)
@@ -20,9 +20,9 @@
         </svg>
     </div>
     <select id="bulan" class="border py-1 rounded" disabled>
-        @if (old('bulan'))
+        @if (old("bulan.$indextanggal"))
         @for ($i = 1; $i < 13; $i++)
-        <option value="{{ $i }}" {{ old('bulan') == $i ? 'selected' : '' }}>{{ $i }}</option>
+        <option value="{{ $i }}" {{ old("bulan.$indextanggal") == $i ? 'selected' : '' }}>{{ $i }}</option>
         @endfor
         @else
         @for ($i = 1; $i < 13; $i++)
@@ -39,7 +39,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
         </svg>
     </div>
-    <input type="text" name="tahun[]" class="border rounded p-1 w-1/3" value="{{ old('tahun') ? old('tahun') : date('Y') }}" readonly>
+    <input type="text" name="tahun[]" class="border rounded p-1 w-1/3" value="{{ old("tahun.$indextanggal") ? old("tahun.$indextanggal") : date('Y') }}" readonly>
     {{-- kalau nanti ada fungsi pengubahan tanggal surat, maka ini boleh dihapus --}}
     <input type="hidden" name="hari[]" value="{{ date('d') }}" readonly>
     <input type="hidden" name="bulan[]" value="{{ date('m') }}" readonly>
