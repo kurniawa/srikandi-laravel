@@ -414,9 +414,6 @@ class SuratPembelianController extends Controller
         $total_buyback = (float)$post['total_buyback'];
         $total_bayar = (float)$post['total_bayar'];
         $sisa_bayar = (float)$post['sisa_bayar'];
-        if ($total_bayar < $total_buyback) {
-            $request->validate(['error' => 'required'], ['error.required' => 'jumlah pembayaran ke pelanggan, kurang!']);
-        }
         // END VALIDASI TOTAL BUYBACK DAN TOTAL BAYAR
         // dd($post);
         $user = Auth::user();
@@ -439,6 +436,10 @@ class SuratPembelianController extends Controller
             if ($post['potongan_mata'][$index_locked]) {
                 $potongan_mata = (float)$post['potongan_mata'][$index_locked] * 100;
             }
+            // if ($potongan_mata === 0) {
+            //     dd($potongan_mata);
+            // }
+            // dd('0 != null');
 
             $potongan_rusak = 0;
             if ($post['potongan_rusak'][$index_locked]) {
@@ -463,21 +464,48 @@ class SuratPembelianController extends Controller
             // dd($post_harga_buyback);
 
             if ($harga_buyback != ($post_harga_buyback)) {
-                $request->validate(['error' => 'requrired'], ['error.required' => "harga_buyback berbeda: $harga_buyback vs $post_harga_buyback"]);
+                $request->validate(['error' => 'required'], ['error.required' => "harga_buyback berbeda: $harga_buyback vs $post_harga_buyback"]);
+            }
+
+            $harga_buyback = (string)$harga_buyback;
+            if ($potongan_ongkos === 0) {
+                $potongan_ongkos = null;
+            } else {
+                $potongan_ongkos = (string)$potongan_ongkos;
+            }
+            if ($potongan_mata === 0) {
+                $potongan_mata = null;
+            } else {
+                $potongan_mata = (string)$potongan_mata;
+            }
+            if ($potongan_rusak === 0) {
+                $potongan_rusak = null;
+            } else {
+                $potongan_rusak = (string)$potongan_rusak;
+            }
+            if ($potongan_susut === 0) {
+                $potongan_susut = null;
+            } else {
+                $potongan_susut = (string)$potongan_susut;
+            }
+            if ($potongan_lain === 0) {
+                $potongan_lain = null;
+            } else {
+                $potongan_lain = (string)$potongan_lain;
             }
 
             $surat_pembelian_item->update([
                 'locked_buyback' => 'yes',
-                'status_buyback' => $post['status_buyback'][$index_locked],
+                'status_buyback' => null,
                 'kondisi_buyback' => $post['kondisi_buyback'][$index_locked],
-                'berat_buyback' => (string)$berat_buyback,
-                'potongan_ongkos' => (string)($potongan_ongkos),
-                'potongan_mata' => (string)($potongan_mata),
-                'potongan_rusak' => (string)($potongan_rusak),
-                'potongan_susut' => (string)($potongan_susut),
-                'potongan_lain' => (string)($potongan_lain),
-                'total_potongan' => (string)($total_potongan),
-                'harga_buyback' => (string)$harga_buyback,
+                'berat_buyback' => $berat_buyback,
+                'potongan_ongkos' => $potongan_ongkos,
+                'potongan_mata' => $potongan_mata,
+                'potongan_rusak' => $potongan_rusak,
+                'potongan_susut' => $potongan_susut,
+                'potongan_lain' => $potongan_lain,
+                'total_potongan' => $total_potongan,
+                'harga_buyback' => $harga_buyback,
                 'keterangan_buyback' => $post['keterangan_buyback'][$index_locked],
                 'tanggal_buyback' => date('Y-m-d', strtotime($post['hari'][$index_locked] . "-" . $post['bulan'][$index_locked] . "-" . $post['tahun'][$index_locked])) . 'T' . date('H:i:s', $time_key),
             ]);
@@ -494,6 +522,11 @@ class SuratPembelianController extends Controller
         } elseif (isset($post['konfirmasi_buyback']) || is_null($post['konfirmasi_buyback'])) {
             // dump($post);
             // dd('masuk ke konfirmasi_buyback');
+            
+            if ($total_bayar < $total_buyback) {
+                $request->validate(['error' => 'required'], ['error.required' => 'jumlah pembayaran ke pelanggan, kurang!']);
+            }
+
             $tanggal_buyback = '';
             foreach ($post['index_to_process'] as $key => $index_to_process) {
                 if ($key === 0) {
@@ -649,10 +682,43 @@ class SuratPembelianController extends Controller
     }
 
     function proceed_cancel_buyback(SuratPembelian $surat_pembelian, SuratPembelianItem $surat_pembelian_item) {
-        dump($surat_pembelian);
-        dd($surat_pembelian_item);
+        // dump($surat_pembelian);
+        // dd($surat_pembelian_item);
+        $warnings_ = '';
+        $related_accounting = Accounting::where('surat_pembelian_id', $surat_pembelian->id)->where('surat_pembelian_item_id', $surat_pembelian_item->id)->where('tipe', 'pengeluaran')->where('kategori', 'Buyback Perhiasan')->first();
+        // dump($related_accounting);
+        $related_cashflows = Cashflow::where('kode_accounting', $related_accounting->kode_accounting)->get();
+        // dump($related_cashflows);
+        foreach ($related_cashflows as $related_cashflow) {
+            $related_wallet = Wallet::where('nama', $related_cashflow->nama_wallet)->first();
+            $related_wallet->saldo = (string)((int)$related_wallet->saldo + (int)$related_cashflow->jumlah);
+            $related_wallet->save();
 
+            // Untuk pengecekan apakah saldo sudah sesuai
+            $last_cashflow_before_related_cashflow = Cashflow::where('nama_wallet', $related_cashflow->nama_wallet)->where('id', '!=', $related_cashflow->id)->latest()->first();
+            // dump($last_cashflow_before_related_cashflow->saldo);
+            // dd($related_wallet->saldo);
+            // END - Untuk pengecekan apakah saldo sudah sesuai
+
+            // HAPUS related_cashflow
+            $related_cashflow->delete();
+            // END - HAPUS related_cashflow
+        }
+
+        $related_accounting->delete();
+        $warnings_ .= '-relatedaccounting and cashflows deleted-';
+
+        $surat_pembelian_item->status_buyback = null;
+        $surat_pembelian_item->save();
+        $warnings_ .= '-suratpembelianitem->statusbuyback = null-';
+
+        SuratPembelian::update_status_buyback($surat_pembelian);
         
+        $warnings_ .= '-suratpembelian->statusbuyback updated-';
+
+        $feedback = [
+            'warnings_' => $warnings_
+        ];
 
         return redirect()->route('surat_pembelian.show', $surat_pembelian->id)->with($feedback);
     }

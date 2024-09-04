@@ -37,7 +37,7 @@ class CashflowController extends Controller
         $to_year_copy = $to_year;
 
         if (count($get)) {
-            dump($get);
+            // dump($get);
             $from_day = $get['from_day'];
             $from_month = $get['from_month'];
             $from_year = $get['from_year'];
@@ -81,7 +81,7 @@ class CashflowController extends Controller
             $until = "$to_year_copy-$month_2_digit-$day_2_digit 23:59:59";
             
             $cashflows = Cashflow::whereBetween('created_at', [$from, $until])->orderByDesc("created_at")->get();
-            dump($from, $until);
+            // dump($from, $until);
 
             $col_cashflows->push([
                 "hari" => $to_day_copy,

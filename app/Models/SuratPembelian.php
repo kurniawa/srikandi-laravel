@@ -184,6 +184,7 @@ class SuratPembelian extends Model
                 $surat_pembelian_item = SuratPembelianItem::create_surat_pembelian_item($surat_pembelian, $cart_item_id, $kode_accounting);
             }
         } elseif (isset($post['kategori']) && $post['kategori'] == "Buyback Perhiasan") {
+            // SP pada saat pelanggan menjual, namun surat biasa, belum masuk ke dalam sistem.
             $surat_pembelian_item = SuratPembelianItem::buyback_create_spi($surat_pembelian, $item, $time_key);
             $surat_pembelian->tanggal_buyback = $surat_pembelian->created_at;
             $surat_pembelian->status_buyback = 'all';
@@ -195,5 +196,26 @@ class SuratPembelian extends Model
 
     static function buyback_sp($surat_pembelian) {
         $surat_pembelian->update([]);
+    }
+
+    static function update_status_buyback($surat_pembelian) {
+        $surat_pembelian_items = $surat_pembelian->items;
+        $spi_jumlah_bb = 0;
+        foreach ($surat_pembelian_items as $spi) {
+            if ($spi->status_buyback) {
+                $spi_jumlah_bb++;
+            }
+        }
+        
+        $status_buyback = null;
+        if ($spi_jumlah_bb === 0) {
+            
+        } elseif ($spi_jumlah_bb === count($surat_pembelian_items)) {
+            $status_buyback = 'all';
+        } elseif ($spi_jumlah_bb < count($surat_pembelian_items)) {
+            $status_buyback = 'sebagian';
+        }
+        $surat_pembelian->status_buyback = $status_buyback;
+        $surat_pembelian->save();
     }
 }

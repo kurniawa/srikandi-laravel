@@ -50,8 +50,8 @@
             @csrf
             @foreach ($surat_pembelian->items as $key => $surat_pembelian_item)
                 <div class="relative">
-                    @if ($surat_pembelian_item->status_buyback)
-                        <div class="absolute bg-slate-400 opacity-30 top-0 left-0 bottom-0 right-0"></div>
+                    @if ($surat_pembelian_item->status_buyback == 'buyback')
+                        <div class="absolute bg-slate-300 opacity-70 top-0 left-0 bottom-0 right-0"></div>
                         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-bold">
                             <div class="text-3xl text-slate-500">BUYBACK</div>
                             <div class="mt-1">
@@ -102,19 +102,16 @@
                     <div id="tombol-toggle-{{ $key }}" class="mt-2">
                         <label class="inline-flex items-center cursor-pointer">
                             @if ($surat_pembelian_item->locked_buyback == 'yes')
-                                @if ($surat_pembelian_item->status_buyback)
-                                    <input type="checkbox" class="sr-only peer"
-                                        onclick="toggleBuyback({{ $key }}, this)" checked>
+                                @if ($surat_pembelian_item->status_buyback == 'buyback')
+                                    <input type="checkbox" class="sr-only peer" onclick="toggleBuyback({{ $key }}, this)">
                                 @else
                                     <input type="checkbox" name="index_to_process[]" value="{{ $key }}"
                                         class="sr-only peer checkbox-toggle-buyback"
                                         onclick="toggleBuyback({{ $key }}, this)" checked>
                                 @endif
                             @else
-                                @if ($surat_pembelian_item->status_buyback)
-                                    <input type="checkbox" class="sr-only peer"
-                                        onclick="toggleBuyback({{ $key }},
-                                        this)">
+                                @if ($surat_pembelian_item->status_buyback == 'buyback')
+                                    <input type="checkbox" class="sr-only peer" onclick="toggleBuyback({{ $key }}, this)">
                                 @else
                                     <input type="checkbox" name="index_to_process[]" value="{{ $key }}"
                                         class="sr-only peer checkbox-toggle-buyback"
@@ -131,11 +128,13 @@
                         </label>
                     </div>
                     @if ($surat_pembelian_item->locked_buyback == 'yes')
-                        <div id="buyback_form-{{ $key }}"
-                            class="grid-cols-12 bg-orange-100 text-slate-500 p-2 rounded">
+                        @if ($surat_pembelian_item->status_buyback == 'buyback')
+                        <div id="buyback_form-{{ $key }}" class="grid-cols-12 bg-orange-100 text-slate-500 p-2 rounded hidden">
                         @else
-                            <div id="buyback_form-{{ $key }}"
-                                class="grid-cols-12 bg-violet-100 text-slate-500 p-2 rounded hidden">
+                        <div id="buyback_form-{{ $key }}" class="grid-cols-12 bg-orange-100 text-slate-500 p-2 rounded">
+                        @endif
+                    @else
+                        <div id="buyback_form-{{ $key }}" class="grid-cols-12 bg-violet-100 text-slate-500 p-2 rounded hidden">
                     @endif
                     <div class="flex text-slate-500 justify-center">
                         <div class="bg-yellow-200 p-1 shadow drop-shadow">
