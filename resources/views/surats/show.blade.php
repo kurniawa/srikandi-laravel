@@ -199,7 +199,16 @@
         <h5 class="font-bold text-lg text-slate-500 my-3">Histori Pembayaran</h5>
         <table class="table-slim w-full">
             @foreach ($surat_pembelian->cashflows as $cashflow)
-            <tr><td>{{ $cashflow->kategori_wallet }}</td><td>{{ $cashflow->tipe_wallet }}</td><td>{{ $cashflow->nama_wallet }}</td><td>{{ my_decimal_format($cashflow->jumlah) }}</td></tr>
+            <tr>
+                <td>{{ $cashflow->kategori_wallet }}</td>
+                <td>{{ $cashflow->tipe_wallet }}</td>
+                <td>{{ $cashflow->nama_wallet }}</td>
+                @if ($cashflow->tipe == 'pengeluaran')
+                <td>-{{ my_decimal_format($cashflow->jumlah) }}</td>
+                @else
+                <td>{{ my_decimal_format($cashflow->jumlah) }}</td>
+                @endif
+            </tr>
             @endforeach
         </table>
 

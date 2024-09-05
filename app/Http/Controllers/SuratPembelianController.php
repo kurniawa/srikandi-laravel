@@ -709,6 +709,7 @@ class SuratPembelianController extends Controller
         $warnings_ .= '-relatedaccounting and cashflows deleted-';
 
         $surat_pembelian_item->status_buyback = null;
+        // $surat_pembelian_item->locked_buyback = null;
         $surat_pembelian_item->save();
         $warnings_ .= '-suratpembelianitem->statusbuyback = null-';
 
