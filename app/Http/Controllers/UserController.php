@@ -451,6 +451,6 @@ class UserController extends Controller
             'password' => Hash::make($request->new_password)
         ]);
 
-        return back()->with("success_", "Password changed successfully!");
+        return redirect()->route('users.show', $user_this->id)->with("success_", "Password changed successfully!");
     }
 }
