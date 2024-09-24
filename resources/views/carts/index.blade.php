@@ -117,8 +117,9 @@
                         value="{{ (string) ((float) $cart->harga_total / 100) }}">
                 </div>
                 <div class="flex justify-center mt-9">
-                    <button type="submit"
-                        class="rounded-lg px-3 py-2 bg-emerald-300 text-white border-2 border-emerald-400 font-bold">Checkout</button>
+                    <button type="submit" class="loading-spinner rounded-lg px-3 py-2 bg-emerald-300 text-white border-2 border-emerald-400 font-bold">
+                        Checkout
+                    </button>
                 </div>
             </form>
         @else
