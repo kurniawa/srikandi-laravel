@@ -31,7 +31,7 @@
                 </div>
             </div>
             <div class="flex justify-center mt-5">
-                <button class="bg-emerald-300 text-white font-bold p-2 rounded">+Tambah Jenis Perhiasan</button>
+                <button class="bg-emerald-300 text-white font-bold p-2 rounded">Konfirmasi +Tambah Jenis Perhiasan</button>
             </div>
         </form>
     </div>

@@ -6,7 +6,7 @@
 
     <div class="flex">
         <div class="bg-white shadow drop-shadow p-2 rounded">
-            <h3 class="text-xl font-bold text-slate-500">+Tambah Harga Pasaran</h3>
+            <h3 class="text-xl font-bold text-slate-500">Konfirmasi +Tambah Harga Pasaran</h3>
         </div>
     </div>
 

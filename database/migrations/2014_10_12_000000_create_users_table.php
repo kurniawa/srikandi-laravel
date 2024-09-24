@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('role', ['Developer', 'SuperAdmin', 'Admin', 'User', 'Client'])->default('Client');
-            $table->smallInteger('clearance_level')->default(1);
+            $table->tinyInteger('clearance_level')->default(1);
             $table->string('gender', 20)->nullable(); // pria atau wanita
             $table->string('profile_picture_path')->nullable();
             $table->string('id_photo_path')->nullable();

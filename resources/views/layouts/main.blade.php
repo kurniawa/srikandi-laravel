@@ -390,8 +390,8 @@
     // console.log(window.location.protocol);
     // console.log(window.location.host);
     // console.log(window.location.pathname);
+    const window_main_url = window.location.protocol + '//' + window.location.host + '/';
     try {
-        const window_main_url = window.location.protocol + '//' + window.location.host + '/';
     } catch (error) {
         console.error(error);        
     }

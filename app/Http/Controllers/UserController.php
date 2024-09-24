@@ -73,7 +73,7 @@ class UserController extends Controller
         $filename_profile_picture = null;
         if ($request->file('profile_picture')) {
             $request->validate([
-                "profile_picture" => "nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048"
+                "profile_picture" => "nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5120"
             ]);
             $file_profile_picture = $request->file('profile_picture');
             $filename_profile_picture = $time . "." . $file_profile_picture->extension();
@@ -85,7 +85,7 @@ class UserController extends Controller
         $filename_id_photo = null;
         if ($request->file('id_photo')) {
             $request->validate([
-                "id_photo" => "nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048"
+                "id_photo" => "nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5120"
             ]);
             $file_id_photo = $request->file('id_photo');
             $filename_id_photo = $time . "." . $file_id_photo->extension();
@@ -284,7 +284,7 @@ class UserController extends Controller
         // dd($cart_item);
 
         $request->validate([
-            'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
         ]);
 
         $success_ = "";
@@ -335,7 +335,7 @@ class UserController extends Controller
         // dd($cart_item);
 
         $request->validate([
-            'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
         ]);
 
         $success_ = "";

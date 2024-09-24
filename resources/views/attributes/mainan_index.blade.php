@@ -27,7 +27,7 @@
             </div>
             <div class="flex justify-center mt-2">
                 <div class="rounded p-2 bg-emerald-300 text-white font-bold">
-                    <button type="submit">+Tambah Mainan</button>
+                    <button type="submit">Konfirmasi +Tambah Mainan</button>
                 </div>
             </div>
         </form>

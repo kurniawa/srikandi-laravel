@@ -191,7 +191,7 @@
 
             <div class="mt-5 text-center">
                 <button type="submit"
-                    class="loading-spinner bg-emerald-300 rounded text-white font-bold px-3 py-2 hover:bg-emerald-400 disabled:opacity-25">+Tambah
+                    class="loading-spinner bg-emerald-300 rounded text-white font-bold px-3 py-2 hover:bg-emerald-400 disabled:opacity-25">Konfirmasi +Tambah
                     Pelanggan</button>
             </div>
         </form>

@@ -21,7 +21,7 @@ class PhotoController extends Controller
         // dd($item);
 
         $request->validate([
-            'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
             'photo_index' => 'required|numeric'
         ]);
 
@@ -91,7 +91,7 @@ class PhotoController extends Controller
         // dd($cart_item);
 
         $request->validate([
-            'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
         ]);
 
         $success_ = "";
@@ -141,7 +141,7 @@ class PhotoController extends Controller
         // dd($cart);
 
         $request->validate([
-            'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
         ]);
 
         $success_ = "";

@@ -36,22 +36,26 @@
                     <h2 class="text-slate-500 font-bold">Saran foto untuk index ke-{{ $index+1 }}</h2>
                 </div>
                 <div>
-                    <form action="{{ route('items.add_photo_from_sugestion', [$item->id]) }}" method="POST" class="mt-2">
+                    <form action="{{ route('items.add_photo_from_sugestion', [$item->id]) }}" method="POST" class="mt-2" onsubmit="return confirm('Sudah yakin dengan pilihan foto ini?')">
                         @csrf
+                        @if (count($saran_photos))
                         <div class="grid grid-cols-3 gap-3">
                             @foreach ($saran_photos as $key => $saran_photo)
                             <div class="flex gap-1 items-center">
-                                <input type="radio" name="photo_id" id="saran_photo-{{ $key }}" value="{{ $saran_photo['photo_id'] }}">
+                                <input type="radio" name="photo_id" id="saran_photo-{{ $key }}" value="{{ $saran_photo['photo_id'] }}" class="pilihan_saran_photo" onchange="showButtonPilihPhoto()">
                                 <label for="saran_photo-{{ $key }}">
                                     <img src="{{ asset('storage/' . $saran_photo['photo_path']) }}" alt="" class="w-full">
                                 </label>
                             </div>
                             @endforeach
                         </div>
-                        <div class="text-center mt-2">
+                        <div id="button_pilih" class="text-center mt-2 hidden">
                             <input type="hidden" name="photo_index" value="{{ $index }}">
-                            <button type="submit" class="bg-emerald-300 font-bold text-white p-2 rounded">Konfirmasi</button>
+                            <button type="submit" class="bg-emerald-300 font-bold text-white p-2 rounded">Pilih</button>
                         </div>
+                        @else
+                        <span class="italic text-slate-500">-Belum ada saran foto untuk item ini-</span>
+                        @endif
                     </form>
                 </div>
             </div>
@@ -63,7 +67,7 @@
                     <h2 class="text-slate-500 font-bold">Foto baru untuk index ke-{{ $index+1 }}</h2>
                 </div>
                 <form method="POST" action="{{ route('items.add_photo', $item->id) }}" class="mt-2"
-                    enctype="multipart/form-data">
+                    enctype="multipart/form-data" onsubmit="return confirm('Sudah yakin dengan foto ini?')">
                     @csrf
                     <label for="input-photo" class="inline-block hover:cursor-pointer"
                         id="label-input-photo">
@@ -92,10 +96,10 @@
                             </button>
                         </div>
                         <img id="preview-photo"></img>
-                        <div class="flex justify-center mt-1">
-                            <button type="submit"
-                                class="loading-spinner bg-emerald-300 text-white border-2 border-emerald-400 font-bold rounded px-3 py-1 text-sm">+
-                                Tambah Foto</button>
+                        <div class="flex justify-center mt-3">
+                            <button type="submit" class="loading-spinner bg-emerald-300 text-white border-2 border-emerald-400 font-bold rounded px-3 py-1 text-sm">
+                                Konfirmasi +Tambah Foto
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -110,4 +114,20 @@
 
     </main>
     <script src="{{ asset('js/item.js') }}"></script>
+    <script>
+        const showButtonPilihPhoto = () => {
+            const pilihan_saran_photo = document.querySelectorAll('.pilihan_saran_photo');
+            let ada_yang_terpilih = false;
+            pilihan_saran_photo.forEach(element => {
+                if (element.checked) {
+                    ada_yang_terpilih = true;
+                }
+            });
+            if (ada_yang_terpilih) {
+                $('#button_pilih').show();
+            } else {
+                $('#button_pilih').hide();
+            }
+        }
+    </script>
 @endsection

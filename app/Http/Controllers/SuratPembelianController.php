@@ -343,7 +343,7 @@ class SuratPembelianController extends Controller
         // dd($cart);
 
         $request->validate([
-            'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
         ]);
 
         $success_ = "";
