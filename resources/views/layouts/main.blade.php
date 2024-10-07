@@ -54,21 +54,19 @@
                     </div>
 
                     {{-- PENCARIAN ITEM --}}
-                    <form action="" method="GET">
-                        <div class="flex-auto">
-                            <div class="flex gap-1 items-center bg-white text-xs text-slate-400 rounded-lg border-slate-300 border-2 pl-1">
-                                <div class="">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-4">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                                    </svg>
-                                </div>
-                                <div class="grow">
-                                    <input type="text" name="longname" id="search-longname" oninput="searchItem(this, 'search-result')" class="border-none w-full p-1 rounded" placeholder="nama barang/item...">
-                                </div>
+                    <div class="flex-auto">
+                        <div class="flex gap-1 items-center bg-white text-xs text-slate-400 rounded-lg border-slate-300 border-2 pl-1">
+                            <div class="">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-4">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                                </svg>
+                            </div>
+                            <div class="grow">
+                                <input type="text" name="longname" id="search-longname" oninput="searchItem(this, 'search-result')" class="border-none w-full p-1 rounded" placeholder="nama barang/item...">
                             </div>
                         </div>
-                    </form>
+                    </div>
                     {{-- END - PENCARIAN ITEM --}}
 
                     <div class="flex gap-2 items-center">
@@ -421,10 +419,26 @@
                     <img class="w-full" src="${window_main_url}storage/${item.photo_path}">
                     </div>`;
             }
-            html_result += `<a href="${window_main_url}items/${item.id}/show"><div class="loading-spinner border-b hover:cursor-pointer hover:bg-slate-100 grid grid-cols-12 gap-2 items-center">
+            html_result += `<div class="border-b grid grid-cols-12 gap-1 items-center">
                 ${html_photo}
-                <div class="col-span-9">${item.longname}</div>
-                </div></a>`;
+                <a href="${window_main_url}items/${item.id}/show" class="loading-spinner col-span-8">
+                    <div>${item.longname}</div>
+                    <div class="text-xs flex">
+                        <div class="text-emerald-300 border border-emerald-300 rounded px-1">${formatCurrencyID(item.harga_g)}</div>
+                        <div class="text-rose-300 border border-rose-300 rounded px-1">${formatCurrencyID(item.ongkos_g)}</div>
+                    </div>
+                    <div>${formatCurrencyID(item.harga_t)}</div>
+                </a>
+                <div class="col-span-1">
+                    <form action="${window_main_url}items/${item.tipe_barang}/create_item" method="GET" class="">
+                        <button type="submit" name="item_id" value="${item.id}" class="loading-spinner flex h-full w-full rounded py-1 items-center justify-center text-white bg-emerald-300 hover:bg-emerald-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+                </div>`;
         });
         html_result += '</div>';
 

@@ -507,3 +507,35 @@ function remove_photo(
     el_container_preview_photo.classList.add("hidden");
     el_label_choose_photo.classList.remove("hidden");
 }
+
+function formatCurrencyID(num) {
+    num = (num / 100).toString();
+    // console.log(num);
+    // console.log(num.includes(","));
+    // console.log(num.includes("."));
+    if (num.includes(".")) {
+        num = num.split(".");
+        num[0] = parseFloat(num[0]).toLocaleString("id-ID", {style: "decimal",});
+        num = `${num[0]},${num[1]}`
+    } else {
+        num = parseFloat(num).toLocaleString("id-ID", {style: "decimal",});
+        num = `${num},-`;
+    }
+
+    return num;
+}
+
+const formatNumberDecID = (num) => {
+    num = (num / 100).toString();
+    if (num.includes(".")) {
+        num = num.split(".");
+        num[0] = parseFloat(num[0]).toLocaleString("id-ID", {style: "decimal",});
+        num = `${num[0]},${num[1]}`
+    } else {
+        num = parseFloat(num).toLocaleString("id-ID", {style: "decimal",});
+    }
+
+    return num;
+}
+
+// export{formatCurrencyID, formatNumberDecID};

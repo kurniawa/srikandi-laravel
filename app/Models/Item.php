@@ -382,7 +382,7 @@ class Item extends Model
     }
 
     static function get_all_item_x_photos($route, $item_id) {
-        $all_items = Item::select('id', 'shortname', 'longname', 'harga_g', 'ongkos_g', 'harga_t')->get();
+        $all_items = Item::select('id', 'shortname', 'longname', 'tipe_barang', 'harga_g', 'ongkos_g', 'harga_t')->get();
         $all_items_x_photos = collect();
         foreach ($all_items as $item) {
             $photo_path = null;
@@ -395,6 +395,7 @@ class Item extends Model
             }
             $all_items_x_photos->push([
                 'id' => $item->id,
+                'tipe_barang' => $item->tipe_barang,
                 'shortname' => $item->shortname,
                 'longname' => $item->longname,
                 'harga_g' => $item->harga_g,

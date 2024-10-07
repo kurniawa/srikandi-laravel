@@ -45,8 +45,11 @@
                     @endif
                 </div>
                 <div><span class="font-bold text-xs text-slate-500">{{ $item->shortname }}</span></div>
-                <div class="font-bold text-slate-600"><span>Rp
-                    </span><span>{{ number_format((float) $item->harga_t / 100, 2, ',', '.') }}</span></div>
+                <div class="text-xs flex">
+                    <div class="text-emerald-300 border border-emerald-300 rounded px-1">{{ my_decimal_format($item->harga_g) }}</div>
+                    <div class="text-rose-300 border border-rose-300 rounded px-1">{{ my_decimal_format($item->ongkos_g) }}</div>
+                </div>
+                <div class="font-bold text-slate-500"><span>Rp </span><span>{{ my_decimal_format($item->harga_t) }}</span></div>
                 {{-- <div class="text-slate-500">By: {{ $item->user->username }}</div> --}}
             </a>
         @endforeach
