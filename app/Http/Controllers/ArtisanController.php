@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
+use App\Models\Item;
 use App\Models\Menu;
+use App\Models\WarnaEmas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
@@ -10,16 +13,33 @@ use Illuminate\Support\Facades\Auth;
 class ArtisanController extends Controller
 {
     function index() {
+        $user = Auth::user();
+        $cart = null;
+        if ($user) {
+            $cart = Cart::where('user_id', $user->id)->first();
+        }
 
         $data = [
-            'menus' => Menu::get(),
-            'route_now' => 'home',
             'profile_menus' => Menu::get_profile_menus(Auth::user()),
-            'parent_route' => 'home',
-            // 'spk_menus' => Menu::get_spk_menus(),
+            'user' => $user,
+            'cart' => $cart,
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
 
-        return view('artisans.index', $data);
+        return view('commands.index', $data);
+    }
+
+    function input_initial_data_warna_emas() {
+        WarnaEmas::query()->truncate();
+        $warna_emas = [
+            ['nama' => 'kuning'],
+            ['nama' => 'rose gold'],
+            ['nama' => 'putih'],
+            ['nama' => 'chrome'],
+        ];
+        foreach ($warna_emas as $we) {
+            WarnaEmas::create($we);
+        }
     }
     function migrate_fresh_seed(Request $request) {
         if (Auth::user()->role !== 'Developer') {

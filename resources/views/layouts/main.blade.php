@@ -169,7 +169,7 @@
                                 </a>
                                 @endif
                                 @auth
-                                @if ($user->clearance_level >= 6)
+                                @if ($user->clearance_level >= 5)
                                 <a href="{{ route('artisans.index') }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Artisan Commands</a>
                                 @endif
                                 <a href="{{ route('attributes.index') }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Attribute Setting</a>
@@ -406,7 +406,7 @@
             return false;
             }, {count:0});
         // console.log(filtered);
-        let html_result = `<div class="absolute bg-white shadow drop-shadow p-1 text-xs font-bold z-10">`;
+        let html_result = `<div class="absolute bg-white shadow drop-shadow p-1 text-xs font-bold z-30">`;
         
         filtered.forEach(item => {
             html_photo = `<div class="col-span-3 bg-indigo-100 text-indigo-400">

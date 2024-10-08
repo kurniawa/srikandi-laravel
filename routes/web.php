@@ -234,9 +234,11 @@ Route::controller(CapController::class)->group(function(){
 // END - ATTRIBUTES
 
 Route::controller(ArtisanController::class)->group(function () {
-    Route::get('/artisans', 'index')->name('artisans.index')->middleware('auth');
-    Route::post('/artisans/migrate_fresh_seed', 'migrate_fresh_seed')->name('artisans.migrate_fresh_seed')->middleware('auth');
-    Route::post('/artisans/symbolic_link', 'symbolic_link')->name('artisans.symbolic_link')->middleware('auth');
-    Route::post('/artisans/optimize_clear', 'optimize_clear')->name('artisans.optimize_clear')->middleware('auth');
+    Route::get('/artisans', 'index')->name('artisans.index')->middleware('level5');
+    Route::post('/artisans/input_initial_data_warna_emas', 'input_initial_data_warna_emas')->name('artisans.input_initial_data_warna_emas')->middleware('level5');
+    Route::post('/artisans/migrate_fresh_seed', 'migrate_fresh_seed')->name('artisans.migrate_fresh_seed')->middleware('level5');
+    Route::post('/artisans/symbolic_link', 'symbolic_link')->name('artisans.symbolic_link')->middleware('level5');
+    Route::post('/artisans/optimize_clear', 'optimize_clear')->name('artisans.optimize_clear')->middleware('level5');
+    Route::post('/artisans/optimize_clear', 'optimize_clear')->name('artisans.optimize_clear')->middleware('level5');
     // Route::post('/artisans/vendor_publish_laravelPWA','vendor_publish_laravelPWA')->name('artisans.vendor_publish_laravelPWA')->middleware('auth');
 });

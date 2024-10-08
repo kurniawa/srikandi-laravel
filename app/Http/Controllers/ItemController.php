@@ -14,6 +14,7 @@ use App\Models\Mata;
 use App\Models\Menu;
 use App\Models\Photo;
 use App\Models\TipePerhiasan;
+use App\Models\WarnaEmas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -52,20 +53,90 @@ class ItemController extends Controller
     }
 
     // function create_item($from, $tipe_barang) {
-    function create_item($tipe_barang)
+    function create_item($tipe_barang, Request $request)
     {
         // dump($from);
         // dd($tipe_barang);
-        $time = time();
+        // $time = time();
         // dump($time);
         // dump(date("Y-m-d", $time));
         // dd(date("Y-m-d", $time - 86400));
+        $get = $request->query();
+
+        $tipe_perhiasan = null;
+        $jenis_perhiasan = null;
+        $deskripsi = null;
+        $warna_emas = null;
+        $kadar = null;
+        $berat = null;
+        $harga_g = null;
+        $ongkos_g = null;
+        $harga_t = null;
+        $shortname = null;
+        $longname = null;
+        $keterangan = null;
+        $kondisi = null;
+        $cap = null;
+        $range_usia = null;
+        $item_matas = [];
+        $item_mainans = [];
+        $ukuran = null;
+        $merk = null;
+        $plat = null;
+
+        if ($get && isset($get['item_id'])) {
+            $item = Item::find($get['item_id']);
+            $tipe_perhiasan = $item->tipe_perhiasan;
+            $jenis_perhiasan = $item->jenis_perhiasan;
+            $deskripsi = $item->deskripsi;
+            $warna_emas = $item->warna_emas;
+            $kadar = $item->kadar;
+            $berat = $item->berat;
+            $harga_g = $item->harga_g;
+            $ongkos_g = $item->ongkos_g;
+            $harga_t = $item->harga_t;
+            $shortname = $item->shortname;
+            $longname = $item->longname;
+            $keterangan = $item->keterangan;
+            $kondisi = $item->kondisi;
+            $cap = $item->cap;
+            $range_usia = $item->range_usia;
+            $ukuran = $item->ukuran;
+            $merk = $item->merk;
+            $plat = $item->plat;
+
+            $this_item_matas = ItemMata::where('item_id', $item->id)->get();
+            if (count($this_item_matas)) {
+                foreach ($this_item_matas as $item_mata) {
+                    $mata = Mata::find($item_mata->mata_id);
+                    $item_matas[] = [
+                        'warna' => $mata->warna,
+                        'level_warna' => $mata->level_warna,
+                        'opacity' => $mata->opacity,
+                        'jumlah' => $item_mata->jumlah,
+                    ];
+                }
+            }
+
+            $this_item_mainans = ItemMainan::where('item_id', $item->id)->get();
+            if (count($this_item_mainans)) {
+                foreach ($this_item_mainans as $item_mainan) {
+                    $mainan = Mainan::find($item_mainan->mainan_id);
+                    $item_mainans[] = [
+                        'nama' => $mainan->nama,
+                        'jumlah' => $item_mainan->jumlah_mainan,
+                    ];
+                }
+            }
+
+        }
         $tipe_perhiasans = TipePerhiasan::all();
         $jenis_perhiasans = JenisPerhiasan::select('id', 'nama as label', 'nama as value', 'tipe_perhiasan_id', 'tipe_perhiasan')->get();
         $caps = Cap::select('id', 'nama as label', 'nama as value', 'codename')->get();
         $label_matas = Mata::select('warna as label', 'warna as value')->groupBy('warna')->get();
         $matas = Mata::all();
         $label_mainans = Mainan::select('id', 'nama as label', 'nama as value', 'codename')->get();
+        $label_warna_emas = WarnaEmas::all();
         // dd($tipe_perhiasans);
         // dd($jenis_perhiasans);
 
@@ -95,9 +166,31 @@ class ItemController extends Controller
             'label_matas' => $label_matas,
             'matas' => $matas,
             'label_mainans' => $label_mainans,
+            'label_warna_emas' => $label_warna_emas,
             'cart' => $cart,
             'user' => $user,
             'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
+
+            'tipe_perhiasan' => $tipe_perhiasan,
+            'jenis_perhiasan' => $jenis_perhiasan,
+            'deskripsi' => $deskripsi,
+            'warna_emas' => $warna_emas,
+            'kadar' => $kadar,
+            'berat' => $berat,
+            'harga_g' => $harga_g,
+            'ongkos_g' => $ongkos_g,
+            'harga_t' => $harga_t,
+            'shortname' => $shortname,
+            'longname' => $longname,
+            'keterangan' => $keterangan,
+            'kondisi' => $kondisi,
+            'cap' => $cap,
+            'range_usia' => $range_usia,
+            'item_matas' => $item_matas,
+            'item_mainans' => $item_mainans,
+            'ukuran' => $ukuran,
+            'merk' => $merk,
+            'plat' => $plat
         ];
 
         // dd($caps);

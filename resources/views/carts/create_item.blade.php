@@ -16,8 +16,7 @@
                             class="bg-gray-200 border border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     </div>
                     <div class="mb-5">
-                        <label for="tipe_perhiasan"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">tipe perhiasan</label>
+                        <label for="tipe_perhiasan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">tipe perhiasan</label>
                         <select id="tipe_perhiasan" name="tipe_perhiasan"
                             onchange="pilihanJenisPerhiasan(this.value);generateNama()"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -31,32 +30,53 @@
                         <option value='{ "id":{{ $tipe_perhiasan->id }}, "nama": "{{ $tipe_perhiasan->nama }}" }'>{{ $tipe_perhiasan->nama }}</option>
                         @endif
                         @endforeach --}}
-
-                            @foreach ($tipe_perhiasans as $tipe_perhiasan)
-                                @if (old('tipe_perhiasan'))
-                                    @if (old('tipe_perhiasan') == $tipe_perhiasan->nama)
-                                        <option value='{{ $tipe_perhiasan->nama }}' selected>{{ $tipe_perhiasan->nama }}
-                                        </option>
-                                    @endif
+                        @if (old('tipe_perhiasan'))
+                            @foreach ($tipe_perhiasans as $tp)
+                                @if (old('tipe_perhiasan') == $tp->nama)
+                                    <option value='{{ $tp->nama }}' selected>{{ $tp->nama }}</option>
                                 @else
-                                    <option value='{{ $tipe_perhiasan->nama }}'>{{ $tipe_perhiasan->nama }}</option>
+                                    <option value='{{ $tp->nama }}'>{{ $tp->nama }}</option>
                                 @endif
                             @endforeach
+                        @elseif ($tipe_perhiasan)
+                            @foreach ($tipe_perhiasans as $tp)
+                                @if ($tipe_perhiasan == $tp->nama)
+                                    <option value='{{ $tp->nama }}' selected>{{ $tp->nama }}</option>
+                                @else
+                                    <option value='{{ $tp->nama }}'>{{ $tp->nama }}</option>
+                                @endif
+                            @endforeach
+                        @else
+                            @foreach ($tipe_perhiasans as $tp)
+                                <option value='{{ $tp->nama }}'>{{ $tp->nama }}</option>
+                            @endforeach
+                        @endif
+                            
                         </select>
                     </div>
                     <div class="mb-5">
-                        <label id="label_jenis_perhiasan" for="jenis_perhiasan"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">jenis ...</label>
-                        <input type="text" name="jenis_perhiasan" id="jenis_perhiasan"
-                            value="{{ old('jenis_perhiasan') ? old('jenis_perhiasan') : '' }}" onchange="generateNama()"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <label id="label_jenis_perhiasan" for="jenis_perhiasan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">jenis ...</label>
+                        @if (old('jenis_perhiasan'))
+                            <input type="text" name="jenis_perhiasan" id="jenis_perhiasan"
+                                value="{{ old('jenis_perhiasan') }}" onchange="generateNama()"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        @else
+                            <input type="text" name="jenis_perhiasan" id="jenis_perhiasan"
+                                value="{{ $jenis_perhiasan }}" onchange="generateNama()"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        @endif
                     </div>
                     <div class="mb-5">
-                        <label for="deskripsi"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">deskripsi (opt.)</label>
-                        <input type="text" id="deskripsi" name="deskripsi" onchange="generateNama()"
-                            value="{{ old('deskripsi') ? old('deskripsi') : '' }}"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <label for="deskripsi" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">deskripsi (opt.)</label>
+                        @if (old('deskripsi'))
+                            <input type="text" id="deskripsi" name="deskripsi" onchange="generateNama()"
+                                value="{{ old('deskripsi') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        @else
+                            <input type="text" id="deskripsi" name="deskripsi" onchange="generateNama()"
+                                value="{{ $deskripsi }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        @endif
                     </div>
                     <div class="mb-5">
                         <label for="warna_emas" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">warna
@@ -64,63 +84,91 @@
                         <select id="warna_emas" name="warna_emas" onchange="generateNama()"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             @if (old('warna_emas'))
-                                @if (old('warna_emas') == 'kuning')
-                                    <option value="kuning" selected>kuning</option>
-                                @else
-                                    <option value="kuning">kuning</option>
-                                @endif
-                                @if (old('warna_emas') == 'rose gold')
-                                    <option value="rose gold" selected>rose gold</option>
-                                @else
-                                    <option value="rose gold">rose gold</option>
-                                @endif
-                                @if (old('warna_emas') == 'putih')
-                                    <option value="putih" selected>putih</option>
-                                @else
-                                    <option value="putih">putih</option>
-                                @endif
-                                @if (old('warna_emas') == 'chrome')
-                                    <option value="chrome" selected>chrome</option>
-                                @else
-                                    <option value="chrome">chrome</option>
-                                @endif
+                                @foreach ($label_warna_emas as $we)
+                                    @if (old('warna_emas') == $we->nama)
+                                        <option value="{{ $we->nama }}" selected>{{ $we->nama }}</option>
+                                    @else
+                                        <option value="{{ $we->nama }}">{{ $we->nama }}</option>
+                                    @endif
+                                @endforeach
+                            @elseif ($warna_emas)
+                                @foreach ($label_warna_emas as $we)
+                                    @if ($warna_emas == $we->nama)
+                                        <option value="{{ $we->nama }}" selected>{{ $we->nama }}</option>
+                                    @else
+                                        <option value="{{ $we->nama }}">{{ $we->nama }}</option>
+                                    @endif
+                                @endforeach
                             @else
-                                <option value="kuning">kuning</option>
-                                <option value="rose gold">rose gold</option>
-                                <option value="putih">putih</option>
-                                <option value="chrome">chrome</option>
+                                @foreach ($label_warna_emas as $we)
+                                    <option value="{{ $we->nama }}">{{ $we->nama }}</option>
+                                @endforeach
                             @endif
                         </select>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div class="mb-5">
-                        <label id="label_kadar_formatted" for="kadar_formatted"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">kadar(%)</label>
+                        <label id="label_kadar_formatted" for="kadar_formatted" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">kadar(%)</label>
+                        @if (old('kadar_formatted'))
+                            <input type="text" inputmode="numeric" id="kadar_formatted"
+                                value="{{ old('kadar_formatted') }}"
+                                onchange="formatNumber(this, 'kadar');generateNama()"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <input type="hidden" id="kadar" name="kadar" value="{{ old('kadar') ? old('kadar') : '' }}">
+                        @elseif ($kadar)
+                            <input type="text" inputmode="numeric" id="kadar_formatted"
+                                value="{{ casual_decimal_format($kadar) }}"
+                                onchange="formatNumber(this, 'kadar');generateNama()"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <input type="hidden" id="kadar" name="kadar" value="{{ $kadar/100 }}">
+                        @else
                         <input type="text" inputmode="numeric" id="kadar_formatted"
-                            value="{{ old('kadar_formatted') ? old('kadar_formatted') : '' }}"
                             onchange="formatNumber(this, 'kadar');generateNama()"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <input type="hidden" id="kadar" name="kadar" value="{{ old('kadar') ? old('kadar') : '' }}">
+                        <input type="hidden" id="kadar" name="kadar">
+                        @endif
                     </div>
                     <div class="mb-5">
-                        <label id="label_berat_formatted" for="berat_formatted"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">berat</label>
+                        <label id="label_berat_formatted" for="berat_formatted" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">berat</label>
+                        @if (old('berat'))
                         <input type="text" inputmode="numeric" id="berat_formatted"
-                            value="{{ old('berat_formatted') ? old('berat_formatted') : '' }}"
+                            value="{{ old('berat_formatted') }}"
                             onchange="formatNumber(this, 'berat');hitungHargaGrOrT();generateNama();"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <input type="hidden" id="berat" name="berat" value="{{ old('berat') ? old('berat') : '' }}">
+                        <input type="hidden" id="berat" name="berat" value="{{ old('berat') }}">
+                        @elseif ($berat)
+                        <input type="text" inputmode="numeric" id="berat_formatted"
+                            value="{{ casual_decimal_format($berat) }}"
+                            onchange="formatNumber(this, 'berat');hitungHargaGrOrT();generateNama();"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <input type="hidden" id="berat" name="berat" value="{{ $berat/100 }}">
+                        @else
+                        <input type="text" inputmode="numeric" id="berat_formatted"
+                            onchange="formatNumber(this, 'berat');hitungHargaGrOrT();generateNama();"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <input type="hidden" id="berat" name="berat">
+                        @endif
                     </div>
                     <div class="mb-5">
-                        <label id="label_harga_g_formatted" for="harga_g_formatted"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">harga/g</label>
+                        <label id="label_harga_g_formatted" for="harga_g_formatted" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">harga/g</label>
+                        @if (old('harga_g'))
                         <input type="text" inputmode="numeric" id="harga_g_formatted"
-                            value="{{ old('harga_g_formatted') ? old('harga_g_formatted') : '' }}"
+                            value="{{ old('harga_g_formatted') }}"
                             onchange="formatNumber(this, 'harga_g');hitungHargaT();"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         <input type="hidden" id="harga_g" name="harga_g"
-                            value="{{ old('harga_g') ? old('harga_g') : '' }}">
+                            value="{{ old('harga_g') }}">
+                        @elseif ($harga_g)
+                        <input type="text" inputmode="numeric" id="harga_g_formatted"
+                            value="{{ casual_decimal_format($harga_g) }}"
+                            onchange="formatNumber(this, 'harga_g');hitungHargaT();"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <input type="hidden" id="harga_g" name="harga_g"
+                            value="{{ $harga_g/100 }}">
+                        @else
+
+                        @endif
                     </div>
                     <div class="mb-5">
                         <label id="label_ongkos_g_formatted" for="ongkos_g_formatted"
@@ -144,14 +192,23 @@
                     </div>
                 </div>
                 <div class="mb-5 border border-emerald-300 rounded p-1">
-                    <label id="label_shortname" for="shortname"
-                        class="block text-sm font-medium text-gray-900 dark:text-white">shortname</label>
-                    <input type="text" id="shortname" name="shortname"
-                        value="{{ old('shortname') ? old('shortname') : '' }}"
-                        class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-                    <label id="label_longname" for="longname"
-                        class="mt-1 block text-sm font-medium text-gray-900 dark:text-white">longname</label>
-                    <textarea id="longname" name="longname" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-300 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">{{ old('longname') ? old('longname') : '' }}</textarea>
+                    <label id="label_shortname" for="shortname" class="block text-sm font-medium text-gray-900 dark:text-white">shortname</label>
+                    @if (old('shorname'))
+                        <input type="text" id="shortname" name="shortname"
+                            value="{{ old('shortname') }}"
+                            class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                    @else
+                        <input type="text" id="shortname" name="shortname"
+                            value="{{ $shorname }}"
+                            class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                    @endif
+
+                    <label id="label_longname" for="longname" class="mt-1 block text-sm font-medium text-gray-900 dark:text-white">longname</label>
+                    @if (old('longname'))
+                    <textarea id="longname" name="longname" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-300 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">{{ old('longname') }}</textarea>
+                    @else
+                    <textarea id="longname" name="longname" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-300 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">{{ $longname }}</textarea>
+                    @endif
                     {{-- <input type="text" id="longname" name="longname" class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"> --}}
                 </div>
                 <div class="mb-5">
