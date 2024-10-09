@@ -193,13 +193,13 @@
                 </div>
                 <div class="mb-5 border border-emerald-300 rounded p-1">
                     <label id="label_shortname" for="shortname" class="block text-sm font-medium text-gray-900 dark:text-white">shortname</label>
-                    @if (old('shorname'))
+                    @if (old('shortname'))
                         <input type="text" id="shortname" name="shortname"
                             value="{{ old('shortname') }}"
                             class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
                     @else
                         <input type="text" id="shortname" name="shortname"
-                            value="{{ $shorname }}"
+                            value="{{ $shortname }}"
                             class="bg-gray-200 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
                     @endif
 
