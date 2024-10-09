@@ -40,6 +40,8 @@ class ArtisanController extends Controller
         foreach ($warna_emas as $we) {
             WarnaEmas::create($we);
         }
+
+        return back()->with('success_', '-truncate table warna_emas dan input data warna_emas-');
     }
     function migrate_fresh_seed(Request $request) {
         if (Auth::user()->role !== 'Developer') {
