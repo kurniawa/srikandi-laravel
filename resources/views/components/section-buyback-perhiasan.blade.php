@@ -98,7 +98,7 @@
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">harga/g</label>
             <input type="text" inputmode="numeric" id="harga_g_formatted"
                 value="{{ old('harga_g_formatted') ? old('harga_g_formatted') : '' }}"
-                onchange="formatNumber(this, 'harga_g');hitungHargaT();hitungSisaBayar()"
+                onchange="formatNumber(this, 'harga_g');hitungHargaT();"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             <input type="hidden" id="harga_g" name="harga_g"
                 value="{{ old('harga_g') ? old('harga_g') : '' }}">
@@ -118,7 +118,7 @@
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">harga_t</label>
             <input type="text" inputmode="numeric" id="harga_t_formatted"
                 value="{{ old('harga_t_formatted') ? old('harga_t_formatted') : '' }}"
-                onchange="formatNumber(this, 'harga_t');hitungHargaGr();hitungSisaBayar()"
+                onchange="formatNumber(this, 'harga_t');hitungHargaGr();"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             <input type="hidden" id="harga_t" name="harga_t"
                 value="{{ old('harga_t') ? old('harga_t') : '' }}">
@@ -289,6 +289,41 @@
         </div>
     </div>
 
+    <div class="mt-5">
+        <h3>Data Terima:</h3>
+    </div>
+    <div class="grid grid-cols-2 gap-2 border rounded p-1 border-rose-300">
+        <div class="mb-5">
+            <label id="label_berat_terima_formatted" for="berat_terima_formatted"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">berat terima</label>
+            <input type="text" inputmode="numeric" id="berat_terima_formatted"
+                value="{{ old('berat_terima_formatted') ? old('berat_terima_formatted') : '' }}"
+                onchange="formatNumber(this, 'berat_terima');"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <input type="hidden" id="berat_terima" name="berat_terima" value="{{ old('berat_terima') ? old('berat_terima') : '' }}">
+        </div>
+        <div class="mb-5">
+            <label id="label_total_potongan_formatted" for="total_potongan_formatted"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">total potongan</label>
+            <input type="text" inputmode="numeric" id="total_potongan_formatted"
+                value="{{ old('total_potongan_formatted') ? old('total_potongan_formatted') : '' }}"
+                onchange="formatNumber(this, 'total_potongan');hitungHargaTerima();hitungSisaBayar()"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <input type="hidden" id="total_potongan" name="total_potongan"
+                value="{{ old('total_potongan') ? old('total_potongan') : '' }}">
+        </div>
+        <div class="mb-5">
+            <label id="label_harga_terima_formatted" for="harga_terima_formatted"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">harga terima</label>
+            <input type="text" inputmode="numeric" id="harga_terima_formatted"
+                value="{{ old('harga_terima_formatted') ? old('harga_terima_formatted') : '' }}"
+                onchange="formatNumber(this, 'harga_terima');hitungTotalPotongan();hitungSisaBayar()"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <input type="hidden" id="harga_terima" name="harga_terima"
+                value="{{ old('harga_terima') ? old('harga_terima') : '' }}">
+        </div>
+    </div>
+
     {{-- TOMBOL ATRIBUT --}}
     <div class="fixed z-30 bottom-0 bg-violet-200 rounded w-4/5 px-2">
         <div class="grid grid-cols-3 gap-2">
@@ -447,16 +482,53 @@
             let harga_g = parseFloat(document.getElementById('harga_g').value);
             let harga_t = parseFloat(document.getElementById('harga_t').value);
             if (!isNaN(berat) && !isNaN(harga_g)) {
-                let harga_t = formatDecimal(berat * harga_g);
+                harga_t = formatDecimal(berat * harga_g);
                 let harga_t_formatted = document.getElementById('harga_t_formatted');
                 harga_t_formatted.value = harga_t.toString().split('.').join(',');
                 formatNumber2('harga_t_formatted', 'harga_t');
             } else if (!isNaN(berat) && !isNaN(harga_t)) {
-                let harga_g = formatDecimal(harga_t / berat);
+                harga_g = formatDecimal(harga_t / berat);
                 let harga_g_formatted = document.getElementById('harga_g_formatted');
                 harga_g_formatted.value = harga_g.toString().split('.').join(',')
                 formatNumber2('harga_g_formatted', 'harga_g');
             }
+        }
+
+        function hitungHargaTerima() {
+            let berat = parseFloat(document.getElementById('berat').value);
+            let harga_g = parseFloat(document.getElementById('harga_g').value);
+            let harga_t = parseFloat(document.getElementById('harga_t').value);
+            if (isNaN(harga_t)) {
+                harga_t = formatDecimal(berat * harga_g);
+            }
+            let total_potongan = parseFloat(document.getElementById('total_potongan').value);
+            if (!total_potongan) {
+                total_potongan = 0;
+            }
+            const harga_terima = harga_t - total_potongan;
+            // console.log(harga_terima);
+            document.getElementById('harga_terima_formatted').value = harga_terima.toString().split('.').join(',');
+            formatNumber2('harga_terima_formatted', 'harga_terima');
+        }
+
+        function hitungTotalPotongan() {
+            let berat = parseFloat(document.getElementById('berat').value);
+            let harga_g = parseFloat(document.getElementById('harga_g').value);
+            let harga_t = parseFloat(document.getElementById('harga_t').value);
+            let harga_terima = parseFloat(document.getElementById('harga_terima').value);
+            if (!harga_terima) {
+                harga_terima = 0;
+            }
+            if (isNaN(harga_t)) {
+                harga_t = formatDecimal(berat * harga_g);
+                if (isNaN(harga_t)) {
+                    harga_t = harga_terima;
+                }
+            }
+            
+            const total_potongan = harga_t - harga_terima;
+            document.getElementById('total_potongan_formatted').value = total_potongan.toString().split('.').join(',');
+            formatNumber2('total_potongan_formatted', 'total_potongan');
         }
     </script>
     <script src="{{ asset('js/item.js') }}"></script>

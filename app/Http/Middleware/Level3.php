@@ -26,6 +26,7 @@ class Level3
         if ($user->clearance_level >= 3) {
             return $next($request);
         } else {
+            dd($user->clearance_level);
             return back()->with('errors_', '-clearance level is too low-');
         }
 

@@ -28,7 +28,7 @@
         <div id="div-total-tagihan" class="mt-3">
             <label for="harga" class="font-bold">Harga</label>
             <div>
-                <input type="text" inputmode="numeric" name="total_tagihan_formatted" id="total_tagihan_formatted" onchange="formatNumber(this, 'total_tagihan_real'); hitungSisaBayar()" class="rounded-lg">
+                <input type="text" inputmode="numeric" id="total_tagihan_formatted" onchange="formatNumber(this, 'total_tagihan_real'); hitungSisaBayar()" class="rounded-lg">
                 <input type="hidden" name="total_tagihan" id="total_tagihan_real">
             </div>
         </div>
@@ -118,13 +118,13 @@
         const kategori = document.getElementById('kategori').value;
         // console.log(kategori);
         if (kategori == "Buyback Perhiasan") {
-            harga_total = document.getElementById("harga_t").value;
+            harga_total = document.getElementById("harga_terima").value;
         }
         const total_bayar = document.getElementById("total_bayar_real").value;
         const sisa_bayar = (parseFloat(harga_total) - parseFloat(total_bayar));
         document.getElementById('sisa_bayar_real').value = (pangkasDesimal(sisa_bayar) * 100).toString();
         document.getElementById('sisa_bayar_formatted').innerHTML = formatNumberX(preformatDotToComa(pangkasDesimal(sisa_bayar)));
-        // console.log(harga_total);
+        console.log(harga_total);
         // console.log(total_bayar);
         // console.log(sisa_bayar);
     }

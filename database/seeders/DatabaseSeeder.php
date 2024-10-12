@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             MerkSeeder::class,
             WalletSeeder::class,
             AcuanPembukuanSeeder::class,
+            WarnaEmasSeeder::class,
             TransactionTest::class,
         ]);
     }

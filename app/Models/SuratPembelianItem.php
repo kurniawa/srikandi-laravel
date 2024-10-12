@@ -17,7 +17,7 @@ class SuratPembelianItem extends Model
         // dd($cart_item_id);
         $cart_item = CartItem::find($cart_item_id);
         // dd($cart_item);
-        $stock = $cart_item->item->stock - 1;
+        $stock = (int)$cart_item->item->stock - 1;
 
         if ($stock <= 0) {
             $cart_item->item->stock = 0;
@@ -286,6 +286,13 @@ class SuratPembelianItem extends Model
             'keterangan_lain' => $keterangan_lain,
             'tanggal_buyback' => date("Y-m-d H:i:s", $time_key),
         ]);
+
+        $stock = (int)$item->stock - 1;
+
+        if ($stock <= 0) {
+            $item->stock = 0;
+            $item->save();
+        }
 
         return $surat_pembelian_item;
     }

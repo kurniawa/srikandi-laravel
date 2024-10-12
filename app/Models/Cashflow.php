@@ -54,9 +54,11 @@ class Cashflow extends Model
         $total_tagihan = "";
         if ($post['kategori'] == "Buyback Perhiasan") {
             if (!isset($post['harga_t']) || $post['harga_t'] == null) {
-                $request->validate(['error'=>'required'],['error.required'=>'Buyback Perhiasan harus ada harga_t']);
+                $request->validate([
+                    'harga_terima'=>'required'
+                ]);
             }
-            $total_tagihan = $post['harga_t'];
+            $total_tagihan = $post['harga_terima'];
         } elseif ($post['kategori'] == "Penjualan Perhiasan") {
             if (!isset($post['harga_total']) || $post['harga_total'] == null) {
                 $request->validate(['error'=>'required'],['error.required'=>'Harus ada harga_total']);

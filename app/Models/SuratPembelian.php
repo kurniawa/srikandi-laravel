@@ -128,7 +128,20 @@ class SuratPembelian extends Model
 
         // PHOTO PATH
         $photo_path = null;
+        $berat_terima = null;
+        $total_potongan = null;
+        $harga_terima = null;
+        $berat_susut = null;
+        $total_buyback = null;
+
         if (isset($post['kategori']) && $post['kategori'] == "Buyback Perhiasan") {
+            $berat_terima = (float)$post['berat_terima'];
+            $total_potongan = (float)$post['total_potongan'];
+            $harga_terima = (float)$post['harga_terima'];
+            if ($berat_terima < $item->berat) {
+                $berat_susut = (float)$item->berat - $berat_terima * 100;
+            }
+            $total_buyback = $harga_terima;
             
         } elseif ($cart->photo_path) {
             if (Storage::exists($cart->photo_path)) {
@@ -162,6 +175,7 @@ class SuratPembelian extends Model
             'harga_total' => (string)($harga_total * 100),
             'total_bayar' => (string)($total_bayar * 100),
             'sisa_bayar' => (string)($sisa_bayar * 100),
+            'total_buyback' => (string)($total_buyback * 100),
             'status_bayar' => $status_bayar,
             'photo_path' => $photo_path,
         ]);
@@ -188,8 +202,11 @@ class SuratPembelian extends Model
             $surat_pembelian_item = SuratPembelianItem::buyback_create_spi($surat_pembelian, $item, $time_key);
             $surat_pembelian->tanggal_buyback = $surat_pembelian->created_at;
             $surat_pembelian->status_buyback = 'all';
-            $surat_pembelian->total_buyback = $surat_pembelian->harga_total;
             $surat_pembelian->save();
+
+            $surat_pembelian_item->berat_susut = (string)($berat_susut);
+            $surat_pembelian_item->total_potongan = (string)($total_potongan * 100);
+            $surat_pembelian_item->harga_buyback = (string)($harga_terima * 100);
         }
         return array($surat_pembelian, $surat_pembelian_item);
     }

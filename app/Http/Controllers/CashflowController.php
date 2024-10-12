@@ -212,7 +212,10 @@ class CashflowController extends Controller
         ]);
 
         if (isset($post['kategori']) && $post["kategori"] == "Buyback Perhiasan") {
-            $request->validate(["harga_g" => "required|numeric"]);
+            $request->validate([
+                "harga_g" => "required|numeric",
+                'harga_terima' => 'required|numeric'
+            ]);
         } else {
             $request->validate(["total_tagihan" => "required|numeric"]);
         }
@@ -290,9 +293,6 @@ class CashflowController extends Controller
             $nama_barang = $surat_pembelian_item->longname;
             // END - PEMBUATAN SURAT PEMBELIAN
         }
-
-        
-        
 
         $success_ = '';
         if ($surat_pembelian) {

@@ -69,7 +69,7 @@ function hitungTotalBayar() {
 
     const kategori = document.getElementById("kategori").value;
     if (kategori == "Buyback Perhiasan") {
-        total_tagihan = document.getElementById("harga_t").value;
+        total_tagihan = document.getElementById("harga_terima").value;
     } else if (kategori == "Penjualan Perhiasan") {
         total_tagihan = document.getElementById("harga_total_real").value;
     } else {

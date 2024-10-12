@@ -162,6 +162,8 @@
             @endforeach
         </table>
         {{-- <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button> --}}
+        @auth
+        @if ($user->clearance_level >= 5)
         <div class="flex">
             <div class="mt-5 p-2 border rounded-lg">
                 <table class="text-slate-400 font-bold">
@@ -177,5 +179,7 @@
                 </table>
             </div>
         </div>
+        @endif
+        @endauth
     </main>
 @endsection
