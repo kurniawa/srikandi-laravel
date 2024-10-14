@@ -241,7 +241,11 @@ class CashflowController extends Controller
         $create_new_item = true;
         $item = collect();
         if ($post['kategori'] == "Buyback Perhiasan") {
-            
+            $request->validate([
+                'berat_terima' => 'required|numeric',
+                'total_potongan' => 'required|numeric',
+                'harga_terima' => 'required|numeric',
+            ]);
             if (isset($post['item_id'])) {
                 $create_new_item = false;
                 $item = Item::find($post['item_id']);
@@ -259,12 +263,16 @@ class CashflowController extends Controller
                     // dd($candidate_new_item);
                     $item = Item::create($candidate_new_item);
                 } else {
-                    $candidate_new_item = Item::validasi_item($request);
+                    // $candidate_new_item = Item::validasi_item($request);
                     // Strategi:
                     // 1. Bikin item baru. Kalau ada similiar items, maka pilih dari similiar items atau tetap dengan item yang sudah diinput.
                     // 2. Create Surat Pembelian baru
                     // 3. Langsung proses buyback surat tersebut
+
                     list($item_exist, $data) = Item::check_item_exist($candidate_new_item, $post);
+                    // dump($data);
+                    // dd($item_exist);
+
                     // if (count($item_exist)) {
                     //     // dump($data);
                     //     $data['route1'] = 'items.store';
@@ -279,6 +287,13 @@ class CashflowController extends Controller
                         $data['keterangan_transaksi'] = $keterangan_transaksi;
                         $data['route1'] = 'cashflow.store_transaction';
                         $data['route2'] = 'items.show';
+                        $data['berat_terima'] = (string)((float)$post['berat_terima'] * 100);
+                        $data['total_potongan'] = (string)((float)$post['total_potongan'] * 100);
+                        $data['harga_terima'] = (string)((float)$post['harga_terima'] * 100);
+                        // $data['berat_terima'] = $post['berat_terima'];
+                        // $data['total_potongan'] = $post['total_potongan'];
+                        // $data['harga_terima'] = $post['harga_terima'];
+                        // dump(casual_decimal_format(190));
                         // dd($data);
                         return redirect()->route('transactions.found_similar_items', $data);
                         // return view('items.found_similar_items', $data);

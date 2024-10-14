@@ -32,15 +32,24 @@ function casual_decimal_format($number) {
 
     // dump($number + 0);
     $number_divided_by_100 = ($number / 100) + 0;
+    // dump($number_divided_by_100);
     $str_devided = (string)$number_divided_by_100;
-    $formatted_number = number_format($str_devided, 2, ',', '.');
-    $exploded_number = explode(",", $formatted_number);
-
-    if ( (int)$exploded_number[1] === 0 ) {
-        $formatted_number = number_format($str_devided, 0, ',', '.');
-    } else {
-        $formatted_number = "$exploded_number[0],$exploded_number[1]";
+    // dump($str_devided);
+    // $formatted_number = number_format($str_devided, 2, ',', '.');
+    // $exploded_number = explode(",", $formatted_number);
+    $formatted_number = $str_devided;
+    if (str_contains($str_devided, '.')) {
+        $exploded_number = explode(".", $str_devided);
+        
+        if ( (int)$exploded_number[1] === 0 ) {
+            $formatted_number = number_format($str_devided, 0, ',', '.');
+            // echo($formatted_number);
+        } else {
+            $formatted_number = "$exploded_number[0],$exploded_number[1]";
+        }
     }
+
+    // dd($exploded_number);
 
     // dump($formatted_number);
 

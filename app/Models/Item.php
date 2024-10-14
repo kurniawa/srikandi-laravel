@@ -91,6 +91,8 @@ class Item extends Model
         $ongkos_g = null;
         // $edisi = null;
         // $nampan = null;
+        
+
         if ($post['tipe_barang'] === 'perhiasan') {
             $request->validate([
                 'tipe_perhiasan' => 'required',
@@ -227,6 +229,7 @@ class Item extends Model
             // 'status',
         ];
 
+        // dd($item_data);
         return $item_data;
     }
 
@@ -246,7 +249,7 @@ class Item extends Model
     // }
 
     static function check_item_exist($candidate_new_item, $post) {
-        $item_exists = Item::where('longname', 'like',"%$post[longname]%")->get()->toArray();
+        $item_exists = Item::where('longname', 'like', "%$post[longname]%")->get()->toArray();
         // dump($item_exists);
         $data = null;
         if (count($item_exists)) {
@@ -281,14 +284,17 @@ class Item extends Model
 
             // get ItemPhotos secara manual, karena $item_exist bukan collection
             for ($i=0; $i < count($item_exists); $i++) { 
-                $item_photo_utama = ItemPhoto::where('item_id', $item_exists[$i]['id'])->orderBy('index')->first()->toArray();
-                $photo_path_utama = "";
+                $item_photo_utama = ItemPhoto::where('item_id', $item_exists[$i]['id'])->orderBy('photo_index')->first();
                 if ($item_photo_utama) {
+                    $item_photo_utama = $item_photo_utama->toArray();
                     $photo_path_utama = Photo::find($item_photo_utama['photo_id'])->toArray();
+                    $item_exists[$i]['photo_path'] = $photo_path_utama['path'];
+                } else {
+                    $item_exists[$i]['photo_path'] = null;
                 }
-                $item_exists[$i]['photo_path'] = $photo_path_utama['path'];
             }
             // END - get ItemPhotos secara manual, karena $item_exist bukan collection
+            // dd($item_exists);
 
             $data = [
                 'similar_items' => $item_exists,
