@@ -24,32 +24,32 @@ class SuratPembelianItem extends Model
             $cart_item->item->save();
         }
 
-        $kondisi_bb = null;
+        $kondisi_buyback = null;
         $berat_susut = null;
-        $berat_bb = null;
+        $berat_buyback = null;
         $potongan_susut = null;
         $potongan_ongkos = null;
         $potongan_tambahan = null;
         $persentase_potongan_tambahan = null;
         $total_potongan = null;
-        $total_bb = null;
-        $status_bb = null;
+        $harga_buyback = null;
+        $status_buyback = null;
         $keterangan_lain = null;
-        if ($cart_item->item->tipe_barang === 'perhiasan') {
-            $kondisi_bb = 'sama';
-            $berat_susut = 'tidak';
-            $berat_bb = $cart_item->item->berat;
-            $potongan_susut = 0;
-            $potongan_ongkos = ($cart_item->ongkos_g * $cart_item->item->berat) / 100;
-            $potongan_tambahan = 0;
-            $persentase_potongan_tambahan = 0;
-            $total_potongan = $potongan_ongkos;
-            $total_bb = $cart_item->harga_total - $potongan_ongkos;
-            $status_bb = 'ada';
-        } elseif ($cart_item->item->tipe_barang === 'LM') {
-            $kondisi_bb = 'sama';
-            $status_bb = 'ada';
-        }
+        // if ($cart_item->item->tipe_barang === 'perhiasan') {
+        //     $kondisi_bb = 'sama';
+        //     $berat_susut = 'tidak';
+        //     $berat_buyback = $cart_item->item->berat;
+        //     $potongan_susut = 0;
+        //     $potongan_ongkos = ($cart_item->ongkos_g * $cart_item->item->berat) / 100;
+        //     $potongan_tambahan = 0;
+        //     $persentase_potongan_tambahan = 0;
+        //     $total_potongan = $potongan_ongkos;
+        //     $total_bb = $cart_item->harga_total - $potongan_ongkos;
+        //     $status_bb = 'ada';
+        // } elseif ($cart_item->item->tipe_barang === 'LM') {
+        //     $kondisi_bb = 'sama';
+        //     $status_bb = 'ada';
+        // }
         /**
          * ITEM PHOTO
          */
@@ -120,16 +120,16 @@ class SuratPembelianItem extends Model
             'photo_path' => $photo_path,
             'jumlah' => $cart_item->jumlah,
             // Data penjualan udah diisi juga sebagian, selama item memang bisa BB
-            'status_bb' => $status_bb,
-            'kondisi_bb' => $kondisi_bb,
+            'status_buyback' => $status_buyback,
+            'kondisi_buyback' => $kondisi_buyback,
             'berat_susut' => $berat_susut,
-            'berat_bb' => $berat_bb,
+            'berat_buyback' => $berat_buyback,
             'potongan_susut' => $potongan_susut,
             'potongan_ongkos' => $potongan_ongkos,
             'potongan_tambahan' => $potongan_tambahan,
             'persentase_potongan_tambahan' => $persentase_potongan_tambahan,
             'total_potongan' => $total_potongan,
-            'total_bb' => $total_bb,
+            'harga_buyback' => $harga_buyback,
             'keterangan_lain' => $keterangan_lain,
         ]);
 
@@ -197,21 +197,21 @@ class SuratPembelianItem extends Model
         return $data_bb;
     }
 
-    static function buyback_penetapan_data_bb($item) {
-        $data_bb = [
-            "kondisi_bb" => null,
+    static function buyback_penetapan_data_bb() {
+        $data_buyback = [
+            "kondisi_buyback" => null,
             "berat_susut" => null,
-            "berat_bb" => null,
+            "berat_buyback" => null,
             "potongan_susut" => null,
             "potongan_ongkos" => null,
             "potongan_tambahan" => null,
             "persentase_potongan_tambahan" => null,
             "total_potongan" => null,
-            "total_bb" => null,
-            "status_bb" => "buyback",
+            "harga_buyback" => null,
+            "status_buyback" => "buyback",
             "keterangan_lain" => null,
         ];
-        return $data_bb;
+        return $data_buyback;
     }
 
     static function buyback_photo_path($item, $time_key) {
@@ -237,7 +237,7 @@ class SuratPembelianItem extends Model
     }
 
     static function buyback_create_spi($surat_pembelian, $item, $time_key) {
-        $data_bb = self::buyback_penetapan_data_bb($item);
+        $data_buyback = self::buyback_penetapan_data_bb();
         $photo_path = self::buyback_photo_path($item, $time_key);
         $keterangan_lain = null;
         $jumlah = 1;
@@ -273,16 +273,16 @@ class SuratPembelianItem extends Model
             'photo_path' => $photo_path,
             'jumlah' => $jumlah,
             // Data penjualan udah diisi juga sebagian, selama item memang bisa BB
-            'status_bb' => $data_bb["status_bb"],
-            'kondisi_bb' => $data_bb["kondisi_bb"],
-            'berat_susut' => $data_bb["berat_susut"],
-            'berat_bb' => $data_bb["berat_bb"],
-            'potongan_susut' => $data_bb["potongan_susut"],
-            'potongan_ongkos' => $data_bb["potongan_ongkos"],
-            'potongan_tambahan' => $data_bb["potongan_tambahan"],
-            'persentase_potongan_tambahan' => $data_bb["persentase_potongan_tambahan"],
-            'total_potongan' => $data_bb["total_potongan"],
-            'total_bb' => $data_bb["total_bb"],
+            'status_buyback' => $data_buyback["status_buyback"],
+            'kondisi_buyback' => $data_buyback["kondisi_buyback"],
+            'berat_susut' => $data_buyback["berat_susut"],
+            'berat_buyback' => $data_buyback["berat_buyback"],
+            'potongan_susut' => $data_buyback["potongan_susut"],
+            'potongan_ongkos' => $data_buyback["potongan_ongkos"],
+            'potongan_tambahan' => $data_buyback["potongan_tambahan"],
+            'persentase_potongan_tambahan' => $data_buyback["persentase_potongan_tambahan"],
+            'total_potongan' => $data_buyback["total_potongan"],
+            'harga_buyback' => $data_buyback["harga_buyback"],
             'keterangan_lain' => $keterangan_lain,
             'tanggal_buyback' => date("Y-m-d H:i:s", $time_key),
         ]);
