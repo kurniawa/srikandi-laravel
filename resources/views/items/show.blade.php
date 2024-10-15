@@ -76,7 +76,7 @@
                 @endif
             </div>
             <div class="text-slate-500 flex justify-between">
-                <span>@ {{ number_format((int) $item->harga_g / 100, 2, ',', '.') }}</span>
+                <span>@ {{ my_decimal_format($item->harga_g) }}</span>
                 <div>
                     <span onclick="toggle_element('form-update-stock')" class="border-2 rounded p-1">stok: {{ $item->stock }}</span>
                     <form action="{{ route('items.update_stock', $item->id) }}" method="POST" class="mb-3 hidden"
@@ -92,7 +92,7 @@
             </div>
             <div class="mt-2 flex justify-between items-center">
                 <div class="font-bold text-xl text-slate-600">
-                    <span>Rp. </span>{{ number_format((int) $item->harga_t / 100, 2, ',', '.') }}
+                    <span>Rp </span>{{ my_decimal_format($item->harga_t) }}
                 </div>
                 <div class="flex gap-2">
                     <div class="bg-slate-100 rounded-full w-9 h-9 flex justify-center items-center">
@@ -167,13 +167,13 @@
                                 @if (isset($ongkos_g))
                                 <td class="text-xs font-bold">
                                     <div class="flex items-center gap-1">
-                                        <span>{{ number_format((int) $item->ongkos_g / 100, 2, ',', '.') }}</span>
+                                        <span>{{ my_decimal_format($item->ongkos_g) }}</span>
                                         <span>--></span>
-                                        <span>{{ number_format($ongkos_g, 2, ',', '.') }}</span>
+                                        <span>{{ my_decimal_format($ongkos_g * 100) }}</span>
                                     </div>
                                 </td>
                                 @else
-                                <td>{{ number_format((int) $item->ongkos_g / 100, 2, ',', '.') }}</td>
+                                <td>{{ my_decimal_format($item->ongkos_g) }}</td>
                                 @endif
                             </tr>
                             <tr>
@@ -182,13 +182,13 @@
                                 @if (isset($harga_g))
                                 <td class="text-xs font-bold">
                                     <div class="flex items-center gap-1">
-                                        <span>{{ number_format((int) $item->harga_g / 100, 2, ',', '.') }}</span>
+                                        <span>{{ my_decimal_format($item->harga_g) }}</span>
                                         <span>--></span>
-                                        <span>{{ number_format($harga_g, 2, ',', '.') }}</span>
+                                        <span>{{ my_decimal_format($harga_g * 100) }}</span>
                                     </div>
                                 </td>
                                 @else
-                                <td>{{ number_format((int) $item->harga_g / 100, 2, ',', '.') }}</td>
+                                <td>{{ my_decimal_format($item->harga_g) }}</td>
                                 @endif
                             </tr>
                             <tr>
@@ -197,13 +197,13 @@
                                 @if (isset($harga_t))
                                 <td class="text-xs font-bold">
                                     <div class="flex items-center gap-1">
-                                        <span>{{ number_format((int) $item->harga_t / 100, 2, ',', '.') }}</span>
+                                        <span>{{ my_decimal_format($item->harga_t) }}</span>
                                         <span>--></span>
-                                        <span>{{ number_format($harga_t, 2, ',', '.') }}</span>
+                                        <span>{{ my_decimal_format($harga_t * 100) }}</span>
                                     </div>
                                 </td>
                                 @else
-                                <td>{{ number_format((int) $item->harga_t / 100, 2, ',', '.') }}</td>
+                                <td>{{ my_decimal_format($item->harga_t) }}</td>
                                 @endif
                             </tr>
                             <tr>
@@ -315,6 +315,26 @@
         <h3 class="font-bold">Buyer / sold to: - belum ada -</h3>
         @endif --}}
         @if (isset($buyback_mode) && $buyback_mode == 'yes')
+            <h3 class="font-bold text-slate-400 mt-2">Data Buyback:</h3>
+            <div class="border border-rose-300 rounded p-1">
+                <table class="font-bold text-slate-500 text-xs">
+                    <tr>
+                        @if (isset($berat_terima))
+                        <td>Berat Terima</td><td>:</td><td><span>{{ casual_decimal_format($berat_terima) }}g</span></td>
+                        @endif
+                    </tr>
+                    <tr>
+                        @if (isset($total_potongan))
+                        <td>Total Pot.</td><td>:</td><td><span>{{ my_decimal_format($total_potongan) }}</span></td>
+                        @endif
+                    </tr>
+                    <tr>
+                        @if (isset($harga_terima))
+                        <td>Harga Terima</td><td>:</td><td><span>{{ my_decimal_format($harga_terima) }}</span></td>
+                        @endif
+                    </tr>
+                </table>
+            </div>
             <div class="mt-12">
                 <form action="{{ route('cashflow.store_transaction') }}" method="POST" class="mt-2">
                     @csrf
@@ -322,6 +342,18 @@
                     <input type="hidden" name="ongkos_g" value="{{ $ongkos_g }}">
                     <input type="hidden" name="harga_t" value="{{ $harga_t }}">
                     <input type="hidden" name="item_id" value="{{ $item->id }}">
+
+                    @if (isset($berat_terima))
+                    <input type="hidden" name="berat_terima" value="{{ (float)$berat_terima / 100 }}">
+                    @endif
+
+                    @if (isset($total_potongan))
+                    <input type="hidden" name="total_potongan" value="{{ (float)$total_potongan / 100 }}">
+                    @endif
+
+                    @if (isset($harga_terima))
+                    <input type="hidden" name="harga_terima" value="{{ (float)$harga_terima / 100 }}">
+                    @endif
 
                     {{-- DATA METODE PEMBAYARAN --}}
                     @if (isset($jumlah_tunai))

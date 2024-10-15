@@ -284,6 +284,11 @@ class ItemController extends Controller
         $jumlah_non_tunai = array();
         $nama_instansi = array();
         $tipe_instansi = array();
+
+        $berat_terima = null;
+        $total_potongan = null;
+        $harga_terima = null;
+
         if (isset($get['buyback_mode'])) {
             $buyback_mode = $get['buyback_mode'];
         }
@@ -323,6 +328,15 @@ class ItemController extends Controller
         if (isset($get['nama_instansi'])) {
             $nama_instansi = $get['nama_instansi'];
         }
+        if (isset($get['berat_terima'])) {
+            $berat_terima = (float)$get['berat_terima'] * 100;
+        }
+        if (isset($get['total_potongan'])) {
+            $total_potongan = (float)$get['total_potongan'] * 100;
+        }
+        if (isset($get['harga_terima'])) {
+            $harga_terima = (float)$get['harga_terima'] * 100;
+        }
 
         $photos_sorted = Item::photos_sorted_by_index($item);
         $data = [
@@ -354,6 +368,9 @@ class ItemController extends Controller
             'keterangan_transaksi' => $keterangan_transaksi,
             'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
             'photos_sorted' => $photos_sorted,
+            'berat_terima' => $berat_terima,
+            'total_potongan' => $total_potongan,
+            'harga_terima' => $harga_terima,
         ];
         // dd($data);
         return view('items.show', $data);

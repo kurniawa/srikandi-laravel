@@ -259,7 +259,7 @@ class CashflowController extends Controller
 
             if ($create_new_item) {
                 $candidate_new_item = Item::validasi_item($request);
-                if (isset($post['tetap_buyback'])) {
+                if (isset($post['tambah_item_baru_dan_buyback'])) {
                     // dd($candidate_new_item);
                     $item = Item::create($candidate_new_item);
                 } else {

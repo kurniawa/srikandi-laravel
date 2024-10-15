@@ -123,7 +123,7 @@
                             @else
                             <input type="hidden" name="keterangan_transaksi" value="">
                             @endif
-                            <button type="submit" name="tetap_buyback" value="yes" class="bg-emerald-300 p-4 text-white font-bold rounded">Tetap Buyback dengan Data diatas</button>
+                            <button type="submit" name="tambah_item_baru_dan_buyback" value="yes" class="bg-emerald-300 p-4 text-white font-bold rounded">Tambah Item Baru + Buyback</button>
                         @endif
                     @else
                         <button type="submit" class="bg-emerald-300 p-4 text-white font-bold rounded">Tetap Tambah Baru dengan Data diatas</button>
@@ -219,6 +219,18 @@
                         {{-- END - DATA METODE PEMBAYARAN --}}
 
                         @if ($buyback_mode)
+                            @if (isset($berat_terima))
+                            <input type="hidden" name="berat_terima" value="{{ (float)$berat_terima / 100 }}">
+                            @endif
+
+                            @if (isset($total_potongan))
+                            <input type="hidden" name="total_potongan" value="{{ (float)$total_potongan / 100 }}">
+                            @endif
+
+                            @if (isset($harga_terima))
+                            <input type="hidden" name="harga_terima" value="{{ (float)$harga_terima / 100 }}">
+                            @endif
+
                             <div class="flex justify-end gap-2 mt-2">
                                 {{-- <button type="submit" name="submit" class="bg-pink-300 text-white py-2 px-5 rounded" value="pilih_dan_update_harga">Pilih & Update Harga</button> --}}
                                 <input type="hidden" name="tipe_transaksi" value="{{ $tipe_transaksi }}">
