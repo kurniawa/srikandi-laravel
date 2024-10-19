@@ -200,7 +200,7 @@
             <div class="flex justify-end mt-2 gap-3">
                 <span class="text-xl font-bold text-red-600">Total:</span>
                 <div class="text-xl font-bold text-red-600">Rp <span
-                        id="harga_total_formatted">{{ number_format((string) ((float) $harga_total / 100), 2, ',', '.') }}</span>
+                        id="harga_total_formatted">{{ my_decimal_format($harga_total) }}</span>
                 </div>
                 <input type="hidden" name="harga_total" id="harga_total_real"
                     value="{{ (string) ((float) $harga_total / 100) }}">
@@ -267,7 +267,7 @@
                 <div class="">
                     <span id="label-sisa-bayar" class="font-bold text-orange-500">Sisa Bayar</span>
                     <div class="font-bold text-lg"><span>Rp </span><span
-                            id="sisa_bayar_formatted">{{ number_format((string) ((float) $harga_total / 100), 2, ',', '.') }}</span>
+                            id="sisa_bayar_formatted">{{ my_decimal_format($harga_total) }}</span>
                     </div>
                 </div>
                 <div class="ml-2">

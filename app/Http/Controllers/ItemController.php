@@ -210,6 +210,11 @@ class ItemController extends Controller
         // dd($item_exist);
         if (count($item_exist)) {
             // dump($data);
+            $user = Auth::user();
+            $cart = null;
+            if ($user) { $cart = Cart::where('user_id', $user->id)->first(); }
+            $data['user'] = $user;
+            $data['cart'] = $cart;
             $data['route1'] = 'items.store';
             $data['route2'] = 'items.show';
             $data['all_items_x_photos'] = Item::get_all_item_x_photos(null, null);

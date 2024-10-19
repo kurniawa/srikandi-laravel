@@ -46,6 +46,9 @@ class CartController extends Controller
 
     function checkout(Cart $cart, Request $request)
     {
+        // dump(casual_decimal_format(60000020));
+        // dump(casual_decimal_format(60000021));
+        // dd(casual_decimal_format(60000000));
         $get = $request->query();
         $user = Auth::user();
 

@@ -275,6 +275,7 @@ class Item extends Model
 
             $buyback_mode = null;
             $tipe_transaksi = "pemasukan";
+            $kategori = null;
             if (isset($post['kategori'])) {
                 if ($post['kategori'] == 'Buyback Perhiasan') {
                     $buyback_mode = 'yes';
@@ -303,7 +304,7 @@ class Item extends Model
                 'warna_mata' => $warna_mata,
                 'checkbox_mainan' => $checkbox_mainan,
                 'tipe_mainan' => $tipe_mainan,
-                'kategori' => $post['kategori'],
+                'kategori' => $kategori,
                 'buyback_mode' => $buyback_mode,
                 'tipe_transaksi' => $tipe_transaksi,
             ];

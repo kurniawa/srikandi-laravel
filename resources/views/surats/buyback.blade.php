@@ -735,7 +735,7 @@
             }
             let potongan_lain = document.getElementById(`potongan_lain-${index}`).value;
             if (potongan_lain) {
-                if (isNaN) {
+                if (isNaN(potongan_lain)) {
                     potongan_lain = 0;
                 } else {
                     potongan_lain = parseFloat(potongan_lain);
@@ -743,6 +743,7 @@
             } else {
                 potongan_lain = 0;
             }
+            // console.log(potongan_lain);
             let total_potongan = potongan_ongkos + potongan_mata + potongan_rusak + potongan_susut + potongan_lain;
             let harga_t = parseFloat(document.getElementById(`harga_t-${index}`).value);
             let harga_buyback = harga_t - total_potongan;
