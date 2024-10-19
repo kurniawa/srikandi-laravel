@@ -71,18 +71,19 @@ class SuratPembelianItem extends Model
             }
         } else {
             if (count($cart_item->item->item_photos)) {
-                if (Storage::exists($cart_item->item->item_photos[0]->photo->path)) {
-                    $exploded_path = explode(".", $cart_item->item->item_photos[0]->photo->path);
-                    $file_extension = $exploded_path[count($exploded_path) - 1];
-                    $filename = "$user->id-$time.$file_extension";
-                    $photo_path = "surat_pembelian_items/photos/$filename";
-                    while (Storage::exists($photo_path)) {
-                        $time++;
-                        $filename = "$user->id-$time.$file_extension";
-                        $photo_path = "surat_pembelian_items/photos/$filename";
-                    }
-                    Storage::copy($cart_item->item->item_photos[0]->photo->path, $photo_path);
-                }
+                $photo_path = $cart_item->item->item_photos[0]->photo->path;
+                // if (Storage::exists($cart_item->item->item_photos[0]->photo->path)) {
+                //     $exploded_path = explode(".", $cart_item->item->item_photos[0]->photo->path);
+                //     $file_extension = $exploded_path[count($exploded_path) - 1];
+                //     $filename = "$user->id-$time.$file_extension";
+                //     $photo_path = "surat_pembelian_items/photos/$filename";
+                //     while (Storage::exists($photo_path)) {
+                //         $time++;
+                //         $filename = "$user->id-$time.$file_extension";
+                //         $photo_path = "surat_pembelian_items/photos/$filename";
+                //     }
+                //     Storage::copy($cart_item->item->item_photos[0]->photo->path, $photo_path);
+                // }
             }
         }
         // if ($cart_item->item->tipe_barang === 'perhiasan' || $cart_item->item->tipe_barang === 'LM') {
@@ -219,18 +220,19 @@ class SuratPembelianItem extends Model
         $user = Auth::user();
         $time = $time_key;
         if (count($item->item_photos)) {
-            if (Storage::exists($item->item_photos[0]->photo->path)) {
-                $exploded_path = explode(".", $item->item_photos[0]->photo->path);
-                $file_extension = $exploded_path[count($exploded_path) - 1];
-                $filename = "$user->id-$time.$file_extension";
-                $photo_path = "surat_pembelian_items/photos/$filename";
-                while (Storage::exists($photo_path)) {
-                    $time++;
-                    $filename = "$user->id-$time.$file_extension";
-                    $photo_path = "surat_pembelian_items/photos/$filename";
-                }
-                Storage::copy($item->item_photos[0]->photo->path, $photo_path);
-            }
+            $photo_path = $item->item_photos[0]->photo->path;
+            // if (Storage::exists($item->item_photos[0]->photo->path)) {
+            //     $exploded_path = explode(".", $item->item_photos[0]->photo->path);
+            //     $file_extension = $exploded_path[count($exploded_path) - 1];
+            //     $filename = "$user->id-$time.$file_extension";
+            //     $photo_path = "surat_pembelian_items/photos/$filename";
+            //     while (Storage::exists($photo_path)) {
+            //         $time++;
+            //         $filename = "$user->id-$time.$file_extension";
+            //         $photo_path = "surat_pembelian_items/photos/$filename";
+            //     }
+            //     Storage::copy($item->item_photos[0]->photo->path, $photo_path);
+            // }
         }
 
         return $photo_path;

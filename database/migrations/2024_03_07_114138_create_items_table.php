@@ -35,7 +35,7 @@ return new class extends Migration
             $table->string('nampan',50)->nullable();
             $table->smallInteger('stock')->default('1'); // smallint    | 2 bytes  -32768 to 32767                              0 to 65535
             $table->string('kode_item',100)->nullable(); // nullable dulu, soalnya belum tau mesti gimana formatnya
-            $table->integer('barcode')->nullable()->unique();
+            $table->integer('barcode')->nullable();
             $table->string('deskripsi')->nullable();
             $table->string('keterangan')->nullable();
             $table->string('status', 20)->nullable(); // ready, terjual, cuci, sortir-buyback, dll

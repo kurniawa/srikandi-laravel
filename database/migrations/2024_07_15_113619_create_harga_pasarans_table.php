@@ -18,7 +18,7 @@ return new class extends Migration
             $table->bigInteger('harga_beli');
             $table->bigInteger('harga_buyback');
             $table->string('codename', 50)->nullable()->unique();
-            $table->smallInteger('barcode')->nullable();
+            $table->integer('barcode')->nullable();
             $table->timestamps();
         });
     }

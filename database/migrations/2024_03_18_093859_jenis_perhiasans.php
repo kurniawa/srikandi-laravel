@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('tipe_perhiasan');
             $table->string('nama');
             $table->string('codename', 50)->nullable()->unique();
-            $table->smallInteger('barcode')->nullable();
+            $table->integer('barcode')->nullable();
             $table->timestamps();
         });
     }
