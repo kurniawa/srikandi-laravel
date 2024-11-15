@@ -1,6 +1,6 @@
 @extends('layouts.main')
 @section('content')
-    <main class="p-2">
+    <main class="p-2 relative">
         <x-errors-any></x-errors-any>
         <x-validation-feedback></x-validation-feedback>
 
@@ -283,9 +283,43 @@
             <div class="relative flex justify-center mt-9 z-10">
                 <input type="hidden" id="kategori" name="kategori" value="Penjualan Perhiasan">
                 <input type="hidden" id="tipe_transaksi" name="tipe_transaksi" value="pemasukan">
-                <button type="submit"
+                <button type="button" onclick="$('#konfirmasi_admin').show(300)"
                     class="rounded-lg px-3 py-2 bg-emerald-400 text-white border-2 border-emerald-500 font-bold">PROSES
                     PEMBAYARAN</button>
+            </div>
+
+            <div id="konfirmasi_admin" class="hidden">
+                <div class="absolute top-0 right-0 bottom-0 left-0 bg-slate-500 opacity-50" onclick="$('#konfirmasi_admin').hide()"></div>
+                <div class="absolute w-5/6 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 bg-white rounded">
+                    <div class="text-slate-500 font-bold">Konfirmasi Data Admin:</div>
+                    <div class="mt-2">
+                        <table class="table-slim">
+                            <tr>
+                                <td>username</td><td>:</td>
+                                <td>
+                                    <select name="target_user_id" id="target_user_id" onchange="showPassword({{ $user->id }}, this.value)" class="rounded p-1">
+                                        @foreach ($user_lists as $u)
+                                        @if ($user->id == $u->id)
+                                        <option value="{{ $u->id }}" selected>{{ $u->username }}</option>
+                                        @else
+                                        <option value="{{ $u->id }}">{{ $u->username }}</option>
+                                        @endif
+                                        @endforeach
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr id="target_password" class="hidden">
+                                <td>password</td><td>:</td>
+                                <td>
+                                    <input type="password" name="target_password" class="p-1 border rounded w-full" placeholder="password...">
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="mt-3 text-center">
+                        <button type="submit" class="bg-emerald-300 p-2 rounded text-white font-bold">Konfirmasi Admin</button>
+                    </div>
+                </div>
             </div>
         </form>
 
@@ -319,6 +353,14 @@
             cariDataPelangganF(users);
         }
 
-        
+        function showPassword(user_id, target_user_id) {
+            // console.log(user_id, target_user_id)
+            if (user_id != target_user_id) {
+                $('#target_password').show();
+            } else {
+                $('#target_password').hide();
+            }
+        }
+
     </script>
 @endsection

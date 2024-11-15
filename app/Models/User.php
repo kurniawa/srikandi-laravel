@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -129,6 +130,18 @@ class User extends Authenticatable
         $auth_user = Auth::user();
         if ($auth_user->clearance_level <= $user->clearance_level) {
             $request->validate(['error' => 'required'], ['error.required' => '-You are not authorized-']);
+        }
+    }
+
+    static function admin_validation($login_user_id, $target_user_id, $target_password) {
+        $target_user = User::find($target_user_id);
+
+        if (Hash::check($target_password, $target_user->password)) {
+            // return response()->json(['message' => 'Username dan password cocok.'], 200);
+            return $target_user;
+        } else {
+            // return response()->json(['message' => 'Password salah.'], 401);
+            return false;
         }
     }
 }

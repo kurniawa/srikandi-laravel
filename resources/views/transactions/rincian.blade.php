@@ -25,7 +25,18 @@
     <x-filter-tanggal></x-filter-tanggal>
     {{-- END - FILTER --}}
 
-    <div class="text-xs italic mt-5 text-slate-500">user: {{ $user->username }}</div>
+    <form action="{{ route('transactions.rincian_transaksi', $user->id) }}" method="GET" class="text-xs italic mt-5 text-slate-500">
+        user:
+        <select name="target_user_id" id="target_user_id" onchange="showLoadingSpinner();this.form.submit()">
+            @foreach ($user_lists as $user)
+            @if ($user->id == $target_user->id)
+            <option value="{{ $user->id }}" selected>{{ $user->username }}</option>
+            @else
+            <option value="{{ $user->id }}">{{ $user->username }}</option>
+            @endif
+            @endforeach
+        </select>
+    </form>
 
     <div>
         <div class="font-bold text-white bg-orange-400 border-2 border-orange-500 rounded text-center mt-2">Buyback</div>

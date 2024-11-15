@@ -40,6 +40,8 @@ class CartItemController extends Controller
         // dump($cart);
         // dd($cart_item);
         $dangers_ = "";
+
+        $item = $cart_item->item;
         // Cek apakah cart_item ini ada fotonya?
         if ($cart_item->photo_path) {
             if (Storage::exists($cart_item->photo_path)) {
@@ -69,6 +71,13 @@ class CartItemController extends Controller
         $feedback = [
             'dangers_' => $dangers_
         ];
+
+        // UPDATE STOCK
+        $stock = (int)$item->stock;
+        $stock++;
+        $item->stock = $stock;
+        $item->save();
+        // END - UPDATE STOCK
 
         return back()->with($feedback);
     }

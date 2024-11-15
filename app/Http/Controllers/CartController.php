@@ -79,6 +79,7 @@ class CartController extends Controller
             $pelanggannik = $cart->pelanggan->nik;
         }
 
+        $user_lists = User::where('clearance_level', '>=', 3)->get();
         $data = [
             // 'goback' => 'home',
             // 'user_role' => $user_role,
@@ -96,7 +97,8 @@ class CartController extends Controller
             'user' => $user,
             'cart_items' => $cart_items,
             'harga_total' => $harga_total,
-            'users' => $users,
+            'users' => $users, // Semua user, dipakai nanti untuk cari dan menentukan data customer pada saat checkout
+            'user_lists' => $user_lists, // Semua user admin, dipakai untuk proses_checkout, apabila admin pemegang HP belum tentu admin yang melayani checkout
             'wallets_non_tunai' => $wallets_non_tunai,
             'pelangganid' => $pelangganid,
             'pelanggannama' => $pelanggannama,
@@ -113,7 +115,20 @@ class CartController extends Controller
     function proses_checkout(Cart $cart, Request $request)
     {
         $post = $request->post();
-        // dd($post);
+        // dump($post);
+        $user = Auth::user();
+        // $res_admin_validation = User::admin_validation($user->id, $post['target_user_id'], $post['target_password']);
+        // dump($res_admin_validation);
+        // dd($res_admin_validation->getStatusCode());
+        // VALIDASI ADMIN
+        if ($user->id != $post['target_user_id']) {
+            $user = User::admin_validation($user->id, $post['target_user_id'], $post['target_password']);
+            if (!$user) {
+                $request->validate(['error'=>'required'],['error.required'=>'-terjadi kesalahan data admin/password-']);
+            }
+        }
+        // END - VALIDASI ADMIN
+
         Cashflow::validasi_metode_pembayaran($request);
         // dump($cart);
         // dd($post);
@@ -213,7 +228,6 @@ class CartController extends Controller
             $request->validate(['error' => 'required'], ['error.required' => $feedback_cek_pelanggan]);
         }
 
-        $user = Auth::user();
         $pelanggan_id = null;
         $pelanggan_nama = null;
         $pelanggan_username = null;
@@ -247,8 +261,8 @@ class CartController extends Controller
             'tanggal_surat' => date('Y-m-d', strtotime("$post[hari]-$post[bulan]-$post[tahun]")) . 'T' . date('H:i:s', $time_key),
             'nomor_surat' => uniqid(),
             'time_key' => $time_key,
-            'user_id' => Auth::user()->id,
-            'username' => Auth::user()->username,
+            'user_id' => $user->id,
+            'username' => $user->username,
             'pelanggan_id' => $pelanggan_id,
             'pelanggan_nama' => $pelanggan_nama,
             'pelanggan_username' => $pelanggan_username,
@@ -263,7 +277,7 @@ class CartController extends Controller
 
         $success_ .= 'Pembelian baru dibuat!';
 
-        $nomor_surat = SuratPembelian::generate_nomor_surat($pembelian_new->id, $pelanggan_id, count($post['cart_item_ids']), $simple_time_key);
+        $nomor_surat = SuratPembelian::generate_nomor_surat($user, $pembelian_new->id, $pelanggan_id, count($post['cart_item_ids']), $simple_time_key);
         $pembelian_new->nomor_surat = $nomor_surat;
         $pembelian_new->save();
         $success_ .= '-nomor_surat, status_bb Pembelian diupdate!-';
@@ -273,7 +287,7 @@ class CartController extends Controller
         $kode_accounting = "$user->id.$time_key";
 
         foreach ($post['cart_item_ids'] as $cart_item_id) {
-            SuratPembelianItem::create_surat_pembelian_item($pembelian_new, $cart_item_id, $kode_accounting);
+            SuratPembelianItem::create_surat_pembelian_item($user, $pembelian_new, $cart_item_id, $kode_accounting);
         }
         $success_ .= '-Items diinput! Stok diupdate!-';
 

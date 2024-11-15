@@ -12,18 +12,11 @@ class SuratPembelianItem extends Model
     use HasFactory;
     protected $guarded = ['id'];
 
-    static function create_surat_pembelian_item($surat_pembelian, $cart_item_id, $kode_accounting)
+    static function create_surat_pembelian_item($user, $surat_pembelian, $cart_item_id, $kode_accounting)
     {
         // dd($cart_item_id);
         $cart_item = CartItem::find($cart_item_id);
         // dd($cart_item);
-        $stock = (int)$cart_item->item->stock - 1;
-
-        if ($stock <= 0) {
-            $cart_item->item->stock = 0;
-            $cart_item->item->save();
-        }
-
         $kondisi_buyback = null;
         $berat_susut = null;
         $berat_buyback = null;
@@ -55,7 +48,6 @@ class SuratPembelianItem extends Model
          */
         $photo_path = null;
         $time = time();
-        $user = Auth::user();
         if ($cart_item->photo_path) {
             if (Storage::exists($cart_item->photo_path)) {
                 $exploded_path = explode(".", $cart_item->photo_path);
@@ -291,10 +283,12 @@ class SuratPembelianItem extends Model
 
         $stock = (int)$item->stock - 1;
 
-        if ($stock <= 0) {
-            $item->stock = 0;
-            $item->save();
+        if ($stock < 0) {
+            $stock = 0;
         }
+
+        $item->stock = $stock;
+        $item->save();
 
         return $surat_pembelian_item;
     }

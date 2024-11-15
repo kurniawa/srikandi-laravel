@@ -538,4 +538,22 @@ const formatNumberDecID = (num) => {
     return num;
 }
 
+function submitWithPreserveScroll(target_element, position_name) {
+    // Simpan posisi scroll saat ini di sessionStorage
+    sessionStorage.setItem(position_name, window.scrollY);
+    
+    // Submit form
+    target_element.form.submit();
+}
+
+// Setelah halaman dimuat, kembalikan ke posisi scroll yang tersimpan
+function getScrollLocation(position_name) {
+    // window.onload = function() {
+    const scrollPosition = sessionStorage.getItem(position_name);
+    if (scrollPosition) {
+        window.scrollTo(0, scrollPosition);
+    }
+    // };
+}
+
 // export{formatCurrencyID, formatNumberDecID};

@@ -12,7 +12,7 @@ class SuratPembelian extends Model
     use HasFactory;
     protected $guarded = ['id'];
 
-    static function generate_nomor_surat($pembelian_id, $pelanggan_id, $jumlah_item, $simple_time_key)
+    static function generate_nomor_surat($user, $pembelian_id, $pelanggan_id, $jumlah_item, $simple_time_key)
     {
         // $time = time();
         // $last_four_digit = substr(strval($time),-4);
@@ -35,7 +35,6 @@ class SuratPembelian extends Model
         if (strlen((string)$pembelian_id) === 1) {
             $pembelian_id_formatted = "0$pembelian_id";
         }
-        $user = Auth::user();
         $user_id = $user->id;
         if (strlen((string)$user->id) === 1) {
             $user_id = "0$user->id";
@@ -165,8 +164,8 @@ class SuratPembelian extends Model
             'tanggal_surat' => date('Y-m-d', strtotime("$hari-$bulan-$tahun")) . 'T' . date('H:i:s', $time_key),
             'nomor_surat' => uniqid(),
             'time_key' => $time_key,
-            'user_id' => Auth::user()->id,
-            'username' => Auth::user()->username,
+            'user_id' => $user->id,
+            'username' => $user->username,
             'pelanggan_id' => $pelanggan_id,
             'pelanggan_nama' => $pelanggan_nama,
             'pelanggan_username' => $pelanggan_username,
@@ -186,7 +185,7 @@ class SuratPembelian extends Model
             $jumlah_item = count($post['cart_item_ids']);
         }
         $simple_time_key = Accounting::simple_time_key($time_key);
-        $nomor_surat = self::generate_nomor_surat($surat_pembelian->id, $pelanggan_id, $jumlah_item, $simple_time_key);
+        $nomor_surat = self::generate_nomor_surat($user, $surat_pembelian->id, $pelanggan_id, $jumlah_item, $simple_time_key);
 
         $surat_pembelian->nomor_surat = $nomor_surat;
         $surat_pembelian->save();
@@ -195,7 +194,7 @@ class SuratPembelian extends Model
         $surat_pembelian_item = null;
         if (isset($post['cart_item_ids'])) {
             foreach ($post['cart_item_ids'] as $cart_item_id) {
-                $surat_pembelian_item = SuratPembelianItem::create_surat_pembelian_item($surat_pembelian, $cart_item_id, $kode_accounting);
+                $surat_pembelian_item = SuratPembelianItem::create_surat_pembelian_item($user, $surat_pembelian, $cart_item_id, $kode_accounting);
             }
         } elseif (isset($post['kategori']) && $post['kategori'] == "Buyback Perhiasan") {
             // SP pada saat pelanggan menjual, namun surat biasa, belum masuk ke dalam sistem.

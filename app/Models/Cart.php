@@ -59,13 +59,32 @@ class Cart extends Model
         } else {
             $cart->harga_total = $item->harga_t;
         }
+
         $cart->save();
+
+        // UPDATE STOCK
+        $stock = (int)$item->stock - 1;
+
+        if ($stock < 0) {
+            $stock = 0;
+        }
+
+        $item->stock = $stock;
+        $item->save();
+        // END - UPDATE STOCK
     }
 
     static function delete_cart_items($cart_item_ids, $cart) {
         $success_ = '';
         foreach ($cart_item_ids as $cart_item_id) {
             $cart_item = CartItem::find($cart_item_id);
+            // UPDATE STOCK
+            $item = $cart_item->item;
+            $stock = (int)$item->stock;
+            $stock++;
+            $item->stock = $stock;
+            $item->save();
+            // END - UPDATE STOCK
             $cart_item->delete();
         }
         if (count($cart->cart_items) === 0) {
