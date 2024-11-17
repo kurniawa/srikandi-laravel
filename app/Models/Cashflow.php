@@ -76,13 +76,13 @@ class Cashflow extends Model
         // dump((float)$total_tagihan);
         // dump("jumlah_pembayaran");
         // dd($jumlah_pembayaran);
-        if ($jumlah_pembayaran !== (float)$total_tagihan) {
-            dump("post[harga_total]");
-            dump($total_tagihan);
-            dump((float)$total_tagihan);
-            dump("jumlah_pembayaran");
-            dd($jumlah_pembayaran);
-        }
+        // if ($jumlah_pembayaran !== (float)$total_tagihan) {
+        //     dump("post[harga_total]");
+        //     dump($total_tagihan);
+        //     dump((float)$total_tagihan);
+        //     dump("jumlah_pembayaran");
+        //     dd($jumlah_pembayaran);
+        // }
 
         return true;
     }
