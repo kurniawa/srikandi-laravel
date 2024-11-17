@@ -175,7 +175,7 @@ class CashflowController extends Controller
 
         $acuan_pembukuans = AcuanPembukuan::all();
         // dd($acuan_pembukuans);
-        $wallets_non_tunai = Wallet::where('kategori', 'non-tunai')->get();
+        $wallets_non_tunai = Wallet::where('kategori_wallet', 'non-tunai')->get();
         $data = [
             // 'goback' => 'home',
             // 'user_role' => $user_role,

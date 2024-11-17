@@ -170,7 +170,7 @@
                     @foreach ($wallets as $wallet)
                         @if ($wallet->saldo !== null)
                             <tr>
-                                <td>{{ $wallet->nama }}</td>
+                                <td>{{ $wallet->nama_wallet }}</td>
                                 <td>:</td>
                                 <td>Rp {{ my_decimal_format($wallet->saldo) }}</td>
                             </tr>

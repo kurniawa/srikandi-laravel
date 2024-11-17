@@ -110,7 +110,7 @@ class SuratPembelianController extends Controller
             $pelanggannik = $surat_pembelian->pelanggan_nik;
         }
 
-        $wallets_non_tunai = Wallet::where('kategori', 'non-tunai')->get();
+        $wallets_non_tunai = Wallet::where('kategori_wallet', 'non-tunai')->get();
 
         $users = User::all();
         // dd($surat_pembelian->cashflows);
@@ -222,7 +222,7 @@ class SuratPembelianController extends Controller
             $pelanggannik = $surat_pembelian->pelanggan_nik;
         }
 
-        $wallets_non_tunai = Wallet::where('kategori', 'non-tunai')->get();
+        $wallets_non_tunai = Wallet::where('kategori_wallet', 'non-tunai')->get();
 
         $data = [
             // 'goback' => 'home',
@@ -277,6 +277,13 @@ class SuratPembelianController extends Controller
                 }
             }
             $surat_pembelian_item->delete();
+            // Restock
+            $item = $surat_pembelian_item->item;
+            $stock = (int)$item->stock;
+            $stock++;
+            $item->stock = (string)$stock;
+            $item->save();
+            // END - Restock
             $dangers_ .= "-SPI $surat_pembelian_item->id dihapus-";
         }
 
@@ -284,8 +291,17 @@ class SuratPembelianController extends Controller
             $cashflow_date = date("Y-m-d", strtotime($cashflow->created_at));
             $last_hour_of_date = date("Y-m-d H:i:s", strtotime("$cashflow_date 23:59:59"));
 
-            $wallet = Wallet::where('kategori_wallet', $cashflow->kategori_wallet)->where('tipe_wallet', $cashflow->tipe_wallet)->where('nama_wallet', $cashflow->nama_wallet)->whereBetween("created_at", [$cashflow_date, $last_hour_of_date])->latest()->first();
-            $jumlah_saldo = (int)$wallet->saldo;
+            $wallet = Wallet::where('kategori_wallet', $cashflow->kategori_wallet)->where('tipe_wallet', $cashflow->tipe_wallet)->where('nama_wallet', $cashflow->nama_wallet)->first();
+            // $wallet = Wallet::where('kategori_wallet', $cashflow->kategori_wallet)->where('tipe_wallet', $cashflow->tipe_wallet)->where('nama_wallet', $cashflow->nama_wallet)->whereBetween("created_at", [$cashflow_date, $last_hour_of_date])->latest()->first();
+            // kenapa pake latest first lalu kenapa pake whereBetween created_at?
+            try {
+                $jumlah_saldo = (int)$wallet->saldo;
+                // dump($wallet);
+            } catch (\Throwable $th) {
+                dump($th);
+                dump($cashflow->kategori_wallet, $cashflow->tipe_wallet, $cashflow->nama_wallet);
+                dd($wallet);
+            }
             if ($cashflow->tipe == 'pengeluaran') {
                 $wallet->saldo = (string)($jumlah_saldo + (int)$cashflow->jumlah);
                 $wallet->save();
@@ -372,7 +388,7 @@ class SuratPembelianController extends Controller
         if ($user) {
             $cart = Cart::where('user_id', $user->id)->first();
         }
-        $wallets_non_tunai = Wallet::where('kategori', 'non-tunai')->get();
+        $wallets_non_tunai = Wallet::where('kategori_wallet', 'non-tunai')->get();
 
         $data = [
             // 'goback' => 'home',
@@ -690,7 +706,7 @@ class SuratPembelianController extends Controller
         $related_cashflows = Cashflow::where('kode_accounting', $related_accounting->kode_accounting)->get();
         // dump($related_cashflows);
         foreach ($related_cashflows as $related_cashflow) {
-            $related_wallet = Wallet::where('nama', $related_cashflow->nama_wallet)->first();
+            $related_wallet = Wallet::where('nama_wallet', $related_cashflow->nama_wallet)->first();
             $related_wallet->saldo = (string)((int)$related_wallet->saldo + (int)$related_cashflow->jumlah);
             $related_wallet->save();
 

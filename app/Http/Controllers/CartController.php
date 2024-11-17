@@ -66,7 +66,7 @@ class CartController extends Controller
 
         $users = User::all();
 
-        $wallets_non_tunai = Wallet::where('kategori', 'non-tunai')->get();
+        $wallets_non_tunai = Wallet::where('kategori_wallet', 'non-tunai')->get();
 
         $pelangganid = null;
         $pelanggannama = null;
@@ -312,7 +312,7 @@ class CartController extends Controller
         //         } else {
         //             $jumlah = (float)$post['jumlah_tunai'] * 100;
         //         }
-        //         $wallet = Wallet::where('tipe', 'laci')->where('nama', 'cash')->first();
+        //         $wallet = Wallet::where('tipe_wallet', 'laci')->where('nama', 'cash')->first();
         //         $cashflow = Cashflow::create([
         //             'user_id' => Auth::user()->id,
         //             'time_key' => $time_key,
@@ -321,9 +321,9 @@ class CartController extends Controller
         //             // 'surat_pembelian_item_id' => $surat_pembelian_item->id,
         //             // 'nama_transaksi' => $nama_transaksi,
         //             'tipe' => 'pemasukan',
-        //             'kategori_wallet' => $wallet->kategori,
-        //             'tipe_wallet' => $wallet->tipe,
-        //             'nama_wallet' => $wallet->nama,
+        //             'kategori_wallet' => $wallet->kategori_wallet,
+        //             'tipe_wallet' => $wallet->tipe_wallet,
+        //             'nama_wallet' => $wallet->nama_wallet,
         //             'jumlah' => $jumlah,
         //         ]);
         //         // self::create_update_neraca($tipe_wallet, $nama_wallet, $jumlah);
@@ -338,7 +338,7 @@ class CartController extends Controller
         // if (isset($post['jumlah_non_tunai'])) { // kodingan pada blade sempat di edit, js dipake bareng2, awalnya ini namanya jumlah_non_tunai
         //     foreach ($post['jumlah_non_tunai'] as $key => $jumlah_non_tunai) {
         //         if ($jumlah_non_tunai !== null) {
-        //             $wallet = Wallet::where('tipe', $post['tipe_instansi'][$key])->where('nama', $post['nama_instansi'][$key])->first();
+        //             $wallet = Wallet::where('tipe_wallet', $post['tipe_instansi'][$key])->where('nama_wallet', $post['nama_instansi'][$key])->first();
         //             // $tipe_wallet = $post['tipe_instansi'][$key];
         //             // $nama_wallet = $post['nama_instansi'][$key];
         //             $jumlah = $jumlah_non_tunai * 100;
@@ -349,9 +349,9 @@ class CartController extends Controller
         //                 'surat_pembelian_id' => $pembelian_new->id,
         //                 // 'nama_transaksi' => $nama_transaksi,
         //                 'tipe' => 'pemasukan',
-        //                 'kategori_wallet' => $wallet->kategori,
-        //                 'tipe_wallet' => $wallet->tipe,
-        //                 'nama_wallet' => $wallet->nama,
+        //                 'kategori_wallet' => $wallet->kategori_wallet,
+        //                 'tipe_wallet' => $wallet->tipe_wallet,
+        //                 'nama_wallet' => $wallet->nama_wallet,
         //                 'jumlah' => $jumlah,
         //             ]);
         //             // self::create_update_neraca($tipe_wallet, $nama_wallet, $jumlah);
@@ -436,7 +436,7 @@ class CartController extends Controller
         // END: UPDATE cashflows
 
         // HAPUS CART
-        $success_ .= Cart::delete_cart_items($post['cart_item_ids'], $cart);
+        $success_ .= Cart::delete_cart_items($post['cart_item_ids'], $cart, false);
 
         $feedback = [
             'success_' => $success_,

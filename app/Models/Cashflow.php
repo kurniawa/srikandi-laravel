@@ -145,8 +145,8 @@ class Cashflow extends Model
             } else {
                 $jumlah = (float)$jumlah_tunai * 100;
             }
-            $wallet = Wallet::where('tipe', 'laci')->where('nama', 'cash')->first();
-            $cashflow_sebelum = Cashflow::where('kategori_wallet', $wallet->kategori)->where('tipe_wallet', $wallet->tipe)->where('nama_wallet', $wallet->nama)->latest()->first();
+            $wallet = Wallet::where('tipe_wallet', 'laci')->where('nama_wallet', 'cash')->first();
+            $cashflow_sebelum = Cashflow::where('kategori_wallet', $wallet->kategori_wallet)->where('tipe_wallet', $wallet->tipe_wallet)->where('nama_wallet', $wallet->nama_wallet)->latest()->first();
             $saldo_akhir = 0;
             if ($cashflow_sebelum) {
                 $saldo_akhir = (int)$cashflow_sebelum->saldo;
@@ -164,13 +164,13 @@ class Cashflow extends Model
                 // 'surat_pembelian_item_id' => $surat_pembelian_item->id,
                 // 'nama_transaksi' => $nama_transaksi,
                 'tipe' => $post['tipe_transaksi'],
-                'kategori_wallet' => $wallet->kategori,
-                'tipe_wallet' => $wallet->tipe,
-                'nama_wallet' => $wallet->nama,
+                'kategori_wallet' => $wallet->kategori_wallet,
+                'tipe_wallet' => $wallet->tipe_wallet,
+                'nama_wallet' => $wallet->nama_wallet,
                 'jumlah' => (string)$jumlah,
                 'saldo' => (string)$saldo_akhir,
             ]);
-            $wallet = Wallet::where('nama', $cashflow->nama_wallet)->first();
+            $wallet = Wallet::where('nama_wallet', $cashflow->nama_wallet)->first();
             $wallet->saldo = (string)$saldo_akhir;
             $wallet->save();
             // self::create_update_neraca($tipe_wallet, $nama_wallet, $jumlah);
@@ -184,8 +184,8 @@ class Cashflow extends Model
         if ($jumlah_non_tunai) { // kodingan pada blade sempat di edit, js dipake bareng2, awalnya ini namanya jumlah_non_tunai
             foreach ($jumlah_non_tunai as $key => $jumlah_nt) {
                 if ($jumlah_nt !== null) {
-                    $wallet = Wallet::where('tipe', $tipe_instansis[$key])->where('nama', $nama_instansis[$key])->first();
-                    $cashflow_sebelum = Cashflow::where('kategori_wallet', $wallet->kategori)->where('tipe_wallet', $wallet->tipe)->where('nama_wallet', $wallet->nama)->latest()->first();
+                    $wallet = Wallet::where('tipe_wallet', $tipe_instansis[$key])->where('nama_wallet', $nama_instansis[$key])->first();
+                    $cashflow_sebelum = Cashflow::where('kategori_wallet', $wallet->kategori_wallet)->where('tipe_wallet', $wallet->tipe_wallet)->where('nama_wallet', $wallet->nama_wallet)->latest()->first();
                     // $tipe_wallet = $post['tipe_instansi'][$key];
                     // $nama_wallet = $post['nama_instansi'][$key];
                     $jumlah = $jumlah_nt * 100;
@@ -205,14 +205,14 @@ class Cashflow extends Model
                         'surat_pembelian_id' => $pembelian_id,
                         // 'nama_transaksi' => $nama_transaksi,
                         'tipe' => $post['tipe_transaksi'],
-                        'kategori_wallet' => $wallet->kategori,
-                        'tipe_wallet' => $wallet->tipe,
-                        'nama_wallet' => $wallet->nama,
+                        'kategori_wallet' => $wallet->kategori_wallet,
+                        'tipe_wallet' => $wallet->tipe_wallet,
+                        'nama_wallet' => $wallet->nama_wallet,
                         'jumlah' => (string)$jumlah,
                         'saldo' => (string)$saldo_akhir,
                     ]);
                     
-                    $wallet = Wallet::where('nama', $cashflow->nama_wallet)->first();
+                    $wallet = Wallet::where('nama_wallet', $cashflow->nama_wallet)->first();
                     $wallet->saldo = (string)$saldo_akhir;
                     $wallet->save();
                     // self::create_update_neraca($tipe_wallet, $nama_wallet, $jumlah);

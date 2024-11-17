@@ -598,9 +598,9 @@
                         <div id="dd-daftar-ewallet" class="border absolute top-12 bg-white w-full z-20 hidden">
                             @foreach ($wallets_non_tunai as $wallet)
                                 <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100"
-                                    onclick="tambahPembayaran('{{ $wallet->tipe }}', '{{ $wallet->nama }}')"
-                                    id="{{ $wallet->nama }}"><img
-                                        src="{{ asset("img/logo-$wallet->tipe-$wallet->nama.png") }}" class="h-full">
+                                    onclick="tambahPembayaran('{{ $wallet->tipe_wallet }}', '{{ $wallet->nama_wallet }}')"
+                                    id="{{ $wallet->nama_wallet }}"><img
+                                        src="{{ asset("img/logo-$wallet->tipe_wallet-$wallet->nama_wallet.png") }}" class="h-full">
                                 </div>
                             @endforeach
                             <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100"

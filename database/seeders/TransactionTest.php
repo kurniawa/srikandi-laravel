@@ -879,7 +879,7 @@ class TransactionTest extends Seeder
             $cashflow->saldo = $updated_saldo;
             $cashflow->save();
             // dump($cashflow);
-            $wallet = Wallet::where('nama', $cashflow->nama_wallet)->first();
+            $wallet = Wallet::where('nama_wallet', $cashflow->nama_wallet)->first();
             $wallet->saldo = $cashflow->saldo;
             $wallet->save();
         }
