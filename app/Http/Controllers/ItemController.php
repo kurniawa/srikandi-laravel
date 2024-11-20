@@ -207,6 +207,7 @@ class ItemController extends Controller
 
         // CEK APAKAH ADA ITEM YANG SAMA
         list($item_exist, $data) = Item::check_item_exist($candidate_new_item, $post);
+        // dump($data);
         // dd($item_exist);
         if (count($item_exist)) {
             // dump($data);
@@ -220,6 +221,7 @@ class ItemController extends Controller
             $data['all_items_x_photos'] = Item::get_all_item_x_photos(null, null);
             // dd($data);
             return view('items.found_similar_items', $data);
+            // return redirect()->route('add_new_item.create', $data);
         }
         // END - CEK ITEM YANG SAMA
         // dd($candidate_new_item);

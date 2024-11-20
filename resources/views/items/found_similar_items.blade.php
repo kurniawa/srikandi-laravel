@@ -164,6 +164,7 @@
                                 @endif
                             </div>
 
+                            @if ($item['harga_g'] != $candidate_new_item['harga_g'] || $item['ongkos_g'] != $candidate_new_item['ongkos_g'] || $item['harga_t'] != $candidate_new_item['harga_t'])
                             <div class="col-span-4">
                                 <div class="border-2 p-2 rounded border-indigo-300">
                                     <div class="font-bold mb-2 text-slate-500">Harga 1:</div>
@@ -182,7 +183,9 @@
                                     <input type="hidden" name="harga_g" value="{{ (float)$candidate_new_item['harga_g'] / 100 }}">
                                     <input type="hidden" name="ongkos_g" value="{{ (float)$candidate_new_item['ongkos_g'] / 100 }}">
                                     <input type="hidden" name="harga_t" value="{{ (float)$candidate_new_item['harga_t'] / 100 }}">
+                                    @if ($buyback_mode)
                                     <input type="hidden" name="buyback_mode" value="yes">
+                                    @endif
 
                                     @if (isset($berat_terima))
                                     <input type="hidden" name="berat_terima" value="{{ $berat_terima }}">
@@ -197,6 +200,16 @@
                                     @endif
                                 </div>
                             </div>
+                            @else
+                            <div class="col-span-8">
+                                <div class="border-2 p-2 rounded border-indigo-300">
+                                    <div class="font-bold mb-2 text-slate-500">Harga:</div>
+                                    <div class="font-bold text-slate-600 text-xs">{{ my_decimal_format($item['harga_g']) }} /g</div>
+                                    <div class="font-bold text-slate-600 text-xs">{{ my_decimal_format($item['ongkos_g']) }} /g</div>
+                                    <div class="font-bold text-slate-600 text-xs">{{ my_decimal_format($item['harga_t']) }}</div>
+                                </div>
+                            </div>
+                            @endif
                         </div>
 
                         {{-- DATA METODE PEMBAYARAN --}}
@@ -245,14 +258,14 @@
                         @else
                             <div class="flex justify-center mt-2">
                                 <div>
-                                    <div class="text-center">
+                                    {{-- <div class="text-center">
                                         <button type="submit" name="submit" class="bg-pink-300 text-white py-2 px-5 rounded" value="add_to_cart_and_price_update">+ Keranjang & Update Harga</button>
-                                    </div>
+                                    </div> --}}
+                                    {{-- <div class="text-center mt-2">
+                                        <button type="submit" name="submit" class="bg-emerald-300 text-white py-2 px-5 rounded" value="add_to_cart">Pilih</button>
+                                    </div> --}}
                                     <div class="text-center mt-2">
-                                        <button type="submit" name="submit" class="bg-emerald-300 text-white py-2 px-5 rounded" value="add_to_cart">+ Keranjang</button>
-                                    </div>
-                                    <div class="text-center mt-2">
-                                        <button type="submit" name="submit" class="bg-yellow-300 text-slate-500 py-2 px-5 rounded" value="add_to_cart">Lihat Detail</button>
+                                        <button type="submit" name="submit" class="bg-yellow-300 text-slate-500 py-2 px-5 rounded" value="add_to_cart">Pilih</button>
                                     </div>
                                 </div>
                             </div>

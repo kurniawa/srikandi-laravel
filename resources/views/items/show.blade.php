@@ -392,8 +392,15 @@
                 <form action="{{ route('carts.insert_to_cart', [$item->id, $user->id]) }}" onsubmit="submitWithPreserveScroll(this, '{{ $user->id }}-items.show')" method="POST" class="mt-2">
                     @csrf
                     @if ((int) $item->stock >= 1)
-                        <button type="submit"
-                            class="loading-spinner mt-2 p-4 bg-emerald-300 rounded w-full text-white flex items-center justify-center gap-1 font-bold">
+                        @if (isset($harga_t))
+                        <input type="hidden" name="harga_g" value="{{ $harga_g * 100 }}">
+                        <input type="hidden" name="ongkos_g" value="{{ $ongkos_g * 100 }}">
+                        <input type="hidden" name="harga_t" value="{{ $harga_t * 100 }}">
+                        <button type="submit" name="submit" value="update_harga" class="loading-spinner mt-2 p-4 bg-orange-400 rounded w-full text-white flex items-center justify-center gap-1 font-bold mb-2">
+                            <span>Update Harga + Keranjang</span>
+                        </button>
+                        @endif
+                        <button type="submit" class="loading-spinner mt-2 p-4 bg-emerald-300 rounded w-full text-white flex items-center justify-center gap-1 font-bold">
                             <span>+ Keranjang</span>
                         </button>
                     @else

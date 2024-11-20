@@ -132,7 +132,12 @@ class PelangganController extends Controller
 
         $username = null;
         if (isset($post['username'])) {
+            $request->validate([
+                'username' => 'required|alpha_dash|unique:users,username'
+            ]);
             $username = $post["username"];
+            // $username = preg_replace('/\s+/', '', $username);
+            // $username = strtolower($username);
             // CEK USERNAME APAKAH SUDAH DIPAKAI
             $username_exist = User::where('username', $username)->first();
             if ($username_exist) {

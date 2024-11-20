@@ -54,7 +54,7 @@
                     </div>
 
                     {{-- PENCARIAN ITEM --}}
-                    <div class="flex-auto">
+                    <form action="{{ route('home') }}" method="GET" class="flex-auto">
                         <div class="flex gap-1 items-center bg-white text-xs text-slate-400 rounded-lg border-slate-300 border-2 pl-1">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-4">
@@ -66,7 +66,7 @@
                                 <input type="text" name="longname" id="search-longname" oninput="searchItem(this, 'search-result')" class="border-none w-full p-1 rounded" placeholder="nama barang/item...">
                             </div>
                         </div>
-                    </div>
+                    </form>
                     {{-- END - PENCARIAN ITEM --}}
 
                     <div class="flex gap-2 items-center">
@@ -422,7 +422,7 @@
             html_result += `<div class="border-b grid grid-cols-12 gap-1 items-center">
                 ${html_photo}
                 <a href="${window_main_url}items/${item.id}/show" class="loading-spinner col-span-8">
-                    <div>${item.longname}</div>
+                    <div class="text-indigo-500">${item.longname}</div>
                     <div class="text-xs flex">
                         <div class="text-emerald-300 border border-emerald-300 rounded px-1">${formatCurrencyID(item.harga_g)}</div>
                         <div class="text-rose-300 border border-rose-300 rounded px-1">${formatCurrencyID(item.ongkos_g)}</div>
@@ -431,11 +431,7 @@
                 </a>
                 <div class="col-span-1">
                     <form action="${window_main_url}items/${item.tipe_barang}/create_item" method="GET" class="">
-                        <button type="submit" name="item_id" value="${item.id}" class="loading-spinner flex h-full w-full rounded py-1 items-center justify-center text-white bg-emerald-300 hover:bg-emerald-400">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                            </svg>
-                        </button>
+                        <button type="submit" name="item_id" value="${item.id}" class="loading-spinner flex h-full w-full rounded py-1 items-center justify-center text-white bg-emerald-300 hover:bg-emerald-400">+N</button>
                     </form>
                 </div>
                 </div>`;

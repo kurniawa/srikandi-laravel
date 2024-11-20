@@ -531,6 +531,10 @@
             })
             document.getElementById('label_jenis_perhiasan').textContent = `jenis ${tipe_perhiasan}`;
         }
+        const tipe_perhiasan_value = document.getElementById('tipe_perhiasan').value;
+        if (tipe_perhiasan_value) {
+            pilihanJenisPerhiasan(tipe_perhiasan_value);
+        }
 
         let index_mata = 0;
 

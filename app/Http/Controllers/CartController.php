@@ -447,9 +447,42 @@ class CartController extends Controller
         return redirect(route('surat_pembelian.index'))->with($feedback);
     }
 
-    function insert_to_cart(Item $item, User $user)
+    function insert_to_cart(Item $item, User $user, Request $request)
     {
         $success_ = '';
+        $post = $request->post();
+        if (isset($post['submit']) && $post['submit'] == 'update_harga') {
+            // dump($item);
+            // dd($post);
+            $item->harga_g = $post['harga_g'];
+            $item->ongkos_g = $post['ongkos_g'];
+            $item->harga_t = $post['harga_t'];
+            $item->save();
+            $success_ .= "-Item diupdate-";
+            // Terdapat kasus dimana item ini sebelumnya sudah ada di keranjang.
+            // Oleh karena itu setelah update harga_t, maka perlu untuk update harga_t pada cart
+            // UPDATE harga_t pada cart
+            $cart = Cart::where('user_id', $user->id)->first();
+            $cart_items = CartItem::where('cart_id', $cart->id)->where('item_id', $item->id)->get();
+            if (count($cart_items)) {
+                foreach ($cart_items as $cart_item) {
+                    $cart_item->harga_t = $item->harga_t;
+                    $cart_item->save();
+                }
+                // UPDATE harga_total pada carts
+                $cart_items_2 = CartItem::where('cart_id', $cart->id)->get();
+                $harga_total = 0;
+                foreach ($cart_items_2 as $cart_item) {
+                    $harga_total += $cart_item->harga_t;
+                }
+                $cart->harga_total = (string)$harga_total;
+                $cart->save();
+                $success_ .= "-Data cart diupdate-";
+                // END - UPDATE harga_total pada carts
+            }
+            // END - UPDATE harga_t pada cart
+        }
+        // dd($post);
         Cart::insert_to_cart_helper($item, $user);
         $success_ .= "-Item telah diinput ke keranjang-";
         $feedback = [
