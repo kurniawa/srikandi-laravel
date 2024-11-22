@@ -297,6 +297,25 @@ class Item extends Model
             // END - get ItemPhotos secara manual, karena $item_exist bukan collection
             // dd($item_exists);
 
+            // UPDATE longname
+            $arr_longname = explode(" ", $candidate_new_item['longname']);
+            $is_version_exist = false;
+            for ($i=0; $i < count($arr_longname); $i++) { 
+                if (str_contains($arr_longname[$i], "v.")) {
+                    $this_explode = explode(".", $arr_longname[$i]);
+                    $version = (int)$this_explode[1];
+                    $version++;
+                    $arr_longname[$i] = "v.$version";
+                    $is_version_exist = true;
+                }
+            }
+            if ($is_version_exist) {
+                $new_longname = implode(" ", $arr_longname);
+                $candidate_new_item['longname'] = $new_longname;
+            } else {
+                $candidate_new_item['longname'] .= " v.2";
+            }
+            // END - UPDATE longname
             $data = [
                 'similar_items' => $item_exists,
                 'candidate_new_item' => $candidate_new_item,
@@ -346,8 +365,10 @@ class Item extends Model
                     if ($tipe_mainan) {
                         $mainan = Mainan::where('nama', $tipe_mainan)->first();
                         if (!$mainan) {
+                            list($nama_mainan, $codename_mainan) = Mainan::generate_codename_from_nama($tipe_mainan);
                             $mainan = Mainan::create([
-                                'nama' => $tipe_mainan,
+                                'nama' => $nama_mainan,
+                                'codename' => $codename_mainan,
                             ]);
                         }
                         ItemMainan::create([

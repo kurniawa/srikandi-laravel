@@ -14,26 +14,26 @@ class WalletSeeder extends Seeder
     public function run(): void
     {
         $wallets = [
-            ['kategori'=>'tunai', 'tipe'=>'laci', 'nama'=>'cash'],
-            ['kategori'=>'non-tunai', 'tipe'=>'bank', 'nama'=>'BCA'],
-            ['kategori'=>'non-tunai', 'tipe'=>'bank', 'nama'=>'BRI'],
-            ['kategori'=>'non-tunai', 'tipe'=>'bank', 'nama'=>'Mandiri'],
-            ['kategori'=>'non-tunai', 'tipe'=>'bank', 'nama'=>'BNI'],
-            ['kategori'=>'non-tunai', 'tipe'=>'bank', 'nama'=>'CIMB'],
-            ['kategori'=>'non-tunai', 'tipe'=>'bank', 'nama'=>'OCBC'],
-            ['kategori'=>'non-tunai', 'tipe'=>'bank', 'nama'=>'BJB'],
-            ['kategori'=>'non-tunai', 'tipe'=>'bank', 'nama'=>'Maybank'],
-            ['kategori'=>'non-tunai', 'tipe'=>'ewallet', 'nama'=>'GoPay'],
-            ['kategori'=>'non-tunai', 'tipe'=>'ewallet', 'nama'=>'ShopeePay'],
-            ['kategori'=>'non-tunai', 'tipe'=>'ewallet', 'nama'=>'Dana'],
-            ['kategori'=>'non-tunai', 'tipe'=>'ewallet', 'nama'=>'OVO'],
+            ['kategori_wallet'=>'tunai', 'tipe_wallet'=>'laci', 'nama_wallet'=>'cash'],
+            ['kategori_wallet'=>'non-tunai', 'tipe_wallet'=>'bank', 'nama_wallet'=>'BCA'],
+            ['kategori_wallet'=>'non-tunai', 'tipe_wallet'=>'bank', 'nama_wallet'=>'BRI'],
+            ['kategori_wallet'=>'non-tunai', 'tipe_wallet'=>'bank', 'nama_wallet'=>'Mandiri'],
+            ['kategori_wallet'=>'non-tunai', 'tipe_wallet'=>'bank', 'nama_wallet'=>'BNI'],
+            ['kategori_wallet'=>'non-tunai', 'tipe_wallet'=>'bank', 'nama_wallet'=>'CIMB'],
+            ['kategori_wallet'=>'non-tunai', 'tipe_wallet'=>'bank', 'nama_wallet'=>'OCBC'],
+            ['kategori_wallet'=>'non-tunai', 'tipe_wallet'=>'bank', 'nama_wallet'=>'BJB'],
+            ['kategori_wallet'=>'non-tunai', 'tipe_wallet'=>'bank', 'nama_wallet'=>'Maybank'],
+            ['kategori_wallet'=>'non-tunai', 'tipe_wallet'=>'ewallet', 'nama_wallet'=>'GoPay'],
+            ['kategori_wallet'=>'non-tunai', 'tipe_wallet'=>'ewallet', 'nama_wallet'=>'ShopeePay'],
+            ['kategori_wallet'=>'non-tunai', 'tipe_wallet'=>'ewallet', 'nama_wallet'=>'Dana'],
+            ['kategori_wallet'=>'non-tunai', 'tipe_wallet'=>'ewallet', 'nama_wallet'=>'OVO'],
         ];
 
         foreach ($wallets as $wallet) {
             Wallet::create([
-                "kategori" => $wallet['kategori'],
-                "tipe" => $wallet['tipe'],
-                "nama" => $wallet['nama'],
+                "kategori_wallet" => $wallet['kategori_wallet'],
+                "tipe_wallet" => $wallet['tipe_wallet'],
+                "nama_wallet" => $wallet['nama_wallet'],
             ]);
         }
     }

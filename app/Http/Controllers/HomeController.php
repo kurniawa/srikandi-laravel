@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
-use App\Models\CartItem;
 use App\Models\Item;
 use App\Models\Menu;
-use App\Models\Saldo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -34,7 +32,7 @@ class HomeController extends Controller
                 $items = Item::select('id', 'shortname', 'longname', 'harga_g', 'ongkos_g', 'harga_t')->limit(100)->get();
             }
         } else {
-            $items = Item::select('id', 'shortname', 'longname', 'harga_g', 'ongkos_g', 'harga_t')->limit(100)->get();
+            $items = Item::select('id', 'shortname', 'longname', 'harga_g', 'ongkos_g', 'harga_t')->limit(100)->orderByDesc('created_at')->get();
         }
 
         $data = [

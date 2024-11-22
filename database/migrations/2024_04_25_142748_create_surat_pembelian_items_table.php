@@ -35,7 +35,7 @@ return new class extends Migration
             $table->string('edisi',50)->nullable();
             $table->string('nampan',50)->nullable();
             $table->string('kode_item',100)->nullable(); // nullable dulu, soalnya belum tau mesti gimana formatnya
-            $table->integer('barcode')->nullable()->unique();
+            $table->integer('barcode')->nullable();
             $table->string('deskripsi')->nullable();
             $table->string('keterangan')->nullable();
             // $table->string('status', 20)->nullable(); // ready, terjual, cuci, dll

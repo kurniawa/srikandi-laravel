@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Mainan;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class MainanSeeder extends Seeder
 {
@@ -13,20 +14,25 @@ class MainanSeeder extends Seeder
      */
     public function run(): void
     {
-        $mainans = [
-            ['nama' => 'Bola', 'codename' => 'mai.Bola'],
-            ['nama' => 'Dora', 'codename' => 'mai.Dora'],
-            ['nama' => 'Hello Kitty', 'codename' => 'mai.HelloKitty'],
-            ['nama' => 'Lonceng', 'codename' => 'mai.Lonceng'],
-            ['nama' => 'Patrick', 'codename' => 'mai.Patrick'],
-            ['nama' => 'SpongeBob', 'codename' => 'mai.SpongeBob'],
-        ];
+        // Path ke file JSON
+        $path = storage_path('backup/mainans.json');
 
-        foreach ($mainans as $mainan) {
-            Mainan::create([
-                'nama' => $mainan['nama'],
-                'codename' => $mainan['codename'],
-            ]);
+        // Periksa apakah file JSON ada
+        if (!File::exists($path)) {
+            $this->command->error("File $path tidak ditemukan.");
+            return;
+        }
+
+        // Baca data dari file JSON
+        $json = File::get($path);
+        $data = json_decode($json, true);
+
+        // Insert data ke tabel 'mainans'
+        if (!empty($data)) {
+            DB::table('mainans')->insert($data);
+            $this->command->info('Data berhasil dimasukkan ke tabel mainans.');
+        } else {
+            $this->command->warn('Tidak ada data yang ditemukan di file JSON.');
         }
     }
 }

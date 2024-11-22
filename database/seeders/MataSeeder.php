@@ -23,7 +23,8 @@ class MataSeeder extends Seeder
             ['nama' => 'pink', 'codename' => 'm.pink'],
             ['nama' => 'lila', 'codename' => 'm.lila'],
             ['nama' => 'hitam', 'codename' => 'm.hitam'],
-            ['nama' => 'coklat', 'codename' => 'm.c']
+            ['nama' => 'coklat', 'codename' => 'm.c'],
+            ['nama' => 'orange', 'codename' => 'm.or'],
         ];
 
         $level_warnas = [
@@ -41,7 +42,8 @@ class MataSeeder extends Seeder
         foreach ($warnas as $warna) {
             foreach ($level_warnas as $level_warna) {
                 foreach ($opacities as $opacity) {
-                    $codename = "$warna[codename]-$level_warna[codename]-$opacity[codename]";
+                    // $codename = "$warna[codename]-$level_warna[codename]-$opacity[codename]";
+                    $codename = "$warna[codename]";
                     Mata::create([
                         'warna' => $warna['nama'],
                         'level_warna' => $level_warna['nama'],

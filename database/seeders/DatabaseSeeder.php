@@ -20,7 +20,6 @@ class DatabaseSeeder extends Seeder
         // ]);
         $this->call([
             UserSeeder::class,
-            ItemSeeder::class,
             KadarSeeder::class,
             HargaPasaranSeeder::class,
             TipePerhiasanSeeder::class,
@@ -28,9 +27,11 @@ class DatabaseSeeder extends Seeder
             CapSeeder::class,
             MataSeeder::class,
             MerkSeeder::class,
+            ItemSeeder::class,
             WalletSeeder::class,
             AcuanPembukuanSeeder::class,
             WarnaEmasSeeder::class,
+            PhotoSeeder::class,
             TransactionTest::class,
         ]);
     }

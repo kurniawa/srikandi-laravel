@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class UserSeeder extends Seeder
 {
@@ -13,27 +14,25 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        //
-        $user = [
-            ['nama' => 'Adi Kurniawan', 'username' => 'cibinongguy', 'password' => 'ffloveakunsomuch', 'role' => 'Developer', 'clearance_level' => 6],
-            ['nama' => 'Adi Kurniawan', 'username' => 'kuruniawa', 'password' => 'ddloveakunsomuch', 'role' => 'SuperAdmin', 'clearance_level' => 5],
-            ['nama' => 'Aldebaran Al-Fahri', 'username' => 'aldebaran', 'password' => 'aldebaran', 'role' => 'Admin', 'clearance_level' => 3],
-            ['nama' => 'Andini Kharisma Putri', 'username' => 'andin', 'password' => 'andin', 'role' => 'User', 'clearance_level' => 1],
-            ['nama' => 'Udin', 'username' => 'udin', 'password' => 'udin', 'role' => 'Client', 'clearance_level' => 1],
-        ];
+        // Path ke file JSON
+        $path = storage_path('backup/users.json');
 
-        for ($i = 0; $i < count($user); $i++) {
-            $password = $user[$i]['password'];
-            if ($user[$i]['username'] !== 'Dian' || $user[$i]['username'] !== 'Albert21') {
-                $password = bcrypt($password);
-            }
-            DB::table('users')->insert([
-                'nama' => $user[$i]['nama'],
-                'username' => $user[$i]['username'],
-                'password' => $password,
-                'role' => $user[$i]['role'],
-                'clearance_level' => $user[$i]['clearance_level'],
-            ]);
+        // Periksa apakah file JSON ada
+        if (!File::exists($path)) {
+            $this->command->error("File $path tidak ditemukan.");
+            return;
+        }
+
+        // Baca data dari file JSON
+        $json = File::get($path);
+        $data = json_decode($json, true);
+
+        // Insert data ke tabel 'users'
+        if (!empty($data)) {
+            DB::table('users')->insert($data);
+            $this->command->info('Data berhasil dimasukkan ke tabel users.');
+        } else {
+            $this->command->warn('Tidak ada data yang ditemukan di file JSON.');
         }
     }
 }

@@ -100,7 +100,7 @@
                         <span>zu:{{ $item->kondisi }}</span>
                         @endif
                         @if ($item->range_usia)
-                        <span>ru:{{ $item->range_usia }}</span>
+                        <span>u:{{ $item->range_usia }}</span>
                         @endif
                         @if ($item->ukuran)
                         <span>uk:{{ $item->ukuran }}mm</span>

@@ -173,7 +173,7 @@ function generateNama() {
             });
             // console.log(found_mata);
             if (found_mata.length && jumlah_matas[i].value) {
-                codename_mata += ` ${found_mata[0].codename}:${jumlah_matas[i].value}`;
+                codename_mata += ` ${found_mata[0].codename}:${jumlah_matas[i].value}(${found_mata[0].id})`;
             }
         }
     }

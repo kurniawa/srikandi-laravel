@@ -239,6 +239,9 @@ Route::controller(ArtisanController::class)->group(function () {
     Route::post('/artisans/migrate_fresh_seed', 'migrate_fresh_seed')->name('artisans.migrate_fresh_seed')->middleware('level5');
     Route::post('/artisans/symbolic_link', 'symbolic_link')->name('artisans.symbolic_link')->middleware('level5');
     Route::post('/artisans/optimize_clear', 'optimize_clear')->name('artisans.optimize_clear')->middleware('level5');
-    Route::post('/artisans/optimize_clear', 'optimize_clear')->name('artisans.optimize_clear')->middleware('level5');
+    Route::post('/artisans/update_codename_in_table_matas', 'update_codename_in_table_matas')->name('artisans.update_codename_in_table_matas')->middleware('level5');
+    Route::post('/artisans/update_codename_in_table_mainans', 'update_codename_in_table_mainans')->name('artisans.update_codename_in_table_mainans')->middleware('level5');
+    Route::post('/artisans/backup_data', 'backup_data')->name('artisans.backup_data')->middleware('level5');
+    Route::post('/artisans/update_jenis_perhiasan', 'update_jenis_perhiasan')->name('artisans.update_jenis_perhiasan')->middleware('level5');
     // Route::post('/artisans/vendor_publish_laravelPWA','vendor_publish_laravelPWA')->name('artisans.vendor_publish_laravelPWA')->middleware('auth');
 });

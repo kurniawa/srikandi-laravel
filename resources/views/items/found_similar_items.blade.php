@@ -53,7 +53,7 @@
                 <input type="hidden" name="ongkos_g" value="{{ (float)$candidate_new_item['ongkos_g'] / 100 }}">
                 <input type="hidden" name="harga_t" value="{{ (float)$candidate_new_item['harga_t'] / 100 }}">
                 <input type="hidden" name="shortname" value="{{ $candidate_new_item['shortname'] }}">
-                <input type="hidden" name="longname" value="{{ "$candidate_new_item[longname] " . "v" . count($similar_items) + 1 }}">
+                <input type="hidden" name="longname" value="{{ $candidate_new_item[longname] }}">
                 <input type="hidden" name="kondisi" value="{{ $candidate_new_item['kondisi'] }}">
                 @if (isset($candidate_new_item['cap']) && $candidate_new_item['cap'] !== null)
                 <input type="hidden" name="cap" value="{{ $candidate_new_item['cap'] }}">

@@ -2,10 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\Item;
 use App\Models\JenisPerhiasan;
 use App\Models\TipePerhiasan;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class TipePerhiasanSeeder extends Seeder
 {
@@ -145,5 +147,6 @@ class TipePerhiasanSeeder extends Seeder
                 'codename' => $codename,
             ]);
         }
+
     }
 }

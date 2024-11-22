@@ -134,6 +134,7 @@ class ItemController extends Controller
         $jenis_perhiasans = JenisPerhiasan::select('id', 'nama as label', 'nama as value', 'tipe_perhiasan_id', 'tipe_perhiasan')->get();
         $caps = Cap::select('id', 'nama as label', 'nama as value', 'codename')->get();
         $label_matas = Mata::select('warna as label', 'warna as value')->groupBy('warna')->get();
+        // dd($label_matas);
         $matas = Mata::all();
         $label_mainans = Mainan::select('id', 'nama as label', 'nama as value', 'codename')->get();
         $label_warna_emas = WarnaEmas::all();
