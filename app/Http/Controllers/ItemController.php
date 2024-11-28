@@ -426,8 +426,9 @@ class ItemController extends Controller
         $tipe_perhiasans = TipePerhiasan::all();
         $jenis_perhiasans = JenisPerhiasan::select('id', 'nama as label', 'nama as value', 'tipe_perhiasan_id', 'tipe_perhiasan')->get();
         $caps = Cap::select('id', 'nama as label', 'nama as value', 'codename')->get();
-        $warna_matas = Mata::select('warna as label', 'warna as value')->groupBy('warna')->get();
-        $mainans = Mainan::select('id', 'nama as label', 'nama as value')->get();
+        $label_warna_matas = Mata::select('warna as label', 'warna as value')->groupBy('warna')->get();
+        $matas = Mata::all();
+        $label_mainans = Mainan::select('id', 'nama as label', 'nama as value', 'codename')->get();
 
         $data = [
             'menus' => Menu::get(),
@@ -452,8 +453,9 @@ class ItemController extends Controller
             'tipe_perhiasans' => $tipe_perhiasans,
             'jenis_perhiasans' => $jenis_perhiasans,
             'caps' => $caps,
-            'warna_matas' => $warna_matas,
-            'mainans' => $mainans,
+            'label_warna_matas' => $label_warna_matas,
+            'matas' => $matas,
+            'label_mainans' => $label_mainans,
             // 'related_user' => $related_user,
             // 'peminat_items' => $peminat_items,
             'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
@@ -535,19 +537,23 @@ class ItemController extends Controller
         }
 
         // VALIDASI MATA
-        foreach ($post['warna_mata'] as $key_warna_mata => $warna_mata) {
-            if ($warna_mata) {
-                if ($post['jumlah_mata'][$key_warna_mata] == 0 || $post['jumlah_mata'][$key_warna_mata] === null) {
-                    $request->validate(['error' => 'required'], ['error.required' => '-jumlah_mata tidak sesuai-']);
+        if (isset($post['warna_mata'])) {
+            foreach ($post['warna_mata'] as $key_warna_mata => $warna_mata) {
+                if ($warna_mata) {
+                    if ($post['jumlah_mata'][$key_warna_mata] == 0 || $post['jumlah_mata'][$key_warna_mata] === null) {
+                        $request->validate(['error' => 'required'], ['error.required' => '-jumlah_mata tidak sesuai-']);
+                    }
                 }
             }
         }
 
         // VALIDASI MAINAN
-        foreach ($post['tipe_mainan'] as $key_tipe_mainan => $tipe_mainan) {
-            if ($tipe_mainan) {
-                if ($post['jumlah_mainan'][$key_tipe_mainan] === null || $post['jumlah_mainan'][$key_tipe_mainan] == 0) {
-                    $request->validate(['error' => 'required'], ['error.required' => '-jumlah_mainan tidak sesuai-']);
+        if (isset($post['tipe_mainan'])) {
+            foreach ($post['tipe_mainan'] as $key_tipe_mainan => $tipe_mainan) {
+                if ($tipe_mainan) {
+                    if ($post['jumlah_mainan'][$key_tipe_mainan] === null || $post['jumlah_mainan'][$key_tipe_mainan] == 0) {
+                        $request->validate(['error' => 'required'], ['error.required' => '-jumlah_mainan tidak sesuai-']);
+                    }
                 }
             }
         }
@@ -586,21 +592,23 @@ class ItemController extends Controller
                 $item_mata->delete();
             }
         }
-        foreach ($post['warna_mata'] as $key_warna_mata => $warna_mata) {
-            if ($warna_mata) {
-                $mata = Mata::where('warna', $warna_mata)->where('level_warna', $post['level_warna'][$key_warna_mata])->where('opacity', $post['opacity'][$key_warna_mata])->first();
-                if (!$mata) {
-                    $mata = Mata::create([
-                        'warna' => $warna_mata,
-                        'level_warna' => $post['level_warna'][$key_warna_mata],
-                        'opacity' => $post['opacity'][$key_warna_mata],
+        if (isset($post['warna_mata'])) {
+            foreach ($post['warna_mata'] as $key_warna_mata => $warna_mata) {
+                if ($warna_mata) {
+                    $mata = Mata::where('warna', $warna_mata)->where('level_warna', $post['level_warna'][$key_warna_mata])->where('opacity', $post['opacity'][$key_warna_mata])->first();
+                    if (!$mata) {
+                        $mata = Mata::create([
+                            'warna' => $warna_mata,
+                            'level_warna' => $post['level_warna'][$key_warna_mata],
+                            'opacity' => $post['opacity'][$key_warna_mata],
+                        ]);
+                    }
+                    ItemMata::create([
+                        'item_id' => $item->id,
+                        'mata_id' => $mata->id,
+                        'jumlah_mata' => $post['jumlah_mata'][$key_warna_mata],
                     ]);
                 }
-                ItemMata::create([
-                    'item_id' => $item->id,
-                    'mata_id' => $mata->id,
-                    'jumlah_mata' => $post['jumlah_mata'][$key_warna_mata],
-                ]);
             }
         }
 
@@ -611,19 +619,21 @@ class ItemController extends Controller
                 $item_mainan->delete();
             }
         }
-        foreach ($post['tipe_mainan'] as $key_tipe_mainan => $tipe_mainan) {
-            if ($tipe_mainan) {
-                $mainan = Mainan::where('nama', $tipe_mainan)->first();
-                if (!$mainan) {
-                    $mainan = Mainan::create([
-                        'nama' => $tipe_mainan,
+        if (isset($post['tipe_mainan'])) {
+            foreach ($post['tipe_mainan'] as $key_tipe_mainan => $tipe_mainan) {
+                if ($tipe_mainan) {
+                    $mainan = Mainan::where('nama', $tipe_mainan)->first();
+                    if (!$mainan) {
+                        $mainan = Mainan::create([
+                            'nama' => $tipe_mainan,
+                        ]);
+                    }
+                    ItemMainan::create([
+                        'item_id' => $item->id,
+                        'mainan_id' => $mainan->id,
+                        'jumlah_mainan' => $post['jumlah_mainan'][$key_tipe_mainan]
                     ]);
                 }
-                ItemMainan::create([
-                    'item_id' => $item->id,
-                    'mainan_id' => $mainan->id,
-                    'jumlah_mainan' => $post['jumlah_mainan'][$key_tipe_mainan]
-                ]);
             }
         }
 

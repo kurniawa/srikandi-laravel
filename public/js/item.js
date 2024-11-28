@@ -6,7 +6,7 @@ function pilihanJenisPerhiasan__(tipe_perhiasan, jenis_perhiasans) {
     var pilihan_jenis_perhiasans = jenis_perhiasans.filter(
         (o) => o.tipe_perhiasan == tipe_perhiasan
     );
-    console.log(pilihan_jenis_perhiasans);
+    // console.log(pilihan_jenis_perhiasans);
     $("#jenis_perhiasan").autocomplete({
         source: pilihan_jenis_perhiasans,
         select: function (event, ui) {
@@ -53,7 +53,7 @@ function addMata__(index_mata, label_matas) {
             </div>
         </div>
         <div class="flex justify-end mt-1">
-            <button type="button" class="bg-pink-300 text-white px-2 py-1 rounded-2xl" onclick="removeElement('data-mata-${index_mata}')">
+            <button type="button" class="bg-pink-300 text-white px-2 py-1 rounded-2xl" onclick="removeElement('data-mata-${index_mata}');generateNama()">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
                 </svg>
@@ -84,7 +84,7 @@ function addMainan__(index_mainan, mainans) {
             </div>
         </div>
         <div class="flex justify-end mt-1">
-            <button type="button" class="bg-pink-300 text-white px-2 py-1 rounded-2xl" onclick="removeElement('data-mainan-${index_mainan}')">
+            <button type="button" class="bg-pink-300 text-white px-2 py-1 rounded-2xl" onclick="removeElement('data-mainan-${index_mainan}');generateNama()">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
                 </svg>
@@ -186,18 +186,23 @@ function generateNama() {
     let jumlah_mainans = document.querySelectorAll(".jumlah-mainan");
 
     // console.log(checkbox_mainan.checked);
+    // console.log(tipe_mainans);
     if (checkbox_mainan.checked) {
         for (let i = 0; i < tipe_mainans.length; i++) {
             let found_mainan = label_mainans.filter((mainan) => {
                 // console.log(mainan.value);
                 // console.log(tipe_mainans[i].value);
                 if (mainan.value == tipe_mainans[i].value) {
+                    // console.log(mainan);
                     return mainan;
                 }
             });
             // console.log(found_mainan);
+            // console.log(found_mainan);
+            // console.log(jumlah_mainans[i].value);
             if (found_mainan.length && jumlah_mainans[i].value) {
                 codename_mainan += ` ${found_mainan[0].codename}:${jumlah_mainans[i].value}`;
+                // console.log(codename_mainan);
             }
         }
     }

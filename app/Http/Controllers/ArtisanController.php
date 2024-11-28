@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cap;
 use App\Models\Cart;
 use App\Models\Item;
 use App\Models\JenisPerhiasan;
@@ -172,12 +173,37 @@ class ArtisanController extends Controller
 
         $mainans = DB::table('mainans')->get();
         File::put(storage_path('backup/mainans.json'), $mainans->toJson());
+
+        $caps = DB::table('caps')->get();
+        foreach ($caps as $cap) {
+            if (str_contains($cap->nama, "gambar")) {
+                $exploded_nama = explode(" ", $cap->nama);
+                $exploded_nama[0] = "g-";
+                $new_nama = implode("", $exploded_nama);
+
+                $exploded_codename = explode("gbr.", $cap->codename);
+                $exploded_codename[1] = "g-" . $exploded_codename[1];
+                $new_codename = implode("", $exploded_codename);
+
+                DB::table('caps')->where('id', $cap->id)->update([
+                    'nama' => $new_nama,
+                    'codename' => $new_codename,
+                ]);
+            }
+        }
+        // dd($caps);
+        $caps = DB::table('caps')->get();
+        File::put(storage_path('backup/caps.json'), $caps->toJson());
         
         $items = DB::table('items')->get();
         // FIX keterangan mata pada items
         foreach ($items as $item) {
             $arr_longnames = explode(" ", $item->longname);
             $confirm_update_longname = false;
+
+            // set initial value for variable to update
+            $new_longname = $item->longname;
+            // END - set initial value for variable to update
             foreach ($arr_longnames as $key => $longname) {
                 if (str_contains($longname, 'm.p-lw.n-opac.t')) {
                     // dump($longname);
@@ -207,14 +233,32 @@ class ArtisanController extends Controller
                     // dd($arr_longnames);
                 }
             }
+
             if ($confirm_update_longname) {
                 $new_longname = implode(" ", $arr_longnames);
-                DB::table('items')->where('id', $item->id)->update(['longname' => $new_longname]);
+                DB::table('items')->where('id', $item->id)->update([
+                    'longname' => $new_longname,
+                ]);
                 // dd($new_longname);
+            }
+
+            if (str_contains($item->cap, "gambar")) {
+                $new_cap = str_replace("gambar ", "g-", $item->cap);
+                $old_longname = DB::table('items')->select('longname')->where('id', $item->id)->first();
+                // dump($old_longname);
+                // dd($old_longname->longname);
+                if (str_contains($old_longname->longname, "gambar")) {
+                    $new_longname = str_replace("gambar ", "g-", $old_longname->longname);
+                    DB::table('items')->where('id', $item->id)->update([
+                        'longname' => $new_longname,
+                        'cap' => $new_cap,
+                    ]);
+                }
             }
             
         }
         // END - FIX keterangan mata pada items
+        $items = DB::table('items')->get();
         File::put(storage_path('backup/items.json'), $items->toJson());
 
         $photos = DB::table('photos')->get();
@@ -236,41 +280,38 @@ class ArtisanController extends Controller
         return back()->with($feedback);
     }
 
-    function update_jenis_perhiasan() {
+    function update_jenis_perhiasans_d_caps() {
         // UPDATE Data Jenis Perhiasan
         $items = Item::all();
-        $jenis_perhiasan_to_insert = [];
-        // $jenis_perhiasan_available = [];
         foreach ($items as $item) {
             $is_jenis_perhiasan_exist = JenisPerhiasan::where('tipe_perhiasan', $item->tipe_perhiasan)->where('nama', $item->jenis_perhiasan)->first();
             if (!$is_jenis_perhiasan_exist) {
                 $tipe_perhiasan = TipePerhiasan::where('nama', $item->tipe_perhiasan)->first();
-                $jenis_perhiasan_to_insert[] = [
+                JenisPerhiasan::create([
                     'nama' => $item->jenis_perhiasan,
                     'tipe_perhiasan' => $item->tipe_perhiasan,
                     'tipe_perhiasan_id' => $tipe_perhiasan->id,
-                ];
-            } 
+                ]);
+            }
             
-            // else {
-            //     $tipe_perhiasan = TipePerhiasan::where('nama', $item->tipe_perhiasan)->first();
-            //     $jenis_perhiasan_available[] = [
-            //         'nama' => $item->jenis_perhiasan,
-            //         'tipe_perhiasan' => $item->tipe_perhiasan,
-            //         'tipe_perhiasan_id' => $tipe_perhiasan->id,
-            //     ];
-            // }
-        }
-        // dump($jenis_perhiasan_available);
-        // dd($jenis_perhiasan_to_insert);
-        if (count($jenis_perhiasan_to_insert)) {
-            DB::table('jenis_perhiasans')->insert($jenis_perhiasan_to_insert);
+            if ($item->cap !== null) {
+                $is_cap_exist = Cap::where('nama', $item->cap)->first();
+                if (!$is_cap_exist) {
+                    Cap::create([
+                        'nama' => $item->cap,
+                        'codename' => 'c.' . $item->cap,
+                    ]);
+                }
+            }
         }
 
+
         $feedback = [
-            'success_' => '-jenis_perhiasans updated-'
+            'success_' => '-jenis_perhiasans dan caps updated-'
         ];
+
         return back()->with($feedback);
         // END - UPDATE Data Jenis Perhiasan
     }
+
 }

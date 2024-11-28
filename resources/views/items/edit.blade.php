@@ -402,11 +402,13 @@
                                             <div class="mb-1">
                                                 <input type="text" id="warna_mata-0" name="warna_mata[]"
                                                     value="{{ old("warna_mata.$key") ? old("warna_mata.$key") : $item->matas[$key]->warna }}"
+                                                    onchange="generateNama()"
                                                     placeholder="warna_mata"
                                                     class="warna-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                             </div>
                                             <div class="mb-1">
                                                 <select id="level_warna" name="level_warna[]"
+                                                    onchange="generateNama()"
                                                     class="level-warna bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                     @if (old("level_warna.$key"))
                                                         @foreach ($arr_level_warnas as $level_warna)
@@ -433,6 +435,7 @@
                                             </div>
                                             <div class="mb-1">
                                                 <select id="opacity" name="opacity[]"
+                                                    onchange="generateNama()"
                                                     class="opacity-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                     @if (old('opacity'))
                                                         @foreach ($arr_opacities as $opacity)
@@ -460,6 +463,7 @@
                                             </div>
                                             <div class="mb-1">
                                                 <input type="text" inputmode="numeric" id="jumlah_mata" name="jumlah_mata[]"
+                                                    onchange="generateNama()"
                                                     value="{{ old("jumlah_mata.$key") ? old("jumlah_mata.$key") : $item_mata->jumlah_mata }}"
                                                     placeholder="jumlah_mata"
                                                     class="jumlah-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -467,7 +471,7 @@
                                         </div>
                                         <div class="flex justify-end mt-1">
                                             <button class="bg-pink-300 text-white px-2 py-1 rounded-2xl"
-                                                onclick="removeElement('data-mata-{{ $key }}')">
+                                                onclick="removeElement('data-mata-{{ $key }}');generateNama()">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
                                                     class="w-6 h-6">
@@ -483,11 +487,13 @@
                                         <div class="mb-1">
                                             <input type="text" id="warna_mata-0" name="warna_mata[]"
                                                 value="{{ old('warna_mata.0') ? old('warna_mata.0') : '' }}"
+                                                onchange="generateNama()"
                                                 placeholder="warna_mata"
                                                 class="warna-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                         </div>
                                         <div class="mb-1">
                                             <select id="level_warna" name="level_warna[]"
+                                                onchange="generateNama()"
                                                 class="level-warna bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                 @if (old('level_warna.0'))
                                                     @foreach ($arr_level_warnas as $level_warna)
@@ -509,6 +515,7 @@
                                         </div>
                                         <div class="mb-1">
                                             <select id="opacity" name="opacity[]"
+                                                onchange="generateNama()"
                                                 class="opacity-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                 @if (old('opacity'))
                                                     @foreach ($arr_opacities as $opacity)
@@ -530,6 +537,7 @@
                                         </div>
                                         <div class="mb-1">
                                             <input type="text" inputmode="numeric" id="jumlah_mata" name="jumlah_mata[]"
+                                                onchange="generateNama()"
                                                 value="{{ old('jumlah_mata.0') ? old('jumlah_mata.0') : '' }}"
                                                 placeholder="jumlah_mata"
                                                 class="jumlah-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -537,7 +545,7 @@
                                     </div>
                                     <div class="flex justify-end mt-1">
                                         <button class="bg-pink-300 text-white px-2 py-1 rounded-2xl"
-                                            onclick="removeElement('data-mata-0')">
+                                            onclick="removeElement('data-mata-0');generateNama()">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                 stroke-width="2" stroke="currentColor" class="w-6 h-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
@@ -571,11 +579,13 @@
                                                 <input type="text" id="tipe_mainan-{{ $key }}"
                                                     name="tipe_mainan[]"
                                                     value="{{ old("tipe_mainan.$key") ? old("tipe_mainan.$key") : $mainan->nama }}"
+                                                    onchange="generateNama()"
                                                     placeholder="tipe_mainan"
                                                     class="tipe-mainan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                             </div>
                                             <div class="mb-1">
                                                 <input type="text" inputmode="numeric" id="jumlah_mainan-{{ $key }}"
+                                                    onchange="generateNama()"
                                                     name="jumlah_mainan[]"
                                                     value="{{ old("jumlah_mainan.$key") ? old("jumlah_mainan.$key") : $item->item_mainans[$key]->jumlah_mainan }}"
                                                     placeholder="jumlah_mainan"
@@ -584,7 +594,7 @@
                                         </div>
                                         <div class="flex justify-end mt-1">
                                             <button type="button" class="bg-pink-300 text-white px-2 py-1 rounded-2xl"
-                                                onclick="removeElement('data-mainan-{{ $key }}')">
+                                                onclick="removeElement('data-mainan-{{ $key }}'); generateNama()">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
                                                     class="w-6 h-6">
@@ -599,12 +609,14 @@
                                     <div class="grid grid-cols-2 gap-2 mt-2 border-t border-b border-violet-300 p-1">
                                         <div class="mb-1">
                                             <input type="text" id="tipe_mainan-0" name="tipe_mainan[]"
+                                                onchange="generateNama()"
                                                 value="{{ old('tipe_mainan.0') ? old('tipe_mainan.0') : '' }}"
                                                 placeholder="tipe_mainan"
                                                 class="tipe-mainan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                         </div>
                                         <div class="mb-1">
                                             <input type="text" inputmode="numeric" id="jumlah_mainan-0" name="jumlah_mainan[]"
+                                                onchange="generateNama()"
                                                 value="{{ old('jumlah_mainan.0') ? old('jumlah_mainan.0') : '' }}"
                                                 placeholder="jumlah_mainan"
                                                 class="jumlah-mainan bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -612,7 +624,7 @@
                                     </div>
                                     <div class="flex justify-end mt-1">
                                         <button type="button" class="bg-pink-300 text-white px-2 py-1 rounded-2xl"
-                                            onclick="removeElement('data-mainan-0')">
+                                            onclick="removeElement('data-mainan-0'); genereateNama()">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                 stroke-width="2" stroke="currentColor" class="w-6 h-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
@@ -633,30 +645,30 @@
             <div class="fixed z-30 bottom-0 bg-violet-200 rounded w-4/5 px-2">
                 <div class="grid grid-cols-3 gap-2">
                     <div class="flex gap-1 items-center">
-                        <input type="checkbox" name="toggle_mata" id="toggle_mata"
-                            onclick="toggleCheckbox(this, 'div_mata')" {{ count($item->matas) ? 'checked' : '' }}><label
-                            for="toggle_mata">mata</label>
+                        <input type="checkbox" name="checkbox_mata" id="checkbox_mata"
+                            onclick="toggleCheckbox(this, 'div_mata'); existElementMata(this); generateNama()" {{ count($item->matas) ? 'checked' : '' }}><label
+                            for="checkbox_mata">mata</label>
                     </div>
                     <div class="flex gap-1 items-center">
-                        <input type="checkbox" name="toggle_mainan" id="toggle_mainan"
-                            onclick="toggleCheckbox(this, 'div_mainan')"
-                            {{ count($item->mainans) ? 'checked' : '' }}><label for="toggle_mainan"><label
-                                for="toggle_mainan">mainan</label>
+                        <input type="checkbox" name="checkbox_mainan" id="checkbox_mainan"
+                            onclick="toggleCheckbox(this, 'div_mainan'); existElementMainan(this); generateNama()"
+                            {{ count($item->mainans) ? 'checked' : '' }}><label for="checkbox_mainan"><label
+                                for="checkbox_mainan">mainan</label>
                     </div>
                     <div class="flex gap-1 items-center">
-                        <input type="checkbox" name="toggle_ukuran" id="toggle_ukuran"
+                        <input type="checkbox" name="checkbox_ukuran" id="checkbox_ukuran"
                             onclick="toggleCheckbox(this, 'div_ukuran')" {{ $item->ukuran ? 'checked' : '' }}><label
-                            for="toggle_ukuran">ukuran</label>
+                            for="checkbox_ukuran">ukuran</label>
                     </div>
                     <div class="flex gap-1 items-center">
-                        <input type="checkbox" name="toggle_merk" id="toggle_merk"
+                        <input type="checkbox" name="checkbox_merk" id="checkbox_merk"
                             onclick="toggleCheckbox(this, 'div_merk')" {{ $item->merk ? 'checked' : '' }}><label
-                            for="toggle_merk">merk</label>
+                            for="checkbox_merk">merk</label>
                     </div>
                     <div class="flex gap-1 items-center">
-                        <input type="checkbox" name="toggle_plat" id="toggle_plat"
+                        <input type="checkbox" name="checkbox_plat" id="checkbox_plat"
                             onclick="toggleCheckbox(this, 'div_plat')" {{ $item->plat ? 'checked' : '' }}><label
-                            for="toggle_plat">plat</label>
+                            for="checkbox_plat">plat</label>
                     </div>
                 </div>
             </div>
@@ -678,10 +690,13 @@
     <script>
         let jenis_perhiasans = {!! json_encode($jenis_perhiasans, JSON_HEX_TAG) !!}
         let caps = {!! json_encode($caps, JSON_HEX_TAG) !!}
-        let warna_matas = {!! json_encode($warna_matas, JSON_HEX_TAG) !!}
-        let mainans = {!! json_encode($mainans, JSON_HEX_TAG) !!}
+        let label_warna_matas = {!! json_encode($label_warna_matas, JSON_HEX_TAG) !!}
+        let label_mainans = {!! json_encode($label_mainans, JSON_HEX_TAG) !!}
+        let matas = {!! json_encode($matas, JSON_HEX_TAG) !!}
         let item_matas = {!! json_encode($item->matas, JSON_HEX_TAG) !!}
         let item_mainans = {!! json_encode($item->mainans, JSON_HEX_TAG) !!}
+        let tipe_perhiasan_onload = {!! json_encode($item->tipe_perhiasan, JSON_HEX_TAG) !!}
+
         // console.log(item_matas);
         // console.log(item_mainans);
         // console.log(jenis_perhiasans);
@@ -702,25 +717,47 @@
         function pilihanJenisPerhiasan(tipe_perhiasan) {
             pilihanJenisPerhiasan__(tipe_perhiasan, jenis_perhiasans);
         }
+        pilihanJenisPerhiasan(tipe_perhiasan_onload);
 
         let index_mata = item_matas.length + 1;
 
         function addMata() {
-            addMata__(index_mata, warna_matas);
+            addMata__(index_mata, label_warna_matas);
             index_mata++;
 
         }
-        setAutocompleteWarnaMata(`warna_mata-0`, warna_matas);
+        setAutocompleteWarnaMata(`warna_mata-0`, label_warna_matas);
 
         let index_mainan = item_mainans.length + 1;
         // console.log(index_mata);
         // console.log(index_mainan);
         function addMainan() {
-            addMainan__(index_mainan, mainans)
+            addMainan__(index_mainan, label_mainans)
             index_mainan++;
         }
 
-        setAutocompleteMainan('tipe_mainan-0', mainans);
+        setAutocompleteMainan('tipe_mainan-0', label_mainans);
+
+        function existElementMata(checkbox_mata) {
+            if (checkbox_mata.checked) {
+                let input_label_matas = document.querySelectorAll('.warna-mata');
+                // console.log(input_label_matas.length);
+                if (!input_label_matas.length) {
+                    addMata();
+                }
+            }
+        }
+
+        function existElementMainan(checkbox_mainan) {
+            console.log(checkbox_mainan.checked);
+            if (checkbox_mainan.checked) {
+                let input_tipe_label_mainans = document.querySelectorAll('.tipe-mainan');
+                // console.log(input_tipe_label_mainans.length);
+                if (!input_tipe_label_mainans.length) {
+                    addMainan();
+                }
+            }
+        }
     </script>
 
 @endsection

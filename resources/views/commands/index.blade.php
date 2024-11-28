@@ -25,9 +25,9 @@
         <h3 class="mt-3 text-lg font-bold text-slate-500">4. Jalankan perintah "php artisan migrate:fresh --seed"</h3>
 
         <h3 class="mt-3 text-lg font-bold text-slate-500">5. Update Jenis Perhiasan</h3>
-        <form action="{{ route('artisans.update_jenis_perhiasan') }}" method="POST" onsubmit="return confirm('Anda yakin?')">
+        <form action="{{ route('artisans.update_jenis_perhiasans_d_caps') }}" method="POST" onsubmit="return confirm('Anda yakin?')">
             @csrf
-            <button class="p-2 bg-orange-300 text-white font-bold rounded">Update Jenis Perhiasan</button>
+            <button class="p-2 bg-orange-300 text-white font-bold rounded">Update Jenis Perhiasan & Caps</button>
         </form>
     </main>
 @endsection
