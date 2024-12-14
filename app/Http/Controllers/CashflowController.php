@@ -340,6 +340,7 @@ class CashflowController extends Controller
             'kadar' => $kadar,
             'berat' => $berat,
             'user_id' => $user->id,
+            'username' => $user->username,
             'tipe' => $post['tipe_transaksi'],
             'kategori' => $post['kategori'],
             'kategori_2' => $kategori_2,
@@ -354,6 +355,16 @@ class CashflowController extends Controller
             'success_' => $success_
         ];
         return redirect()->route('cashflow.index')->with($feedback);
+    }
+
+    function update_saldo_wallet(Request $request) {
+        $post = $request->post();
+
+        $wallet = Wallet::find($post['wallet_id']);
+        $wallet->saldo = (string)((int)$post['saldo_wallet'] * 100);
+        $wallet->save();
+        
+        return back()->with('success_', '- Saldo wallet diupdate! -');
     }
 
     // function store_and_buyback_perhiasan(Request $request) {

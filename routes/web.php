@@ -150,6 +150,7 @@ Route::controller(CashflowController::class)->group(function () {
     Route::get('/cashflow/index', 'index')->name('cashflow.index')->middleware('level3');
     Route::get('/cashflow/transaksi/{tipe_transaksi}', 'transaksi')->name('cashflow.transaksi')->middleware('level3');
     Route::post('/cashflow/store_transaction', 'store_transaction')->name('cashflow.store_transaction')->middleware('level3');
+    Route::post('/cashflow/update_saldo_wallet', 'update_saldo_wallet')->name('cashflow.update_saldo_wallet')->middleware('level5');
     Route::get('/cashflow/found_similar_items', 'found_similar_items')->name('cashflow.found_similar_items')->middleware('level3');
     // Route::post('/cashflow/store_and_buyback_perhiasan', 'store_and_buyback_perhiasan')->name('cashflow.store_and_buyback_perhiasan')->middleware('level3');
 });

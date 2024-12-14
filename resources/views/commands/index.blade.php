@@ -4,6 +4,8 @@
         <x-errors-any></x-errors-any>
         <x-validation-feedback></x-validation-feedback>
         
+        <h1>Initial Commands Center</h1>
+        
         <h3 class="text-lg font-bold text-slate-500">1. Ubah Value Codename Pada Table Matas</h3>
         <form action="{{ route('artisans.update_codename_in_table_matas') }}" method="POST" onsubmit="return confirm('Anda yakin?')">
             @csrf
@@ -29,5 +31,10 @@
             @csrf
             <button class="p-2 bg-orange-300 text-white font-bold rounded">Update Jenis Perhiasan & Caps</button>
         </form>
+        
+        <ol class="list-decimal list-inside">
+            <li>php artisan migrate</li>
+            <li>php artisan db:seed --class=AddUsernameToAccountingsTable</li>
+        </ol>
     </main>
 @endsection

@@ -22,19 +22,25 @@
     </div>
 
     {{-- FILTER --}}
-    <x-filter-tanggal></x-filter-tanggal>
+    <x-filter-rincian-transaksi :userLists="$user_lists" :targetUser="$target_user" ></x-filter-rincian-transaksi>
     {{-- END - FILTER --}}
 
     <form action="{{ route('transactions.rincian_transaksi', $user->id) }}" method="GET" class="text-xs italic mt-5 text-slate-500">
         user:
-        <select name="target_user_id" id="target_user_id" onchange="showLoadingSpinner();this.form.submit()">
-            @foreach ($user_lists as $user)
-            @if ($user->id == $target_user->id)
-            <option value="{{ $user->id }}" selected>{{ $user->username }}</option>
+        <select name="target_user_id" id="target_user_id" class="p-1 rounded" onchange="showLoadingSpinner();this.form.submit()">
+            @if ($target_user)
+                @foreach ($user_lists as $user)
+                @if ($user->id == $target_user->id)
+                <option value="{{ $user->id }}" selected>{{ $user->username }}</option>
+                @else
+                <option value="{{ $user->id }}">{{ $user->username }}</option>
+                @endif
+                @endforeach
             @else
-            <option value="{{ $user->id }}">{{ $user->username }}</option>
+                @foreach ($user_lists as $user)
+                <option value="{{ $user->id }}">{{ $user->username }}</option>
+                @endforeach
             @endif
-            @endforeach
         </select>
     </form>
 
@@ -68,7 +74,12 @@
                             <div class="col-span-9">
                                 @foreach ($bb_accounting['accountings'][$bb_accounting["gol_kadars"][$i]] as $accounting)
                                     <div>{{ $accounting['nama_barang'] }}</div>
-                                    <div>{{ casual_decimal_format($accounting['berat']) }}g --> Rp {{ my_decimal_format($accounting['jumlah']) }}</div>
+                                    <div class="flex justify-between">
+                                        <div>{{ casual_decimal_format($accounting['berat']) }}g --> Rp {{ my_decimal_format($accounting['jumlah']) }}</div>
+                                        @if (!$target_user)
+                                        <div class="text-pink-300 font-bold">{{ $accounting['username'] }}</div>
+                                        @endif
+                                    </div>
                                 @endforeach
                             </div>
                         </div>
@@ -123,7 +134,12 @@
                             <div class="col-span-9">
                                 @foreach ($buy_accounting['accountings'][$buy_accounting["gol_kadars"][$i]] as $accounting)
                                     <div>{{ $accounting['nama_barang'] }}</div>
-                                    <div>{{ casual_decimal_format($accounting['berat']) }}g --> Rp {{ my_decimal_format($accounting['jumlah']) }}</div>
+                                    <div class="flex justify-between">
+                                        <div>{{ casual_decimal_format($accounting['berat']) }}g --> Rp {{ my_decimal_format($accounting['jumlah']) }}</div>
+                                        @if (!$target_user)
+                                        <div class="text-indigo-300 font-bold">{{ $accounting['username'] }}</div>
+                                        @endif
+                                    </div>
                                 @endforeach
                             </div>
                         </div>

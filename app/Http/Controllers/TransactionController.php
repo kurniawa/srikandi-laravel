@@ -48,6 +48,7 @@ class TransactionController extends Controller
         }
 
         $get = $request->query();
+        // if(count($get)) {dd($get);}
         // dump($get);
         // dd($user);
 
@@ -65,7 +66,7 @@ class TransactionController extends Controller
         $to_month = $from_month;
         $to_year = $from_year;
 
-        if (isset($get['target_user_id']) && $get['target_user_id']) {
+        if (count($get)) {
             $target_user = User::find($get['target_user_id']);
         }
 
@@ -124,7 +125,12 @@ class TransactionController extends Controller
 
             // dump($from_str);
             // dd($to_str);
-            $bb_accountings_this = Accounting::whereBetween("created_at", [$from_str, $to_str])->where('user_id', $target_user->id)->where('kategori', 'Buyback Perhiasan')->orderBy("kadar")->get();
+            if (!$target_user) {
+                $bb_accountings_this = Accounting::whereBetween("created_at", [$from_str, $to_str])->where('kategori', 'Buyback Perhiasan')->orderBy("kadar")->get();
+            } else {
+                $bb_accountings_this = Accounting::whereBetween("created_at", [$from_str, $to_str])->where('user_id', $target_user->id)->where('kategori', 'Buyback Perhiasan')->orderBy("kadar")->get();
+            }
+
             $bb_accountings_this_groupByKadar = $bb_accountings_this->groupBy('kadar');
             // dump($bb_accountings_this->groupBy("kadar"));
             // dump($bb_accountings_this->groupBy("kadar")->keys());
@@ -158,7 +164,11 @@ class TransactionController extends Controller
             }
             // dump($bb_accountings_this);
             
-            $buy_accountings_this = Accounting::whereBetween("created_at", [$from_str, $to_str])->where('user_id', $target_user->id)->where('kategori_2', 'Penjualan Perhiasan')->orderBy("kadar")->get();
+            if (!$target_user) {
+                $buy_accountings_this = Accounting::whereBetween("created_at", [$from_str, $to_str])->where('kategori_2', 'Penjualan Perhiasan')->orderBy("kadar")->get();
+            } else {
+                $buy_accountings_this = Accounting::whereBetween("created_at", [$from_str, $to_str])->where('user_id', $target_user->id)->where('kategori_2', 'Penjualan Perhiasan')->orderBy("kadar")->get();
+            }
             $buy_accountings_this_groupByKadar = $buy_accountings_this->groupBy('kadar');
             // dump($buy_accountings_this->groupBy("kadar"));
             // dump($buy_accountings_this->groupBy("kadar")->keys());
@@ -198,7 +208,17 @@ class TransactionController extends Controller
         // dump(strtotime($from));
         // dd(strtotime($until));
 
-        $user_lists = User::where('clearance_level', '>=', 3)->get();
+        $user_lists = User::select('id','nama', 'username')->where('clearance_level', '>=', 3)->get();
+
+        // Menambahkan entry ke awal collection sebagai object
+        $user_lists = $user_lists->prepend((object) [
+            'id' => null,
+            'nama' => 'all',
+            'username' => 'all',
+        ]);
+
+        // dd($user_lists);
+
         $data = [
             'menus' => Menu::get(),
             'profile_menus' => Menu::get_profile_menus($user),

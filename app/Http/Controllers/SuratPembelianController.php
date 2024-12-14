@@ -613,6 +613,7 @@ class SuratPembelianController extends Controller
                     'kadar' => $surat_pembelian_item->kadar,
                     'berat' => $surat_pembelian_item->berat,
                     'user_id' => $user->id,
+                    'username' => $user->username,
                     'tipe' => 'pengeluaran',
                     'kategori' => 'Buyback Perhiasan',
                     'kategori_2' => null,
