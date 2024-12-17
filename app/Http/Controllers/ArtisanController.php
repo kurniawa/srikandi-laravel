@@ -177,11 +177,17 @@ class ArtisanController extends Controller
         $caps = DB::table('caps')->get();
         foreach ($caps as $cap) {
             if (str_contains($cap->nama, "gambar")) {
+                // dd($cap);
                 $exploded_nama = explode(" ", $cap->nama);
                 $exploded_nama[0] = "g-";
                 $new_nama = implode("", $exploded_nama);
 
-                $exploded_codename = explode("gbr.", $cap->codename);
+                if (str_contains($cap->codename, "gbr")) {
+                    $exploded_codename = explode("gbr.", $cap->codename);
+                } elseif (str_contains($cap->codename, "gambar")) {
+                    $exploded_codename = explode("gambar ", $cap->codename);
+                }
+
                 $exploded_codename[1] = "g-" . $exploded_codename[1];
                 $new_codename = implode("", $exploded_codename);
 
