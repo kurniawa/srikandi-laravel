@@ -558,6 +558,15 @@ class ItemController extends Controller
             }
         }
 
+        // Jika jenis_perhiasan sebelumnya tidak sama dengan jenis_perhiasan yang baru, cek jenis_perhiasan lama,
+        // apabila tidak ada item lain dengan jenis_perhiasan tersebut, maka hapus jenis_perhiasan
+        if ($item->jenis_perhiasan !== $jenis_perhiasan) {
+            $is_exist_item_same_jenis_perhiasan = Item::where('tipe_perhiasan', $item->tipe_perhiasan)->where('jenis_perhiasan', $item->jenis_perhiasan)->where('id', '!=', $item->id)->get();
+            if (!count($is_exist_item_same_jenis_perhiasan)) {
+                JenisPerhiasan::where('tipe_perhiasan', $item->tipe_perhiasan)->where('nama', $item->jenis_perhiasan)->delete();
+            }
+        }
+
         $item->update([
             'tipe_barang' => $post['tipe_barang'],
             'tipe_perhiasan' => $tipe_perhiasan,

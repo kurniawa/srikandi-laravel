@@ -12,7 +12,12 @@
 
     <form action="{{ route('cashflow.store_transaction') }}" method="POST" class="mt-5 border rounded p-2 text-slate-500">
         @csrf
-        <div>
+        <label for="date" class="font-bold">Tanggal</label>
+        <x-select-date></x-select-date>
+        <div class="mt-3">
+            <label for="transacation-type" class="font-bold">Tipe Transaksi</label>
+        </div>
+        <div class="mt-1">
             <input type="text" name="tipe_transaksi" id="tipe_transaksi" value="{{ $tipe }}" readonly class="bg-slate-100 rounded-lg">
         </div>
         <div class="mt-3">

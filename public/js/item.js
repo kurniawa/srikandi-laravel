@@ -208,8 +208,8 @@ function generateNama() {
     }
     // END - METODE PENAMAAN MAINAN
 
-    let shortname = `${tipe_perhiasan} ${jenis_perhiasan}${deskripsi}${warna_emas} ${kadar}% ${berat}gr`;
-    let longname = `${tipe_perhiasan} ${jenis_perhiasan}${deskripsi}${warna_emas} ${kadar}% ${berat}gr${cap}${ukuran}${range_usia}${merk}${plat}${kondisi}${codename_mata}${codename_mainan}`;
+    let shortname = `${tipe_perhiasan} ${jenis_perhiasan}${deskripsi}${warna_emas} ${kadar}% ${berat}gr${codename_mata}${codename_mainan}${plat}`;
+    let longname = `${tipe_perhiasan} ${jenis_perhiasan}${deskripsi}${warna_emas} ${kadar}% ${berat}gr${codename_mata}${codename_mainan}${plat}${cap}${ukuran}${range_usia}${merk}${kondisi}`;
     // longname = longname.split("  ").join(" ");
     document.getElementById("shortname").value = shortname;
     document.getElementById("longname").value = longname;
