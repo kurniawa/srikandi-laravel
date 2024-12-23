@@ -201,7 +201,7 @@ class CashflowController extends Controller
     function store_transaction(Request $request)
     {
         $post = $request->post();
-        dd($post);
+        // dd($post);
         Cashflow::validasi_metode_pembayaran($request);
         
         $request->validate([
@@ -223,7 +223,7 @@ class CashflowController extends Controller
         $user = Auth::user();
         $time_key = time();
         $kode_accounting = "$user->id.$time_key";
-        // SEBAGIAN DATA DIPERSIAPKAN UNTUK INPUT KE DB
+        // SEBAGIAN DATA DIPERSIAPKAN MENJADI NULL 
         $surat_pembelian = null;
         $surat_pembelian_id = null;
         $surat_pembelian_item = null;
@@ -231,7 +231,7 @@ class CashflowController extends Controller
         $kadar = null;
         $berat = null;
         $nama_barang = null;
-        // END - SEBAGIAN DATA DIPERSIAPKAN UNTUK INPUT KE DB
+        // END - SEBAGIAN DATA DIPERSIAPKAN MENJADI NULL
 
         $keterangan_transaksi = null;
         if (isset($post['keterangan_transaksi'])) {
