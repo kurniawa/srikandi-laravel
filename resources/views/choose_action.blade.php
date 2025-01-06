@@ -11,8 +11,11 @@
     </div>
 
     <div class="mt-5 border rounded p-2">
-        <div class="mt-3">
+        {{-- <div class="mt-3">
             <a href="{{ route('add_new_item.pilih_tipe_barang', 'items') }}" class="loading-spinner bg-indigo-300 text-white p-2 rounded">Tambah Item Baru</a>
+        </div> --}}
+        <div class="mt-3">
+            <a href="{{ route('transactions.manual_buyback_transaction') }}" class="loading-spinner bg-indigo-300 text-white p-2 rounded">Buyback/Jual Kembali</a>
         </div>
         <div class="mt-6">
             <a href="{{ route('cashflow.transaksi', 'pemasukan') }}" class="loading-spinner bg-emerald-300 text-white p-2 rounded">Pemasukan</a>

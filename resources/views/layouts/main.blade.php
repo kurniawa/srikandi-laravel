@@ -71,7 +71,7 @@
 
                     <div class="flex gap-2 items-center">
                         @auth
-                            <a href="{{ route('choose_action') }}" class="loading-spinner size-7 rounded-full bg-amber-500 flex justify-center items-center font-bold text-white text-2xl">+</a>
+                            <a href="{{ route('choose_action') }}" class="loading-spinner size-7 rounded-full bg-amber-500 flex justify-center items-center font-bold text-white text-xl">T</a>
                         @endauth
                         {{-- <button type="button"
                             class="rounded-full bg-rose-200 p-1 text-gray-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">

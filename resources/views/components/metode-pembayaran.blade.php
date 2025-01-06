@@ -6,7 +6,10 @@
         <label for="checkbox-tunai" class="ml-2">Tunai</label>
     </div>
     <input type="text" inputmode="numeric" id="jumlah_tunai" class="input ml-5 hidden" onchange="formatNumber(this, 'jumlah-tunai'); hitungTotalBayar()">
-    <input type="hidden" name="jumlah_tunai" id="jumlah-tunai" class="jumlah-bayar">
+    <input type="hidden" name="kategori_wallet[]" value="tunai" readonly>
+    <input type="hidden" name="tipe_wallet[]" value="laci" readonly>
+    <input type="hidden" name="nama_wallet[]" value="cash" readonly>
+    <input type="hidden" name="jumlah_pembayaran[]" id="jumlah-tunai" class="jumlah-bayar">
     <div class="flex items-center mt-2">
         <input type="checkbox" id="checkbox-non-tunai" name="non_tunai" value="yes" onclick="toggleNonTunai(this)">
         <label for="checkbox-non-tunai" class="ml-2">Non-Tunai</label>
@@ -27,12 +30,12 @@
             <div id="dd-daftar-ewallet" class="border absolute top-12 bg-white w-full z-20 hidden">
                 @foreach ($walletsnontunai as $wallet)
                     <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100"
-                        onclick="tambahPembayaran('{{ $wallet->tipe_wallet }}', '{{ $wallet->nama_wallet }}')"
+                        onclick="tambahPembayaran('{{ $wallet->kategori_wallet }}', '{{ $wallet->tipe_wallet }}', '{{ $wallet->nama_wallet }}')"
                         id="{{ $wallet->nama_wallet }}"><img
                             src="{{ asset("img/logo-$wallet->tipe_wallet-$wallet->nama_wallet.png") }}" class="h-full"></div>
                 @endforeach
                 
-                <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('lain-lain','lain-lain')"><span class="font-bold text-base ml-2">Lain - lain</span></div>
+                <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('lain-lain', 'lain-lain','lain-lain')"><span class="font-bold text-base ml-2">Lain - lain</span></div>
             </div>
         </div>
     </div>

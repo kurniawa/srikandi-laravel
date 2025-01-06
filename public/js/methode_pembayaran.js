@@ -9,27 +9,29 @@ function hideEWallet() {
 var div_input_non_tunai = document.getElementById(
     "daftar-input-pembayaran-non-tunai"
 );
-function tambahPembayaran(tipe, nama_instansi) {
+function tambahPembayaran(kategori, tipe, nama_wallet) {
     var html_input = "";
     if (tipe === "lain-lain") {
         html_input += `
         <div class="ml-5 flex mt-1">
-            <input type="text" name="nama_instansi[]" placeholder="nama..." class="input w-1/4">
-            <input type="text" inputmode="numeric" class="input ml-1" onchange="formatNumber(this, 'jumlah-non-tunai-${nama_instansi}'); hitungTotalBayar()">
-            <input type="hidden" name="jumlah_non_tunai[]" id="jumlah-non-tunai-${nama_instansi}" class="jumlah-bayar">
-            <input type="hidden" name="tipe_instansi[]" value="${tipe}" readonly>
+            <input type="hidden" name="kategori_wallet[]" value="${kategori}" readonly>
+            <input type="hidden" name="tipe_wallet[]" value="${tipe}" readonly>
+            <input type="text" name="nama_wallet[]" placeholder="nama..." class="input w-1/4">
+            <input type="text" inputmode="numeric" class="input ml-1" onchange="formatNumber(this, 'jumlah-non-tunai-${nama_wallet}'); hitungTotalBayar()">
+            <input type="hidden" name="jumlah_pembayaran[]" id="jumlah-non-tunai-${nama_wallet}" class="jumlah-bayar">
         </div>
         `;
     } else {
         html_input += `
         <div class="ml-5 flex mt-1">
-            <input type="text" name="nama_instansi[]" value="${nama_instansi}" class="input bg-slate-100 w-1/4" readonly>
-            <input type="text" inputmode="numeric" class="input ml-1" onchange="formatNumber(this, 'jumlah-non-tunai-${nama_instansi}'); hitungTotalBayar()">
-            <input type="hidden" name="jumlah_non_tunai[]" id="jumlah-non-tunai-${nama_instansi}" class="jumlah-bayar">
-            <input type="hidden" name="tipe_instansi[]" value="${tipe}" readonly>
+            <input type="hidden" name="kategori_wallet[]" value="${kategori}" readonly>
+            <input type="hidden" name="tipe_wallet[]" value="${tipe}" readonly>
+            <input type="text" name="nama_wallet[]" value="${nama_wallet}" class="input bg-slate-100 w-1/4" readonly>
+            <input type="text" inputmode="numeric" class="input ml-1" onchange="formatNumber(this, 'jumlah-non-tunai-${nama_wallet}'); hitungTotalBayar()">
+            <input type="hidden" name="jumlah_pembayaran[]" id="jumlah-non-tunai-${nama_wallet}" class="jumlah-bayar">
         </div>
         `;
-        document.getElementById(nama_instansi).remove();
+        document.getElementById(nama_wallet).remove();
     }
     div_input_non_tunai.insertAdjacentHTML("beforeend", html_input);
     hideEWallet();

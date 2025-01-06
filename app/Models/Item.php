@@ -248,40 +248,38 @@ class Item extends Model
     //     }
     // }
 
-    static function check_item_exist($candidate_new_item, $post) {
+    static function check_item_exist($item_data, $post) {
         $item_exists = Item::where('longname', 'like', "%$post[longname]%")->get()->toArray();
+        $found_item = Item::where('longname', $post["longname"])->first();
+        $is_exist = false;
         // dump($item_exists);
-        $data = null;
+        $similar_items = null;
+        $checkbox_mata = null;
+        $checkbox_mainan = null;
+        $warna_mata = null;
+        $tipe_mainan = null;
         if (count($item_exists)) {
+            $is_exist = true;
+            $similar_items = $item_exists;
             // DATA MATA
-            $checkbox_mata = null;
             $warna_mata = [];
             if (isset($post['checkbox_mata'])) {
                 if ($post['checkbox_mata'] == 'on') {
                     $warna_mata = $post['warna_mata'];
+                    $checkbox_mata = 'yes';
                 }
             }
             // END - DATA MATA
 
             // DATA MAINAN
-            $checkbox_mainan = null;
             $tipe_mainan = [];
             if (isset($post['checkbox_mainan'])) {
                 if ($post['checkbox_mainan'] == 'on') {
                     $tipe_mainan = $post['tipe_mainan'];
+                    $checkbox_mainan = 'yes';
                 }
             }
             // END - DATA MAINAN
-
-            $buyback_mode = null;
-            $tipe_transaksi = "pemasukan";
-            $kategori = null;
-            if (isset($post['kategori'])) {
-                if ($post['kategori'] == 'Buyback Perhiasan') {
-                    $buyback_mode = 'yes';
-                    $tipe_transaksi = 'pengeluaran';
-                }
-            }
 
             // get ItemPhotos secara manual, karena $item_exist bukan collection
             for ($i=0; $i < count($item_exists); $i++) { 
@@ -298,7 +296,7 @@ class Item extends Model
             // dd($item_exists);
 
             // UPDATE longname
-            $arr_longname = explode(" ", $candidate_new_item['longname']);
+            $arr_longname = explode(" ", $item_data['longname']);
             $is_version_exist = false;
             for ($i=0; $i < count($arr_longname); $i++) { 
                 if (str_contains($arr_longname[$i], "v.")) {
@@ -311,27 +309,25 @@ class Item extends Model
             }
             if ($is_version_exist) {
                 $new_longname = implode(" ", $arr_longname);
-                $candidate_new_item['longname'] = $new_longname;
+                $item_data['longname'] = $new_longname;
             } else {
-                $candidate_new_item['longname'] .= " v.2";
+                $item_data['longname'] .= " v.2";
             }
             // END - UPDATE longname
-            $data = [
-                'similar_items' => $item_exists,
-                'candidate_new_item' => $candidate_new_item,
-                'checkbox_mata' => $checkbox_mata,
-                'warna_mata' => $warna_mata,
-                'checkbox_mainan' => $checkbox_mainan,
-                'tipe_mainan' => $tipe_mainan,
-                'kategori' => $kategori,
-                'buyback_mode' => $buyback_mode,
-                'tipe_transaksi' => $tipe_transaksi,
-            ];
-            
-            // return view('items.buyback_found_similar_items', $data);
         }
 
-        return array($item_exists, $data);
+        $params_to_return = [
+            'is_exist' => $is_exist,
+            'found_item' => $found_item,
+            'similar_items' => $similar_items,
+            'checkbox_mata' => $checkbox_mata,
+            'warna_mata' => $warna_mata,
+            'checkbox_mainan' => $checkbox_mainan,
+            'tipe_mainan' => $tipe_mainan,
+            'item_data' => $item_data, // item data yang telah diperbaharui, apabila tetap ingin create item baru nantinya
+            // contohnya, longname tidak boleh sama, jadi longname di edit menjadi ada v.2 nya di belakangnya(misal).
+        ];
+        return $params_to_return;
     }
 
     static function store_itemMata_dan_itemMainan($post, $item_new) {

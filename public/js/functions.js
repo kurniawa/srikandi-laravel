@@ -122,7 +122,9 @@ function set_time_range(timerange) {
         to_day = new Date(to_year, to_month, 0).getDate();
         if (from_month === 0) {
             from_month = 12;
+            to_month = 12;
             from_year--;
+            to_year--;
         }
         // console.log(from_month, to_month);
     } else if (timerange === "tahun_ini") {
@@ -531,6 +533,47 @@ const formatNumberDecID = (num) => {
         num = num.split(".");
         num[0] = parseFloat(num[0]).toLocaleString("id-ID", {style: "decimal",});
         num = `${num[0]},${num[1]}`
+    } else {
+        num = parseFloat(num).toLocaleString("id-ID", {style: "decimal",});
+    }
+
+    return num;
+}
+
+function formatCurrencyIDw100(num) {
+    // console.log(num);
+    num = num.toString();
+    if (num.includes(".")) {
+        num = num.split(".");
+        num[0] = parseFloat(num[0]).toLocaleString("id-ID", {style: "decimal",});
+
+        if (num[1] == '00') {
+            num = `${num[0]},-`;
+        } else if(num[1].length === 1) {
+            num = `${num[0]},${num[1]}0`;
+        } else {
+            num = `${num[0]},${num[1]}`;
+        }
+
+    } else {
+        num = parseFloat(num).toLocaleString("id-ID", {style: "decimal",});
+        num = `${num},-`;
+    }
+
+    return num;
+}
+
+const formatNumberDecIDw100 = (num) => {
+    num = num.toString();
+    if (num.includes(".")) {
+        num = num.split(".");
+        num[0] = parseFloat(num[0]).toLocaleString("id-ID", {style: "decimal",});
+
+        if (num[1] == '00') {
+            num = `${num[0]}`;
+        } else {
+            num = `${num[0]},${num[1]}`;
+        }
     } else {
         num = parseFloat(num).toLocaleString("id-ID", {style: "decimal",});
     }

@@ -12,22 +12,28 @@ class SuratPembelianItem extends Model
     use HasFactory;
     protected $guarded = ['id'];
 
-    static function create_surat_pembelian_item($user, $surat_pembelian, $cart_item_id, $kode_accounting)
+    static function create_spi_for_buy($params)
     {
+        $user_id = $params['user_id'];
+        $username = $params['username'];
+        $surat_pembelian_id = $params['surat_pembelian_id'];
+        $cart_item_id = $params['cart_item_id'];
+        $kode_accounting = $params['kode_accounting'];
+        $accounting_date = $params['accounting_date'];
         // dd($cart_item_id);
         $cart_item = CartItem::find($cart_item_id);
         // dd($cart_item);
-        $kondisi_buyback = null;
-        $berat_susut = null;
-        $berat_buyback = null;
-        $potongan_susut = null;
-        $potongan_ongkos = null;
-        $potongan_tambahan = null;
-        $persentase_potongan_tambahan = null;
-        $total_potongan = null;
-        $harga_buyback = null;
-        $status_buyback = null;
-        $keterangan_lain = null;
+        // $kondisi_buyback = null;
+        // $berat_susut = null;
+        // $berat_buyback = null;
+        // $potongan_susut = null;
+        // $potongan_ongkos = null;
+        // $potongan_tambahan = null;
+        // $persentase_potongan_tambahan = null;
+        // $total_potongan = null;
+        // $harga_buyback = null;
+        // $status_buyback = null;
+        // $keterangan_lain = null;
         // if ($cart_item->item->tipe_barang === 'perhiasan') {
         //     $kondisi_bb = 'sama';
         //     $berat_susut = 'tidak';
@@ -52,11 +58,11 @@ class SuratPembelianItem extends Model
             if (Storage::exists($cart_item->photo_path)) {
                 $exploded_path = explode(".", $cart_item->photo_path);
                 $file_extension = $exploded_path[count($exploded_path) - 1];
-                $filename = "$user->id-$time.$file_extension";
+                $filename = "$user_id-$time.$file_extension";
                 $photo_path = "surat_pembelian_items/photos/$filename";
                 while (Storage::exists($photo_path)) {
                     $time++;
-                    $filename = "$user->id-$time.$file_extension";
+                    $filename = "$user_id-$time.$file_extension";
                     $photo_path = "surat_pembelian_items/photos/$filename";
                 }
                 Storage::move($cart_item->photo_path, $photo_path);
@@ -85,7 +91,7 @@ class SuratPembelianItem extends Model
          * END - ITEM PHOTO
          */
         $surat_pembelian_item = SuratPembelianItem::create([
-            'surat_pembelian_id' => $surat_pembelian->id,
+            'surat_pembelian_id' => $surat_pembelian_id,
             'item_id' => $cart_item->item->id,
             'tipe_barang' => $cart_item->item->tipe_barang,
             'tipe_perhiasan' => $cart_item->item->tipe_perhiasan,
@@ -113,17 +119,17 @@ class SuratPembelianItem extends Model
             'photo_path' => $photo_path,
             'jumlah' => $cart_item->jumlah,
             // Data penjualan udah diisi juga sebagian, selama item memang bisa BB
-            'status_buyback' => $status_buyback,
-            'kondisi_buyback' => $kondisi_buyback,
-            'berat_susut' => $berat_susut,
-            'berat_buyback' => $berat_buyback,
-            'potongan_susut' => $potongan_susut,
-            'potongan_ongkos' => $potongan_ongkos,
-            'potongan_tambahan' => $potongan_tambahan,
-            'persentase_potongan_tambahan' => $persentase_potongan_tambahan,
-            'total_potongan' => $total_potongan,
-            'harga_buyback' => $harga_buyback,
-            'keterangan_lain' => $keterangan_lain,
+            // 'status_buyback' => $status_buyback,
+            // 'kondisi_buyback' => $kondisi_buyback,
+            // 'berat_susut' => $berat_susut,
+            // 'berat_buyback' => $berat_buyback,
+            // 'potongan_susut' => $potongan_susut,
+            // 'potongan_ongkos' => $potongan_ongkos,
+            // 'potongan_tambahan' => $potongan_tambahan,
+            // 'persentase_potongan_tambahan' => $persentase_potongan_tambahan,
+            // 'total_potongan' => $total_potongan,
+            // 'harga_buyback' => $harga_buyback,
+            // 'keterangan_lain' => $keterangan_lain,
         ]);
 
         // ACCOUNTING
@@ -133,18 +139,19 @@ class SuratPembelianItem extends Model
         }
         Accounting::create([
             'kode_accounting' => $kode_accounting,
-            'surat_pembelian_id' => $surat_pembelian->id,
+            'surat_pembelian_id' => $surat_pembelian_id,
             'surat_pembelian_item_id' => $surat_pembelian_item->id,
             'nama_barang' => $surat_pembelian_item->longname,
             'kadar' => $surat_pembelian_item->kadar,
             'berat' => $surat_pembelian_item->berat,
-            'user_id' => $user->id,
-            'username' => $user->username,
+            'user_id' => $user_id,
+            'username' => $username,
             'tipe' => 'pemasukan',
             'kategori' => 'Penjualan Produk',
             'kategori_2' => $kategori_2,
             'deskripsi' => null,
             'jumlah' => $surat_pembelian_item->harga_t,
+            'accounting_date' => $accounting_date,
         ]);
         // END - ACCOUNTING
 
@@ -231,16 +238,105 @@ class SuratPembelianItem extends Model
         return $photo_path;
     }
 
-    static function buyback_create_spi($surat_pembelian, $item, $time_key) {
-        $data_buyback = self::buyback_penetapan_data_bb();
-        $photo_path = self::buyback_photo_path($item, $time_key);
-        $keterangan_lain = null;
-        $jumlah = 1;
-        if (isset($item->jumlah)) {
-            $jumlah = $item->jumlah;
-        }
+    // static function buyback_create_spi($data) {
+    //     $surat_pembelian = $data['surat_pembelian'];
+    //     $item = $data['item'];
+    //     $time_key = $data['time_key'];
+
+    //     $data_buyback = self::buyback_penetapan_data_bb();
+    //     $photo_path = self::buyback_photo_path($item, $time_key);
+    //     $keterangan_lain = null;
+    //     $jumlah = 1;
+    //     if (isset($item->jumlah)) {
+    //         $jumlah = $item->jumlah;
+    //     }
+    //     $surat_pembelian_item = SuratPembelianItem::create([
+    //         'surat_pembelian_id' => $surat_pembelian->id,
+    //         'item_id' => $item->id,
+    //         'tipe_barang' => $item->tipe_barang,
+    //         'tipe_perhiasan' => $item->tipe_perhiasan,
+    //         'jenis_perhiasan' => $item->jenis_perhiasan,
+    //         'warna_emas' => $item->warna_emas,
+    //         'kadar' => $item->kadar,
+    //         'berat' => $item->berat,
+    //         'ongkos_g' => $item->ongkos_g,
+    //         'harga_g' => $item->harga_g,
+    //         'harga_t' => $item->harga_t,
+    //         'shortname' => $item->shortname,
+    //         'longname' => $item->longname,
+    //         'kondisi' => $item->kondisi,
+    //         'cap' => $item->cap,
+    //         'range_usia' => $item->range_usia,
+    //         'ukuran' => $item->ukuran,
+    //         'merk' => $item->merk,
+    //         'plat' => $item->plat,
+    //         'edisi' => $item->edisi,
+    //         'nampan' => $item->nampan,
+    //         'kode_item' => $item->kode_item,
+    //         'barcode' => $item->barcode,
+    //         'deskripsi' => $item->deskripsi,
+    //         'keterangan' => $item->keterangan,
+    //         'photo_path' => $photo_path,
+    //         'jumlah' => $jumlah,
+    //         // Data penjualan udah diisi juga sebagian, selama item memang bisa BB
+    //         'status_buyback' => $data_buyback["status_buyback"],
+    //         'kondisi_buyback' => $data_buyback["kondisi_buyback"],
+    //         'berat_susut' => $data_buyback["berat_susut"],
+    //         'berat_buyback' => $data_buyback["berat_buyback"],
+    //         'potongan_susut' => $data_buyback["potongan_susut"],
+    //         'potongan_ongkos' => $data_buyback["potongan_ongkos"],
+    //         'potongan_tambahan' => $data_buyback["potongan_tambahan"],
+    //         'persentase_potongan_tambahan' => $data_buyback["persentase_potongan_tambahan"],
+    //         'total_potongan' => $data_buyback["total_potongan"],
+    //         'harga_buyback' => $data_buyback["harga_buyback"],
+    //         'keterangan_lain' => $keterangan_lain,
+    //         'tanggal_buyback' => date("Y-m-d H:i:s", $time_key),
+    //     ]);
+
+    //     $stock = (int)$item->stock - 1;
+
+    //     if ($stock < 0) {
+    //         $stock = 0;
+    //     }
+
+    //     $item->stock = $stock;
+    //     $item->save();
+
+    //     Accounting::create([
+    //         'kode_accounting' => $data['kode_accounting'],
+    //         'surat_pembelian_id' => $surat_pembelian->id,
+    //         'surat_pembelian_item_id' => $surat_pembelian_item->id,
+    //         'nama_barang' => $surat_pembelian_item->longname,
+    //         'kadar' => $surat_pembelian_item->kadar,
+    //         'berat' => $surat_pembelian_item->berat,
+    //         'user_id' => $user->id,
+    //         'username' => $user->username,
+    //         'tipe' => 'pemasukan',
+    //         'kategori' => 'Penjualan Produk',
+    //         'kategori_2' => $kategori_2,
+    //         'deskripsi' => null,
+    //         'jumlah' => $surat_pembelian_item->harga_t,
+    //     ]);
+
+        
+
+    //     return $surat_pembelian_item;
+    // }
+
+    static function create_spi_for_manual_buyback($params) {
+        $item = $params['item'];
+        $surat_pembelian_id = $params['surat_pembelian_id'];
+        $photo_path = $params['photo_path'];
+        $jumlah = $params['jumlah'];
+        $accounting_date = $params['accounting_date'];
+        $keterangan = $params['keterangan'];
+        $kode_accounting = $params['kode_accounting'];
+        $user_id = $params['user_id'];
+        $username = $params['username'];
+        $harga_terima = $params['harga_terima'];
+
         $surat_pembelian_item = SuratPembelianItem::create([
-            'surat_pembelian_id' => $surat_pembelian->id,
+            'surat_pembelian_id' => $surat_pembelian_id,
             'item_id' => $item->id,
             'tipe_barang' => $item->tipe_barang,
             'tipe_perhiasan' => $item->tipe_perhiasan,
@@ -268,28 +364,39 @@ class SuratPembelianItem extends Model
             'photo_path' => $photo_path,
             'jumlah' => $jumlah,
             // Data penjualan udah diisi juga sebagian, selama item memang bisa BB
-            'status_buyback' => $data_buyback["status_buyback"],
-            'kondisi_buyback' => $data_buyback["kondisi_buyback"],
-            'berat_susut' => $data_buyback["berat_susut"],
-            'berat_buyback' => $data_buyback["berat_buyback"],
-            'potongan_susut' => $data_buyback["potongan_susut"],
-            'potongan_ongkos' => $data_buyback["potongan_ongkos"],
-            'potongan_tambahan' => $data_buyback["potongan_tambahan"],
-            'persentase_potongan_tambahan' => $data_buyback["persentase_potongan_tambahan"],
-            'total_potongan' => $data_buyback["total_potongan"],
-            'harga_buyback' => $data_buyback["harga_buyback"],
-            'keterangan_lain' => $keterangan_lain,
-            'tanggal_buyback' => date("Y-m-d H:i:s", $time_key),
+            // 'status_buyback' => $data_buyback["status_buyback"],
+            // 'kondisi_buyback' => $data_buyback["kondisi_buyback"],
+            // 'berat_susut' => $data_buyback["berat_susut"],
+            // 'berat_buyback' => $data_buyback["berat_buyback"],
+            // 'potongan_susut' => $data_buyback["potongan_susut"],
+            // 'potongan_ongkos' => $data_buyback["potongan_ongkos"],
+            // 'potongan_tambahan' => $data_buyback["potongan_tambahan"],
+            // 'persentase_potongan_tambahan' => $data_buyback["persentase_potongan_tambahan"],
+            // 'total_potongan' => $data_buyback["total_potongan"],
+            // 'harga_buyback' => $data_buyback["harga_buyback"],
+            'keterangan_lain' => $keterangan,
+            'tanggal_buyback' => $accounting_date,
         ]);
 
-        $stock = (int)$item->stock - 1;
-
-        if ($stock < 0) {
-            $stock = 0;
-        }
-
-        $item->stock = $stock;
-        $item->save();
+        /**
+         * Pada proses manual buyback, langsung bikin accounting saja, tidak masalah.
+         */
+        $accounting = Accounting::create([
+            'kode_accounting' => $kode_accounting,
+            'surat_pembelian_id' => $surat_pembelian_id,
+            'surat_pembelian_item_id' => $surat_pembelian_item->id,
+            'nama_barang' => $item->longname,
+            'kadar' => $item->kadar,
+            'berat' => $item->berat,
+            'user_id' => $user_id,
+            'username' => $username,
+            'tipe' => 'pengeluaran',
+            'kategori' => 'Buyback Perhiasan',
+            'kategori_2' => null,
+            'deskripsi' => $keterangan,
+            'jumlah' => $harga_terima,
+            'accounting_date' => $accounting_date,
+        ]);
 
         return $surat_pembelian_item;
     }

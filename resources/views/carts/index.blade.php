@@ -62,12 +62,12 @@
                             <a href="{{ route('items.show', [$cart_item->item->id, 'carts.index']) }}"
                                 class="font-bold text-indigo-500">{{ $cart_item->item->shortname }}</a>
                             <div class="font-bold text-slate-600 text-xs">Rp
-                                {{ number_format((string) ((float) $cart_item->item->harga_g / 100), 2, ',', '.') }} / g
+                                {{ FormatCurrencyID($cart_item->item->harga_g) }} / g
                             </div>
                             <div class="font-bold text-slate-500">Rp
-                                {{ number_format((string) ((float) $cart_item->item->harga_t / 100), 2, ',', '.') }}</div>
+                                {{ FormatCurrencyID($cart_item->item->harga_t) }}</div>
                             <input type="hidden" name="harga_t[]"
-                                value="{{ (string) ((float) $cart_item->item->harga_t / 100) }}" class="binder_harga_t">
+                                value="{{ $cart_item->item->harga_t }}" class="binder_harga_t">
                         </div>
 
                         <div class="col-span-12 mt-2">
@@ -111,10 +111,10 @@
                 @endforeach
                 <div class="flex justify-end mt-2">
                     <div class="text-xl font-bold text-red-600">Rp <span
-                            id="harga_total_formatted">{{ number_format((string) ((float) $cart->harga_total / 100), 2, ',', '.') }}</span>
+                            id="harga_total_formatted">{{ FormatCurrencyID($cart->harga_total) }}</span>
                     </div>
                     <input type="hidden" name="harga_total" id="harga_total_real"
-                        value="{{ (string) ((float) $cart->harga_total / 100) }}">
+                        value="{{ $cart->harga_total }}">
                 </div>
                 <div class="flex justify-center mt-9">
                     <button type="submit" class="loading-spinner rounded-lg px-3 py-2 bg-emerald-300 text-white border-2 border-emerald-400 font-bold">

@@ -9,6 +9,7 @@ use App\Models\Cashflow;
 use App\Models\Item;
 use App\Models\Menu;
 use App\Models\SuratPembelian;
+use App\Models\SuratPembelianItem;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -80,7 +81,7 @@ class CashflowController extends Controller
             $from = "$to_year_copy-$month_2_digit-$day_2_digit";
             $until = "$to_year_copy-$month_2_digit-$day_2_digit 23:59:59";
             
-            $cashflows = Cashflow::whereBetween('created_at', [$from, $until])->orderByDesc("created_at")->get();
+            $cashflows = Cashflow::whereBetween('cashflow_date', [$from, $until])->orderByDesc("cashflow_date")->get();
             // dump($from, $until);
 
             $col_cashflows->push([
@@ -90,7 +91,7 @@ class CashflowController extends Controller
                 "cashflows" => $cashflows,
             ]);
             // Accounting
-            $accountings = Accounting::whereBetween('created_at', [$from, $until])->orderByDesc("created_at")->get();
+            $accountings = Accounting::whereBetween('accounting_date', [$from, $until])->orderByDesc("accounting_date")->get();
             // if (count($accountings)) {
             //     dump($accountings);
             // }
@@ -197,11 +198,10 @@ class CashflowController extends Controller
         return view('cashflows.transaksi', $data);
     }
 
-
     function store_transaction(Request $request)
     {
         $post = $request->post();
-        // dd($post);
+        dump($post);
         Cashflow::validasi_metode_pembayaran($request);
         
         $request->validate([
@@ -209,28 +209,36 @@ class CashflowController extends Controller
             'kategori' => 'required',
             'total_bayar' => 'required|numeric',
             'sisa_bayar' => 'required|numeric',
+            "total_tagihan" => "required|numeric"
         ]);
-
-        if (isset($post['kategori']) && $post["kategori"] == "Buyback Perhiasan") {
-            $request->validate([
-                "harga_g" => "required|numeric",
-                'harga_terima' => 'required|numeric'
-            ]);
-        } else {
-            $request->validate(["total_tagihan" => "required|numeric"]);
-        }
         
         $user = Auth::user();
-        $time_key = time();
+
+        /*
+        Apabila tanggal bukan merupakan tanggal teraktual, melainkan tanggal sebelumnya, maka is_earlier_date = true
+        Apabila $is_earlier_date === true, maka accounting_date dan cashflow_date tidak lagi sama dengan created_at
+        Dengan demikian harus dihitung ulang terutama bagian saldo terakhir dari cashflow sebelumnya
+        dan edit juga saldo_akhir dari cashflow-cashflow setelahnya.
+        */
+        
+        $res_date_time = Cashflow::set_date_time($post);
+
+        $timestamp_now = $res_date_time['timestamp_now'];
+        $time_key = $res_date_time['time_key'];
+        $accounting_date = $res_date_time['accounting_date'];
+        $cashflow_date = $res_date_time['cashflow_date'];
+        $is_earlier_date = $res_date_time['is_earlier_date'];
+
+        dump($accounting_date);
+        dd($accounting_date < $timestamp_now);
+
+        // END - PENENTUAN accounting_date dan cashflow_date
+        
         $kode_accounting = "$user->id.$time_key";
         // SEBAGIAN DATA DIPERSIAPKAN MENJADI NULL 
         $surat_pembelian = null;
         $surat_pembelian_id = null;
         $surat_pembelian_item = null;
-        $surat_pembelian_item_id = null;
-        $kadar = null;
-        $berat = null;
-        $nama_barang = null;
         // END - SEBAGIAN DATA DIPERSIAPKAN MENJADI NULL
 
         $keterangan_transaksi = null;
@@ -241,18 +249,13 @@ class CashflowController extends Controller
         $create_new_item = true;
         $item = collect();
         if ($post['kategori'] == "Buyback Perhiasan") {
-            $request->validate([
-                'berat_terima' => 'required|numeric',
-                'total_potongan' => 'required|numeric',
-                'harga_terima' => 'required|numeric',
-            ]);
             if (isset($post['item_id'])) {
                 $create_new_item = false;
                 $item = Item::find($post['item_id']);
                 if ($post['submit'] == 'pilih_dan_update_harga') {
-                    $item->harga_g = (string)((int)$post['harga_g'] * 100);
-                    $item->ongkos_g = (string)((int)$post['ongkos_g'] * 100);
-                    $item->harga_t = (string)((int)$post['harga_t'] * 100);
+                    $item->harga_g = $post['harga_g'];
+                    $item->ongkos_g = $post['ongkos_g'];
+                    $item->harga_t = $post['harga_t'];
                     $item->save();
                 }
             }
@@ -304,7 +307,15 @@ class CashflowController extends Controller
                 }
             }
             // PEMBUATAN SURAT PEMBELIAN
-            list($surat_pembelian, $surat_pembelian_item) = SuratPembelian::create_sp($request, $item, $time_key, $kode_accounting);
+            $data_create_sp = [
+                "tanggal_surat" => $accounting_date,
+                "item" => $item,
+                "time_key" => $time_key,
+                "kode_accounting" => $kode_accounting,
+                "post" => $post,
+                "user" => $user,
+            ];
+            list($surat_pembelian, $surat_pembelian_item) = SuratPembelian::create_sp($data_create_sp);
             $nama_barang = $surat_pembelian_item->longname;
             // END - PEMBUATAN SURAT PEMBELIAN
         }
@@ -314,16 +325,19 @@ class CashflowController extends Controller
             $surat_pembelian_id = $surat_pembelian->id;
         }
 
-        if ($surat_pembelian_item) {
-            $surat_pembelian_item_id = $surat_pembelian_item->id;
-            $kadar = $surat_pembelian_item->kadar;
-            $berat = $surat_pembelian_item->berat;
-        }
-
         // dump($surat_pembelian, $surat_pembelian_item);
         // dd($surat_pembelian_id, $surat_pembelian_item_id);
 
-        $total_bayar = Cashflow::create_cashflow($user->id, $time_key, $kode_accounting, $surat_pembelian_id, $post);
+        $data_create_cashflow = [
+            'user_id' => $user->id,
+            "time_key" => $time_key,
+            "kode_accounting" => $kode_accounting,
+            "surat_pembelian_id" => $surat_pembelian_id,
+            "post" => $post,
+            "cashflow_date" => $cashflow_date,
+            "is_earlier_date" => $is_earlier_date,
+        ];
+        $total_bayar = Cashflow::create_cashflow($data_create_cashflow);
 
         $kategori_2 = null;
         if (isset($post['kategori_2'])) {
@@ -332,23 +346,110 @@ class CashflowController extends Controller
             }
         }
 
-        $accounting = Accounting::create([
-            'kode_accounting' => $kode_accounting,
-            'surat_pembelian_id' => $surat_pembelian_id,
-            'surat_pembelian_item_id' => $surat_pembelian_item_id,
-            'nama_barang' => $nama_barang,
-            'kadar' => $kadar,
-            'berat' => $berat,
-            'user_id' => $user->id,
-            'username' => $user->username,
-            'tipe' => $post['tipe_transaksi'],
-            'kategori' => $post['kategori'],
-            'kategori_2' => $kategori_2,
-            'deskripsi' => $keterangan_transaksi,
-            'jumlah' => $total_bayar,
+        $success_ .= "Transaksi baru telah dibuat!";
+        $feedback = [
+            'success_' => $success_
+        ];
+        return redirect()->route('cashflow.index')->with($feedback);
+    }
+
+    function store_manual_buyback_transaction(Request $request) {
+        $post = $request->post();
+        // dd($post);
+        // Validasi metode pembayaran
+        Cashflow::validasi_metode_pembayaran($request);
+        
+        $request->validate([
+            'tipe_transaksi' => 'required',
+            'kategori' => 'required',
+            'total_bayar' => 'required|numeric',
+            'sisa_bayar' => 'required|numeric',
+            'harga_g' => 'required|numeric',
+            'harga_terima' => 'required|numeric',
+            'berat_terima' => 'required|numeric',
+            'total_potongan' => 'required|numeric',
+            'harga_terima' => 'required|numeric',
         ]);
 
-        // dd($accounting);
+        /**
+         * Validasi Item sekaligus return data_item yang nantinya siap untuk melakukan create, apabila item belum ada 
+        */
+        $item_data = Item::validasi_item($request);
+
+        $user = Auth::user();
+        $success_ = '';
+        /**
+         * Pengecekan apakah item telah exist sebelumnya, karena ini proses buyback, maka apabila item yang sama, akan
+         * di ignore saja. Dan apabila item tidak exist, akan di create item baru.
+         */
+        $res_check_item_exist = Item::check_item_exist($item_data, $post);
+        $item = $res_check_item_exist['found_item'];
+        if (!$res_check_item_exist['is_exist']) {
+            $item = Item::create($item_data);
+        }
+        // dump($item);
+        // dd($res_check_item_exist['is_exist']);
+
+        /*
+        Apabila tanggal bukan merupakan tanggal teraktual, melainkan tanggal sebelumnya, maka is_earlier_date = true
+        Apabila $is_earlier_date === true, maka accounting_date dan cashflow_date tidak lagi sama dengan created_at
+        Dengan demikian harus dihitung ulang terutama bagian saldo terakhir dari cashflow sebelumnya
+        dan edit juga saldo_akhir dari cashflow-cashflow setelahnya.
+        */
+        
+        $res_date_time = Cashflow::set_date_time($post);
+
+        $timestamp_now = $res_date_time['timestamp_now'];
+        $time_key = $res_date_time['time_key'];
+        $accounting_date = $res_date_time['accounting_date'];
+        $cashflow_date = $res_date_time['cashflow_date'];
+        $is_earlier_date = $res_date_time['is_earlier_date'];
+
+        $kode_accounting = "$user->id.$time_key";
+
+        // Pembuatan Surat Pembelian
+        $params_create_sp = [
+            "tanggal_surat" => $accounting_date,
+            "item" => $item,
+            "time_key" => $time_key,
+            "kode_accounting" => $kode_accounting,
+            "post" => $post,
+            "user_id" => $user->id,
+            "username" => $user->username,
+        ];
+
+        $surat_pembelian = SuratPembelian::create_sp_for_manual_buyback($params_create_sp);
+
+        // Pembuatan Surat Pembelian Item
+        $photo_path = null;
+        if (isset($post['photo_path'])) {
+            // fitur pengambilan foto manual buyback, menyusul
+        }
+        $params_create_spi = [
+            'item' => $item,
+            'surat_pembelian_id' => $surat_pembelian->id,
+            'photo_path' => $photo_path,
+            'jumlah' => 1,
+            'accounting_date' => $accounting_date,
+            'keterangan' => $post['keterangan_transaksi'],
+            "kode_accounting" => $kode_accounting,
+            "user_id" => $user->id,
+            "username" => $user->username,
+            "harga_terima" => $post['harga_terima'],
+        ];
+        $surat_pembelian_item = SuratPembelianItem::create_spi_for_manual_buyback($params_create_spi);
+
+        $data_create_cashflow = [
+            'user_id' => $user->id,
+            "time_key" => $time_key,
+            "kode_accounting" => $kode_accounting,
+            "surat_pembelian_id" => $surat_pembelian->id,
+            "post" => $post,
+            "cashflow_date" => $cashflow_date,
+            "is_earlier_date" => $is_earlier_date,
+        ];
+
+        $total_bayar = Cashflow::create_cashflow($data_create_cashflow);
 
         $success_ .= "Transaksi baru telah dibuat!";
         $feedback = [
@@ -361,7 +462,7 @@ class CashflowController extends Controller
         $post = $request->post();
 
         $wallet = Wallet::find($post['wallet_id']);
-        $wallet->saldo = (string)((int)$post['saldo_wallet'] * 100);
+        $wallet->saldo = $post['saldo_wallet'];
         $wallet->save();
         
         return back()->with('success_', '- Saldo wallet diupdate! -');

@@ -4,11 +4,25 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Cashflow extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($cashflow) {
+            while (DB::table('cashflows')
+                ->where('cashflow_date', $cashflow->cashflow_date)
+                ->exists()) {
+                $cashflow->cashflow_date = date('Y-m-d H:i:s', strtotime($cashflow->cashflow_date) + 1);
+            }
+        });
+    }
 
     function user()
     {
@@ -28,47 +42,40 @@ class Cashflow extends Model
 
     static function validasi_metode_pembayaran($request) {
         $post = $request->post();
-        if (!isset($post['jumlah_tunai']) && !isset($post['jumlah_non_tunai'])) {
-            $request->validate(['error'=>'required'],['error.required'=>'post jumlah_tunai or jumlah_non_tunai not exist']);
+        // dd($post);
+        if (!isset($post['kategori_wallet']) || !isset($post['tipe_wallet']) || !isset($post['nama_wallet']) || !isset($post['jumlah_pembayaran'])) {
+            $request->validate(['error'=>'required'],['error.required'=>'post data wallet not exist']);
         }
-        $jumlah_tunai = 0;
-        if (isset($post['jumlah_tunai'])) {
-            if ($post['jumlah_tunai']) {
-                $jumlah_tunai += (float)$post['jumlah_tunai'];
-            }
-        }
-        $jumlah_non_tunai = 0;
-        if (isset($post['jumlah_non_tunai'])) {
-            $request->validate([
-                'jumlah_non_tunai' => 'array',
-                'jumlah_non_tunai.*' => 'nullable|numeric',
-                'nama_instansi' => 'array',
-                'tipe_instansi' => 'array',
-            ]);
-            for ($i=0; $i < count($post['jumlah_non_tunai']); $i++) { 
-                $jumlah_non_tunai += (float)$post['jumlah_non_tunai'][$i];
-            }
-        }
+        // $jumlah_pembayaran = 0;
+        $request->validate([
+            'jumlah_pembayaran' => 'array',
+            'jumlah_pembayaran.*' => 'nullable|numeric',
+            'kategori_wallet' => 'array',
+            'tipe_wallet' => 'array',
+            'nama_wallet' => 'array',
+        ]);
+        // for ($i=0; $i < count($post['jumlah_pembayaran']); $i++) { 
+        //     $jumlah_pembayaran += (float)$post['jumlah_pembayaran'][$i];
+        // }
 
-        $jumlah_pembayaran = $jumlah_tunai + $jumlah_non_tunai;
-        $total_tagihan = "";
+        // $total_tagihan = "";
         if ($post['kategori'] == "Buyback Perhiasan") {
             if (!isset($post['harga_t']) || $post['harga_t'] == null) {
                 $request->validate([
                     'harga_terima'=>'required'
                 ]);
             }
-            $total_tagihan = $post['harga_terima'];
+            // $total_tagihan = $post['harga_terima'];
         } elseif ($post['kategori'] == "Penjualan Perhiasan") {
             if (!isset($post['harga_total']) || $post['harga_total'] == null) {
                 $request->validate(['error'=>'required'],['error.required'=>'Harus ada harga_total']);
             }
-            $total_tagihan = $post['harga_total'];
+            // $total_tagihan = $post['harga_total'];
         } else {
             if (!isset($post['total_tagihan']) || $post['total_tagihan'] == null) {
                 $request->validate(['error'=>'required'],['error.required'=>'Harus ada total_tagihan']);
             }
-            $total_tagihan = $post['total_tagihan'];
+            // $total_tagihan = $post['total_tagihan'];
         }
 
         // dump("harga_t atau total_tagihan");
@@ -105,123 +112,123 @@ class Cashflow extends Model
         return $data;
     }
 
-    static function create_cashflow($user_id, $time_key, $kode_accounting, $pembelian_id, $post)
-    {
-        // CASHFLOW
-        // $total_tagihan = 0; // harga_total sinonim dnegan total_tagihan
-        // if (isset($post['harga_total'])) {
-        //     $total_tagihan = (float)$post['harga_total'];
-        // } elseif (isset($post['total_tagihan'])) {
-        //     $total_tagihan = (float)$post['total_tagihan'];
-        // }
-        // $total_bayar = (float)$post['total_bayar'];
-        $sisa_bayar = (float)$post['sisa_bayar'];
-        // $sisa_bayar = 0;
-        // try {
-        //     $sisa_bayar = (float)$post['sisa_bayar'];
-        // } catch (\Throwable $th) {
-        //     dump($sisa_bayar);
-        //     dump($post['sisa_bayar']);
-        // }
-
-        $jumlah_tunai = null;
-        $jumlah_non_tunai = null;
-        $tipe_instansis = null;
-        $nama_instansis = null;
-        if (isset($post['jumlah_tunai'])) {
-            $jumlah_tunai = $post['jumlah_tunai'];
-        }
-        if (isset($post['jumlah_non_tunai'])) {
-            $jumlah_non_tunai = $post['jumlah_non_tunai'];
-            $tipe_instansis = $post['tipe_instansi'];
-            $nama_instansis = $post['nama_instansi'];
-        }
-
-        $jumlah = 0;
-        $jumlah_terima_total = 0;
-        if ($jumlah_tunai) {
-            if ((int)$sisa_bayar < 0) {
-                $jumlah = ((float)$jumlah_tunai + (float)$sisa_bayar) * 100;
-            } else {
-                $jumlah = (float)$jumlah_tunai * 100;
-            }
-            $wallet = Wallet::where('tipe_wallet', 'laci')->where('nama_wallet', 'cash')->first();
-            $cashflow_sebelum = Cashflow::where('kategori_wallet', $wallet->kategori_wallet)->where('tipe_wallet', $wallet->tipe_wallet)->where('nama_wallet', $wallet->nama_wallet)->latest()->first();
-            $saldo_akhir = 0;
-            if ($cashflow_sebelum) {
-                $saldo_akhir = (int)$cashflow_sebelum->saldo;
-            }
-            if ($post['tipe_transaksi'] == 'pemasukan') {
-                $saldo_akhir += $jumlah;
-            } elseif ($post['tipe_transaksi'] == 'pengeluaran') {
-                $saldo_akhir -= $jumlah;
-            }
-            $cashflow = Cashflow::create([
-                'user_id' => $user_id,
-                'time_key' => $time_key,
-                'kode_accounting' => $kode_accounting,
-                'surat_pembelian_id' => $pembelian_id,
-                // 'surat_pembelian_item_id' => $surat_pembelian_item->id,
-                // 'nama_transaksi' => $nama_transaksi,
-                'tipe' => $post['tipe_transaksi'],
-                'kategori_wallet' => $wallet->kategori_wallet,
-                'tipe_wallet' => $wallet->tipe_wallet,
-                'nama_wallet' => $wallet->nama_wallet,
-                'jumlah' => (string)$jumlah,
-                'saldo' => (string)$saldo_akhir,
-            ]);
-            $wallet = Wallet::where('nama_wallet', $cashflow->nama_wallet)->first();
-            $wallet->saldo = (string)$saldo_akhir;
-            $wallet->save();
-            // self::create_update_neraca($tipe_wallet, $nama_wallet, $jumlah);
-
-            // CEK Saldo terkait
-
-            // Saldo::cek_saldo_wallet_sebelumnya_dan_create_apabila_belum_ada($time_key, $wallet, $jumlah);
-        }
-        $jumlah_terima_total += $jumlah;
-
-        if ($jumlah_non_tunai) { // kodingan pada blade sempat di edit, js dipake bareng2, awalnya ini namanya jumlah_non_tunai
-            foreach ($jumlah_non_tunai as $key => $jumlah_nt) {
-                if ($jumlah_nt !== null) {
-                    $wallet = Wallet::where('tipe_wallet', $tipe_instansis[$key])->where('nama_wallet', $nama_instansis[$key])->first();
-                    $cashflow_sebelum = Cashflow::where('kategori_wallet', $wallet->kategori_wallet)->where('tipe_wallet', $wallet->tipe_wallet)->where('nama_wallet', $wallet->nama_wallet)->latest()->first();
-                    // $tipe_wallet = $post['tipe_instansi'][$key];
-                    // $nama_wallet = $post['nama_instansi'][$key];
-                    $jumlah = $jumlah_nt * 100;
-                    $saldo_akhir = 0;
-                    if ($cashflow_sebelum) {
-                        $saldo_akhir = (int)$cashflow_sebelum->saldo;
+    static function create_cashflow($params) {
+        return DB::transaction(function () use ($params) {
+            $user_id = $params['user_id'];
+            $time_key = $params['time_key'];
+            $kode_accounting = $params['kode_accounting'];
+            $surat_pembelian_id = $params['surat_pembelian_id'];
+            $post = $params['post'];
+            $cashflow_date = $params['cashflow_date'];
+            $is_earlier_date = $params['is_earlier_date'];
+    
+            $jumlah_terima_total = 0.0;
+            $cashflow_time = strtotime($cashflow_date);
+            $incremented_cashflow_date = $cashflow_time;
+    
+            foreach ($post['kategori_wallet'] as $key => $kategori_wallet) {
+                if ($post['jumlah_pembayaran'][$key]) {
+                    // Ambil wallet
+                    $wallet = Wallet::where('kategori_wallet', $kategori_wallet)
+                        ->where('tipe_wallet', $post['tipe_wallet'][$key])
+                        ->where('nama_wallet', $post['nama_wallet'][$key])
+                        ->first();
+    
+                    // Pastikan cashflow_date unik
+                    while (Cashflow::where('kategori_wallet', $wallet->kategori_wallet)
+                        ->where('tipe_wallet', $wallet->tipe_wallet)
+                        ->where('nama_wallet', $wallet->nama_wallet)
+                        ->where('cashflow_date', '=', date('Y-m-d\TH:i:s', $incremented_cashflow_date))
+                        ->exists()) {
+                        $incremented_cashflow_date = strtotime('+1 second', $incremented_cashflow_date);
                     }
-                    if ($post['tipe_transaksi'] == 'pemasukan') {
-                        $saldo_akhir += $jumlah;
-                    } elseif ($post['tipe_transaksi'] == 'pengeluaran') {
-                        $saldo_akhir -= $jumlah;
+                    $cashflow_date = date('Y-m-d\TH:i:s', $incremented_cashflow_date);
+    
+                    // Ambil cashflows setelah cashflow_date jika perlu
+                    $latest_cashflows = collect();
+                    $cashflow_before = null;
+    
+                    if ($is_earlier_date) {
+                        $cashflow_before = Cashflow::where('kategori_wallet', $wallet->kategori_wallet)
+                            ->where('tipe_wallet', $wallet->tipe_wallet)
+                            ->where('nama_wallet', $wallet->nama_wallet)
+                            ->where('cashflow_date', '<', $cashflow_date)
+                            ->orderByDesc('cashflow_date')->first();
+    
+                        $latest_cashflows = Cashflow::where('kategori_wallet', $wallet->kategori_wallet)
+                            ->where('tipe_wallet', $wallet->tipe_wallet)
+                            ->where('nama_wallet', $wallet->nama_wallet)
+                            ->where('cashflow_date', '>', $cashflow_date)
+                            ->orderBy('cashflow_date')->get();
+                    } else {
+                        $cashflow_before = Cashflow::where('kategori_wallet', $wallet->kategori_wallet)
+                            ->where('tipe_wallet', $wallet->tipe_wallet)
+                            ->where('nama_wallet', $wallet->nama_wallet)
+                            ->orderByDesc('cashflow_date')->first();
                     }
+    
+                    $saldo_akhir = $cashflow_before ? $cashflow_before->saldo : 0.0;
+                    $transaksi = (float) $post['jumlah_pembayaran'][$key];
+    
+                    $saldo_akhir += $post['tipe_transaksi'] == 'pemasukan' ? $transaksi : -$transaksi;
+    
+                    // Buat cashflow baru
                     $cashflow = Cashflow::create([
                         'user_id' => $user_id,
                         'time_key' => $time_key,
                         'kode_accounting' => $kode_accounting,
-                        'surat_pembelian_id' => $pembelian_id,
-                        // 'nama_transaksi' => $nama_transaksi,
+                        'surat_pembelian_id' => $surat_pembelian_id,
                         'tipe' => $post['tipe_transaksi'],
                         'kategori_wallet' => $wallet->kategori_wallet,
                         'tipe_wallet' => $wallet->tipe_wallet,
                         'nama_wallet' => $wallet->nama_wallet,
-                        'jumlah' => (string)$jumlah,
-                        'saldo' => (string)$saldo_akhir,
+                        'jumlah' => $transaksi,
+                        'saldo' => $saldo_akhir,
+                        'cashflow_date' => $cashflow_date,
                     ]);
-                    
-                    $wallet = Wallet::where('nama_wallet', $cashflow->nama_wallet)->first();
-                    $wallet->saldo = (string)$saldo_akhir;
-                    $wallet->save();
-                    // self::create_update_neraca($tipe_wallet, $nama_wallet, $jumlah);
-                    // Saldo::cek_saldo_wallet_sebelumnya_dan_create_apabila_belum_ada($time_key, $wallet, $jumlah);
-                    $jumlah_terima_total += $jumlah;
+    
+                    // Update saldo pada cashflows berikutnya
+                    foreach ($latest_cashflows as $latest_cashflow) {
+                        $saldo_akhir += $latest_cashflow->tipe == 'pemasukan' ? $latest_cashflow->jumlah : -$latest_cashflow->jumlah;
+                        $latest_cashflow->update(['saldo' => $saldo_akhir]);
+                    }
+    
+                    // Update saldo pada wallet
+                    $wallet->update(['saldo' => $saldo_akhir]);
+    
+                    $jumlah_terima_total += $transaksi;
                 }
+                $incremented_cashflow_date = strtotime('+1 second', $incremented_cashflow_date);
             }
-        }
-        return $jumlah_terima_total;
-        // END - CASHFLOW
+    
+            return $jumlah_terima_total;
+        });
     }
+
+    static function set_date_time($post) {
+        $time_key = time();
+        $timestamp_now = date('Y-m-d', $time_key) . 'T' . date('H:i:s', $time_key);
+        $accounting_date = $timestamp_now;
+        $is_earlier_date = false;
+        if (isset($post['hari']) && isset($post['bulan']) && isset($post['tahun'])) {
+            if (is_numeric($post['hari']) && is_numeric($post['bulan']) && is_numeric($post['tahun'])) {
+                $accounting_date = date('Y-m-d', strtotime("$post[hari]-$post[bulan]-$post[tahun]")) . 'T' . date('H:i:s', $time_key);
+            } 
+        }
+
+        if ($accounting_date < $timestamp_now) {
+            $is_earlier_date = true;
+        }
+
+        $cashflow_date = $accounting_date;
+
+        return [
+            "timestamp_now" => $timestamp_now,
+            "time_key" => $time_key,
+            "accounting_date" => $accounting_date,
+            "cashflow_date" => $cashflow_date,
+            "is_earlier_date" => $is_earlier_date,
+        ];
+    }
+    
 }

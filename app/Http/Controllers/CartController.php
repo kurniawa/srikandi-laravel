@@ -117,21 +117,33 @@ class CartController extends Controller
         $post = $request->post();
         // dump($post);
         $user = Auth::user();
-        // $res_admin_validation = User::admin_validation($user->id, $post['target_user_id'], $post['target_password']);
-        // dump($res_admin_validation);
-        // dd($res_admin_validation->getStatusCode());
-        // VALIDASI ADMIN
+
+        // Validasi
+        $request->validate([
+            'hari' => 'required|numeric',
+            'bulan' => 'required|numeric',
+            'tahun' => 'required|numeric',
+            'harga_total' => 'required|numeric',
+            'total_bayar' => 'required|numeric',
+            'sisa_bayar' => 'required|numeric',
+            'tipe_transaksi' => 'required',
+        ]);
+
+        /**
+         * Validasi Admin
+         * Pada saat checkout, admin bisa membantu admin yang lain dari device yang lain.
+         * Tetapi saat konfirmasi checkout, admin yang benar-benar melayani pelanggan harus konfirmasi
+         * dan input password sekali lagi.
+         */
         if ($user->id != $post['target_user_id']) {
             $user = User::admin_validation($user->id, $post['target_user_id'], $post['target_password']);
             if (!$user) {
                 $request->validate(['error'=>'required'],['error.required'=>'-terjadi kesalahan data admin/password-']);
             }
         }
-        // END - VALIDASI ADMIN
 
+        // Validasi metode pembayaran
         Cashflow::validasi_metode_pembayaran($request);
-        // dump($cart);
-        // dd($post);
 
         // PENGECEKAN File Storage Photo
 
@@ -154,18 +166,9 @@ class CartController extends Controller
         $success_ = '';
         $warnings_ = '';
         $errors_ = '';
-        $post = $request->post();
 
         // VALIDASI
-        $request->validate([
-            'hari' => 'required|numeric',
-            'bulan' => 'required|numeric',
-            'tahun' => 'required|numeric',
-            'harga_total' => 'required|numeric',
-            'total_bayar' => 'required|numeric',
-            'sisa_bayar' => 'required|numeric',
-            'tipe_transaksi' => 'required',
-        ]);
+        
         // END - VALIDASI
 
         $harga_total = (float)$post['harga_total'];
@@ -257,8 +260,27 @@ class CartController extends Controller
                 Storage::move($cart->photo_path, $photo_path);
             }
         }
-        $pembelian_new = SuratPembelian::create([
-            'tanggal_surat' => date('Y-m-d', strtotime("$post[hari]-$post[bulan]-$post[tahun]")) . 'T' . date('H:i:s', $time_key),
+
+        /*
+        Apabila tanggal bukan merupakan tanggal teraktual, melainkan tanggal sebelumnya, maka is_earlier_date = true
+        Apabila $is_earlier_date === true, maka accounting_date dan cashflow_date tidak lagi sama dengan created_at
+        Dengan demikian harus dihitung ulang terutama bagian saldo terakhir dari cashflow sebelumnya
+        dan edit juga saldo_akhir dari cashflow-cashflow setelahnya.
+        */
+        
+        $res_date_time = Cashflow::set_date_time($post);
+
+        $timestamp_now = $res_date_time['timestamp_now'];
+        $time_key = $res_date_time['time_key'];
+        $accounting_date = $res_date_time['accounting_date'];
+        $cashflow_date = $res_date_time['cashflow_date'];
+        $tanggal_surat = $accounting_date;
+        $is_earlier_date = $res_date_time['is_earlier_date'];
+
+        $kode_accounting = "$user->id.$time_key";
+
+        $surat_pembelian = SuratPembelian::create([
+            'tanggal_surat' => $tanggal_surat,
             'nomor_surat' => uniqid(),
             'time_key' => $time_key,
             'user_id' => $user->id,
@@ -268,26 +290,46 @@ class CartController extends Controller
             'pelanggan_username' => $pelanggan_username,
             'pelanggan_nik' => $pelanggan_nik,
             'keterangan' => $cart->keterangan,
-            'harga_total' => (string)($harga_total * 100),
-            'total_bayar' => (string)($total_bayar * 100),
-            'sisa_bayar' => (string)($sisa_bayar * 100),
+            'harga_total' => $harga_total,
+            'total_bayar' => $total_bayar,
+            'sisa_bayar' => $sisa_bayar,
             'status_bayar' => $status_bayar,
             'photo_path' => $photo_path,
         ]);
 
         $success_ .= 'Pembelian baru dibuat!';
 
-        $nomor_surat = SuratPembelian::generate_nomor_surat($user, $pembelian_new->id, $pelanggan_id, count($post['cart_item_ids']), $simple_time_key);
-        $pembelian_new->nomor_surat = $nomor_surat;
-        $pembelian_new->save();
+        // GENERATE NOMOR_SURAT
+        $jumlah_item = 1;
+        $simple_time_key = Accounting::simple_time_key($time_key);
+        $params_generate_nomor_surat = [
+            'user_id' => $user->id,
+            'surat_pembelian_id' => $surat_pembelian->id,
+            'pelanggan_id' => $pelanggan_id,
+            'jumlah_item' => $jumlah_item,
+            'simple_time_key' => $simple_time_key,
+        ];
+        $nomor_surat = SuratPembelian::generate_nomor_surat($params_generate_nomor_surat);
+
+        $surat_pembelian->nomor_surat = $nomor_surat;
+        $surat_pembelian->save();
         $success_ .= '-nomor_surat, status_bb Pembelian diupdate!-';
 
         // CREATE SURAT_PEMBELIAN_ITEM
         // Create kode_accounting
         $kode_accounting = "$user->id.$time_key";
 
+        $params_for_create_spi_for_buy = [
+            'user_id' => $user->id,
+            'username' => $user->username,
+            'surat_pembelian_id' => $surat_pembelian->id,
+            'kode_accounting' => $kode_accounting,
+            'accounting_date' => $accounting_date,
+        ];
+
         foreach ($post['cart_item_ids'] as $cart_item_id) {
-            SuratPembelianItem::create_surat_pembelian_item($user, $pembelian_new, $cart_item_id, $kode_accounting);
+            $params_for_create_spi_for_buy['cart_item_id'] = $cart_item_id;
+            SuratPembelianItem::create_spi_for_buy($params_for_create_spi_for_buy);
         }
         $success_ .= '-Items diinput! Stok diupdate!-';
 
@@ -302,7 +344,7 @@ class CartController extends Controller
         // dump($sisa_bayar);
         // dump((float)$sisa_bayar);
         // dd($jumlah);
-        $total_bayar_2 = Cashflow::create_cashflow($user->id, $time_key, $kode_accounting, $pembelian_new->id, $post);
+        $total_bayar_2 = Cashflow::create_cashflow($user->id, $time_key, $kode_accounting, $surat_pembelian->id, $post);
         // $jumlah = 0;
         // $jumlah_terima_total = 0;
         // if (isset($post['jumlah_tunai'])) {

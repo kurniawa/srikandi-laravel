@@ -11,6 +11,7 @@ use App\Models\Menu;
 use App\Models\SuratPembelian;
 use App\Models\SuratPembelianItem;
 use App\Models\User;
+use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -238,5 +239,25 @@ class TransactionController extends Controller
         // dd($buy_accountings);
 
         return view('transactions.rincian', $data);
+    }
+
+    function manual_buyback_transaction() {
+        $user = Auth::user();
+        $cart = null;
+        
+        if ($user) {
+            $cart = Cart::where('user_id', $user->id)->first();
+        }
+
+        $wallets_non_tunai = Wallet::where('kategori_wallet', 'non-tunai')->get();
+
+        $data = [
+            'cart' => $cart,
+            'user' => $user,
+            'wallets_non_tunai' => $wallets_non_tunai,
+            'data' => Item::get_data_for_create_item('perhiasan'),
+            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
+        ];
+        return view('transactions.manual-buyback', $data);
     }
 }

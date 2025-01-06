@@ -112,14 +112,14 @@
                             <div>
                                 <div class="font-bold text-slate-500">{{ $cart_item->item->shortname }}</div>
                                 <div class="font-bold text-slate-600 text-xs">Rp
-                                    {{ number_format((string) ((float) $cart_item->item->harga_g / 100), 2, ',', '.') }} /
+                                    {{ FormatCurrencyID($cart_item->item->harga_g) }} /
                                     g
                                 </div>
                                 <div class="font-bold text-slate-500">Rp
-                                    {{ number_format((string) ((float) $cart_item->item->harga_t / 100), 2, ',', '.') }}
+                                    {{ FormatCurrencyID($cart_item->item->harga_t) }}
                                 </div>
                                 <input type="hidden" name="harga_t[]"
-                                    value="{{ (string) ((float) $cart_item->harga_t / 100) }}" class="binder_harga_t">
+                                    value="{{ $cart_item->harga_t }}" class="binder_harga_t">
                                 <input type="hidden" name="cart_item_ids[]" value="{{ $cart_item->id }}">
                             </div>
                             <div class="w-6 h-6 flex justify-center border font-bold text-slate-500">1</div>
@@ -149,10 +149,10 @@
             <div class="flex justify-end mt-2 gap-3">
                 <span class="text-xl font-bold text-red-600">Total:</span>
                 <div class="text-xl font-bold text-red-600">Rp <span
-                        id="harga_total_formatted">{{ my_decimal_format($harga_total) }}</span>
+                        id="harga_total_formatted">{{ FormatCurrencyID($harga_total) }}</span>
                 </div>
                 <input type="hidden" name="harga_total" id="harga_total_real"
-                    value="{{ (string) ((float) $harga_total / 100) }}">
+                    value="{{ $harga_total }}">
             </div>
             <input type="hidden" name="pelanggan_nama" id="pelanggan_nama_di_dalam_form"
                 value="{{ $cart->pelanggan_id ? $cart->pelanggan->nama : '' }}">
@@ -169,7 +169,7 @@
             </div>
             <input type="text" inputmode="numeric" id="jumlah_tunai" class="input ml-5 hidden"
                 onchange="formatNumber(this, 'jumlah-tunai'); hitungTotalBayar()">
-            <input type="hidden" name="jumlah_tunai" id="jumlah-tunai" class="jumlah-bayar">
+            <input type="hidden" name="jumlah_pembayaran[]" id="jumlah-tunai" class="jumlah-bayar">
             <div class="flex items-center mt-2">
                 <input type="checkbox" id="checkbox-non-tunai" name="non_tunai" value="yes"
                     onclick="toggleNonTunai(this)">
@@ -191,21 +191,10 @@
                     <div id="dd-daftar-ewallet" class="border absolute top-12 bg-white w-full z-20 hidden">
                         @foreach ($wallets_non_tunai as $wallet)
                             <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100"
-                                onclick="tambahPembayaran('{{ $wallet->tipe_wallet }}', '{{ $wallet->nama_wallet }}')"
+                                onclick="tambahPembayaran('{{ $wallet->kategori_wallet }}', '{{ $wallet->tipe_wallet }}', '{{ $wallet->nama_wallet }}')"
                                 id="{{ $wallet->nama_wallet }}"><img
                                     src="{{ asset("img/logo-$wallet->tipe_wallet-". strtolower($wallet->nama_wallet) . ".png") }}" class="h-full"></div>
                         @endforeach
-                        {{-- <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('bank','BRI')" id="BRI"><img src="{{ asset('img/logo-bank-bri.png') }}" class="h-full"><span class="font-bold text-blue-800 text-base ml-2">BRI</span></div>
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('bank','Mandiri')" id="Mandiri"><img src="{{ asset('img/logo-bank-mandiri.png') }}" class="h-full"></div>
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('bank','BNI')" id="BNI"><img src="{{ asset('img/logo-bank-bni.png') }}" class="h-full"></div>
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('bank','CIMB')" id="CIMB"><img src="{{ asset('img/logo-bank-cimb.png') }}" class="h-full"></div>
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('bank','OCBC')" id="OCBC"><img src="{{ asset('img/logo-bank-ocbc.jpg') }}" class="h-full"></div>
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('bank','BJB')" id="BJB"><img src="{{ asset('img/logo-bank-bjb.png') }}" class="h-full"></div>
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('bank','Maybank')" id="Maybank"><img src="{{ asset('img/logo-bank-maybank.svg') }}" class="h-full"></div>
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('ewallet','GoPay')" id="GoPay"><img src="{{ asset('img/logo-ewallet-gopay.png') }}" class="h-full"></div>
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('ewallet','ShopeePay')" id="ShopeePay"><img src="{{ asset('img/logo-ewallet-shopee.png') }}" class="h-full"></div>
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('ewallet','Dana')" id="Dana"><img src="{{ asset('img/logo-ewallet-dana.png') }}" class="h-full"></div>
-                    <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaran('ewallet','OVO')" id="OVO"><img src="{{ asset('img/logo-ewallet-ovo.png') }}" class="h-full"><span class="font-bold text-violet-800 text-base ml-2">OVO</span></div> --}}
                         <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100"
                             onclick="tambahPembayaran('lain-lain','lain-lain')"><span
                                 class="font-bold text-base ml-2">Lain - lain</span></div>
@@ -216,7 +205,7 @@
                 <div class="">
                     <span id="label-sisa-bayar" class="font-bold text-orange-500">Sisa Bayar</span>
                     <div class="font-bold text-lg"><span>Rp </span><span
-                            id="sisa_bayar_formatted">{{ my_decimal_format($harga_total) }}</span>
+                            id="sisa_bayar_formatted">{{ FormatCurrencyID($harga_total) }}</span>
                     </div>
                 </div>
                 <div class="ml-2">
@@ -226,7 +215,7 @@
             </div>
             <input type="hidden" id="total_bayar_real" name="total_bayar" value="0" readonly>
             <input type="hidden" id="sisa_bayar_real" name="sisa_bayar"
-                value="{{ (string) ((float) $harga_total / 100) }}" readonly>
+                value="{{ $harga_total }}" readonly>
 
             {{-- END PEMBAYARAN --}}
             <div class="relative flex justify-center mt-9 z-10">

@@ -28,6 +28,11 @@
             <button class="bg-emerald-300 text-white font-bold rounded p-2">+ New Item</button>
         </a>
     </div> --}}
+    <div class="flex justify-end">
+        <a href="{{ route('add_new_item.pilih_tipe_barang') }}" class="p-1 bg-emerald-300 rounded text-white text-xs font-bold">
+            + New Item
+        </a>
+    </div>
     <div class="grid grid-cols-2 gap-2 mt-2">
         @foreach ($items as $key => $item)
             <a href="{{ route('items.show', $item->id) }}" class="loading-spinner p-2 bg-white rounded shadow drop-shadow relative">
@@ -46,10 +51,10 @@
                 </div>
                 <div><span class="font-bold text-xs text-slate-500">{{ $item->shortname }}</span></div>
                 <div class="text-xs flex">
-                    <div class="text-emerald-300 border border-emerald-300 rounded px-1">{{ my_decimal_format($item->harga_g) }}</div>
-                    <div class="text-rose-300 border border-rose-300 rounded px-1">{{ my_decimal_format($item->ongkos_g) }}</div>
+                    <div class="text-emerald-300 border border-emerald-300 rounded px-1">{{ FormatCurrencyID($item->harga_g) }}</div>
+                    <div class="text-rose-300 border border-rose-300 rounded px-1">{{ FormatCurrencyID($item->ongkos_g) }}</div>
                 </div>
-                <div class="font-bold text-slate-500"><span>Rp </span><span>{{ my_decimal_format($item->harga_t) }}</span></div>
+                <div class="font-bold text-slate-500"><span>Rp </span><span>{{ FormatCurrencyID($item->harga_t) }}</span></div>
                 {{-- <div class="text-slate-500">By: {{ $item->user->username }}</div> --}}
             </a>
         @endforeach
