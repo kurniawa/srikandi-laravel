@@ -14,6 +14,8 @@ use App\Models\User;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class CartController extends Controller
@@ -115,7 +117,7 @@ class CartController extends Controller
     function proses_checkout(Cart $cart, Request $request)
     {
         $post = $request->post();
-        // dump($post);
+        // dd($post);
         $user = Auth::user();
 
         // Validasi
@@ -163,17 +165,6 @@ class CartController extends Controller
 
         // END - PENGECEKAN File Storage Photo
 
-        $success_ = '';
-        $warnings_ = '';
-        $errors_ = '';
-
-        // VALIDASI
-        
-        // END - VALIDASI
-
-        $harga_total = (float)$post['harga_total'];
-        $total_bayar = (float)$post['total_bayar'];
-        $sisa_bayar = (float)$post['sisa_bayar'];
         // dump(time());
         // dd($sisa_bayar);
 
@@ -211,12 +202,7 @@ class CartController extends Controller
         // }
         // // END - VALIDASI PHOTO
 
-        // STATUS BAYAR
-        $status_bayar = 'lunas';
-        if ((float)$post['sisa_bayar'] > 0.0) {
-            $status_bayar = 'belum-lunas';
-        }
-        // END - STATUS BAYAR
+        
         // if ($cart->pelanggan_id == Auth::user()->id) {
         //     $request->validate(['error'=>'required'],['error.required'=>'User tidak boleh membeli untuk diri sendiri!']);
         // }
@@ -231,35 +217,41 @@ class CartController extends Controller
             $request->validate(['error' => 'required'], ['error.required' => $feedback_cek_pelanggan]);
         }
 
-        $pelanggan_id = null;
-        $pelanggan_nama = null;
-        $pelanggan_username = null;
-        $pelanggan_nik = null;
+        $params_for_transactions['pelanggan_id'] = null;
+        $params_for_transactions['pelanggan_nama'] = null;
+        $params_for_transactions['pelanggan_username'] = null;
+        $params_for_transactions['pelanggan_nik'] = null;
         if ($pelanggan) {
-            $pelanggan_id = $pelanggan->id;
-            $pelanggan_nama = $pelanggan->nama;
-            $pelanggan_username = $pelanggan->username;
-            $pelanggan_nik = $pelanggan->nik;
-            SuratPembelian::customer_cannot_be_user($user->id, $pelanggan_id, $request);
+            $params_for_transactions['pelanggan_id'] = $pelanggan->id;
+            $params_for_transactions['pelanggan_nama'] = $pelanggan->nama;
+            $params_for_transactions['pelanggan_username'] = $pelanggan->username;
+            $params_for_transactions['pelanggan_nik'] = $pelanggan->nik;
+            SuratPembelian::customer_cannot_be_user($user->id, $params_for_transactions['pelanggan_id'], $request);
         }
         // dd($cart);
         // dump((int)$post['sisa_bayar']);
         // dump($post);
         // dd($status_bayar);
 
-        $time_key = time();
-        $simple_time_key = Accounting::simple_time_key($time_key);
+        
 
-        $photo_path = null;
+        $params_for_transactions['photo_path'] = null;
         if ($cart->photo_path) {
             if (Storage::exists($cart->photo_path)) {
                 $exploded_filenamepath = explode("/", $cart->photo_path);
                 $name_index = count($exploded_filenamepath) - 1;
                 $filename = $exploded_filenamepath[$name_index];
-                $photo_path = "surat_pembelians/photos/$filename";
-                Storage::move($cart->photo_path, $photo_path);
+                $params_for_transactions['photo_path'] = "surat_pembelians/photos/$filename";
+                Storage::move($cart->photo_path, $params_for_transactions['photo_path']);
             }
         }
+
+        $params_for_transactions['success_'] = '';
+        $params_for_transactions['warnings_'] = '';
+        $params_for_transactions['errors_'] = '';
+
+        $time_key = time();
+        $simple_time_key = Accounting::simple_time_key($time_key);
 
         /*
         Apabila tanggal bukan merupakan tanggal teraktual, melainkan tanggal sebelumnya, maka is_earlier_date = true
@@ -267,7 +259,7 @@ class CartController extends Controller
         Dengan demikian harus dihitung ulang terutama bagian saldo terakhir dari cashflow sebelumnya
         dan edit juga saldo_akhir dari cashflow-cashflow setelahnya.
         */
-        
+
         $res_date_time = Cashflow::set_date_time($post);
 
         $timestamp_now = $res_date_time['timestamp_now'];
@@ -279,61 +271,110 @@ class CartController extends Controller
 
         $kode_accounting = "$user->id.$time_key";
 
-        $surat_pembelian = SuratPembelian::create([
-            'tanggal_surat' => $tanggal_surat,
-            'nomor_surat' => uniqid(),
-            'time_key' => $time_key,
-            'user_id' => $user->id,
-            'username' => $user->username,
-            'pelanggan_id' => $pelanggan_id,
-            'pelanggan_nama' => $pelanggan_nama,
-            'pelanggan_username' => $pelanggan_username,
-            'pelanggan_nik' => $pelanggan_nik,
-            'keterangan' => $cart->keterangan,
-            'harga_total' => $harga_total,
-            'total_bayar' => $total_bayar,
-            'sisa_bayar' => $sisa_bayar,
-            'status_bayar' => $status_bayar,
-            'photo_path' => $photo_path,
-        ]);
+        $harga_total = (float)$post['harga_total'];
+        $total_bayar = (float)$post['total_bayar'];
+        $sisa_bayar = (float)$post['sisa_bayar'];
 
-        $success_ .= 'Pembelian baru dibuat!';
-
-        // GENERATE NOMOR_SURAT
-        $jumlah_item = 1;
-        $simple_time_key = Accounting::simple_time_key($time_key);
-        $params_generate_nomor_surat = [
-            'user_id' => $user->id,
-            'surat_pembelian_id' => $surat_pembelian->id,
-            'pelanggan_id' => $pelanggan_id,
-            'jumlah_item' => $jumlah_item,
-            'simple_time_key' => $simple_time_key,
-        ];
-        $nomor_surat = SuratPembelian::generate_nomor_surat($params_generate_nomor_surat);
-
-        $surat_pembelian->nomor_surat = $nomor_surat;
-        $surat_pembelian->save();
-        $success_ .= '-nomor_surat, status_bb Pembelian diupdate!-';
-
-        // CREATE SURAT_PEMBELIAN_ITEM
-        // Create kode_accounting
-        $kode_accounting = "$user->id.$time_key";
-
-        $params_for_create_spi_for_buy = [
-            'user_id' => $user->id,
-            'username' => $user->username,
-            'surat_pembelian_id' => $surat_pembelian->id,
-            'kode_accounting' => $kode_accounting,
-            'accounting_date' => $accounting_date,
-        ];
-
-        foreach ($post['cart_item_ids'] as $cart_item_id) {
-            $params_for_create_spi_for_buy['cart_item_id'] = $cart_item_id;
-            SuratPembelianItem::create_spi_for_buy($params_for_create_spi_for_buy);
+        // STATUS BAYAR
+        $status_bayar = 'lunas';
+        if ((float)$post['sisa_bayar'] > 0.0) {
+            $status_bayar = 'belum-lunas';
         }
-        $success_ .= '-Items diinput! Stok diupdate!-';
+        // END - STATUS BAYAR
+        try {
+            DB::beginTransaction();
 
-        // END - CREATE SURAT_PEMBELIAN_ITEM
+            $surat_pembelian = SuratPembelian::create([
+                'tanggal_surat' => $tanggal_surat,
+                'nomor_surat' => uniqid(),
+                'time_key' => $time_key,
+                'user_id' => $user->id,
+                'username' => $user->username,
+                'pelanggan_id' => $params_for_transactions['pelanggan_id'],
+                'pelanggan_nama' => $params_for_transactions['pelanggan_nama'],
+                'pelanggan_username' => $params_for_transactions['pelanggan_username'],
+                'pelanggan_nik' => $params_for_transactions['pelanggan_nik'],
+                'keterangan' => $cart->keterangan,
+                'harga_total' => $harga_total,
+                'total_bayar' => $total_bayar,
+                'sisa_bayar' => $sisa_bayar,
+                'status_bayar' => $status_bayar,
+                'photo_path' => $params_for_transactions['photo_path'],
+            ]);
+
+            $params_for_transactions['success_'] .= 'Pembelian baru dibuat!';
+
+            // GENERATE NOMOR_SURAT
+            $jumlah_item = 1;
+            $simple_time_key = Accounting::simple_time_key($time_key);
+            $params_generate_nomor_surat = [
+                'user_id' => $user->id,
+                'surat_pembelian_id' => $surat_pembelian->id,
+                'pelanggan_id' => $params_for_transactions['pelanggan_id'],
+                'jumlah_item' => $jumlah_item,
+                'simple_time_key' => $simple_time_key,
+            ];
+            $nomor_surat = SuratPembelian::generate_nomor_surat($params_generate_nomor_surat);
+
+            $surat_pembelian->nomor_surat = $nomor_surat;
+            $surat_pembelian->save();
+            $params_for_transactions['success_'] .= '-nomor_surat, status_bb Pembelian diupdate!-';
+
+            // CREATE SURAT_PEMBELIAN_ITEM
+            // Create kode_accounting
+            $kode_accounting = "$user->id.$time_key";
+
+            $params_for_create_spi_for_buy = [
+                'user_id' => $user->id,
+                'username' => $user->username,
+                'surat_pembelian_id' => $surat_pembelian->id,
+                'kode_accounting' => $kode_accounting,
+                'accounting_date' => $accounting_date,
+            ];
+
+            foreach ($post['cart_item_ids'] as $cart_item_id) {
+                $params_for_create_spi_for_buy['cart_item_id'] = $cart_item_id;
+                SuratPembelianItem::create_spi_for_buy($params_for_create_spi_for_buy);
+            }
+            $params_for_transactions['success_'] .= '-Items diinput! Stok diupdate!-';
+
+            // END - CREATE SURAT_PEMBELIAN_ITEM
+
+            $params_for_create_cashflow = [
+                'user_id' => $user->id,
+                "time_key" => $time_key,
+                "kode_accounting" => $kode_accounting,
+                "surat_pembelian_id" => $surat_pembelian->id,
+                "post" => $post,
+                "cashflow_date" => $cashflow_date,
+                "is_earlier_date" => $is_earlier_date,
+            ];
+    
+            $total_bayar_2 = Cashflow::create_cashflow($params_for_create_cashflow);
+
+            // HAPUS CART
+            $params_for_transactions['success_'] .= Cart::delete_cart_items($post['cart_item_ids'], $cart, false);
+
+            $feedback = [
+                'success_' => $params_for_transactions['success_'],
+                'errors_' => $params_for_transactions['errors_'],
+                'warnings_' => $params_for_transactions['warnings_'],
+            ];
+
+            DB::commit();
+
+            return redirect(route('surat_pembelian.index'))->with($feedback);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            //throw $th;
+            Log::error('Proses checkout gagal: ' . $th->getMessage());
+            // return response()->json(['error' => 'Terjadi kesalahan saat checkout.'], 500);
+            return back()->with('errors_', 'Terjadi kesalahan saat checkout.');
+        }
+
+        
+
+        
 
         // // CASHFLOW
         
@@ -344,7 +385,7 @@ class CartController extends Controller
         // dump($sisa_bayar);
         // dump((float)$sisa_bayar);
         // dd($jumlah);
-        $total_bayar_2 = Cashflow::create_cashflow($user->id, $time_key, $kode_accounting, $surat_pembelian->id, $post);
+        
         // $jumlah = 0;
         // $jumlah_terima_total = 0;
         // if (isset($post['jumlah_tunai'])) {
@@ -477,16 +518,7 @@ class CartController extends Controller
         // }
         // END: UPDATE cashflows
 
-        // HAPUS CART
-        $success_ .= Cart::delete_cart_items($post['cart_item_ids'], $cart, false);
-
-        $feedback = [
-            'success_' => $success_,
-            'errors_' => $errors_,
-            'warnings_' => $warnings_,
-        ];
-
-        return redirect(route('surat_pembelian.index'))->with($feedback);
+        
     }
 
     function insert_to_cart(Item $item, User $user, Request $request)

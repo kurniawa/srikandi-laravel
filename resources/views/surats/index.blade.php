@@ -67,7 +67,7 @@
                     </td>
                     <td class="py-1">
                         <div class="text-center text-slate-500">
-                            {{ my_decimal_format($surat_pembelian->harga_total) }}
+                            {{ formatCurrencyID($surat_pembelian->harga_total) }}
                         </div>
                     </td>
                 </tr>
@@ -82,15 +82,15 @@
                                         <div class="col-span-8">
                                             <div>{{ $item->shortname }}</div>
                                             <div class="text-xs font-bold">({{ $item->status_buyback }} ->
-                                                {{ my_decimal_format($item->harga_buyback) }})</div>
+                                                {{ formatCurrencyID($item->harga_buyback) }})</div>
                                         </div>
                                     @else
                                         <span class="col-span-8">{{ $item->shortname }}</span>
                                     @endif
                                     <div class="col-span-4 text-xs">
-                                        <div>@ {{ my_decimal_format($item->harga_g) }}</div>
-                                        <div>o: {{ my_decimal_format($item->ongkos_g) }}</div>
-                                        <div>{{ my_decimal_format($item->harga_t) }}</div>
+                                        <div>@ {{ formatCurrencyID($item->harga_g) }}</div>
+                                        <div>o: {{ formatCurrencyID($item->ongkos_g) }}</div>
+                                        <div>{{ formatCurrencyID($item->harga_t) }}</div>
                                     </div>
                                 @endforeach
                             </div>

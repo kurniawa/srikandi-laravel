@@ -112,11 +112,11 @@
                             <div>
                                 <div class="font-bold text-slate-500">{{ $cart_item->item->shortname }}</div>
                                 <div class="font-bold text-slate-600 text-xs">Rp
-                                    {{ FormatCurrencyID($cart_item->item->harga_g) }} /
+                                    {{ formatCurrencyID($cart_item->item->harga_g) }} /
                                     g
                                 </div>
                                 <div class="font-bold text-slate-500">Rp
-                                    {{ FormatCurrencyID($cart_item->item->harga_t) }}
+                                    {{ formatCurrencyID($cart_item->item->harga_t) }}
                                 </div>
                                 <input type="hidden" name="harga_t[]"
                                     value="{{ $cart_item->harga_t }}" class="binder_harga_t">
@@ -149,7 +149,7 @@
             <div class="flex justify-end mt-2 gap-3">
                 <span class="text-xl font-bold text-red-600">Total:</span>
                 <div class="text-xl font-bold text-red-600">Rp <span
-                        id="harga_total_formatted">{{ FormatCurrencyID($harga_total) }}</span>
+                        id="harga_total_formatted">{{ formatCurrencyID($harga_total) }}</span>
                 </div>
                 <input type="hidden" name="harga_total" id="harga_total_real"
                     value="{{ $harga_total }}">
@@ -170,6 +170,9 @@
             <input type="text" inputmode="numeric" id="jumlah_tunai" class="input ml-5 hidden"
                 onchange="formatNumber(this, 'jumlah-tunai'); hitungTotalBayar()">
             <input type="hidden" name="jumlah_pembayaran[]" id="jumlah-tunai" class="jumlah-bayar">
+            <input type="hidden" name="kategori_wallet[]" value="tunai" readonly>
+            <input type="hidden" name="tipe_wallet[]" value="laci" readonly>
+            <input type="hidden" name="nama_wallet[]" value="cash" readonly>
             <div class="flex items-center mt-2">
                 <input type="checkbox" id="checkbox-non-tunai" name="non_tunai" value="yes"
                     onclick="toggleNonTunai(this)">
@@ -205,7 +208,7 @@
                 <div class="">
                     <span id="label-sisa-bayar" class="font-bold text-orange-500">Sisa Bayar</span>
                     <div class="font-bold text-lg"><span>Rp </span><span
-                            id="sisa_bayar_formatted">{{ FormatCurrencyID($harga_total) }}</span>
+                            id="sisa_bayar_formatted">{{ formatCurrencyID($harga_total) }}</span>
                     </div>
                 </div>
                 <div class="ml-2">

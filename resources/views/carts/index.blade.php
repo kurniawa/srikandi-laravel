@@ -62,10 +62,10 @@
                             <a href="{{ route('items.show', [$cart_item->item->id, 'carts.index']) }}"
                                 class="font-bold text-indigo-500">{{ $cart_item->item->shortname }}</a>
                             <div class="font-bold text-slate-600 text-xs">Rp
-                                {{ FormatCurrencyID($cart_item->item->harga_g) }} / g
+                                {{ formatCurrencyID($cart_item->item->harga_g) }} / g
                             </div>
                             <div class="font-bold text-slate-500">Rp
-                                {{ FormatCurrencyID($cart_item->item->harga_t) }}</div>
+                                {{ formatCurrencyID($cart_item->item->harga_t) }}</div>
                             <input type="hidden" name="harga_t[]"
                                 value="{{ $cart_item->item->harga_t }}" class="binder_harga_t">
                         </div>
@@ -111,7 +111,7 @@
                 @endforeach
                 <div class="flex justify-end mt-2">
                     <div class="text-xl font-bold text-red-600">Rp <span
-                            id="harga_total_formatted">{{ FormatCurrencyID($cart->harga_total) }}</span>
+                            id="harga_total_formatted">{{ formatCurrencyID($cart->harga_total) }}</span>
                     </div>
                     <input type="hidden" name="harga_total" id="harga_total_real"
                         value="{{ $cart->harga_total }}">

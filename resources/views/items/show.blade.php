@@ -76,7 +76,7 @@
                 @endif
             </div>
             <div class="text-slate-500 flex justify-between">
-                <span>@ {{ FormatCurrencyID($item->harga_g) }}</span>
+                <span>@ {{ formatCurrencyID($item->harga_g) }}</span>
                 <div>
                     <span onclick="toggle_element('form-update-stock')" class="border-2 rounded p-1">stok: {{ $item->stock }}</span>
                     <form action="{{ route('items.update_stock', $item->id) }}" onsubmit="submitWithPreserveScroll(this, '{{ $user->id }}-items.show');" method="POST" class="mb-3 hidden"
@@ -92,7 +92,7 @@
             </div>
             <div class="mt-2 flex justify-between items-center">
                 <div class="font-bold text-xl text-slate-600">
-                    <span>Rp </span>{{ FormatCurrencyID($item->harga_t) }}
+                    <span>Rp </span>{{ formatCurrencyID($item->harga_t) }}
                 </div>
                 <div class="flex gap-2">
                     <div class="bg-slate-100 rounded-full w-9 h-9 flex justify-center items-center">
@@ -130,12 +130,12 @@
                             <tr>
                                 <td>k</td>
                                 <td>:</td>
-                                <td>{{ FormatDecimal($item->kadar) }}%</td>
+                                <td>{{ formatDecimal($item->kadar) }}%</td>
                             </tr>
                             <tr>
                                 <td>b</td>
                                 <td>:</td>
-                                <td>{{ FormatDecimal($item->berat) }}g</td>
+                                <td>{{ formatDecimal($item->berat) }}g</td>
                             </tr>
                             <tr>
                                 <td>zu</td>
@@ -167,13 +167,13 @@
                                 @if (isset($ongkos_g))
                                 <td class="text-xs font-bold">
                                     <div class="flex items-center gap-1">
-                                        <span>{{ FormatDecimal($item->ongkos_g) }}</span>
+                                        <span>{{ formatDecimal($item->ongkos_g) }}</span>
                                         <span>--></span>
-                                        <span>{{ FormatDecimal($ongkos_g) }}</span>
+                                        <span>{{ formatDecimal($ongkos_g) }}</span>
                                     </div>
                                 </td>
                                 @else
-                                <td>{{ FormatDecimal($item->ongkos_g) }}</td>
+                                <td>{{ formatDecimal($item->ongkos_g) }}</td>
                                 @endif
                             </tr>
                             <tr>
@@ -182,13 +182,13 @@
                                 @if (isset($harga_g))
                                 <td class="text-xs font-bold">
                                     <div class="flex items-center gap-1">
-                                        <span>{{ FormatDecimal($item->harga_g) }}</span>
+                                        <span>{{ formatDecimal($item->harga_g) }}</span>
                                         <span>--></span>
-                                        <span>{{ FormatDecimal($harga_g) }}</span>
+                                        <span>{{ formatDecimal($harga_g) }}</span>
                                     </div>
                                 </td>
                                 @else
-                                <td>{{ FormatDecimal($item->harga_g) }}</td>
+                                <td>{{ formatDecimal($item->harga_g) }}</td>
                                 @endif
                             </tr>
                             <tr>
@@ -197,13 +197,13 @@
                                 @if (isset($harga_t))
                                 <td class="text-xs font-bold">
                                     <div class="flex items-center gap-1">
-                                        <span>{{ FormatDecimal($item->harga_t) }}</span>
+                                        <span>{{ formatDecimal($item->harga_t) }}</span>
                                         <span>--></span>
-                                        <span>{{ FormatDecimal($harga_t) }}</span>
+                                        <span>{{ formatDecimal($harga_t) }}</span>
                                     </div>
                                 </td>
                                 @else
-                                <td>{{ FormatDecimal($item->harga_t) }}</td>
+                                <td>{{ formatDecimal($item->harga_t) }}</td>
                                 @endif
                             </tr>
                             <tr>
@@ -320,17 +320,17 @@
                 <table class="font-bold text-slate-500 text-xs">
                     <tr>
                         @if (isset($berat_terima))
-                        <td>Berat Terima</td><td>:</td><td><span>{{ FormatDecimal($berat_terima) }}g</span></td>
+                        <td>Berat Terima</td><td>:</td><td><span>{{ formatDecimal($berat_terima) }}g</span></td>
                         @endif
                     </tr>
                     <tr>
                         @if (isset($total_potongan))
-                        <td>Total Pot.</td><td>:</td><td><span>{{ FormatCurrencyID($total_potongan) }}</span></td>
+                        <td>Total Pot.</td><td>:</td><td><span>{{ formatCurrencyID($total_potongan) }}</span></td>
                         @endif
                     </tr>
                     <tr>
                         @if (isset($harga_terima))
-                        <td>Harga Terima</td><td>:</td><td><span>{{ FormatCurrencyID($harga_terima) }}</span></td>
+                        <td>Harga Terima</td><td>:</td><td><span>{{ formatCurrencyID($harga_terima) }}</span></td>
                         @endif
                     </tr>
                 </table>

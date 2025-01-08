@@ -51,10 +51,10 @@
                 </div>
                 <div><span class="font-bold text-xs text-slate-500">{{ $item->shortname }}</span></div>
                 <div class="text-xs flex">
-                    <div class="text-emerald-300 border border-emerald-300 rounded px-1">{{ FormatCurrencyID($item->harga_g) }}</div>
-                    <div class="text-rose-300 border border-rose-300 rounded px-1">{{ FormatCurrencyID($item->ongkos_g) }}</div>
+                    <div class="text-emerald-300 border border-emerald-300 rounded px-1">{{ formatCurrencyID($item->harga_g) }}</div>
+                    <div class="text-rose-300 border border-rose-300 rounded px-1">{{ formatCurrencyID($item->ongkos_g) }}</div>
                 </div>
-                <div class="font-bold text-slate-500"><span>Rp </span><span>{{ FormatCurrencyID($item->harga_t) }}</span></div>
+                <div class="font-bold text-slate-500"><span>Rp </span><span>{{ formatCurrencyID($item->harga_t) }}</span></div>
                 {{-- <div class="text-slate-500">By: {{ $item->user->username }}</div> --}}
             </a>
         @endforeach

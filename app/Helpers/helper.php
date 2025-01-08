@@ -71,7 +71,7 @@ function pangkas_string_25($str_value) {
     return $str_formatted;
 }
 
-function FormatCurrencyID($number) {
+function formatCurrencyID($number) {
     if (is_string($number)) {
         $number = (float)$number;
     }
@@ -95,7 +95,7 @@ function FormatCurrencyID($number) {
     return $formatted_number;
 }
 
-function FormatDecimal($number) {
+function formatDecimal($number) {
     if (is_string($number)) {
         $number = (float)$number;
     }
@@ -117,5 +117,22 @@ function FormatDecimal($number) {
     // dump($formatted_number);
 
     return $formatted_number;
+}
+
+function formatDecimalAndTrim($number) {
+    // Memangkas angka desimal menjadi dua angka di belakang titik
+    $formattedNumber = number_format($number, 2, '.', '');
+    
+    // Menghapus trailing zero jika angka kedua di belakang titik adalah 0
+    if (substr($formattedNumber, -1) === '0') {
+        $formattedNumber = rtrim($formattedNumber, '0');
+    }
+    
+    // Menghapus titik jika angka setelah titik hilang
+    if (substr($formattedNumber, -1) === '.') {
+        $formattedNumber = rtrim($formattedNumber, '.');
+    }
+
+    return $formattedNumber;
 }
 ?>

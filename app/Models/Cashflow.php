@@ -113,96 +113,94 @@ class Cashflow extends Model
     }
 
     static function create_cashflow($params) {
-        return DB::transaction(function () use ($params) {
-            $user_id = $params['user_id'];
-            $time_key = $params['time_key'];
-            $kode_accounting = $params['kode_accounting'];
-            $surat_pembelian_id = $params['surat_pembelian_id'];
-            $post = $params['post'];
-            $cashflow_date = $params['cashflow_date'];
-            $is_earlier_date = $params['is_earlier_date'];
-    
-            $jumlah_terima_total = 0.0;
-            $cashflow_time = strtotime($cashflow_date);
-            $incremented_cashflow_date = $cashflow_time;
-    
-            foreach ($post['kategori_wallet'] as $key => $kategori_wallet) {
-                if ($post['jumlah_pembayaran'][$key]) {
-                    // Ambil wallet
-                    $wallet = Wallet::where('kategori_wallet', $kategori_wallet)
-                        ->where('tipe_wallet', $post['tipe_wallet'][$key])
-                        ->where('nama_wallet', $post['nama_wallet'][$key])
-                        ->first();
-    
-                    // Pastikan cashflow_date unik
-                    while (Cashflow::where('kategori_wallet', $wallet->kategori_wallet)
+        $user_id = $params['user_id'];
+        $time_key = $params['time_key'];
+        $kode_accounting = $params['kode_accounting'];
+        $surat_pembelian_id = $params['surat_pembelian_id'];
+        $post = $params['post'];
+        $cashflow_date = $params['cashflow_date'];
+        $is_earlier_date = $params['is_earlier_date'];
+
+        $jumlah_terima_total = 0.0;
+        // $cashflow_time = strtotime($cashflow_date);
+        // $incremented_cashflow_date = $cashflow_time;
+
+        foreach ($post['kategori_wallet'] as $key => $kategori_wallet) {
+            if ($post['jumlah_pembayaran'][$key]) {
+                // Ambil wallet
+                $wallet = Wallet::where('kategori_wallet', $kategori_wallet)
+                    ->where('tipe_wallet', $post['tipe_wallet'][$key])
+                    ->where('nama_wallet', $post['nama_wallet'][$key])
+                    ->first();
+
+                // // Pastikan cashflow_date unik
+                // while (Cashflow::where('kategori_wallet', $wallet->kategori_wallet)
+                //     ->where('tipe_wallet', $wallet->tipe_wallet)
+                //     ->where('nama_wallet', $wallet->nama_wallet)
+                //     ->where('cashflow_date', '=', date('Y-m-d\TH:i:s', $incremented_cashflow_date))
+                //     ->exists()) {
+                //     $incremented_cashflow_date = strtotime('+1 second', $incremented_cashflow_date);
+                // }
+                // $cashflow_date = date('Y-m-d\TH:i:s', $incremented_cashflow_date);
+
+                // Ambil cashflows setelah cashflow_date jika perlu
+                $latest_cashflows = collect();
+                $cashflow_before = null;
+
+                if ($is_earlier_date) {
+                    $cashflow_before = Cashflow::where('kategori_wallet', $wallet->kategori_wallet)
                         ->where('tipe_wallet', $wallet->tipe_wallet)
                         ->where('nama_wallet', $wallet->nama_wallet)
-                        ->where('cashflow_date', '=', date('Y-m-d\TH:i:s', $incremented_cashflow_date))
-                        ->exists()) {
-                        $incremented_cashflow_date = strtotime('+1 second', $incremented_cashflow_date);
-                    }
-                    $cashflow_date = date('Y-m-d\TH:i:s', $incremented_cashflow_date);
-    
-                    // Ambil cashflows setelah cashflow_date jika perlu
-                    $latest_cashflows = collect();
-                    $cashflow_before = null;
-    
-                    if ($is_earlier_date) {
-                        $cashflow_before = Cashflow::where('kategori_wallet', $wallet->kategori_wallet)
-                            ->where('tipe_wallet', $wallet->tipe_wallet)
-                            ->where('nama_wallet', $wallet->nama_wallet)
-                            ->where('cashflow_date', '<', $cashflow_date)
-                            ->orderByDesc('cashflow_date')->first();
-    
-                        $latest_cashflows = Cashflow::where('kategori_wallet', $wallet->kategori_wallet)
-                            ->where('tipe_wallet', $wallet->tipe_wallet)
-                            ->where('nama_wallet', $wallet->nama_wallet)
-                            ->where('cashflow_date', '>', $cashflow_date)
-                            ->orderBy('cashflow_date')->get();
-                    } else {
-                        $cashflow_before = Cashflow::where('kategori_wallet', $wallet->kategori_wallet)
-                            ->where('tipe_wallet', $wallet->tipe_wallet)
-                            ->where('nama_wallet', $wallet->nama_wallet)
-                            ->orderByDesc('cashflow_date')->first();
-                    }
-    
-                    $saldo_akhir = $cashflow_before ? $cashflow_before->saldo : 0.0;
-                    $transaksi = (float) $post['jumlah_pembayaran'][$key];
-    
-                    $saldo_akhir += $post['tipe_transaksi'] == 'pemasukan' ? $transaksi : -$transaksi;
-    
-                    // Buat cashflow baru
-                    $cashflow = Cashflow::create([
-                        'user_id' => $user_id,
-                        'time_key' => $time_key,
-                        'kode_accounting' => $kode_accounting,
-                        'surat_pembelian_id' => $surat_pembelian_id,
-                        'tipe' => $post['tipe_transaksi'],
-                        'kategori_wallet' => $wallet->kategori_wallet,
-                        'tipe_wallet' => $wallet->tipe_wallet,
-                        'nama_wallet' => $wallet->nama_wallet,
-                        'jumlah' => $transaksi,
-                        'saldo' => $saldo_akhir,
-                        'cashflow_date' => $cashflow_date,
-                    ]);
-    
-                    // Update saldo pada cashflows berikutnya
-                    foreach ($latest_cashflows as $latest_cashflow) {
-                        $saldo_akhir += $latest_cashflow->tipe == 'pemasukan' ? $latest_cashflow->jumlah : -$latest_cashflow->jumlah;
-                        $latest_cashflow->update(['saldo' => $saldo_akhir]);
-                    }
-    
-                    // Update saldo pada wallet
-                    $wallet->update(['saldo' => $saldo_akhir]);
-    
-                    $jumlah_terima_total += $transaksi;
+                        ->where('cashflow_date', '<', $cashflow_date)
+                        ->orderByDesc('cashflow_date')->first();
+
+                    $latest_cashflows = Cashflow::where('kategori_wallet', $wallet->kategori_wallet)
+                        ->where('tipe_wallet', $wallet->tipe_wallet)
+                        ->where('nama_wallet', $wallet->nama_wallet)
+                        ->where('cashflow_date', '>', $cashflow_date)
+                        ->orderBy('cashflow_date')->get();
+                } else {
+                    $cashflow_before = Cashflow::where('kategori_wallet', $wallet->kategori_wallet)
+                        ->where('tipe_wallet', $wallet->tipe_wallet)
+                        ->where('nama_wallet', $wallet->nama_wallet)
+                        ->orderByDesc('cashflow_date')->first();
                 }
-                $incremented_cashflow_date = strtotime('+1 second', $incremented_cashflow_date);
+
+                $saldo_akhir = $cashflow_before ? $cashflow_before->saldo : 0.0;
+                $transaksi = (float) $post['jumlah_pembayaran'][$key];
+
+                $saldo_akhir += $post['tipe_transaksi'] == 'pemasukan' ? $transaksi : -$transaksi;
+
+                // Buat cashflow baru
+                $cashflow = Cashflow::create([
+                    'user_id' => $user_id,
+                    'time_key' => $time_key,
+                    'kode_accounting' => $kode_accounting,
+                    'surat_pembelian_id' => $surat_pembelian_id,
+                    'tipe' => $post['tipe_transaksi'],
+                    'kategori_wallet' => $wallet->kategori_wallet,
+                    'tipe_wallet' => $wallet->tipe_wallet,
+                    'nama_wallet' => $wallet->nama_wallet,
+                    'jumlah' => $transaksi,
+                    'saldo' => $saldo_akhir,
+                    'cashflow_date' => $cashflow_date,
+                ]);
+
+                // Update saldo pada cashflows berikutnya
+                foreach ($latest_cashflows as $latest_cashflow) {
+                    $saldo_akhir += $latest_cashflow->tipe == 'pemasukan' ? $latest_cashflow->jumlah : -$latest_cashflow->jumlah;
+                    $latest_cashflow->update(['saldo' => $saldo_akhir]);
+                }
+
+                // Update saldo pada wallet
+                $wallet->update(['saldo' => $saldo_akhir]);
+
+                $jumlah_terima_total += $transaksi;
             }
-    
-            return $jumlah_terima_total;
-        });
+            // $incremented_cashflow_date = strtotime('+1 second', $incremented_cashflow_date);
+        }
+
+        return $jumlah_terima_total;
     }
 
     static function set_date_time($post) {

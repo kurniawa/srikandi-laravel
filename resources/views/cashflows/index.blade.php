@@ -19,8 +19,8 @@
         <table class="w-full mt-5">
             <tr class="text-slate-500">
                 <th></th>
-                <th><span class="bg-rose-300 rounded font-bold text-white p-1">Rp {{ FormatCurrencyID($grand_total_pengeluaran) }}</span></th>
-                <th><span class="bg-emerald-300 rounded font-bold text-white p-1">Rp {{ FormatCurrencyID($grand_total_pemasukan) }}</span></th>
+                <th><span class="bg-rose-300 rounded font-bold text-white p-1">Rp {{ formatCurrencyID($grand_total_pengeluaran) }}</span></th>
+                <th><span class="bg-emerald-300 rounded font-bold text-white p-1">Rp {{ formatCurrencyID($grand_total_pemasukan) }}</span></th>
             </tr>
             <tr class="text-slate-500">
                 <th></th>
@@ -35,8 +35,8 @@
                                 {{ $col_cashflow['hari'] }}-{{ $col_cashflow['bulan'] }}-{{ $col_cashflow['tahun'] }}</div>
                         </div>
                     </th>
-                    <th class="text-sm text-yellow-500">{{ FormatCurrencyID($col_wallets[$key]['wallet_awal']) }}</th>
-                    <th class="text-sm text-indigo-500">{{ FormatCurrencyID($col_wallets[$key]['wallet_akhir']) }}</th>
+                    <th class="text-sm text-yellow-500">{{ formatCurrencyID($col_wallets[$key]['wallet_awal']) }}</th>
+                    <th class="text-sm text-indigo-500">{{ formatCurrencyID($col_wallets[$key]['wallet_akhir']) }}</th>
                 </tr>
                 @foreach ($col_cashflow['cashflows'] as $cashflow)
             <tr class="border-t text-xs font-bold text-slate-500">
@@ -66,9 +66,9 @@
                 <td class="py-1">
                     @if ($cashflow->tipe === 'pemasukan')
                         <div class="text-center text-emerald-400 font-bold">
-                            {{ FormatCurrencyID($cashflow->jumlah) }}</div>
+                            {{ formatCurrencyID($cashflow->jumlah) }}</div>
                     @else
-                        <div class="text-center text-rose-400 font-bold">{{ FormatCurrencyID($cashflow->jumlah) }}
+                        <div class="text-center text-rose-400 font-bold">{{ formatCurrencyID($cashflow->jumlah) }}
                         </div>
                     @endif
                 </td>
@@ -104,10 +104,10 @@
                             </div>
                         </div>
                     </th>
-                    <th class="text-rose-400"><span class="border-2 border-rose-300 p-1 text-sm rounded-lg">{{ FormatCurrencyID($col_total[$key]['total_pengeluaran']) }}</span></th>
-                    <th class="text-emerald-400"><span class="border-2 border-emerald-300 p-1 text-sm rounded-lg">{{ FormatCurrencyID($col_total[$key]['total_pemasukan']) }}</span></th>
-                    {{-- <th class="text-sm text-yellow-500">{{ FormatCurrencyID($col_wallets[$key]['wallet_awal']) }}</th>
-                    <th class="text-sm text-indigo-500">{{ FormatCurrencyID($col_wallets[$key]['wallet_akhir']) }}</th> --}}
+                    <th class="text-rose-400"><span class="border-2 border-rose-300 p-1 text-sm rounded-lg">{{ formatCurrencyID($col_total[$key]['total_pengeluaran']) }}</span></th>
+                    <th class="text-emerald-400"><span class="border-2 border-emerald-300 p-1 text-sm rounded-lg">{{ formatCurrencyID($col_total[$key]['total_pemasukan']) }}</span></th>
+                    {{-- <th class="text-sm text-yellow-500">{{ formatCurrencyID($col_wallets[$key]['wallet_awal']) }}</th>
+                    <th class="text-sm text-indigo-500">{{ formatCurrencyID($col_wallets[$key]['wallet_akhir']) }}</th> --}}
                 </tr>
                 @foreach ($col_accounting['accountings'] as $accounting)
                     @if ($key % 2 == 0)
@@ -146,13 +146,13 @@
                             <td></td>
                             <td class="py-1">
                                 <div class="text-center text-emerald-600 font-bold text-sm">
-                                    {{ FormatCurrencyID($accounting->jumlah) }}</div>
+                                    {{ formatCurrencyID($accounting->jumlah) }}</div>
                             </td>
                         @else
                             <td></td>
                             <td>
                                 <div class="text-center text-rose-600 font-bold text-sm">
-                                    {{ FormatCurrencyID($accounting->jumlah) }}
+                                    {{ formatCurrencyID($accounting->jumlah) }}
                                 </div>
                             </td>
                             <td></td>
@@ -172,7 +172,7 @@
                             <tr>
                                 <td>{{ $wallet->nama_wallet }}</td>
                                 <td>:</td>
-                                <td>Rp {{ FormatCurrencyID($wallet->saldo) }}</td>
+                                <td>Rp {{ formatCurrencyID($wallet->saldo) }}</td>
                                 <td>
                                     <button type="button" onclick="toggle_element('form-edit-saldo-wallet-{{ $key_wallet }}')">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5">

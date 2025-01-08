@@ -91,10 +91,10 @@
                         <span>we:{{ $item->warna_emas }}</span>
                         @endif
                         @if ($item->kadar)
-                        <span>k:{{ $item->kadar / 100 }}%</span>
+                        <span>k:{{ formatDecimalAndTrim($item->kadar) }}%</span>
                         @endif
                         @if ($item->berat)
-                        <span>b:{{ $item->berat / 100 }}g</span>
+                        <span>b:{{ formatDecimalAndTrim($item->berat) }}g</span>
                         @endif
                         @if ($item->kondisi)
                         <span>zu:{{ $item->kondisi }}</span>
@@ -125,12 +125,12 @@
                 <div class="text-slate-500">
                     <div class="w-6 h-6 flex justify-center border font-bold text-slate-500">1</div>
                     @if ($item->harga_g)
-                    <div class="text-sm text-slate-500">Rp {{ my_decimal_format($item->harga_g) }} /g</div>
+                    <div class="text-sm text-slate-500">Rp {{ formatCurrencyID($item->harga_g) }} /g</div>
                     @endif
                     @if ($item->ongkos_g)
-                    <div class="text-sm text-slate-500">ongkos: Rp {{ my_decimal_format($item->ongkos_g) }} /g</div>
+                    <div class="text-sm text-slate-500">ongkos: Rp {{ formatCurrencyID($item->ongkos_g) }} /g</div>
                     @endif
-                    <div class="font-bold text-slate-500">Rp {{ my_decimal_format($item->harga_t) }}</div>
+                    <div class="font-bold text-slate-500">Rp {{ formatCurrencyID($item->harga_t) }}</div>
                 </div>
             </div>
         </div>
@@ -141,7 +141,7 @@
         <span class="text-xs text-slate-400">CS: {{ $surat_pembelian->user->nama }}</span>
         <div class="flex gap-1">
             <span class="text-xl font-bold text-red-600">Total:</span>
-            <div class="text-xl font-bold text-red-600">Rp <span id="harga_total_formatted">{{ my_decimal_format($surat_pembelian->harga_total) }}</span></div>
+            <div class="text-xl font-bold text-red-600">Rp <span id="harga_total_formatted">{{ formatCurrencyID($surat_pembelian->harga_total) }}</span></div>
         </div>
     </div>
 
