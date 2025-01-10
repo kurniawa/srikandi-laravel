@@ -424,10 +424,10 @@
                 <a href="${window_main_url}items/${item.id}/show" class="loading-spinner col-span-8">
                     <div class="text-indigo-500">${item.longname}</div>
                     <div class="text-xs flex">
-                        <div class="text-emerald-300 border border-emerald-300 rounded px-1">${formatCurrencyID(item.harga_g)}</div>
-                        <div class="text-rose-300 border border-rose-300 rounded px-1">${formatCurrencyID(item.ongkos_g)}</div>
+                        <div class="text-emerald-300 border border-emerald-300 rounded px-1">${formatCurrencyIDw100(item.harga_g)}</div>
+                        <div class="text-rose-300 border border-rose-300 rounded px-1">${formatCurrencyIDw100(item.ongkos_g)}</div>
                     </div>
-                    <div>${formatCurrencyID(item.harga_t)}</div>
+                    <div>${formatCurrencyIDw100(item.harga_t)}</div>
                 </a>
                 <div class="col-span-1">
                     <form action="${window_main_url}items/${item.tipe_barang}/create_item" method="GET" class="">

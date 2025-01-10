@@ -91,10 +91,10 @@
                         <span>we:{{ $item->warna_emas }}</span>
                         @endif
                         @if ($item->kadar)
-                        <span>k:{{ formatDecimalAndTrim($item->kadar) }}%</span>
+                        <span>k:{{ format_decimal_en_and_trim($item->kadar) }}%</span>
                         @endif
                         @if ($item->berat)
-                        <span>b:{{ formatDecimalAndTrim($item->berat) }}g</span>
+                        <span>b:{{ format_decimal_en_and_trim($item->berat) }}g</span>
                         @endif
                         @if ($item->kondisi)
                         <span>zu:{{ $item->kondisi }}</span>

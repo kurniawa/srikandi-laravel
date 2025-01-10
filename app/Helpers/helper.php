@@ -119,7 +119,7 @@ function formatDecimal($number) {
     return $formatted_number;
 }
 
-function formatDecimalAndTrim($number) {
+function format_decimal_en_and_trim($number) {
     // Memangkas angka desimal menjadi dua angka di belakang titik
     $formattedNumber = number_format($number, 2, '.', '');
     
@@ -134,5 +134,46 @@ function formatDecimalAndTrim($number) {
     }
 
     return $formattedNumber;
+    // // Menambahkan koma untuk pemisah ribuan
+    // $parts = explode('.', $formattedNumber);
+    // $parts[0] = number_format($parts[0], 0, '.', ','); // Format bagian angka sebelum desimal
+    // return implode('.', $parts); // Gabungkan kembali dengan desimal jika ada
+}
+
+function format_decimal_id_and_trim($number) {
+    // Memangkas angka desimal menjadi dua angka di belakang titik
+    $formattedNumber = number_format($number, 2, ',', '');
+    
+    // Menghapus trailing zero jika angka kedua di belakang titik adalah 0
+    if (substr($formattedNumber, -1) === '0') {
+        $formattedNumber = rtrim($formattedNumber, '0');
+    }
+    
+    // Menghapus titik jika angka setelah titik hilang
+    if (substr($formattedNumber, -1) === ',') {
+        $formattedNumber = rtrim($formattedNumber, ',');
+    }
+
+    return $formattedNumber;
+}
+
+function format_dots_and_decimals($number) {
+    // Memformat angka dengan maksimal dua angka desimal
+    $formattedNumber = number_format($number, 2, ',', '');
+    
+    // Menghapus trailing zero jika angka kedua desimal adalah 0
+    if (substr($formattedNumber, -1) === '0') {
+        $formattedNumber = rtrim($formattedNumber, '0');
+    }
+
+    // Menghapus koma jika tidak ada angka desimal yang tersisa
+    if (substr($formattedNumber, -1) === ',') {
+        $formattedNumber = rtrim($formattedNumber, ',');
+    }
+
+    // Menambahkan titik untuk pemisah ribuan
+    $parts = explode(',', $formattedNumber);
+    $parts[0] = number_format($parts[0], 0, ',', '.'); // Format bagian angka sebelum desimal
+    return implode(',', $parts); // Gabungkan kembali dengan desimal jika ada
 }
 ?>

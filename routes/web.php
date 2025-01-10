@@ -93,10 +93,10 @@ Route::controller(UserController::class)->group(function () {
 
 Route::controller(ItemController::class)->group(function () {
     Route::get('/items/pilih_tipe_barang', 'pilih_tipe_barang')->name('add_new_item.pilih_tipe_barang')->middleware('level3');
-    Route::get('/items/{tipe_barang}/create_item', 'create_item')->name('add_new_item.create')->middleware('level3');
+    Route::get('/items/{mode}/{tipe_barang}/{item_id}/create_item', 'create_or_edit_item')->name('add_new_item.create')->middleware('level3');
     Route::post('/items/store', 'store')->name('items.store')->middleware('level3');
     Route::get('/items/{item}/show', 'show')->name('items.show')->middleware('auth');
-    Route::get('/items/{item}/edit', 'edit')->name('items.edit')->middleware('level3');
+    Route::get('/items/{mode}/{tipe_barang}/{item_id}/edit', 'create_or_edit_item')->name('items.edit')->middleware('level3');
     Route::post('/items/{item}/update', 'update')->name('items.update')->middleware('level3');
     Route::post('/items/{item}/delete', 'delete')->name('items.delete')->middleware('level3');
     Route::post('/items/{item}/{item_photo}/{photo}/delete_photo', 'delete_photo')->name('items.delete_photo')->middleware('level3');

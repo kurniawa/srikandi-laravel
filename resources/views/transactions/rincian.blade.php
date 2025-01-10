@@ -66,8 +66,8 @@
                         <div class="col-span-12 grid grid-cols-12 py-1 border-b items-center">
                             <div class="col-span-3 font-bold">
                                 <div class="inline-block rounded bg-orange-100 p-1">
-                                    <div class="text-center">{{ formatDecimalAndTrim($bb_accounting["gol_kadars"][$i]) }}%</div>
-                                    <div class="text-center">{{ formatDecimalAndTrim($bb_accounting['total_berats'][$i]) }}g</div>
+                                    <div class="text-center">{{ format_decimal_en_and_trim($bb_accounting["gol_kadars"][$i]) }}%</div>
+                                    <div class="text-center">{{ format_decimal_en_and_trim($bb_accounting['total_berats'][$i]) }}g</div>
                                     <div class="text-center">{{ formatCurrencyID($bb_accounting['total_hargas'][$i]) }}</div>
                                 </div>
                             </div>
@@ -75,7 +75,7 @@
                                 @foreach ($bb_accounting['accountings'][$bb_accounting["gol_kadars"][$i]] as $accounting)
                                     <div>{{ $accounting['nama_barang'] }}</div>
                                     <div class="flex justify-between">
-                                        <div>{{ formatDecimalAndTrim($accounting['berat']) }}g --> Rp {{ formatCurrencyID($accounting['jumlah']) }}</div>
+                                        <div>{{ format_decimal_en_and_trim($accounting['berat']) }}g --> Rp {{ formatCurrencyID($accounting['jumlah']) }}</div>
                                         @if (!$target_user)
                                         <div class="text-pink-300 font-bold">{{ $accounting['username'] }}</div>
                                         @endif
@@ -126,8 +126,8 @@
                         <div class="col-span-12 grid grid-cols-12 py-1 border-b items-center">
                             <div class="col-span-3 font-bold">
                                 <div class="inline-block rounded bg-emerald-100 p-1">
-                                    <div class="text-center">{{ formatDecimalAndTrim($buy_accounting["gol_kadars"][$i]) }}%</div>
-                                    <div class="text-center">{{ formatDecimalAndTrim($buy_accounting['total_berats'][$i]) }}g</div>
+                                    <div class="text-center">{{ format_decimal_en_and_trim($buy_accounting["gol_kadars"][$i]) }}%</div>
+                                    <div class="text-center">{{ format_decimal_en_and_trim($buy_accounting['total_berats'][$i]) }}g</div>
                                     <div class="text-center">{{ formatCurrencyID($buy_accounting['total_hargas'][$i]) }}</div>
                                 </div>
                             </div>
@@ -135,7 +135,7 @@
                                 @foreach ($buy_accounting['accountings'][$buy_accounting["gol_kadars"][$i]] as $accounting)
                                     <div>{{ $accounting['nama_barang'] }}</div>
                                     <div class="flex justify-between">
-                                        <div>{{ formatDecimalAndTrim($accounting['berat']) }}g --> Rp {{ formatCurrencyID($accounting['jumlah']) }}</div>
+                                        <div>{{ format_decimal_en_and_trim($accounting['berat']) }}g --> Rp {{ formatCurrencyID($accounting['jumlah']) }}</div>
                                         @if (!$target_user)
                                         <div class="text-indigo-300 font-bold">{{ $accounting['username'] }}</div>
                                         @endif

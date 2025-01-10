@@ -53,7 +53,7 @@ class ItemController extends Controller
     }
 
     // function create_item($from, $tipe_barang) {
-    function create_item($tipe_barang, Request $request)
+    function create_or_edit_item($mode, $tipe_barang, $item_id, Request $request)
     {
         // dump($from);
         // dd($tipe_barang);
@@ -62,48 +62,20 @@ class ItemController extends Controller
         // dump(date("Y-m-d", $time));
         // dd(date("Y-m-d", $time - 86400));
         $get = $request->query();
+        $user = Auth::user();
+        $cart = null;
+        if ($user) {
+            $cart = Cart::where('user_id', Auth::user()->id)->first();
+        }
 
-        $tipe_perhiasan = null;
-        $jenis_perhiasan = null;
-        $deskripsi = null;
-        $warna_emas = null;
-        $kadar = null;
-        $berat = null;
-        $harga_g = null;
-        $ongkos_g = null;
-        $harga_t = null;
-        $shortname = null;
-        $longname = null;
-        $keterangan = null;
-        $kondisi = null;
-        $cap = null;
-        $range_usia = null;
+        $item = collect();
+        
         $item_matas = [];
         $item_mainans = [];
-        $ukuran = null;
-        $merk = null;
-        $plat = null;
+        
 
-        if ($get && isset($get['item_id'])) {
-            $item = Item::find($get['item_id']);
-            $tipe_perhiasan = $item->tipe_perhiasan;
-            $jenis_perhiasan = $item->jenis_perhiasan;
-            $deskripsi = $item->deskripsi;
-            $warna_emas = $item->warna_emas;
-            $kadar = $item->kadar;
-            $berat = $item->berat;
-            $harga_g = $item->harga_g;
-            $ongkos_g = $item->ongkos_g;
-            $harga_t = $item->harga_t;
-            $shortname = $item->shortname;
-            $longname = $item->longname;
-            $keterangan = $item->keterangan;
-            $kondisi = $item->kondisi;
-            $cap = $item->cap;
-            $range_usia = $item->range_usia;
-            $ukuran = $item->ukuran;
-            $merk = $item->merk;
-            $plat = $item->plat;
+        if ($mode == 'CREATE_BASED_ON_EXISTING' || $mode == 'EDIT') {
+            $item = Item::find($item_id);
 
             $this_item_matas = ItemMata::where('item_id', $item->id)->get();
             if (count($this_item_matas)) {
@@ -113,7 +85,7 @@ class ItemController extends Controller
                         'warna' => $mata->warna,
                         'level_warna' => $mata->level_warna,
                         'opacity' => $mata->opacity,
-                        'jumlah' => $item_mata->jumlah,
+                        'jumlah' => $item_mata->jumlah_mata,
                     ];
                 }
             }
@@ -134,32 +106,25 @@ class ItemController extends Controller
         $jenis_perhiasans = JenisPerhiasan::select('id', 'nama as label', 'nama as value', 'tipe_perhiasan_id', 'tipe_perhiasan')->get();
         $caps = Cap::select('id', 'nama as label', 'nama as value', 'codename')->get();
         $label_matas = Mata::select('warna as label', 'warna as value')->groupBy('warna')->get();
-        // dd($label_matas);
         $matas = Mata::all();
         $label_mainans = Mainan::select('id', 'nama as label', 'nama as value', 'codename')->get();
         $label_warna_emas = WarnaEmas::all();
-        // dd($tipe_perhiasans);
-        // dd($jenis_perhiasans);
 
-        $user = Auth::user();
-        $cart = null;
-        if ($user) {
-            $cart = Cart::where('user_id', Auth::user()->id)->first();
-        }
+        $kondisi_options = [
+            ['value' => '9', 'label' => '9 - mulus'],
+            ['value' => '8', 'label' => '8 - sedikit cacat/hampir tidak terlihat'],
+            ['value' => '7', 'label' => '7 - cacat jelas terlihat'],
+            ['value' => '6', 'label' => '6 - cacat banget'],
+            ['value' => '5', 'label' => '5 - ancur / rusak'],
+        ];
+        $range_usia_options = ['dewasa', 'anak', 'bayi'];
+        $merk_options = ['Antam', 'UBS'];
+        $level_warna_options = ['neutral', 'tua', 'muda'];
+        $opacity_options = ['transparent', 'half-transparent', 'non-transparent'];
 
         $data = [
-            // 'goback' => 'home',
-            // 'user_role' => $user_role,
-            'menus' => Menu::get(),
-            'route_now' => 'items.create_item',
-            'profile_menus' => Menu::get_profile_menus(Auth::user()),
-            // 'parent_route' => 'home',
-            // 'back' => true,
-            // 'backRoute' => 'add_new_item.pilih_tipe_barang',
-            // 'backRouteParams' => [$from],
-            // 'spk_menus' => Menu::get_spk_menus(),
-            // 'user' => Auth::user(),
-            // 'from' => $from,
+            'mode' => $mode,
+            'item' => $item,
             'tipe_barang' => $tipe_barang,
             'tipe_perhiasans' => $tipe_perhiasans,
             'jenis_perhiasans' => $jenis_perhiasans,
@@ -172,34 +137,21 @@ class ItemController extends Controller
             'user' => $user,
             'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
 
-            'tipe_perhiasan' => $tipe_perhiasan,
-            'jenis_perhiasan' => $jenis_perhiasan,
-            'deskripsi' => $deskripsi,
-            'warna_emas' => $warna_emas,
-            'kadar' => $kadar,
-            'berat' => $berat,
-            'harga_g' => $harga_g,
-            'ongkos_g' => $ongkos_g,
-            'harga_t' => $harga_t,
-            'shortname' => $shortname,
-            'longname' => $longname,
-            'keterangan' => $keterangan,
-            'kondisi' => $kondisi,
-            'cap' => $cap,
-            'range_usia' => $range_usia,
+            'kondisi_options' => $kondisi_options,
+            'range_usia_options' => $range_usia_options,
+            'merk_options' => $merk_options,
+            'level_warna_options' => $level_warna_options,
+            'opacity_options' => $opacity_options,
+
             'item_matas' => $item_matas,
             'item_mainans' => $item_mainans,
-            'ukuran' => $ukuran,
-            'merk' => $merk,
-            'plat' => $plat
         ];
 
-        // dd($caps);
+        // dd($data);
 
-        return view('carts.create_item', $data);
+        return view('items.create_or_edit_item', $data);
     }
 
-    // function store($from, Request $request) {
     function store(Request $request)
     {
         $candidate_new_item = Item::validasi_item($request);
@@ -384,98 +336,11 @@ class ItemController extends Controller
         return view('items.show', $data);
     }
 
-    function edit(Item $item)
-    {
-        $user = Auth::user();
-        $cart = Cart::where('user_id', $user->id)->first();
-        // if (count($item->item_photos)) {
-        //     foreach ($item->item_photos as $item_photo) {
-        //         $photo = Photo::find($item_photo->photo_id);
-        //         $photos->push($photo);
-        //     }
-        // }
-
-        $item_photos = collect();
-        $photos = collect();
-
-        for ($i = 0; $i < 5; $i++) {
-            $item_photo = ItemPhoto::where('item_id', $item->id)->where('photo_index', $i)->first();
-
-            $item_photos->push($item_photo);
-
-            $photo = null;
-            if ($item_photo) {
-                $photo = Photo::find($item_photo->photo_id);
-            }
-            $photos->push($photo);
-        }
-
-        $arr_warna_emas = ['kuning', 'rose gold', 'putih', 'chrome'];
-        $obj_kondisi = [
-            ['value' => '99', 'label' => '99 - mulus'],
-            ['value' => '80', 'label' => '80 - sedikit cacat/hampir tidak terlihat'],
-            ['value' => '70', 'label' => '70 - cacat jelas terlihat'],
-            ['value' => '60', 'label' => '60 - cacat banget'],
-            ['value' => '50', 'label' => '50 - ancur / rusak'],
-        ];
-        $arr_range_usia = ['dewasa', 'anak', 'bayi'];
-        $arr_merks = ['', 'Antam', 'UBS'];
-        $arr_level_warnas = ['neutral', 'tua', 'muda'];
-        $arr_opacities = ['transparent', 'half-transparent', 'non-transparent'];
-
-        $tipe_perhiasans = TipePerhiasan::all();
-        $jenis_perhiasans = JenisPerhiasan::select('id', 'nama as label', 'nama as value', 'tipe_perhiasan_id', 'tipe_perhiasan')->get();
-        $caps = Cap::select('id', 'nama as label', 'nama as value', 'codename')->get();
-        $label_warna_matas = Mata::select('warna as label', 'warna as value')->groupBy('warna')->get();
-        $matas = Mata::all();
-        $label_mainans = Mainan::select('id', 'nama as label', 'nama as value', 'codename')->get();
-
-        $data = [
-            'menus' => Menu::get(),
-            'route_now' => 'items.edit',
-            'profile_menus' => Menu::get_profile_menus(Auth::user()),
-            'parent_route' => 'home',
-            'back' => true,
-            'backRoute' => 'items.show',
-            'backRouteParams' => [$item->id],
-            // 'spk_menus' => Menu::get_spk_menus(),
-            'item' => $item,
-            'cart' => $cart,
-            'user' => $user,
-            'item_photos' => $item_photos,
-            'photos' => $photos,
-            'arr_warna_emas' => $arr_warna_emas,
-            'obj_kondisi' => $obj_kondisi,
-            'arr_range_usia' => $arr_range_usia,
-            'arr_merks' => $arr_merks,
-            'arr_level_warnas' => $arr_level_warnas,
-            'arr_opacities' => $arr_opacities,
-            'tipe_perhiasans' => $tipe_perhiasans,
-            'jenis_perhiasans' => $jenis_perhiasans,
-            'caps' => $caps,
-            'label_warna_matas' => $label_warna_matas,
-            'matas' => $matas,
-            'label_mainans' => $label_mainans,
-            // 'related_user' => $related_user,
-            // 'peminat_items' => $peminat_items,
-            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
-        ];
-        // if (count($item->matas)) {
-        //     $test = ItemMata::where('item_id', $item->id)->get();
-        //     dump($test);
-        //     dump(count($item->matas));
-        //     dump('item->matas true');
-        //     dump($item->item_matas);
-        // }
-        // dd(count($item->item_matas));
-        return view('items.edit', $data);
-    }
-
     function update(Item $item, Request $request)
     {
         $post = $request->post();
         // dump($from);
-        // dd($post);
+        dd($post);
 
         $request->validate([
             'tipe_barang' => 'required',

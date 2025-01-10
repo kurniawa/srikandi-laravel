@@ -96,7 +96,7 @@
                 </div>
                 <div class="flex gap-2">
                     <div class="bg-slate-100 rounded-full w-9 h-9 flex justify-center items-center">
-                        <a href="{{ route('items.edit', $item->id) }}" class="loading-spinner text-slate-400">
+                        <a href="{{ route('items.edit', ['EDIT', $item->tipe_barang, $item->id]) }}" class="loading-spinner text-slate-400">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                                 stroke="currentColor" class="w-5 h-5">
                                 <path stroke-linecap="round" stroke-linejoin="round"
