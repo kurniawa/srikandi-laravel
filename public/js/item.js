@@ -27,12 +27,19 @@ function setAutocompleteWarnaMata(element_id, source) {
 }
 
 function addMata__(index_mata, label_matas) {
+    let html_options_warna_mata = '';
+    label_matas.forEach(label_mata => {
+        html_options_warna_mata += `<option value="${label_mata.value}">${label_mata.label}</option>`;
+    });
+
     document.getElementById("data_mata").insertAdjacentHTML(
         "beforeend",
         `<div id="data-mata-${index_mata}">
         <div class="grid grid-cols-2 gap-2 mt-2 border-t border-b border-violet-300 p-1">
             <div class="mb-1">
-                <input type="text" id="label_mata-${index_mata}" name="warna_mata[]" placeholder="warna_mata" onchange="generateNama()" class="warna-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <select name="warna_mata[]" onchange="generateNama()" class="warna-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5">
+                    ${html_options_warna_mata}
+                </select>
             </div>
             <div class="mb-1">
                 <select id="level_warna" name="level_warna[]" onchange="generateNama()" class="level-warna bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -62,7 +69,8 @@ function addMata__(index_mata, label_matas) {
     </div>`
     );
 
-    setAutocompleteWarnaMata(`label_mata-${index_mata}`, label_matas);
+    // <input type="text" id="label_mata-${index_mata}" name="warna_mata[]" placeholder="warna_mata" onchange="generateNama()" class="warna-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    // setAutocompleteWarnaMata(`label_mata-${index_mata}`, label_matas);
 }
 
 function setAutocompleteMainan(element_id, mainans) {

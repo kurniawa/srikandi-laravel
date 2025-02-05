@@ -419,7 +419,7 @@
         }
 
         function existElementMainan(checkbox_mainan) {
-            console.log(checkbox_mainan.checked);
+            // console.log(checkbox_mainan.checked);
             if (checkbox_mainan.checked) {
                 let input_tipe_label_mainans = document.querySelectorAll('.tipe-mainan');
                 // console.log(input_tipe_label_mainans.length);

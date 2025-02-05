@@ -423,34 +423,6 @@ class Item extends Model
 
     }
 
-    static function get_all_item_x_photos($route, $item_id) {
-        $all_items = Item::select('id', 'shortname', 'longname', 'tipe_barang', 'harga_g', 'ongkos_g', 'harga_t')->get();
-        $all_items_x_photos = collect();
-        foreach ($all_items as $item) {
-            $photo_path = null;
-            if (count($item->photos)) {
-                $photo_path = $item->photos[0]->path;
-            }
-            $url_path = "items/$item->id/show";
-            if ($route && $route == 'items.link_photo_from_similar_item') {
-                $url_path = "items/$item_id/$item->id/link_photo_from_similar_item";
-            }
-            $all_items_x_photos->push([
-                'id' => $item->id,
-                'tipe_barang' => $item->tipe_barang,
-                'shortname' => $item->shortname,
-                'longname' => $item->longname,
-                'harga_g' => $item->harga_g,
-                'ongkos_g' => $item->ongkos_g,
-                'harga_t' => $item->harga_t,
-                'photo_path' => $photo_path,
-                'url_path' => $url_path,
-            ]);
-        }
-
-        return $all_items_x_photos;
-    }
-
     static function similar_items_x_photos($route, $item) {
         $similar_items = Item::select('id', 'shortname', 'longname', 'harga_g', 'ongkos_g', 'harga_t')
         ->where('tipe_barang', $item->tipe_barang)

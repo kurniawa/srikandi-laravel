@@ -30,7 +30,6 @@ class TransactionController extends Controller
             'profile_menus' => Menu::get_profile_menus($user),
             'cart' => $cart,
             'user' => $user,
-            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
 
         $data = array_merge($data, $get);
@@ -232,7 +231,6 @@ class TransactionController extends Controller
             'tanggal' => $tanggal,
             'user_lists' => $user_lists,
             'target_user' => $target_user,
-            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
         // dd(strtotime("2024-07-25 08:08:08"));
         // dump($bb_accountings);
@@ -256,7 +254,6 @@ class TransactionController extends Controller
             'user' => $user,
             'wallets_non_tunai' => $wallets_non_tunai,
             'data' => Item::get_data_for_create_item('perhiasan'),
-            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
         return view('transactions.manual-buyback', $data);
     }

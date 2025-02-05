@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\APIController;
 use App\Http\Controllers\ArtisanController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CapController;
@@ -106,6 +107,11 @@ Route::controller(ItemController::class)->group(function () {
     Route::get('/items/{item}/{similar_item}/link_photo_from_similar_item', 'link_photo_from_similar_item')->name('items.link_photo_from_similar_item')->middleware('level3');
     // Route::post('/items/{item}/mau','mau')->name('items.mau');
     // Route::post('/items/{item}/{peminat_item}/hapus_peminat','hapus_peminat')->name('items.hapus_peminat');
+});
+
+Route::controller(APIController::class)->group(function () {
+    Route::get('/api/search-customers', 'search_customers')->name('api_search_customers')->middleware('level3');
+    Route::get('/api/search-items', 'search_items')->name('api_search_items')->middleware('level3');
 });
 
 Route::controller(PhotoController::class)->group(function () {

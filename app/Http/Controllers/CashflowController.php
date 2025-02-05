@@ -156,7 +156,6 @@ class CashflowController extends Controller
             'back' => true,
             'backRoute' => 'home',
             'backRouteParams' => null,
-            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
             'grand_total_pemasukan' => $grand_total_pemasukan,
             'grand_total_pengeluaran' => $grand_total_pengeluaran,
         ];
@@ -192,7 +191,6 @@ class CashflowController extends Controller
             'acuan_pembukuans' => $acuan_pembukuans,
             'wallets_non_tunai' => $wallets_non_tunai,
             'data' => Item::get_data_for_create_item('perhiasan'),
-            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
         // dd($data);
         return view('cashflows.transaksi', $data);

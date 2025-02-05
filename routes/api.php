@@ -20,5 +20,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::controller(APIController::class)->group(function () {
-    Route::get('api/search-customers', 'search_customers')->name('api_search_customers')->middleware('level3');
+    Route::get('/api/search-customers', 'search_customers')->name('api_search_customers')->middleware('level3');
+    Route::get('/api/search-items', 'search_items')->name('api_search_items')->middleware('level3');
 });

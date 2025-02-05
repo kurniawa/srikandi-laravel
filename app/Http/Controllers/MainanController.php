@@ -23,7 +23,6 @@ class MainanController extends Controller
             'cart' => $cart,
             'user' => $user,
             'mainans' => $mainans,
-            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
 
         return view('attributes.mainan_index', $data);
@@ -73,7 +72,6 @@ class MainanController extends Controller
             'cart' => $cart,
             'user' => $user,
             'mainan' => $mainan,
-            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
 
         return view('attributes.mainan_edit', $data);

@@ -63,7 +63,8 @@
                                 </svg>
                             </div>
                             <div class="grow">
-                                <input type="text" name="longname" id="search-longname" oninput="searchItem(this, 'search-result')" class="border-none w-full p-1 rounded" placeholder="nama barang/item...">
+                                {{-- <input type="text" name="longname" id="search-longname" oninput="searchItem(this, 'search-result')" class="border-none w-full p-1 rounded" placeholder="nama barang/item..."> --}}
+                                <input type="text" name="longname" id="search-longname" class="border-none w-full p-1 rounded" placeholder="nama barang/item...">
                             </div>
                         </div>
                     </form>
@@ -260,7 +261,7 @@
             </div>
             {{-- END - MOBILE MENU --}}
         </nav>
-        <div id="search-result" class="relative w-full"></div>
+        <div id="search-results" class="relative w-full"></div>
 
         @yield('content')
 
@@ -384,9 +385,6 @@
         })
     });
 
-    // Filter Pencarian Item
-    const all_items_x_photos = {!! json_encode($all_items_x_photos, JSON_HEX_TAG) !!};
-
     // console.log(window.location.href);
     // console.log(window.location.protocol);
     // console.log(window.location.host);
@@ -396,57 +394,74 @@
     } catch (error) {
         console.error(error);        
     }
-    // console.log(window_main_url);
-    function searchItem(input, result_id) {
-        if (input.value.trim()) {
-            const filtered = all_items_x_photos.filter(function (item) {
-            if (item.longname.toLowerCase().includes(input.value.trim().toLowerCase()) && this.count < 10) {
-                this.count++;
-                return true;
-            }
-            return false;
-            }, {count:0});
-        // console.log(filtered);
-        let html_result = `<div class="absolute bg-white shadow drop-shadow p-1 text-xs font-bold z-30">`;
-        
-        filtered.forEach(item => {
-            html_photo = `<div class="col-span-3 bg-indigo-100 text-indigo-400">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-                </svg>
-                </div>`;
-            if (item.photo_path) {
-                html_photo = `<div class="col-span-3">
-                    <img class="w-full" src="${window_main_url}storage/${item.photo_path}">
-                    </div>`;
-            }
-            html_result += `<div class="border-b grid grid-cols-12 gap-1 items-center">
-                ${html_photo}
-                <a href="${window_main_url}items/${item.id}/show" class="loading-spinner col-span-8">
-                    <div class="text-indigo-500">${item.longname}</div>
-                    <div class="text-xs flex">
-                        <div class="text-emerald-300 border border-emerald-300 rounded px-1">${formatCurrencyIDw100(item.harga_g)}</div>
-                        <div class="text-rose-300 border border-rose-300 rounded px-1">${formatCurrencyIDw100(item.ongkos_g)}</div>
-                    </div>
-                    <div>${formatCurrencyIDw100(item.harga_t)}</div>
-                </a>
-                <div class="col-span-1">
-                    <form action="${window_main_url}items/${item.tipe_barang}/create_item" method="GET" class="">
-                        <button type="submit" name="item_id" value="${item.id}" class="loading-spinner flex h-full w-full rounded py-1 items-center justify-center text-white bg-emerald-300 hover:bg-emerald-400">+N</button>
-                    </form>
-                </div>
-                </div>`;
-        });
-        html_result += '</div>';
-
-        document.getElementById(result_id).innerHTML = html_result;
-        } else {
-            document.getElementById(result_id).innerHTML = '';
-
+    // Fitur: Search Item
+    let debounceTimeout;
+    const fetchItems = async (query) => {
+        try {
+            const response = await fetch(`/api/search-items?q=${query}`);
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error("Failed to fetch items", error);
+            return [];
         }
-        
-    }
-    // END - Filter Pencarian Item
+        // fetch(`/api/search-items?q=${query}`)
+        //     .then((response) => response.json())
+        //     .then((data) => {
+        //     console.log(data); // Tampilkan daftar items
+        //     });
+    };
+
+    document.getElementById('search-longname').addEventListener('input', function () {
+        clearTimeout(debounceTimeout); // Reset timer
+        const query = this.value;
+
+        const search_results = document.getElementById('search-results');
+        if (query.trim() !== '') {
+            debounceTimeout = setTimeout( async () => {
+                const found_items = await fetchItems(query);
+
+                search_results.innerHTML = '';
+
+                let html_result = `<div class="absolute bg-white shadow drop-shadow p-1 text-xs font-bold z-30">`;
+                
+                found_items.forEach(item => {
+                    html_photo = `<div class="col-span-3 bg-indigo-100 text-indigo-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                        </svg>
+                        </div>`;
+                    if (item.photo_path) {
+                        html_photo = `<div class="col-span-3">
+                            <img class="w-full" src="${window_main_url}storage/${item.photo_path}">
+                            </div>`;
+                    }
+                    html_result += `<div class="border-b grid grid-cols-12 gap-1 items-center">
+                        ${html_photo}
+                        <a href="${window_main_url}items/${item.id}/show" class="loading-spinner col-span-8">
+                            <div class="text-indigo-500">${item.longname}</div>
+                            <div class="text-xs flex">
+                                <div class="text-emerald-300 border border-emerald-300 rounded px-1">${formatCurrencyIDw100(item.harga_g)}</div>
+                                <div class="text-rose-300 border border-rose-300 rounded px-1">${formatCurrencyIDw100(item.ongkos_g)}</div>
+                            </div>
+                            <div>${formatCurrencyIDw100(item.harga_t)}</div>
+                        </a>
+                        <div class="col-span-1">
+                            <form action="${window_main_url}items/${item.tipe_barang}/create_item" method="GET" class="">
+                                <button type="submit" name="item_id" value="${item.id}" class="loading-spinner flex h-full w-full rounded py-1 items-center justify-center text-white bg-emerald-300 hover:bg-emerald-400">+N</button>
+                            </form>
+                        </div>
+                        </div>`;
+                });
+                html_result += '</div>';
+
+                search_results.innerHTML = html_result;
+                
+            }, 300); // 300ms debounce
+        } else {
+            search_results.innerHTML = '';
+        }
+    });
 </script>
 
 </html>

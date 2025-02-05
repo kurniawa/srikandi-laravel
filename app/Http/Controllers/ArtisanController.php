@@ -31,7 +31,6 @@ class ArtisanController extends Controller
             'profile_menus' => Menu::get_profile_menus(Auth::user()),
             'user' => $user,
             'cart' => $cart,
-            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
 
         return view('commands.index', $data);

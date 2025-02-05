@@ -264,10 +264,14 @@
                                 <div id="data-mata-{{ $key_item_mata }}">
                                     <div class="grid grid-cols-2 gap-2 mt-2 border-t border-b border-violet-300 p-1">
                                         <div class="mb-1">
-                                            <input type="text" id="label_mata-{{ $key_item_mata }}" name="warna_mata[]"
-                                            value="{{ old("warna_mata.$key_item_mata") ?? $item_mata['warna'] ?? '' }}"
-                                            placeholder="warna_mata" onchange="generateNama()"
-                                            class="warna-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            <select name="warna_mata[]" onchange="generateNama()" class="warna-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5">
+                                                @php
+                                                    $warna_mata_value = old("warna_mata.$key_item_mata") ?? $item_mata['warna'] ?? '';
+                                                @endphp
+                                                @foreach ($label_matas as $label_mata)
+                                                    <option value="{{ $label_mata->value }}" {{ $label_mata->value == $warna_mata_value ? 'selected' : '' }}>{{ $label_mata->label }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <div class="mb-1">
                                             <select id="level_warna" name="level_warna[]" onchange="generateNama()" class="level-warna bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -401,6 +405,11 @@
         </form>
 
         {{-- <x-back-button :back=$back :backRoute=$backRoute :backRouteParams=$backRouteParams></x-back-button> --}}
+        
+        {{-- <input type="text" id="label_mata-{{ $key_item_mata }}" name="warna_mata[]"
+        value="{{ old("warna_mata.$key_item_mata") ?? $item_mata['warna'] ?? '' }}"
+        placeholder="warna_mata" onchange="generateNama()"
+        class="warna-mata bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"> --}}
     </main>
 
     <script>
@@ -454,15 +463,6 @@
 
         }
 
-        // function setAutocompleteWarnaMata(element_id, source) {
-        //     // console.log('run autocomplete mata');
-        //     $(`#${element_id}`).autocomplete({
-        //         source: source,
-        //     });
-        // }
-
-        // setAutocompleteWarnaMata(`warna_mata-0`, label_matas);
-
         let index_mainan = 0;
 
         function addMainan() {
@@ -481,7 +481,7 @@
         }
 
         function existElementMainan(checkbox_mainan) {
-            console.log(checkbox_mainan.checked);
+            // console.log(checkbox_mainan.checked);
             if (checkbox_mainan.checked) {
                 let input_tipe_label_mainans = document.querySelectorAll('.tipe-mainan');
                 // console.log(input_tipe_label_mainans.length);

@@ -33,7 +33,6 @@ class JenisPerhiasanController extends Controller
             'user' => $user,
             'col_jenis_perhiasans' => $col_jenis_perhiasans,
             'tipe_perhiasans' => $tipe_perhiasans,
-            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
 
         return view('attributes.jenis_perhiasan_index', $data);
@@ -83,7 +82,6 @@ class JenisPerhiasanController extends Controller
             'user' => $user,
             'tipe_perhiasans' => $tipe_perhiasans,
             'jenis_perhiasan' => $jenis_perhiasan,
-            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
 
         return view('attributes.jenis_perhiasan_edit', $data);

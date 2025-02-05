@@ -46,7 +46,6 @@ class ItemController extends Controller
             'backRouteParams' => [Auth::user()->id],
             'cart' => $cart,
             'user' => $user,
-            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
 
         return view('carts.pilih_tipe_barang', $data);
@@ -135,7 +134,6 @@ class ItemController extends Controller
             'label_warna_emas' => $label_warna_emas,
             'cart' => $cart,
             'user' => $user,
-            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
 
             'kondisi_options' => $kondisi_options,
             'range_usia_options' => $range_usia_options,
@@ -171,7 +169,6 @@ class ItemController extends Controller
             $data['cart'] = $cart;
             $data['route1'] = 'items.store';
             $data['route2'] = 'items.show';
-            $data['all_items_x_photos'] = Item::get_all_item_x_photos(null, null);
             // dd($data);
             return view('items.found_similar_items', $data);
             // return redirect()->route('add_new_item.create', $data);
@@ -326,7 +323,6 @@ class ItemController extends Controller
             'tipe_instansi' => $tipe_instansi,
             'tipe_transaksi' => $tipe_transaksi,
             'keterangan_transaksi' => $keterangan_transaksi,
-            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
             'photos_sorted' => $photos_sorted,
             'berat_terima' => $berat_terima,
             'total_potongan' => $total_potongan,
@@ -550,7 +546,6 @@ class ItemController extends Controller
             'user' => $user,
             // 'related_user' => $related_user,
             // 'peminat_items' => $peminat_items,
-            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
             // 'similar_items_x_photos' => Item::similar_items_x_photos('items.link_photo_from_similar_item', $item),
         ];
 
@@ -620,7 +615,6 @@ class ItemController extends Controller
             'item' => $item,
             'cart' => $cart,
             'user' => $user,
-            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
             'saran_photos' => $saran_photos,
             'index' => $index,
         ];

@@ -41,7 +41,6 @@ class HomeController extends Controller
             'cart' => $cart,
             'user' => $user,
             'items' => $items,
-            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
         // dump($items[0]);
         // dd($items[0]->item_photos);
@@ -69,7 +68,6 @@ class HomeController extends Controller
             // 'user' => Auth::user(),
             'cart' => $cart,
             'user' => $user,
-            'all_items_x_photos' => Item::get_all_item_x_photos(null, null),
         ];
         // dump($items[0]);
         // dd($items[0]->item_photos);
