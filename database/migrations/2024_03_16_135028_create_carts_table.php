@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('pelanggan_id')->nullable()->constrained()->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
-            $table->bigInteger('harga_total')->nullable(); // nullable karena harus dihitung terlebih dahulu dari keseluruhan cart_items
+            $table->decimal('harga_total', 15, 2)->nullable(); // nullable karena harus dihitung terlebih dahulu dari keseluruhan cart_items
             $table->string('photo_path')->nullable();
             $table->timestamps();
         });

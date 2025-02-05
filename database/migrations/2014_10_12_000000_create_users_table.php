@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->string('username')->unique();
+            $table->string('username', 50)->unique();
             $table->string('nik')->nullable()->unique();
             $table->string('nomor_wa')->nullable()->unique();
             $table->string('email')->nullable()->unique();
@@ -22,6 +22,10 @@ return new class extends Migration
             $table->string('password');
             $table->enum('role', ['Developer', 'SuperAdmin', 'Admin', 'User', 'Client'])->default('Client');
             $table->tinyInteger('clearance_level')->default(1);
+            $table->tinyInteger('access_level')->nullable()->default(1);
+            $table->string('user_role', 20)->nullable(); // ["kreditur", "debitur"]
+            $table->string('user_type', 20)->nullable(); // ["reseller", "dropshipper", "seller", "buyer"]
+            $table->string('account_type', 20)->nullable();
             $table->string('gender', 20)->nullable(); // pria atau wanita
             $table->string('profile_picture_path')->nullable();
             $table->string('id_photo_path')->nullable();

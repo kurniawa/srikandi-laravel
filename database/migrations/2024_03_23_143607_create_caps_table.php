@@ -13,8 +13,11 @@ return new class extends Migration
     {
         Schema::create('caps', function (Blueprint $table) {
             $table->id();
+            $table->string('name', 50);
+            $table->enum('type', ['character', 'picture']);
             $table->string('nama', 50)->unique();
             $table->string('codename', 50)->nullable()->unique();
+            $table->string('barcode', 6)->nullable()->unique();
             $table->timestamps();
         });
     }

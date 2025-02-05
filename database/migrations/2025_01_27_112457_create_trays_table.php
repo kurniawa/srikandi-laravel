@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('accountings', function (Blueprint $table) {
-            $table->string('username')->nullable()->after('user_id');
+        Schema::create('trays', function (Blueprint $table) {
+            $table->id();
+            $table->string('name', 20);
+            $table->string('barcode', 6)->nullable()->unique();
         });
     }
 
@@ -21,8 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('accountings', function (Blueprint $table) {
-            $table->dropColumn('username');
-        });
+        Schema::dropIfExists('trays');
     }
 };

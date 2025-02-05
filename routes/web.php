@@ -246,5 +246,8 @@ Route::controller(ArtisanController::class)->group(function () {
     Route::post('/artisans/update_codename_in_table_mainans', 'update_codename_in_table_mainans')->name('artisans.update_codename_in_table_mainans')->middleware('level5');
     Route::post('/artisans/backup_data', 'backup_data')->name('artisans.backup_data')->middleware('level5');
     Route::post('/artisans/update_jenis_perhiasans_d_caps', 'update_jenis_perhiasans_d_caps')->name('artisans.update_jenis_perhiasans_d_caps')->middleware('level5');
+    Route::post('/artisans/update_name_in_caps', 'update_name_in_caps')->name('artisans.update_name_in_caps')->middleware('level5');
+    Route::post('/artisans/re_sorting_barcodes_in_caps', 're_sorting_barcodes_in_caps')->name('artisans.re_sorting_barcodes_in_caps')->middleware('level5');
+    Route::post('/artisans/resorting_jenisPerhiasan_berdasarkan_tipePerhiasan_dan_nama', 'resorting_jenisPerhiasan_berdasarkan_tipePerhiasan_dan_nama')->name('artisans.resorting_jenisPerhiasan_berdasarkan_tipePerhiasan_dan_nama')->middleware('level5');
     // Route::post('/artisans/vendor_publish_laravelPWA','vendor_publish_laravelPWA')->name('artisans.vendor_publish_laravelPWA')->middleware('auth');
 });

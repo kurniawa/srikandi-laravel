@@ -19,11 +19,12 @@ return new class extends Migration
             $table->string('tipe_perhiasan',50)->nullable();
             $table->string('jenis_perhiasan')->nullable();
             $table->string('warna_emas',20)->nullable(); // kuning, rose-gold, putih, chrome
-            $table->smallInteger('kadar')->nullable(); // nullable untuk barang yang bukan bb_able atau bukan perhiasan
-            $table->smallInteger('berat')->nullable(); // nullable untuk barang yang bukan bb_able atau bukan perhiasan
-            $table->integer('ongkos_g')->nullable(); // nullable untuk barang yang bukan bb_able atau bukan perhiasan
-            $table->integer('harga_g')->nullable(); // nullable untuk barang yang bukan bb_able atau bukan perhiasan
-            $table->integer('harga_t');
+            $table->decimal('kadar', 8, 4)->nullable(); // nullable untuk barang yang bukan bb_able atau bukan perhiasan
+            $table->decimal('berat', 8, 4)->nullable(); // nullable untuk barang yang bukan bb_able atau bukan perhiasan
+            $table->decimal('ongkos_g', 10, 2)->nullable(); // nullable untuk barang yang bukan bb_able atau bukan perhiasan
+            $table->decimal('harga_g', 15, 2)->nullable(); // nullable untuk barang yang bukan bb_able atau bukan perhiasan
+            $table->decimal('harga_t', 15, 2);
+            
             $table->string('shortname');
             $table->string('longname');
             $table->smallInteger('kondisi')->nullable(); // 99 => mulus, 80 => cacat dikit hampir tidak terlihat, 75 => cacat lumayan keliatan, 50 => rusak
@@ -35,7 +36,7 @@ return new class extends Migration
             $table->string('edisi',50)->nullable();
             $table->string('nampan',50)->nullable();
             $table->string('kode_item',100)->nullable(); // nullable dulu, soalnya belum tau mesti gimana formatnya
-            $table->integer('barcode')->nullable();
+            $table->string('barcode')->nullable();
             $table->string('deskripsi')->nullable();
             $table->string('keterangan')->nullable();
             // $table->string('status', 20)->nullable(); // ready, terjual, cuci, dll
@@ -50,16 +51,15 @@ return new class extends Migration
             $table->string('status_buyback', 20)->nullable(); // ['ada','buyback', 'tukar', 'tukar-tambah', 'tukar-kurang'] // nullable untuk barang yang bukan bb_able atau bukan perhiasan
             $table->string('kondisi_buyback', 20)->nullable(); // ['sama', 'mulus','tidak-mulus', 'rusak-ringan', 'rusak-berat'] // nullable karena bisa jadi barang nya bukan perhiasan
             $table->enum('berat_susut', ['ya', 'tidak'])->nullable();
-            $table->smallInteger('berat_buyback')->nullable();
             $table->string('buyback_photo_path')->nullable();
-            $table->integer('potongan_ongkos')->nullable();
-            $table->integer('potongan_mata')->nullable();
-            $table->integer('potongan_rusak')->nullable();
-            $table->integer('potongan_susut')->nullable();
-            $table->integer('potongan_lain')->nullable();
-            // $table->smallInteger('persentase_potongan_tambahan')->nullable();
-            $table->integer('total_potongan')->nullable();
-            $table->integer('harga_buyback')->nullable(); // total_bb berlaku juga untuk barang di tukar, intinya kan kita terima kembali itu barang
+            $table->decimal('berat_buyback', 8, 4)->nullable();
+            $table->decimal('potongan_ongkos', 10, 2)->nullable();
+            $table->decimal('potongan_mata', 10, 2)->nullable();
+            $table->decimal('potongan_rusak', 10, 2)->nullable();
+            $table->decimal('potongan_susut', 10, 2)->nullable();
+            $table->decimal('potongan_lain', 10, 2)->nullable();
+            $table->decimal('total_potongan', 10, 2)->nullable();
+            $table->decimal('harga_buyback', 15, 2)->nullable();
             // $table->integer('total_bayar')->nullable();
             // $table->integer('sisa_bayar')->nullable();
             // $table->enum('status_bayar', ['lunas', 'belum-lunas'])->nullable();

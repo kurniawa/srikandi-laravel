@@ -383,17 +383,6 @@ class ItemController extends Controller
             ]);
             $tipe_perhiasan = $post['tipe_perhiasan'];
             $jenis_perhiasan = $post['jenis_perhiasan'];
-            // CEK relasi tipe_perhiasan dengan jenis_perhiasan
-            $exist_jenis_perhiasan = JenisPerhiasan::where('tipe_perhiasan', $tipe_perhiasan)->where('nama', $jenis_perhiasan)->first();
-            if (!$exist_jenis_perhiasan) {
-                $get_tipe_perhiasan = TipePerhiasan::where('nama', $tipe_perhiasan)->first();
-                JenisPerhiasan::create([
-                    'tipe_perhiasan_id' => $get_tipe_perhiasan->id,
-                    'tipe_perhiasan' => $tipe_perhiasan,
-                    'nama' => $jenis_perhiasan,
-                ]);
-            }
-            // END - CEK relasi tipe_perhiasan dengan jenis_perhiasan
             $warna_emas = $post['warna_emas'];
             $kadar = (float)$post['kadar'] * 100;
             $berat = (float)$post['berat'] * 100;
@@ -423,8 +412,12 @@ class ItemController extends Controller
             }
         }
 
-        // Jika jenis_perhiasan sebelumnya tidak sama dengan jenis_perhiasan yang baru, cek jenis_perhiasan lama,
-        // apabila tidak ada item lain dengan jenis_perhiasan tersebut, maka hapus jenis_perhiasan
+        // Check $jenis_perhiasan is_exist, kalau tidak exist, maka create
+        JenisPerhiasan::check_and_create(null, $tipe_perhiasan, $jenis_perhiasan);
+        /**
+         * Jika jenis_perhiasan sebelumnya tidak sama dengan jenis_perhiasan yang baru, cek jenis_perhiasan lama,
+         * apabila tidak ada item lain dengan jenis_perhiasan tersebut, maka hapus jenis_perhiasan
+         */
         if ($item->jenis_perhiasan !== $jenis_perhiasan) {
             $is_exist_item_same_jenis_perhiasan = Item::where('tipe_perhiasan', $item->tipe_perhiasan)->where('jenis_perhiasan', $item->jenis_perhiasan)->where('id', '!=', $item->id)->get();
             if (!count($is_exist_item_same_jenis_perhiasan)) {

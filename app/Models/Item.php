@@ -11,6 +11,24 @@ class Item extends Model
     use HasFactory;
     protected $guarded = ['id'];
 
+    // protected static function boot()
+    // {
+    //     parent::boot();
+
+    //     static::saving(function ($item) {
+    //         if ($item->barcode) {
+    //             // Cek apakah barcode mengandung angka 4
+    //             if (preg_match('/4/', (string)$item->barcode)) {
+    //                 // Jika ada, tambahkan 1 pada barcode
+    //                 $item->barcode++;
+    //             }
+    
+    //             // Simpan data
+    //             $item->save();
+    //         }
+    //     });
+    // }
+
     function matas()
     {
         return $this->belongsToMany(Mata::class, 'item_matas', 'item_id', 'mata_id');

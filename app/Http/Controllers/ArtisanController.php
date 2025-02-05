@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 
 class ArtisanController extends Controller
 {
@@ -50,6 +51,7 @@ class ArtisanController extends Controller
 
         return back()->with('success_', '-truncate table warna_emas dan input data warna_emas-');
     }
+
     function migrate_fresh_seed(Request $request) {
         if (Auth::user()->role !== 'Developer') {
             $request->validate(['error'=>'required'],['error.required'=>'clearance?']);
@@ -168,116 +170,23 @@ class ArtisanController extends Controller
     }
 
     function backup_data() {
-        $users = DB::table('users')->get();
-        File::put(storage_path('backup/users.json'), $users->toJson());
+        $users = DB::table('users')->get();File::put(storage_path('backup/users.json'), $users->toJson()); // seeder: aman
+        $item_types = DB::table('item_types')->get();File::put(storage_path('backup/item_types.json'), $item_types->toJson()); // seeder: aman
+        $tipe_perhiasans = DB::table('tipe_perhiasans')->get();File::put(storage_path('backup/tipe_perhiasans.json'), $tipe_perhiasans->toJson()); // seeder: aman
+        $jenis_perhiasans = DB::table('jenis_perhiasans')->get();File::put(storage_path('backup/jenis_perhiasans.json'), $jenis_perhiasans->toJson()); // seeder: aman
+        $warna_emas = DB::table('warna_emas')->get();File::put(storage_path('backup/warna_emas.json'), $warna_emas->toJson()); // seeder: aman
+        $kadars = DB::table('kadars')->get();File::put(storage_path('backup/kadars.json'), $kadars->toJson()); // seeder: aman
+        $caps = DB::table('caps')->get();File::put(storage_path('backup/caps.json'), $caps->toJson()); // seeder: aman
+        $age_ranges = DB::table('age_ranges')->get();File::put(storage_path('backup/age_ranges.json'), $age_ranges->toJson()); // seeder: aman
+        $merks = DB::table('merks')->get();File::put(storage_path('backup/merks.json'), $merks->toJson()); // seeder: aman
+        $matas = DB::table('matas')->get();File::put(storage_path('backup/matas.json'), $matas->toJson()); // seeder: aman
+        $mainans = DB::table('mainans')->get();File::put(storage_path('backup/mainans.json'), $mainans->toJson()); // seeder: aman
 
-        $mainans = DB::table('mainans')->get();
-        File::put(storage_path('backup/mainans.json'), $mainans->toJson());
-
-        $caps = DB::table('caps')->get();
-        foreach ($caps as $cap) {
-            if (str_contains($cap->nama, "gambar")) {
-                // dd($cap);
-                $exploded_nama = explode(" ", $cap->nama);
-                $exploded_nama[0] = "g-";
-                $new_nama = implode("", $exploded_nama);
-
-                if (str_contains($cap->codename, "gbr")) {
-                    $exploded_codename = explode("gbr.", $cap->codename);
-                } elseif (str_contains($cap->codename, "gambar")) {
-                    $exploded_codename = explode("gambar ", $cap->codename);
-                }
-
-                $exploded_codename[1] = "g-" . $exploded_codename[1];
-                $new_codename = implode("", $exploded_codename);
-
-                DB::table('caps')->where('id', $cap->id)->update([
-                    'nama' => $new_nama,
-                    'codename' => $new_codename,
-                ]);
-            }
-        }
-        // dd($caps);
-        $caps = DB::table('caps')->get();
-        File::put(storage_path('backup/caps.json'), $caps->toJson());
-        
-        $items = DB::table('items')->get();
-        // FIX keterangan mata pada items
-        foreach ($items as $item) {
-            $arr_longnames = explode(" ", $item->longname);
-            $confirm_update_longname = false;
-
-            // set initial value for variable to update
-            $new_longname = $item->longname;
-            // END - set initial value for variable to update
-            foreach ($arr_longnames as $key => $longname) {
-                if (str_contains($longname, 'm.p-lw.n-opac.t')) {
-                    // dump($longname);
-                    $explodes = explode(":", $longname);
-                    $explodes[0] = "m.p:";
-                    $explodes[1] = "$explodes[1](1)";
-                    $arr_longnames[$key] = "$explodes[0]$explodes[1]";
-                    $confirm_update_longname = true;
-                    // dump($longname);
-                    // dd($arr_longnames);
-                }
-                if (str_contains($longname, 'm.pink-lw.n-opac.t')) {
-                    // dump($longname);
-                    $explodes = explode(":", $longname);
-                    $explodes[0] = "m.pink:";
-                    $explodes[1] = "$explodes[1](55)";
-                    $arr_longnames[$key] = "$explodes[0]$explodes[1]";
-                    $confirm_update_longname = true;
-                    // dump($longname);
-                    // dd($arr_longnames);
-                }
-                if (str_contains($longname, 'mai.')) {
-                    // dump($longname);
-                    $arr_longnames[$key] = str_replace("mai.", "m-", $longname);
-                    $confirm_update_longname = true;
-                    // dump($longname);
-                    // dd($arr_longnames);
-                }
-            }
-
-            if ($confirm_update_longname) {
-                $new_longname = implode(" ", $arr_longnames);
-                DB::table('items')->where('id', $item->id)->update([
-                    'longname' => $new_longname,
-                ]);
-                // dd($new_longname);
-            }
-
-            if (str_contains($item->cap, "gambar")) {
-                $new_cap = str_replace("gambar ", "g-", $item->cap);
-                $old_longname = DB::table('items')->select('longname')->where('id', $item->id)->first();
-                // dump($old_longname);
-                // dd($old_longname->longname);
-                if (str_contains($old_longname->longname, "gambar")) {
-                    $new_longname = str_replace("gambar ", "g-", $old_longname->longname);
-                    DB::table('items')->where('id', $item->id)->update([
-                        'longname' => $new_longname,
-                        'cap' => $new_cap,
-                    ]);
-                }
-            }
-            
-        }
-        // END - FIX keterangan mata pada items
-        $items = DB::table('items')->get();
-        File::put(storage_path('backup/items.json'), $items->toJson());
-
-        $photos = DB::table('photos')->get();
-        File::put(storage_path('backup/photos.json'), $photos->toJson());
-
-        $item_photos = DB::table('item_photos')->get();
-        File::put(storage_path('backup/item_photos.json'), $item_photos->toJson());
-
-        $item_mainans = DB::table('item_mainans')->get();
-        File::put(storage_path('backup/item_mainans.json'), $item_mainans->toJson());
-
-        $item_matas = DB::table('item_matas')->get();
-        File::put(storage_path('backup/item_matas.json'), $item_matas->toJson());
+        $items = DB::table('items')->get();File::put(storage_path('backup/items.json'), $items->toJson()); // seeder: aman
+        $photos = DB::table('photos')->get();File::put(storage_path('backup/photos.json'), $photos->toJson()); // seeder: aman
+        $item_photos = DB::table('item_photos')->get();File::put(storage_path('backup/item_photos.json'), $item_photos->toJson()); // seeder: aman (PhotoSeeder)
+        $item_mainans = DB::table('item_mainans')->get();File::put(storage_path('backup/item_mainans.json'), $item_mainans->toJson()); // seeder: aman (ItemSeeder)
+        $item_matas = DB::table('item_matas')->get();File::put(storage_path('backup/item_matas.json'), $item_matas->toJson()); // seeder: aman (ItemSeeder)
         
         $feedback = [
             'success_' => '-table users, items, photos, item_photos, item_mainans, item_matas berhasil di backup-'
@@ -320,4 +229,192 @@ class ArtisanController extends Controller
         // END - UPDATE Data Jenis Perhiasan
     }
 
+    function update_name_in_caps() {
+        $caps = Cap::select('id', 'name', 'nama', 'codename')->get();
+        foreach ($caps as $cap) {
+            $nama = $cap->nama;
+            if (str_contains($cap->nama, 'gambar')) {
+                $nama = str_replace('gambar ', 'g-', $cap->nama);
+            }
+
+            $codename = $cap->codename;
+            if (str_contains($cap->codename, 'gbr.')) {
+                $codename = str_replace('gbr.', 'g-', $cap->codename);
+            }
+            
+            $name = $cap->name;
+            if (str_contains($name, 'c.')) {
+                $name = str_replace('c.', '', $name);
+            }
+            if (str_contains($name, 'gbr.')) {
+                $name = str_replace('gbr.', '', $name);
+            }
+
+            $type = $cap->type;
+            if (str_contains($cap->nama, 'g-')) {
+                $type = 'picture';
+            } else {
+                $type = 'character';
+            }
+            // $cap->name = $name;
+            // if (!$nama) {
+            //     dump($cap);
+            //     dd($nama);
+            // }
+            $cap->name = $name;
+            $cap->type = $type;
+            $cap->nama = $nama;
+            $cap->codename = $codename;
+            $cap->save();
+        }
+    }
+
+    function re_sorting_barcodes_in_caps() {
+        // phpinfo();
+        // dd('');
+        try {
+            DB::table('caps')->update(['barcode' => null]);
+            $caps = Cap::select('id', 'barcode')->orderBy('type')->orderBy('name')->get();
+            // dump($caps);
+            $barcode = 1;
+            foreach ($caps as $cap) {
+                // dump($cap->barcode);
+                $cap->barcode = $barcode;
+                $cap->save();
+    
+                // dd($cap->barcode);
+                $barcode++;
+            }
+
+            return back()->with('success_', 're_sorting_barcodes in caps finished');
+
+        } catch (\Throwable $th) {
+            dump('Error during transaction: ' . $th->getMessage());
+            dd('trace', $th->getTraceAsString());
+            // Log::error('Error during transaction: ' . $th->getMessage(), [
+            //     'trace' => $th->getTraceAsString(),
+            // ]);
+        }
+
+        
+    }
+
+    function resorting_jenisPerhiasan_berdasarkan_tipePerhiasan_dan_nama() {
+        $tipe_perhiasans = TipePerhiasan::select('nama')->get();
+        // dump($tipe_perhiasans);
+        $sorted_jenis_perhiasans = collect();
+        foreach ($tipe_perhiasans as $tipe_perhiasan) {
+            $jenis_perhiasans = JenisPerhiasan::select('tipe_perhiasan_id', 'tipe_perhiasan', 'nama')->where('tipe_perhiasan', $tipe_perhiasan->nama)->orderBy('nama')->get();
+            $sorted_jenis_perhiasans = $sorted_jenis_perhiasans->merge($jenis_perhiasans);
+        }
+
+        // dd($sorted_jenis_perhiasans);
+        if (count($sorted_jenis_perhiasans)) {
+            File::put(storage_path('backup/jenis_perhiasans.json'), $sorted_jenis_perhiasans->toJson());
+            JenisPerhiasan::truncate();
+            // Path ke file JSON
+            $path = storage_path('backup/jenis_perhiasans.json');
+    
+            // Periksa apakah file JSON ada
+            if (!File::exists($path)) {
+                dd("File $path tidak ditemukan.");
+            }
+    
+            // Baca data dari file JSON
+            $json = File::get($path);
+            $data = json_decode($json, true);
+    
+            // Insert data ke tabel 'jenis_perhiasans'
+            $continue_to_apply_barcodes = false;
+            if (!empty($data)) {
+                DB::table('jenis_perhiasans')->insert($data);
+                $continue_to_apply_barcodes = true;
+                dump('Data berhasil dimasukkan ke tabel jenis_perhiasans.');
+            } else {
+                dd('Tidak ada data yang ditemukan di file JSON.');
+            }
+    
+            if ($continue_to_apply_barcodes) {
+                // Seeding barcode pada data jenis_perhiasan berdasarkan tipe_perhiasan nya
+                $tipe_perhiasans = TipePerhiasan::select('nama')->get();
+                foreach ($tipe_perhiasans as $tipe_perhiasan) {
+                    $jenis_perhiasans = JenisPerhiasan::where('tipe_perhiasan', $tipe_perhiasan->nama)->orderBy('nama')->get();
+                    $barcode = 1;
+                    foreach ($jenis_perhiasans as $jenis_perhiasan) {
+                        // Menghindari angka 4 pada barcode
+                        $barcode = str_contains((string)$barcode, '4') ? (++$barcode) : $barcode;
+                        $jenis_perhiasan->barcode = (string)$barcode;
+                        $jenis_perhiasan->save();
+                        $barcode++;
+                    }
+                }
+            }
+        }
+
+    }
+
 }
+
+// $items = DB::table('items')->get();
+// // FIX keterangan mata pada items
+// foreach ($items as $item) {
+//     $arr_longnames = explode(" ", $item->longname);
+//     $confirm_update_longname = false;
+
+//     // set initial value for variable to update
+//     $new_longname = $item->longname;
+//     // END - set initial value for variable to update
+//     foreach ($arr_longnames as $key => $longname) {
+//         if (str_contains($longname, 'm.p-lw.n-opac.t')) {
+//             // dump($longname);
+//             $explodes = explode(":", $longname);
+//             $explodes[0] = "m.p:";
+//             $explodes[1] = "$explodes[1](1)";
+//             $arr_longnames[$key] = "$explodes[0]$explodes[1]";
+//             $confirm_update_longname = true;
+//             // dump($longname);
+//             // dd($arr_longnames);
+//         }
+//         if (str_contains($longname, 'm.pink-lw.n-opac.t')) {
+//             // dump($longname);
+//             $explodes = explode(":", $longname);
+//             $explodes[0] = "m.pink:";
+//             $explodes[1] = "$explodes[1](55)";
+//             $arr_longnames[$key] = "$explodes[0]$explodes[1]";
+//             $confirm_update_longname = true;
+//             // dump($longname);
+//             // dd($arr_longnames);
+//         }
+//         if (str_contains($longname, 'mai.')) {
+//             // dump($longname);
+//             $arr_longnames[$key] = str_replace("mai.", "m-", $longname);
+//             $confirm_update_longname = true;
+//             // dump($longname);
+//             // dd($arr_longnames);
+//         }
+//     }
+
+//     if ($confirm_update_longname) {
+//         $new_longname = implode(" ", $arr_longnames);
+//         DB::table('items')->where('id', $item->id)->update([
+//             'longname' => $new_longname,
+//         ]);
+//         // dd($new_longname);
+//     }
+
+//     if (str_contains($item->cap, "gambar")) {
+//         $new_cap = str_replace("gambar ", "g-", $item->cap);
+//         $old_longname = DB::table('items')->select('longname')->where('id', $item->id)->first();
+//         // dump($old_longname);
+//         // dd($old_longname->longname);
+//         if (str_contains($old_longname->longname, "gambar")) {
+//             $new_longname = str_replace("gambar ", "g-", $old_longname->longname);
+//             DB::table('items')->where('id', $item->id)->update([
+//                 'longname' => $new_longname,
+//                 'cap' => $new_cap,
+//             ]);
+//         }
+//     }
+    
+// }
+// // END - FIX keterangan mata pada items

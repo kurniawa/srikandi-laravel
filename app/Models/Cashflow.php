@@ -11,18 +11,18 @@ class Cashflow extends Model
     use HasFactory;
     protected $guarded = ['id'];
 
-    protected static function boot()
-    {
-        parent::boot();
+    // protected static function boot()
+    // {
+    //     parent::boot();
 
-        static::saving(function ($cashflow) {
-            while (DB::table('cashflows')
-                ->where('cashflow_date', $cashflow->cashflow_date)
-                ->exists()) {
-                $cashflow->cashflow_date = date('Y-m-d H:i:s', strtotime($cashflow->cashflow_date) + 1);
-            }
-        });
-    }
+    //     static::saving(function ($cashflow) {
+    //         while (DB::table('cashflows')
+    //             ->where('cashflow_date', $cashflow->cashflow_date)
+    //             ->exists()) {
+    //             $cashflow->cashflow_date = date('Y-m-d H:i:s', strtotime($cashflow->cashflow_date) + 1);
+    //         }
+    //     });
+    // }
 
     function user()
     {
@@ -122,8 +122,8 @@ class Cashflow extends Model
         $is_earlier_date = $params['is_earlier_date'];
 
         $jumlah_terima_total = 0.0;
-        // $cashflow_time = strtotime($cashflow_date);
-        // $incremented_cashflow_date = $cashflow_time;
+        $cashflow_time = strtotime($cashflow_date);
+        $incremented_cashflow_date = $cashflow_time;
 
         foreach ($post['kategori_wallet'] as $key => $kategori_wallet) {
             if ($post['jumlah_pembayaran'][$key]) {
@@ -133,15 +133,8 @@ class Cashflow extends Model
                     ->where('nama_wallet', $post['nama_wallet'][$key])
                     ->first();
 
-                // // Pastikan cashflow_date unik
-                // while (Cashflow::where('kategori_wallet', $wallet->kategori_wallet)
-                //     ->where('tipe_wallet', $wallet->tipe_wallet)
-                //     ->where('nama_wallet', $wallet->nama_wallet)
-                //     ->where('cashflow_date', '=', date('Y-m-d\TH:i:s', $incremented_cashflow_date))
-                //     ->exists()) {
-                //     $incremented_cashflow_date = strtotime('+1 second', $incremented_cashflow_date);
-                // }
-                // $cashflow_date = date('Y-m-d\TH:i:s', $incremented_cashflow_date);
+                // Pastikan cashflow_date unik
+                list($cashflow_date, $incremented_cashflow_date) = self::incremented_cashflow_date($wallet->kategori_wallet, $wallet->tipe_wallet, $wallet->nama_wallet, $incremented_cashflow_date);
 
                 // Ambil cashflows setelah cashflow_date jika perlu
                 $latest_cashflows = collect();
@@ -227,6 +220,21 @@ class Cashflow extends Model
             "cashflow_date" => $cashflow_date,
             "is_earlier_date" => $is_earlier_date,
         ];
+    }
+
+    // Pastikan cashflow_date unik
+    static function incremented_cashflow_date($kategori_wallet, $tipe_wallet, $nama_wallet, $incremented_cashflow_date) {
+        while (Cashflow::where('kategori_wallet', $kategori_wallet)
+        ->where('tipe_wallet', $tipe_wallet)
+        ->where('nama_wallet', $nama_wallet)
+        ->where('cashflow_date', '=', date('Y-m-d\TH:i:s', $incremented_cashflow_date))
+        ->exists()) {
+            $incremented_cashflow_date = strtotime('+1 second', $incremented_cashflow_date);
+        }
+
+        $cashflow_date = date('Y-m-d\TH:i:s', $incremented_cashflow_date);
+
+        return array($cashflow_date, $incremented_cashflow_date);
     }
     
 }

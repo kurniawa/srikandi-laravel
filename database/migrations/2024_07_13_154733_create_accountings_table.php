@@ -20,14 +20,16 @@ return new class extends Migration
             $table->string('kadar')->nullable(); // untuk mempermudah sorting, apabila diperlukan
             $table->string('berat')->nullable(); // untuk mempermudah sorting, apabila diperlukan
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null')->onUpdate('cascade');
+            $table->string('username', 50)->nullable();
             $table->foreignId('supplier_id')->nullable()->constrained()->onDelete('set null');
             $table->string('supplier_name')->nullable();
             $table->enum('tipe', ['pemasukan', 'pengeluaran']);
             $table->string('kategori', 50)->nullable();
             $table->string('kategori_2', 50)->nullable();
             $table->string('deskripsi')->nullable();
-            $table->bigInteger('jumlah'); // nullable karena masih belum bisa jelas apabila semua barang dalam satu surat pembelian dijual semua, lalu penjualan tersebut kombinasi antara tunai dan non-tunai
+            $table->decimal('jumlah', 15, 2);
             $table->timestamps();
+            $table->timestamp('accounting_date')->nullable();
         });
     }
 

@@ -14,11 +14,10 @@ return new class extends Migration
         Schema::create('harga_pasarans', function (Blueprint $table) {
             $table->id();
             $table->string('kategori', 50);
-            $table->smallInteger('kadar');
-            $table->bigInteger('harga_beli');
-            $table->bigInteger('harga_buyback');
+            $table->decimal('kadar', 6, 2);
+            $table->decimal('harga_beli', 15, 2);
+            $table->decimal('harga_buyback', 15, 2);
             $table->string('codename', 50)->nullable()->unique();
-            $table->integer('barcode')->nullable();
             $table->timestamps();
         });
     }

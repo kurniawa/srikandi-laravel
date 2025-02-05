@@ -158,16 +158,17 @@
                                 <a href="{{ route('pelanggans.index') }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Daftar Pelanggan</a>
                                 <a href="{{ route('surat_pembelian.index') }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Surat Pembelian</a>
                                 <a href="{{ route('cashflow.index') }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Cash Flow</a>
-                                @if (!$user)
-                                <a href="{{ route('login') }}" class="loading-spinner" role="menuitem" tabindex="-1">
-                                    <button class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 flex gap-2 items-center">
-                                        <span>Log In</span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
-                                        </svg>
-                                    </button>
-                                </a>
+                                @if (!isset($user) || !$user)
+                                    <a href="{{ route('login') }}" class="loading-spinner" role="menuitem" tabindex="-1">
+                                        <button class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 flex gap-2 items-center">
+                                            <span>Log In</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+                                            </svg>
+                                        </button>
+                                    </a>
                                 @endif
+
                                 @auth
                                 @if ($user->clearance_level >= 5)
                                 <a href="{{ route('artisans.index') }}" class="loading-spinner block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200" role="menuitem" tabindex="-1">Artisan Commands</a>

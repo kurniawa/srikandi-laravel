@@ -58,12 +58,7 @@ class JenisPerhiasanController extends Controller
         }
         // END - VALIDASI EXIST
 
-        $tipe_perhiasan = TipePerhiasan::find($post['tipe_perhiasan_id']);
-        JenisPerhiasan::create([
-            'tipe_perhiasan_id' => $post['tipe_perhiasan_id'],
-            'tipe_perhiasan' => $tipe_perhiasan->nama,
-            'nama' => $post['jenis_perhiasan'],
-        ]);
+        JenisPerhiasan::check_and_create($post['tipe_perhiasan_id'], null, $post['jenis_perhiasan']);
 
         $success_ .= 'New tipe_perhiasan created';
 

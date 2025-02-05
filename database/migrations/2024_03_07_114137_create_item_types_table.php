@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('accountings', function (Blueprint $table) {
-            $table->timestamp('accounting_date')->nullable();
+        Schema::create('item_types', function (Blueprint $table) {
+            $table->id();
+            $table->string('type');
+            $table->string('barcode', 6)->nullable()->unique();
         });
     }
 
@@ -21,8 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('accountings', function (Blueprint $table) {
-            $table->dropColumn('accounting_date');
-        });
+        Schema::dropIfExists('item_types');
     }
 };

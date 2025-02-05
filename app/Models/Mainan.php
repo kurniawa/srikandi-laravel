@@ -10,6 +10,24 @@ class Mainan extends Model
     use HasFactory;
     protected $guarded = ['id'];
 
+    // protected static function boot()
+    // {
+    //     parent::boot();
+
+    //     static::saving(function ($mainan) {
+    //         if ($mainan->barcode) {
+    //             // Cek apakah barcode mengandung angka 4
+    //             if (preg_match('/4/', (string)$mainan->barcode)) {
+    //                 // Jika ada, tambahkan 1 pada barcode
+    //                 $mainan->barcode++;
+    //             }
+    
+    //             // Simpan data
+    //             $mainan->save();
+    //         }
+    //     });
+    // }
+
     static function generate_codename_from_nama($nama) {
         if (str_contains($nama, " ")) {
             $arr_nama = explode(" ", $nama);

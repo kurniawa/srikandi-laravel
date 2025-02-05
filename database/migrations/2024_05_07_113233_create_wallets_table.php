@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('wallets', function (Blueprint $table) {
             $table->id();
-            $table->string('kategori', 20); // tunai atau non-tunai
-            $table->string('tipe', 20); // laci, bank atau ewallet
-            $table->string('nama', 20)->unique(); // tunai, BCA atau GoPay
-            $table->bigInteger('saldo')->nullable();
+            $table->string('kategori_wallet', 20); // tunai atau non-tunai
+            $table->string('tipe_wallet', 20); // laci, bank atau ewallet
+            $table->string('nama_wallet', 20)->unique(); // tunai, BCA atau GoPay
+            $table->decimal('saldo', 15, 2)->nullable();
             $table->timestamps();
         });
     }

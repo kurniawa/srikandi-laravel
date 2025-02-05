@@ -26,10 +26,11 @@ return new class extends Migration
             $table->string('kategori_wallet', 20)->nullable(); // tunai, bank, e-wallet
             $table->string('tipe_wallet', 20)->nullable(); // tunai, bank, e-wallet
             $table->string('nama_wallet', 20)->nullable(); // tunai, bca, bri, bni, mandiri, ovo, gopay, dana, dll.
-            $table->bigInteger('jumlah');
-            $table->bigInteger('saldo');
+            $table->decimal('jumlah', 15, 2); // maks 999 Triliun
+            $table->decimal('saldo', 15, 2); // maks 999 Triliun
             $table->string('keterangan')->nullable();
             $table->timestamps();
+            $table->timestamp('cashflow_date')->nullable();
         });
     }
 

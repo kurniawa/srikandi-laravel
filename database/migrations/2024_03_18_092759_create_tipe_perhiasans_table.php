@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nama');
             $table->string('photo_path')->nullable();
             $table->string('codename', 50)->nullable()->unique();
-            $table->integer('barcode')->nullable();
+            $table->string('barcode', 6)->nullable();
             $table->timestamps();
         });
     }

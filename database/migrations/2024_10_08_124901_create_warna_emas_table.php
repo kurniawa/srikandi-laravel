@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama', 20);
             $table->string('codename', 50)->nullable();
+            $table->string('barcode', 6)->nullable()->unique();
             $table->timestamps();
         });
     }

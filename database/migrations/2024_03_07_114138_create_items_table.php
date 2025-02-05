@@ -17,12 +17,11 @@ return new class extends Migration
             $table->string('tipe_perhiasan',50)->nullable();
             $table->string('jenis_perhiasan')->nullable();
             $table->string('warna_emas',20)->nullable(); // kuning, rose-gold, putih, chrome
-            $table->smallInteger('kadar')->nullable();
-            // $table->enum('gol_kadar',['MUDA','BAGUS','TUA'])->nullable();
-            $table->smallInteger('berat')->nullable(); // int/integer | 4 bytes  -2147483648 to 2147483647                    0 to 4294967295
-            $table->integer('ongkos_g')->nullable(); // nullable untuk barang yang bukan bb_able atau bukan perhiasan
-            $table->bigInteger('harga_g')->nullable();
-            $table->bigInteger('harga_t');
+            $table->decimal('kadar', 8, 4)->nullable();
+            $table->decimal('berat', 8, 4)->nullable();
+            $table->decimal('ongkos_g', 10, 2)->nullable();
+            $table->decimal('harga_g', 15, 2)->nullable();
+            $table->decimal('harga_t', 15, 2);
             $table->string('shortname');
             $table->string('longname')->nullable()->unique();
             $table->smallInteger('kondisi')->nullable(); // 99 => mulus, 80 => cacat dikit hampir tidak terlihat, 75 => cacat lumayan keliatan, 50 => rusak
@@ -35,7 +34,7 @@ return new class extends Migration
             $table->string('nampan',50)->nullable();
             $table->smallInteger('stock')->default('1'); // smallint    | 2 bytes  -32768 to 32767                              0 to 65535
             $table->string('kode_item',100)->nullable(); // nullable dulu, soalnya belum tau mesti gimana formatnya
-            $table->integer('barcode')->nullable();
+            $table->string('barcode')->nullable();
             $table->string('deskripsi')->nullable();
             $table->string('keterangan')->nullable();
             $table->string('status', 20)->nullable(); // ready, terjual, cuci, sortir-buyback, dll

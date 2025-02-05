@@ -27,7 +27,7 @@
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <option value="">--</option>
                             @php
-                                $tipe_perhiasan_value = old('tipe_perhiasan') ?? $item->tipe_perhiasan ?? '';
+                                $tipe_perhiasan_value = old('tipe_perhiasan') ?? ((isset($item) && isset($item->tipe_perhiasan)) ? $item->tipe_perhiasan : '');
                             @endphp
                             @foreach ($tipe_perhiasans as $tp)
                                 <option value="{{ $tp->nama }}" {{ $tp->nama == $tipe_perhiasan_value ? 'selected' : '' }}>{{ $tp->nama }}</option>
@@ -38,7 +38,7 @@
                     <div class="mb-5">
                         <label id="label_jenis_perhiasan" for="jenis_perhiasan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">jenis ...</label>
                         @php
-                            $jenis_perhiasan_value = old('jenis_perhiasan') ?? $item->jenis_perhiasan ?? '';
+                            $jenis_perhiasan_value = old('jenis_perhiasan') ?? ((isset($item) && isset($item->jenis_perhiasan)) ? $item->jenis_perhiasan : '');
                         @endphp
                         
                         <input type="text" name="jenis_perhiasan" id="jenis_perhiasan"
@@ -49,7 +49,7 @@
                     <div class="mb-5">
                         <label for="deskripsi" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">deskripsi (opt.)</label>
                         @php
-                            $deskripsi_value = old('deskripsi') ?? $item->deskripsi ?? '';
+                            $deskripsi_value = old('deskripsi') ?? ((isset($item) && isset($item->deskripsi)) ? $item->deskripsi : '');
                         @endphp
                         <input type="text" id="deskripsi" name="deskripsi" onchange="generateNama()"
                             value="{{ $deskripsi_value }}"
@@ -62,7 +62,7 @@
                         <select id="warna_emas" name="warna_emas" onchange="generateNama()"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             @php
-                                $we_value = old('warna_emas') ?? $item->warna_emas ?? '';
+                                $we_value = old('warna_emas') ?? ((isset($item) && isset($item->warna_emas)) ? $item->warna_emas : '');
                             @endphp
                             @foreach ($label_warna_emas as $we)
                                 <option value="{{ $we->nama }}" {{ $we_value == $we->nama ? 'selected' : '' }}>{{ $we->nama }}</option>
@@ -75,7 +75,7 @@
                     <div class="mb-5">
                         <label id="label_kadar_formatted" for="kadar_formatted" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">kadar(%)</label>
                         @php
-                            $kadar_formatted_value = old('kadar_formatted') ?? (isset($item->kadar) ? format_decimal_id_and_trim($item->kadar) : '');
+                            $kadar_formatted_value = old('kadar_formatted') ?? ((isset($item) && isset($item->kadar)) ? format_decimal_id_and_trim($item->kadar) : '');
                             $kadar_value = old('kadar') ?? (isset($item->kadar) ? format_decimal_en_and_trim($item->kadar) : '');
                         @endphp
                         <input type="text" inputmode="numeric" id="kadar_formatted"
@@ -88,7 +88,7 @@
                     <div class="mb-5">
                         <label id="label_berat_formatted" for="berat_formatted" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">berat</label>
                         @php
-                            $berat_formatted_value = old('berat_formatted') ?? (isset($item->berat) ? format_decimal_id_and_trim($item->berat) : '');
+                            $berat_formatted_value = old('berat_formatted') ?? ((isset($item) && isset($item->berat)) ? format_decimal_id_and_trim($item->berat) : '');
                             $berat_value = old('berat') ?? (isset($item->berat) ? format_decimal_en_and_trim($item->berat) : '');
                         @endphp
                         <input type="text" inputmode="numeric" id="berat_formatted"
@@ -101,8 +101,8 @@
                     <div class="mb-5">
                         <label id="label_harga_g_formatted" for="harga_g_formatted" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">harga/g</label>
                         @php
-                            $harga_g_formatted_value = old('harga_g_formatted') ?? (isset($item->harga_g) ? format_dots_and_decimals($item->harga_g) : '');
-                            $harga_g_value = old('harga_g') ?? (isset($item->harga_g) ? format_decimal_en_and_trim($item->harga_g) : '');
+                            $harga_g_formatted_value = old('harga_g_formatted') ?? ((isset($item) && isset($item->harga_g)) ? format_dots_and_decimals($item->harga_g) : '');
+                            $harga_g_value = old('harga_g') ?? ((isset($item) && isset($item->harga_g)) ? format_decimal_en_and_trim($item->harga_g) : '');
                         @endphp
                         <input type="text" inputmode="numeric" id="harga_g_formatted"
                             value="{{ $harga_g_formatted_value }}"
@@ -166,7 +166,7 @@
                         <div class="">
                             <label for="kondisi" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">kondisi</label>
                             @php
-                                $kondisi_value = old('kondisi') ?? $item->kondisi ?? null;
+                                $kondisi_value = old('kondisi') ?? ((isset($item) && isset($item->kondisi)) ? $item->kondisi : '');
                             @endphp
                             
                             <select id="kondisi" name="kondisi" onchange="generateNama()"

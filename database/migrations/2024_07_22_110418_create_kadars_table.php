@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('kategori', 50);
             $table->string('tipe', 20);
-            $table->smallInteger('kadar');
+            $table->decimal('kadar', 8, 4);
             $table->smallInteger('poin_susut')->nullable();
             $table->smallInteger('poin_tambah')->nullable();
+            $table->string('barcode', 6)->nullable();
         });
     }
 

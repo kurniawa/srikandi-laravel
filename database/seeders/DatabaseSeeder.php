@@ -20,19 +20,23 @@ class DatabaseSeeder extends Seeder
         // ]);
         $this->call([
             UserSeeder::class,
-            KadarSeeder::class,
-            HargaPasaranSeeder::class,
+            ItemTypeSeeder::class,
             TipePerhiasanSeeder::class,
-            MainanSeeder::class,
+            JenisPerhiasanSeeder::class,
+            WarnaEmasSeeder::class,
+            KadarSeeder::class,
             CapSeeder::class,
-            MataSeeder::class,
+            AgeRangeSeeder::class,
             MerkSeeder::class,
+            MataSeeder::class,
+            MainanSeeder::class, // 11
+
             ItemSeeder::class,
+            PhotoSeeder::class,
+            HargaPasaranSeeder::class,
             WalletSeeder::class,
             AcuanPembukuanSeeder::class,
-            WarnaEmasSeeder::class,
-            PhotoSeeder::class,
-            TransactionTest::class,
+            // TransactionTest::class,
         ]);
     }
 }

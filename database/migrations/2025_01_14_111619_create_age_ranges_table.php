@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('cashflows', function (Blueprint $table) {
-            $table->timestamp('cashflow_date')->nullable();
+        Schema::create('age_ranges', function (Blueprint $table) {
+            $table->id();
+            $table->string('range', 20);
+            $table->string('barcode', 6)->nullable()->unique();
         });
     }
 
@@ -21,8 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('cashflows', function (Blueprint $table) {
-            $table->dropColumn('cashflow_date');
-        });
+        Schema::dropIfExists('age_ranges');
     }
 };

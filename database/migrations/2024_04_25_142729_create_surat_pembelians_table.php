@@ -25,12 +25,12 @@ return new class extends Migration
             $table->string('pelanggan_nik')->nullable();
             // $table->enum('guest_id',['A','B','C','D','E'])->nullable(); // guest_id tidak diperlukan di pembelian
             $table->string('keterangan')->nullable(); // jaga2 takutnya ada kondisi khusus yang ribet akhirnya perlu taro di keterangan
-            $table->bigInteger('harga_total');
-            $table->bigInteger('total_bayar');
-            $table->bigInteger('sisa_bayar');
+            $table->decimal('harga_total', 15, 2);
+            $table->decimal('total_bayar', 15, 2);
+            $table->decimal('sisa_bayar', 12, 2);
             $table->string('status_bayar', 20); // ['lunas','belum-lunas']
             $table->string('status_buyback', 20)->nullable(); // nullable untuk barang yang bukan perhiasan -> [null,'all','sebagian']
-            $table->bigInteger('total_buyback')->nullable();
+            $table->decimal('total_buyback', 15, 2)->nullable();
             // $table->enum('status_terima_bb',['lunas','belum-lunas'])->nullable();
             $table->timestamp('tanggal_buyback')->nullable(); // tanggal kapan terjual semua
             $table->foreignId('updated_by')->nullable()->constrained('users','id')->onDelete('set null');
